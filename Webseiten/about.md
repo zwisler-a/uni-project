@@ -4,12 +4,12 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+## ak18b: App zur Inventarisierung von Unternehmenswerten
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jekyll" %} /
-[minima](https://github.com/jekyll/minima)
+**_Betreuer_**: Sebastian Volke und Stefan Koch
 
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+**_Tutor_**: Michael Fritz
+
+**_Kurzbeschreibung_**: In einem Unternehmen müssen alle physischen Unternehmenswerte erfasst und verwaltet werden. Das ist zum einen für die korrekte Abschreibung der Investition notwendig, zum anderen, um den Überblick über alle verfügbaren Werte und Arbeitsmittel zu behalten. Dafür wird ein Tool benötigt, in dem das gesamte Inventar eines Unternehmens mit allen notwendigen unternehmensspezifischen Metadaten erfasst und ihrem jeweiligen Raum und Mitarbeiter zugeordnet werden können. Checklisten zur vollständigen und möglichst fehlerfreien Erfassung sind wünschenswert.
+
+**_Ziel_**: Es ist eine Web-App für die Inventar-Pflege zu entwickeln. Die erfassten Objekttypen und ihre Eigenschaften sollen dabei unternehmensspezifisch konfigurierbar sein. Der Anwendungsfall eines gemeinsamen Inventars von mehreren Unternehmen in einer Dachgesellschaft soll abgedeckt sein. Für die Erfassung von Verträgen und Quittungen ist ein versioniertes Dokumentenmanagementsystem zu erstellen.
