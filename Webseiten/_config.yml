@@ -19,16 +19,11 @@ description: > # this means to ignore newlines until "baseurl:"
 baseurl: "/~ak18b/jekyll/" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
-jekyll_analytics:
-  GoogleAnalytics:
-    id: UA-128282739-1
-
 # Build settings
 markdown: kramdown
 theme: minima
 gems:
   - jekyll-feed
-  - jekyll-analytics
 exclude:
   - Gemfile
   - Gemfile.lock
