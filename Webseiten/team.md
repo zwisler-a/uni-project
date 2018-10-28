@@ -13,3 +13,4 @@ permalink: /team/
 |Rudolph, Leon   |Developer   |
 |Woywod, Steve   |Developer   |
 |Zwisler, Alexander   |Developer   |
+|Seidel, Robin   |Developer   |
