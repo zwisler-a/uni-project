@@ -9,3 +9,15 @@
         -   Schlechtes Timemanagement
         -   Lückenhafte Datenbank Kentnisse (gute Architektur)
         -   Faul was Tests und Doku angeht
+
+#### Robin Seidel
+    -   Stärken
+        -   Erfahrungen mit größeren Softwareprojekten
+        -   Entwicklung von Webanwwendungen
+        -   Design Patterns 
+        -   Programmiersprachen: .net core/ c#
+
+    -   Schwächen        
+        -  java + framework Wissen eher mangelhaft 
+        -  frondend Entwicklung
+    
