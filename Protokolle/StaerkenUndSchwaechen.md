@@ -36,7 +36,10 @@
 
 ## Leon Kamuf
 ##### Stärken
--
+- Hohe Lernbereitsschaft
+- Spaß an organisatorischen Tätigkeiten
+- Pflichbewusstsein
 
 ##### Schwächen
--
+- Geringe Programmierkenntnisse
+- Wenig Erfahrung bei Entwicklungen in Teams
