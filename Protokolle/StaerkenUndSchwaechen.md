@@ -54,3 +54,15 @@
 - Geringe Programmierkenntnisse (was Java und C angeht)
 - schwer von Begriff
 - weder im Frontend noch im Backend gearbeitet
+
+
+## Steve Woywod
+##### Stärken
+- Java (Grundkenntnisse)
+- Python (Grundkenntnisse)
+- Google
+
+##### Schwächen
+- Wenig Erfahrung bei Entwicklungen in Teams
+- Wenig Erfahrung mit großen Projekten
+- Bing
