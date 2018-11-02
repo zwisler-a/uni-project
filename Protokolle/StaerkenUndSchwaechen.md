@@ -66,3 +66,14 @@
 - Wenig Erfahrung bei Entwicklungen in Teams
 - Wenig Erfahrung mit großen Projekten
 - Bing
+
+## Leon Rudolph
+##### Stärken
+ - programmierkenntnisse in Java und C
+ - vorhandene Grundlagen in Javascript und PHP 
+ - lernbereitschaft
+
+##### Schwächen
+ - selten im Team gearbeitet
+ - liederlich was Dokumentationen oder Protokollen angeht
+ - keine Erfahrung in großen Projekten
