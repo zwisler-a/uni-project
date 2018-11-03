@@ -1,5 +1,9 @@
-Dies ist das initiale Repository eurer Softwaretechnik Praktikumsgruppe.
-Bitte lest die Handreichung im OO-Portal für weitere Informationen.
-Falls ihr nicht wisst, wie ihr `git` verwendet könnt ihr euch das [Git-Tutorial](https://white-gecko.github.io/GitTutorial/) vom Natanael Arndt aus dem Wintersemester 2017/18 ansehen.
+# ak18b - Inventarisierung
 
-*Viel Spaß!*
+[Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
+
+## Git
+- [Official Git](https://git-scm.com/)
+- [Git Tutorial](https://white-gecko.github.io/GitTutorial/)
+- [Git SSH for authentication](https://gitlab.com/help/ssh/README)
+- [Git GPG for signing commits](https://gitlab.com/help/user/project/repository/gpg_signed_commits/index.md)
