@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: AK18B - Inventarisierungstool
+title: AK18B
 description: > # this means to ignore newlines until "baseurl:"
   Inventarisierungstool für Unternehmen
 baseurl: "/~ak18b/jekyll/" # the subpath of your site, e.g. /blog
