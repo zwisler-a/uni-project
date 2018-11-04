@@ -8,7 +8,7 @@ permalink: /artifacts/
 
 | Dokument | Download | Datum |
 |---|---|---|
-| Risikoanalyse | [Risikoanalyse.pdf](artifacts\Risikoanalyse.pdf) | 04.11.2018 |
+| Risikoanalyse | [Risikoanalyse.pdf](Risikoanalyse.pdf) | 04.11.2018 |
 
 ### Artefakte
 
