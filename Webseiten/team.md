@@ -4,13 +4,13 @@ title: Team
 permalink: /team/
 ---
 
-|Mitglied|Rolle|
+| Mitglied | Rolle |
 |---|---|
-|Kamuf, Leon   |**Projektleiter**|
-|Opitz, Sina   |Stellvertreterin   |
-|Eisenblätter, Maurice   |Developer   |
-|Gläfcke, Maximilian   |Developer   |
-|Rudolph, Leon   |Developer   |
-|Woywod, Steve   |Developer   |
-|Zwisler, Alexander   |Developer   |
-|Seidel, Robin   |Developer   |
+| Kamuf, Leon 			| **Projektleiter** |
+| Opitz, Sina 			| Stellvertreterin |
+| Eisenblätter, Maurice	| Qualitätssicherung |
+| Woywod, Steve 		| Dokumentation |
+| Zwisler, Alexander 	| Technischer Assistent (Git Experte) |
+| Seidel, Robin 		| Modellierung |
+| Gläfcke, Maximilian 	| Tests |
+| Rudolph, Leon 		| Recherche |

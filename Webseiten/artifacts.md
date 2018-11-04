@@ -4,4 +4,12 @@ title: Artefakte
 permalink: /artifacts/
 ---
 
-### Noch keine Artefakte vorhanden.
+### Dokumente
+
+| Dokument | Download | Datum |
+|---|---|---|
+| Risikoanalyse | [Risikoanalyse.pdf](artifacts\Risikoanalyse.pdf) | 04.11.2018 |
+
+### Artefakte
+
+\---
