@@ -70,7 +70,7 @@
 ## Leon Rudolph
 ##### Stärken
  - programmierkenntnisse in Java und C
- - vorhandene Grundlagen in Javascript und PHP 
+ - vorhandene Grundlagen in Javascript und PHP
  - lernbereitschaft
 
 ##### Schwächen
