@@ -77,3 +77,15 @@
  - selten im Team gearbeitet
  - liederlich was Dokumentationen oder Protokollen angeht
  - keine Erfahrung in großen Projekten
+
+
+## Maximilian Gläfcke
+#### Stärken
+ - Programmierkenntnisse in: Java, Python/Django
+ - Grundlegende Kenntnisse in: JavaScript, PHP
+ - Hilfsbereit und hohe Lernbereitschaft
+
+#### Schwächen
+ - Am Wochenende schwer erreichbar
+ - keine Erfahrung in großen Projekten
+ - Noch nie im Team gearbeitet
