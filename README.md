@@ -1,6 +1,7 @@
 # ak18b - Inventarisierung
 
 - [Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
+- [Git Export](http://pcai042.informatik.uni-leipzig.de/~ak18b/gitexp/)
 - [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
 
 
@@ -22,4 +23,3 @@
 | Termin**  | Review 2: Präsentation des Entwurfs durch das Team für Betreuer und Tutor                                                | **Nein**
 | Termin**  | Abgabe Releasebündel 2-5                                                                                                 | **Nein**
 | Termin**  | Endabnahme: Präsentation des Projektergebnisses durch das Team für Betreuer und Tutor (spätestens 03/2019)               | **Nein**
-
