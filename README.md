@@ -14,7 +14,7 @@
 ## Abgabe Termine
 | Datum     | Name                                                                                                                     | Abgeschlossen |
 | --------- |:------------------------------------------------------------------------------------------------------------------------:|--------------:|
-| 05.11.18  | Abgabe A1: Projektressourcen eingerichtet (Praktikumsserver, gitlab-Server), Rollen besetzt, Risikoanalyse durchgeführt  | **Nein**
+| 05.11.18  | Abgabe A1: Projektressourcen eingerichtet (Praktikumsserver, gitlab-Server), Rollen besetzt, Risikoanalyse durchgeführt  | **Ja**
 | 12.11.18  | Abgabe A2: Recherchebericht erstellen                                                                                    | **Nein**
 | 26.11.18  | Abgabe A3: Lastenheft erstellt                                                                                           | **Nein**
 | Termin**  | Review 1: Präsentation des Lastenhefts durch das Team für Betreuer und Tutor                                             | **Nein**
