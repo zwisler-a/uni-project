@@ -17,8 +17,6 @@ with api level access which is then stored locally on your browser and
 sent with every request. *Will move this the Praktikumsserver once we have your
 port range.*
 
-[//]: <> (Why did I do this server side? I have no idea will move it to clientside later)
-
 ## Git
 
 - [Official Git](https://git-scm.com/)
