@@ -6,7 +6,9 @@
   "scripts": {
     "test:client": "cd client && npm run test",
     "build:client": "cd client && npm run build",
-    "build-prod:client": "cd client && npm run build"
+    "build-prod:client": "cd client && npm run build",
+    "start:server": "cd server && npm run start",
+    "test:server": "cd server && npm run test"
   },
   "private": true,
   "repository": {
