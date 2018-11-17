@@ -11,7 +11,7 @@
 
 # Git Report
 
-I created a this little tool with the gitlab api to generate reports based on
+The Git Report tool uses the gitlab api to generate reports based on
 a given milestone. It needs a
 [personal access token](https://git.informatik.uni-leipzig.de/profile/personal_access_tokens)
 with api level access which is then stored locally on your browser and
@@ -29,7 +29,7 @@ sent with every request.
 | Datum      |                                                          Name                                                           | Abgeschlossen |
 | ---------- | :---------------------------------------------------------------------------------------------------------------------: | ------------: |
 | 05.11.18   | Abgabe A1: Projektressourcen eingerichtet (Praktikumsserver, gitlab-Server), Rollen besetzt, Risikoanalyse durchgeführt |        **Ja** |
-| 12.11.18   |                                          Abgabe A2: Recherchebericht erstellen                                          |      **Nein** |
+| 12.11.18   |                                          Abgabe A2: Recherchebericht erstellen                                          |        **Ja** |
 | 26.11.18   |                                             Abgabe A3: Lastenheft erstellt                                              |      **Nein** |
 | Termin\*\* |                      Review 1: Präsentation des Lastenhefts durch das Team für Betreuer und Tutor                       |      **Nein** |
 | 17.12.18   |                                     Abgabe A4: Projektplan, Releaseplan, QS-Konzept                                     |      **Nein** |
