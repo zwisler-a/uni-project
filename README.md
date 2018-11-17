@@ -6,8 +6,18 @@
 # ak18b - Inventarisierung
 
 - [Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
-- [Git Export](http://pcai042.informatik.uni-leipzig.de/~ak18b/gitexp/)
 - [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
+- [Git Report](https://ingrim4.me:3000/)
+
+# Git Report
+I created a this little tool with the gitlab api to generate reports based on
+a given milestone. It needs a
+[personal access token](https://git.informatik.uni-leipzig.de/profile/personal_access_tokens)
+with api level access which is then stored locally on your browser and
+sent with every request. *Will move this the Praktikumsserver once we have your
+port range.*
+
+[//]: <> (Why did I do this server side? I have no idea will move it to clientside later)
 
 ## Git
 
