@@ -7,15 +7,15 @@
 
 - [Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
 - [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
-- [Git Report](https://ingrim4.me:3000/)
+- [Git Report](http://pcai042.informatik.uni-leipzig.de/~ak18b/git-report/)
 
 # Git Report
+
 I created a this little tool with the gitlab api to generate reports based on
 a given milestone. It needs a
 [personal access token](https://git.informatik.uni-leipzig.de/profile/personal_access_tokens)
 with api level access which is then stored locally on your browser and
-sent with every request. *Will move this the Praktikumsserver once we have your
-port range.*
+sent with every request.
 
 ## Git
 
