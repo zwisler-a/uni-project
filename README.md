@@ -1,15 +1,10 @@
-# Commits
-
-- Commit messages in Englisch
-- Commit message style: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
-
 # ak18b - Inventarisierung
 
 - [Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
-- [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
 - [Git Report](http://pcai042.informatik.uni-leipzig.de/~ak18b/git-report/)
+- [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
 
-# Git Report
+### Git Report
 
 The Git Report tool uses the gitlab api to generate reports based on
 a given milestone. It needs a
@@ -17,12 +12,28 @@ a given milestone. It needs a
 with api level access which is then stored locally on your browser and
 sent with every request.
 
+---
+
 ## Git
 
 - [Official Git](https://git-scm.com/)
 - [Git Tutorial](https://white-gecko.github.io/GitTutorial/)
 - [Git SSH for authentication](https://gitlab.com/help/ssh/README)
 - [Git GPG for signing commits](https://gitlab.com/help/user/project/repository/gpg_signed_commits/index.md)
+
+### Commits
+
+- Commit messages in Englisch
+- Commit message style: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
+
+---
+
+## Environment
+
+- Node: `v11.2.0` - locally installed
+- Portrange: `1590-1599`
+
+---
 
 ## Abgabe Termine
 

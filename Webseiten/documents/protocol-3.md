@@ -7,7 +7,7 @@ permalink: /documents/protocol/3/
 
 ## Organisatorisch:
 
-- Slack als primäre Kommunikation Stakeholdern [slack group link](https://join.slack.com/t/swp18-ak18/shared_invite/enQtNDY1Njg5OTQzMjIxLWZlNDU2YzRhN2MyMzU4N2ZlODljMDNiYzRmZTAyOTExMTdhM2ZiYTQ2MjE0NDFhNTExMGYxNjA2NzIyZjI5ZDY)
+- Slack als primäre Kommunikation Stakeholdern
 - wichtige Sachen über e-Mail klären
 - Termin für Lastenheft-Review
     - 1 Woche im Voraus Termin über e-Mail absprechen
