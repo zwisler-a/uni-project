@@ -12,8 +12,6 @@ a given milestone. It needs a
 with api level access which is then stored locally on your browser and
 sent with every request.
 
----
-
 ## Git
 
 - [Official Git](https://git-scm.com/)
@@ -26,14 +24,10 @@ sent with every request.
 - Commit messages in Englisch
 - Commit message style: [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0-beta.2/)
 
----
-
 ## Environment
 
 - Node: `v11.2.0` - locally installed
 - Portrange: `1590-1599`
-
----
 
 ## Abgabe Termine
 

@@ -1,24 +1,43 @@
-image: node:6
+image: node:latest
 
-before_script:
-  - ping -c 1 aksw.org
+stages:
+  - build
+  - test
 
-build_the_project:
+cache:
+  paths:
+    - Projekt/client/node_modules/
+    - Projekt/server/node_modules/
+
+build_client:
+  stage: build
   script:
-    - sh program.sh
-    - test -f result.md
+    - cd Projekt/client/
+    - npm install
+    - npm run build
 
-release-job:
-  before_script:
-    - npm install -g markdown-pdf
+test_client:
+  stage: test
   script:
-    - sh program.sh
-    - markdown-pdf result.md
-    - markdown-pdf Webseiten/docu.md
-    - mv Webseiten/docu.pdf docu.pdf
-  artifacts:
-    paths:
-    - result.pdf
-    - docu.pdf
+    - cd Projekt/client/
+    - npm install
+    - npm run test
+
+build_prod_client:
+  stage: build
+  script:
+    - cd Projekt/client/
+    - npm install
+    - npm run build-prod
   only:
-    - tags
+    - master
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    paths:
+      - Projekt/client/dist/
+
+test_server:
+  stage: test
+    - cd Projekt/server/
+    - npm install
+    - npm run test
