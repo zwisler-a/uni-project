@@ -6,5 +6,5 @@ module.exports = {
 	buildPath: path.resolve(__dirname, 'dist'),
 	targetPlatforms: [ 'win', 'linux' ],
 	targetArch : [ 'x64', 'x86' ],
-	production: process.env.PRODUCTION
+	production: true
 };
