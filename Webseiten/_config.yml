@@ -15,7 +15,7 @@
 # in the templates via {{ site.myvariable }}.
 title: Inventarisierungs-App
 description: >- # this means to ignore newlines until "baseurl:"
-  Projektseite für eine Inventarisierungs-App welche für
+  Projektseite für eine Inventarisierungs-App, welche für
   das Softwaretechnikpraktikum WS18/19 erstellt werden soll.
 baseurl: "/~ak18b/jekyll/" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
