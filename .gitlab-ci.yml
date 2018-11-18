@@ -1,9 +1,17 @@
 image: node:latest
 
+services:
+  - mongo:latest
+
+variables:
+  MONGO_INITDB_ROOT_USERNAME: username
+  MONGO_INITDB_ROOT_PASSWORD: password
+  PRODUCTION: true
+
 stages:
   - build
   - test
-  - deploy
+  - production
 
 cache:
   paths:
@@ -24,22 +32,23 @@ test_client:
     - npm install
     - npm run test
 
-build_prod_client:
-  stage: deploy
-  script:
-    - cd Projekt/client/
-    - npm install
-    - npm run build-prod
-  only:
-    - master
-  artifacts:
-    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
-    paths:
-      - Projekt/client/dist/
-
 test_server:
   stage: test
   script:
     - cd Projekt/server/
     - npm install
     - npm run test
+
+build_prod_client:
+  stage: production
+  script:
+    - cd Projekt/
+    - npm install
+    - npm run build:all
+  only:
+    - master
+  when: manual
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    paths:
+      - dist/

@@ -8,7 +8,8 @@
     "build:client": "cd client && npm run build",
     "build-prod:client": "cd client && npm run build-prod",
     "start:server": "cd server && npm run start",
-    "test:server": "cd server && npm run test"
+    "test:server": "cd server && npm run test",
+    "build:all": "node build.js"
   },
   "private": true,
   "repository": {
@@ -19,5 +20,9 @@
     "Inventarisierungstool"
   ],
   "author": "ak18b",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "pkg": "^4.3.4"
+  }
 }

@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "test": "mocha test.js"
+    "start": "node src/bin/www",
+    "test": "mocha test/test.js"
   },
   "dependencies": {
     "debug": "~2.6.9",
@@ -17,5 +17,15 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0"
+  },
+  "bin": {
+	"server": "./index.js"
+  },
+  "pkg": {
+	"scripts": [
+		"*.js",
+		"routes/**/*.js"
+	],
+	"assets": "public/*"
   }
 }
