@@ -38,6 +38,7 @@ build_prod_client:
 
 test_server:
   stage: test
+  script:
     - cd Projekt/server/
     - npm install
     - npm run test
