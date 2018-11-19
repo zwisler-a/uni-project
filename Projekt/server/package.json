@@ -4,9 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node src/index config.json",
-    "test": "mocha test/test.js",
-    "stop-build": "forever stopall",
-    "start-build": "forever start index.js config.json"
+    "test": "mocha test/test.js"
   },
   "dependencies": {
     "debug": "~2.6.9",
