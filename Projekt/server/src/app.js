@@ -1,18 +1,29 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
+const express = require('express');
+const path = require('path');
+const logger = require('morgan');
+const mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
-var app = express();
+module.exports = class {
+	constructor(config) {
+		this.app = express();
+		this.config = config;
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
-module.exports = app;
+		this.initializeExpress();
+		//this.initializeMongo(); TODO setup mongodb
+	}
+	initializeExpress() {
+		this.app.use(logger('dev'));
+		this.app.use(express.json());
+		this.app.use(express.urlencoded({ extended: false }));
+		this.app.use(express.static(path.join(__dirname, 'public')));
+		
+		this.app.use('/', indexRouter);
+		this.app.use('/users', usersRouter);
+	}
+	initializeMongo() {
+		mongoose.connect(this.config.mongo);
+	}
+};

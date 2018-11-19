@@ -2,22 +2,31 @@
  * Module dependencies.
  */
 
-var app = require('./app');
-var debug = require('debug')('ak18b:server');
-var http = require('http');
+const App = require('./app');
+const debug = require('debug')('ak18b:server');
+const http = require('http');
+const path = require('path');
+const fs = require('fs-extra');
+
+const configFile = path.resolve(process.argv[2]);
+if (!fs.existsSync(configFile))
+	throw new Error(`File not found ${configFile}`);
+
+const config = fs.readJsonSync(configFile);
+const app = new App(config).app;
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || process.argv[2] || "3000");
+const port = normalizePort(config.port || process.env.PORT || "3000");
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
