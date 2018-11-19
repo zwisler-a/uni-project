@@ -1,4 +1,4 @@
-# Protokoll - 2.Treffen
+# Protokoll 2.Treffen
 
 ## Inhalt Abgaben
 - Aufwandsberichte*
@@ -90,5 +90,5 @@
 - Aspekte: Was soll erreicht werden?
 - Dazu Beispiele von letzten Jahren ansehen oder Handreichung
 
-## Protokoll 2. Treffen innerhalb der Gruppe
+## Protokoll 2. internes Gruppentreffen
 - fand aufgrund von Mitgliedermangel nicht statt.
