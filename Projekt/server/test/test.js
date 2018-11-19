@@ -7,12 +7,14 @@ const config = {
 };
 
 describe('http server', () => {
-	let server;
+	let app, server;
 	beforeEach(() => {
-		server = new App(config).app.listen(0);
+		app = new App(config);
+		server = app.app.listen(0);
 	});
 	afterEach(() => {
 		server.close();
+		app.close();
 	});
 	it('200 response to /', done => {
 		request(server)

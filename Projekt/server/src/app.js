@@ -31,4 +31,7 @@ module.exports = class {
 			throw error;
 		});
 	}
+	close() {
+		mongoose.disconnect();
+	}
 };
