@@ -18,6 +18,7 @@ permalink: /documents/
 | [Protokoll 1](protocol/1/) | 26.10.2018 |
 | [Protokoll 2](protocol/2/) | 02.11.2018 |
 | [Protokoll 3](protocol/3/) | 09.11.2018 |
+| [Protokoll 4](protocol/4/) | 16.11.2018 |
 
 ### Aufwandsberichte
 
