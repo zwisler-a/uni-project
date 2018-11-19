@@ -4,8 +4,7 @@ services:
   - mongo:latest
 
 variables:
-  MONGO_INITDB_ROOT_USERNAME: username
-  MONGO_INITDB_ROOT_PASSWORD: password
+  MONGO_INITDB_DATABASE: ak18b
 
 stages:
   - test
