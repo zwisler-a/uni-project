@@ -21,6 +21,7 @@ class Deployer {
    * Connects with the desired server
    */
   connect(config) {
+    this.config = config;
     return new Promise((res, rej) => {
       this.client.on("ready", () => {
         res(this);
@@ -69,9 +70,9 @@ class Deployer {
       client.scp(
         localPath,
         {
-          host: config.host,
-          username: config.username,
-          password: config.password,
+          host: this.config.host,
+          username: this.config.username,
+          password: this.config.password,
           path: remotePath
         },
         err => {
