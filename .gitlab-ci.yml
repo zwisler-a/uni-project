@@ -8,7 +8,7 @@ variables:
 
 stages:
   - test
-  - deploy
+  - production
 
 cache:
   paths:
@@ -22,9 +22,6 @@ test_client:
     - cd Projekt/client/
     - npm install
     - npm run test
-  only:
-    changes:
-      - Projekt/client/**
 
 test_server:
   stage: test
@@ -32,12 +29,9 @@ test_server:
     - cd Projekt/server/
     - npm install
     - npm run test
-  only:
-    changes:
-      - Projekt/server/**
 
 deploy:
-  stage: deploy
+  stage: production
   script:
     - cd Projekt/
     - npm install

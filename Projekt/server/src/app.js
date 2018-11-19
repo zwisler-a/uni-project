@@ -3,8 +3,6 @@ const path = require('path');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
-//a comment
-
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
