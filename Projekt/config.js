@@ -6,9 +6,5 @@ module.exports = {
 	buildPath: path.resolve(__dirname, 'dist'),
 	deployPath: 'demo/',
 	configFile: 'config.json',
-	config: {
-		port: 1590,
-		mongo: 'mongodb://username:password@localhost:27017/database'
-	},
 	production: true
 };

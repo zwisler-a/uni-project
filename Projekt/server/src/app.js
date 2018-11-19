@@ -12,7 +12,7 @@ module.exports = class {
 		this.config = config;
 
 		this.initializeExpress();
-		//this.initializeMongo(); TODO setup mongodb
+		this.initializeMongo();
 	}
 	initializeExpress() {
 		this.app.use(logger('dev'));
@@ -24,6 +24,8 @@ module.exports = class {
 		this.app.use('/users', usersRouter);
 	}
 	initializeMongo() {
-		mongoose.connect(this.config.mongo);
+		mongoose.connect(this.config.mongo, {
+			useNewUrlParser: true
+		}).catch(error => console.error(error));
 	}
 };

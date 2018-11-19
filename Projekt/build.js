@@ -5,8 +5,7 @@
  * - copies the angular app into <buildPath>/public,
  * - copies the package.json from the server into the dist folder,
  * - copies the Server src folder into the folder defined in <buildPath>.
- * - creates the config.json for the server in <buildPath>
- * - delete the devDependencies from package.json
+ * - delete the devDependencies and unused scripts from package.json
  * 
  * @author Maurice
  */
@@ -14,7 +13,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const childProcess = require('child_process');
 
-const { clientPath, serverPath, buildPath, configFile, config, production } = require('./config');
+const { clientPath, serverPath, buildPath, configFile, production } = require('./config');
 const buildPackage = path.join(buildPath, 'package.json');
 
 const getNpmPath = (basePath) => {
@@ -22,8 +21,6 @@ const getNpmPath = (basePath) => {
 	const binPath = path.resolve(basePath, 'node_modules', '.bin', bin)
 	return fs.existsSync(binPath) ? binPath : bin
 }
-
-
 
 const buildClient = () => {
 	childProcess.execFileSync(
@@ -45,10 +42,12 @@ const prepareDirectory = () => {
 };
 
 const prepareServer = () => {
-	fs.writeJsonSync(path.join(buildPath, configFile), config);
-
 	const package = fs.readJsonSync(buildPackage);
 	delete package.devDependencies;
+	package.scripts = {
+		'start': `forever start index.js ${configFile}`,
+		'stop': 'forever stopall'
+	};
 	fs.writeJsonSync(buildPackage, package);
 };
 

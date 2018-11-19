@@ -120,17 +120,14 @@ const deploy = async () => {
 		console.log("Uploading build ...");
 		await deployer.uploadBuild(buildPath, deployPath);
 
-		console.log("Updating read permissions for config file ...");
-		await deployer.run(deployPath, `chmod 600 ${configFile}`);
-
 		console.log("Installing dependencies ...");
 		await deployer.run(deployPath, "npm i");
 
 		console.log("Trying to stop old server ...");
-		await deployer.run(deployPath, "npm run stop-build");
+		await deployer.run(deployPath, "npm run stop");
 
 		console.log("Starting new Server ...");
-		await deployer.run(deployPath, "npm run start-build");
+		await deployer.run(deployPath, "npm run start");
 		deployer.close();
 		console.log("Deployed!");
 	} catch (err) {

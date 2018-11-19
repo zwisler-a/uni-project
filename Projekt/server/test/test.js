@@ -1,10 +1,13 @@
-const app = require('../src/app');
+const App = require('../src/app');
 const request = require('supertest');
 
 describe('http server', () => {
 	let server;
 	beforeEach(() => {
-		server = app.listen(0);
+		server = new App({
+			port: 0,
+			mongo: 'mongodb://username:password@localhost:27017/database'
+		}).app.listen(0);
 	});
 	afterEach(() => {
 		server.close();
