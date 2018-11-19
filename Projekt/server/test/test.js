@@ -6,7 +6,7 @@ describe('http server', () => {
 	beforeEach(() => {
 		server = new App({
 			port: 0,
-			mongo: 'mongodb://username:password@localhost:27017/database'
+			mongo: 'mongodb://username:password@mongo:27017/database'
 		}).app.listen(0);
 	});
 	afterEach(() => {
