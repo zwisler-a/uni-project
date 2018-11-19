@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node src/index",
     "test": "mocha test/test.js",
-    "start-build": "forever stop index.js && forever start index.js"
+    "stop-build": "forever stopall",
+    "start-build": "forever start index.js"
   },
   "dependencies": {
     "debug": "~2.6.9",
