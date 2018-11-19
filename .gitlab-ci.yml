@@ -8,7 +8,6 @@ variables:
   MONGO_INITDB_ROOT_PASSWORD: password
 
 stages:
-  - build
   - test
   - production
 
@@ -17,13 +16,6 @@ cache:
     - Projekt/node_modules/
     - Projekt/client/node_modules/
     - Projekt/server/node_modules/
-
-build_client:
-  stage: build
-  script:
-    - cd Projekt/client/
-    - npm install
-    - npm run build
 
 test_client:
   stage: test
@@ -39,12 +31,13 @@ test_server:
     - npm install
     - npm run test
 
-bundle:
+deploy:
   stage: production
   script:
     - cd Projekt/
     - npm install
     - npm run build:all
+    - npm run deploy
   only:
     - master
   when: manual
