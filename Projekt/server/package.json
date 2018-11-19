@@ -17,15 +17,5 @@
     "chai": "^4.2.0",
     "mocha": "^5.2.0",
     "supertest": "^3.3.0"
-  },
-  "bin": {
-	"server": "./index.js"
-  },
-  "pkg": {
-	"scripts": [
-		"*.js",
-		"routes/**/*.js"
-	],
-	"assets": "public/*"
   }
 }

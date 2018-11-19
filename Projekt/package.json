@@ -22,7 +22,6 @@
   "author": "ak18b",
   "license": "ISC",
   "dependencies": {
-    "fs-extra": "^7.0.1",
-    "pkg": "^4.3.4"
+    "fs-extra": "^7.0.1"
   }
 }
