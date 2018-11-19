@@ -1,3 +1,13 @@
+/**
+ * Build script for the whole Project.
+ * Steps:
+ * - Builds the angular app via 'npm run build-prod' for prod build, 'npm run build' for dev,
+ * - copies the angular app into <buildPath>/public,
+ * - copies the package.json from the server into the dist folder,
+ * - copies the Server src folder into the folder defined in <buildPath>.
+ * 
+ * @author Maurice
+ */
 const fs = require('fs-extra');
 const path = require('path');
 const childProcess = require('child_process');
@@ -11,11 +21,13 @@ const getNpmPath = (basePath) => {
 	return fs.existsSync(binPath) ? binPath : bin
 }
 
+
+
 const buildClient = () => {
 	childProcess.execFileSync(
 		getNpmPath(clientPath),
 		[ 'run', production ? 'build-prod' : 'build' ],
-		{ env: process.env, cwd: clientPath }
+		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
 	);
 }
 

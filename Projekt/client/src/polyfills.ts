@@ -38,12 +38,12 @@ import 'core-js/es6/set';
  * Date, currency, decimal and percent pipes.
  * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
  */
-import 'intl';
+// import 'intl';
 
 /**
  * Need to import at least one locale-data with intl.
  */
-import 'intl/locale-data/jsonp/en';
+// import 'intl/locale-data/jsonp/en';
 
 /**
  * If the application will be indexed by Google Search, the following is required.
