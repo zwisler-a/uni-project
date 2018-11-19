@@ -1,9 +1,9 @@
-## Protokoll 4. Gruppentreffen
+# Protokoll 4. Gruppentreffen
 
-# Organisatorisches
+## Organisatorisches
 - bis 19.11. 2-3 Terminvorschläge für Prototyp
 
-# Lastenheft
+## Lastenheft
 - kein Pflichtenheft
 - einziges Dokument mit Anforderungen des Kunden und Entwickler an Software
 - inhaltlich konsistent
@@ -38,20 +38,20 @@
 - Evaluation / Review
 - nicht groß, nicht viel, hauptsache funktioniert (Framework kommuniziert mit Daten)
 
-# Konzepte
+## Konzepte
 - Standards 
 - Modelle
 - Funktionalitäten 
 - etablierte Mechanismen
 
-# Aspekte
+## Aspekte
 - Restriktoren 
 - User Experience
 - Marktsituation (Anwendungsort)
 - Datenschutz
 - Lizenzen
 
-# Aufwandsbericht: Feedback
+## Aufwandsbericht: Feedback
 - Aufwandsberichte auf Website und Git
 - im OLAT Schema 
 - Datum in TT-MM-YY Format - keine Punkte
@@ -62,9 +62,9 @@
 - Maven: nicht definieren, sondern begründen, warum und wofür
 -> darauf achten, was wir entwickeln wollen und nicht allgemein bleiben
 
-## Protokoll 4. internes Gruppentreffen
+# Protokoll 4. internes Gruppentreffen
 
-# Rollenverteilung
+## Rollenverteilung
 - Backend: Maurice, Max, Leon, Steve
 - Frontend: Leon K, Alex
 - Design: Sina
@@ -76,7 +76,7 @@
 #### Datenbank
 - Mongodb
 
-# App
+## App
 - Authentifizierung
 - Benutzerverwaltung
 - einzig öffentliche: Login
