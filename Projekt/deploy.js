@@ -106,7 +106,6 @@ const deploy = async () => {
 	const deployer = new Deployer();
 	try {
 		console.log("'Reading' config");
-		const runPort = process.env["PRAKSERV_SERVER_PORT"] || error("Missing port!");
 		const config = {
 			host: process.env["PRAKSERV_HOST"] || error("Missing host!"),
 			port: 22,
