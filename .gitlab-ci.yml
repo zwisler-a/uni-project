@@ -1,24 +1,46 @@
-image: node:6
+image: node:latest
 
-before_script:
-  - ping -c 1 aksw.org
+services:
+  - mongo:latest
 
-build_the_project:
+variables:
+  MONGO_INITDB_DATABASE: ak18b
+
+stages:
+  - test
+  - production
+
+cache:
+  paths:
+    - Projekt/node_modules/
+    - Projekt/client/node_modules/
+    - Projekt/server/node_modules/
+
+test_client:
+  stage: test
   script:
-    - sh program.sh
-    - test -f result.md
+    - cd Projekt/client/
+    - npm install
+    - npm run test
 
-release-job:
-  before_script:
-    - npm install -g markdown-pdf
+test_server:
+  stage: test
   script:
-    - sh program.sh
-    - markdown-pdf result.md
-    - markdown-pdf Webseiten/docu.md
-    - mv Webseiten/docu.pdf docu.pdf
-  artifacts:
-    paths:
-    - result.pdf
-    - docu.pdf
+    - cd Projekt/server/
+    - npm install
+    - npm run test
+
+deploy:
+  stage: production
+  script:
+    - cd Projekt/
+    - npm install
+    - npm run build:all
+    - npm run deploy
   only:
-    - tags
+    - master
+  when: manual
+  artifacts:
+    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
+    paths:
+      - Projekt/dist/

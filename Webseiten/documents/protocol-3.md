@@ -1,20 +1,25 @@
+---
+layout: page
+permalink: /documents/protocol/3/
+---
+
 # Protokoll - 3.Treffen
 
 ## Organisatorisch:
 
-- Slack als primäre kommunikation stakeholdern [slack group link](https://join.slack.com/t/swp18-ak18/shared_invite/enQtNDY1Njg5OTQzMjIxLWZlNDU2YzRhN2MyMzU4N2ZlODljMDNiYzRmZTAyOTExMTdhM2ZiYTQ2MjE0NDFhNTExMGYxNjA2NzIyZjI5ZDY)
-- wichtige sachen über e-Mail klären
-- Termin für Lastenheft-Review 
+- Slack als primäre Kommunikation Stakeholdern
+- wichtige Sachen über e-Mail klären
+- Termin für Lastenheft-Review
     - 1 Woche im Voraus Termin über e-Mail absprechen
 
 ## Konzeptionelles
 
-### Userrollen 
+### Userrollen
 - Read (User)
 - Write (Verwalter)
 - Administrator
 
-Rollen konzept nach objekt typ ordnen. User x kann nur alle Laptops sehen und bearbeiten. User y kann Laptops nur sehen. User z kann nur bücher aber keine Laptops sehen.
+Rollen Konzept nach Objekt typ ordnen. User x kann nur alle Laptops sehen und bearbeiten. User y kann Laptops nur sehen. User z kann nur Bücher aber keine Laptops sehen.
 
 
 ### User
@@ -36,9 +41,9 @@ Muss nur auf einem Browser laufen
 - Firefox
 
 ### Dokumente
-- Dokumente wie Rechnung Wartungszettel usw in Objekt
+- Dokumente wie Rechnung Wartungszettel usw. in Objekt
     - Als Art primitiver Datentyp umsetzbar
-- Versionierung von Anhangsdokumenten 
+- Versionierung von Dokumenten
 
 ### Datenzugriff
 - Datenzugriff besonders wichtig
@@ -48,7 +53,7 @@ Muss nur auf einem Browser laufen
 - Suche nach speziellen Aspekten / Felder (Raum, Mitarbeiter etc.)
 
 ### Daten
-- Es soll pflichtfelder in Datentyp geben
+- Es soll Pflichtfelder in Datentyp geben
 - Für Dokumente soll pdf/bmp/tif gespeichert werden
 
 
@@ -65,7 +70,7 @@ Muss nur auf einem Browser laufen
 - JS
 - Markdown
 - Frameworks?
-- ProgressiveWebApp
+- Progressive Web App
 - Modultest
 - Deployment
 
@@ -74,13 +79,13 @@ Muss nur auf einem Browser laufen
 - Maven
 - Jekyll
 - GitLab
-- noFramework
+- no Framework
 - MongoDB
-- mySQL
+- MySQL
 - Angular
 - Polymer
 - Test
-- Npm
+- NPM
 - java(spring)
 
 ### Konzepte

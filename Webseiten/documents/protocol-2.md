@@ -1,4 +1,9 @@
-# Protokoll 2.Treffen
+---
+layout: page
+permalink: /documents/protocol/2/
+---
+
+# Protokoll - 2.Treffen
 
 ## Inhalt Abgaben
 - Aufwandsberichte*
@@ -26,7 +31,7 @@
 ##### technischer Assistent
 - GitLab-Pflege
 - stimmt sich mit Gruppenleiter ab
-- Autmoatisierung, Serververöffentlichung
+- Automatisierung, Serververöffentlichung
 
 ##### Qualitätsverantwortlicher
 - Wartbarkeit
@@ -48,7 +53,7 @@
 - Projektziele können aus den Augen verloren gehen (Lauffähigkeit ist wichtig, erst dann Features)
 - Entwicklungskosten (hört sich viel Zeit an, ist es aber nicht. Lauffähigkeit wichtiger als Features)
 - Wahl des Entwicklungsmodells (wichtiges vor)
-- verwendete Technologie (Sprache muss ggf. neu erlernt werden oder Frameworkes nicht gut -> auf andere Sprache wechseln)
+- verwendete Technologie (Sprache muss ggf. neu erlernt werden oder Frameworks nicht gut -> auf andere Sprache wechseln)
 
 ## Protokolle
 - Abgabe im Git
@@ -65,7 +70,7 @@
 - ruby installieren
 - Abgaben verlinken
 
-## Projektresourcen
+## Projektressourcen
 - einfach ins Gitlab pushen
 - readme.md ändern
 - Wiki einrichten
@@ -90,5 +95,5 @@
 - Aspekte: Was soll erreicht werden?
 - Dazu Beispiele von letzten Jahren ansehen oder Handreichung
 
-## Protokoll 2. internes Gruppentreffen
+## Protokoll 2. Treffen innerhalb der Gruppe
 - fand aufgrund von Mitgliedermangel nicht statt.

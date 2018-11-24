@@ -1,0 +1,32 @@
+{
+  "name": "inventarisierungstool",
+  "version": "0.0.0",
+  "description": "Inventarisierungtool für Unternehmenswerte",
+  "main": "index.js",
+  "scripts": {
+    "install": "npm run install:server && npm run install:client",
+    "install:server": "cd server && npm i",
+    "install:client": "cd client && npm i",
+    "test:client": "cd client && npm run test",
+    "test:server": "cd server && npm run test",
+    "build:client": "cd client && npm run build",
+    "build-prod:client": "cd client && npm run build-prod",
+    "build:all": "node build.js",
+    "deploy": "node deploy.js"
+  },
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git@git.informatik.uni-leipzig.de:swp18/ak18b.git"
+  },
+  "keywords": [
+    "Inventarisierungstool"
+  ],
+  "author": "ak18b",
+  "license": "ISC",
+  "dependencies": {
+    "fs-extra": "^7.0.1",
+    "scp2": "^0.5.0",
+    "ssh2": "^0.6.1"
+  }
+}
