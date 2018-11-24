@@ -1,0 +1,214 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{titling}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Leon Kamuf}
+\chead{ak18b}
+\rhead{22.11.2018}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\begin{titlepage}
+
+\pretitle{%
+\vskip -3em
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.55]{Logo.png}
+\end{center}
+\end{figure}
+\begin{center}
+\vskip -2em
+\large{Wintersemester 2018/19\\Softwaretechnikpraktikum} \vskip 9em
+\rule{5in}{0.4pt}\par \vskip 0.5em
+}
+\posttitle{\par\rule{5in}{0.4pt} \vskip 4em
+\Large Gruppe: ak18b \vskip 1.5em
+\normalsize Betreuer: Benjamin Lucas Friedland, Michael Fritz\vskip 1em
+\normalsize Gruppenmitglieder: Alexander Zwisler, Leon Kamuf, Leon Rudolph, Maurice Eisenblätter, Maximilian Gläfcke, Robin Seidel, Sina Opitz, Steve Woywod
+\end{center}}
+
+\title{\textbf{\Huge App zur Inventarisierung von Unternehmenswerten}\vskip 0.5em \huge Lastenheft}
+\date{}
+\maketitle
+\end{titlepage}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+\renewcommand\thesection{\arabic{section}}
+
+\section{Ausgangssituation}
+In der Wirtschaft ist die Inventarisierung von Unternehmenswerten ein fester Bestandteil für einen organisierten Arbeitsablauf. Ob man wissen möchte was ein Unternehmen für Reserven zum wirtschaften hat oder ob man unternehmensintern Arbeitsmaterialien sucht, dies alles kann man in der Inventarisierung finden. Viele Unternehmen machen ihre Inventarisierung noch analog und nur wenige digital. Die Arbeitswelt ist jedoch im Wandel und immer mehr Unternehmen wollen auf eine digitale Lösungen umsteigen. Es gibt bereits einige Apps um dies zu realisieren, allerdings sind diese meist auf spezielle Unternehmenstypen zugeschnitten.
+
+\vskip 10em
+\section{Zielsetzung und Produkteinsatz}
+\subsection{Vision}
+Unternehmen sollen mit Hilfe der entstehenden App unternehmensintern besser organisieren können. Ziel des Projektes ist also eine leicht bedienbare Organisationshilfe. Wie bereits erwähnt gibt es noch die analoge Option, welche jedoch nicht so zentral anwendbar ist, wie eine digitale Lösung. Die anderen Apps, welche auf dem Markt sind, sind meist nur auf einen Unternehmenstypen spezialisiert. Aus diesem Grund soll eine App konzipiert werden, zur Inventarisierung von Unternehmenswerten, welche die Inventarisierung nicht als organisatorisch Last erscheinen lässt, sondern, durch ihre leichte Bedienbarkeit, den Arbeitsalltag erleichtert.
+\subsection{Zielsetzung}
+Die zu entwickelnde Software soll eine organisatorische Erleichterung für Unternehmen werden. Um dieses Ziel zu erreichen wird eine leichte, intuitive Bedienbarkeit angestrebt, um zusätzliche Schulungen für die Software zu vermeiden. Die entsprechende Listung und Verwaltung der Software, für ein Unternehmen, sollte entsprechend anschaulich und einfach sein. Die Beziehung von Tochter- und Muttergesellschaften ist häufig anzutreffen in der freien Wirtschaft, weshalb die Software eine Möglichkeit zur Organisation dieser Beziehung haben sollte. Selbstverständlich darf nicht jede Person alles machen, deshalb werden mehrere Rollen eingeteilt, welche verschiedene Berechtigungen zur Bearbeitung, beziehungsweise zur Einsicht in diverse Dokumente haben. Den gelisteten Objekten sollen optionaler Weise Dokumente angehangen werden.
+\subsection{Produkteinsatz}
+Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. Es sollen Arbeitgeber angesprochen werden, welche die Software an ihre Arbeitnehmer weiterleiten. Die Arbeitnehmer sollen dann die Benutzung von Arbeitsmaterialien dokumentieren, damit die Materialien schnell gefunden werden können, sollten sie gebraucht werden. Zudem hat man mit der Software einen guten Überblick über die vorhandenen Guter im Unternehmen.
+\newpage
+
+\section{Funktionale Anforderungen}
+\subsection{Muss-Ziele}
+
+\subsection{Kann-Ziele}
+\newpage
+
+\section{Nicht-funktionale Anforderungen}
+\subsection{Muss-Ziele}
+\subsubsection{Datenschutz und Anonymität}
+\textbf{/LN0010/} Profildetails
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender der App sollte selber bestimmen können, wie viele seiner Daten angezeigt werden. Jedoch ist minimal ein Nutzername, beziehungsweise eine Nutzerkennung anzugeben.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LN0020/} Bearbeitung der Profildaten
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Admin soll stets die Option haben, die Profile der untergeordneten Benutzerklassen editieren zu können, sowie seine eigenen Daten zu ändern.\\
+\par
+\endgroup
+
+\textbf{/LN0030/} Löschen von Profilen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Admin soll, genau wie bei der Bearbeitung von Profildaten, stets die Möglichkeit haben Profile zu löschen, um Personen, welche nicht mehr zum Unternehmen gehören, jederzeit entfernen zu können.\\
+\par
+\endgroup
+
+\textbf{/LN0040/} Sicherheit der Anmeldedaten
+\par
+\begingroup
+\leftskip=1cm
+\noindent Um die Sicherheit der Anmeldedaten zu gewährleisten, sollen diese verschlüsselt gespeichert werden.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Fehlerunanfälligkeit}
+
+\textbf{/LN0110/} Handling von Falscheingaben
+\par
+\begingroup
+\leftskip=1cm
+\noindent Sämtliche Falscheingaben müssen, mit geeigneten Mitteln, gefiltert und unschädlich gemacht werden.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LN0120/} Name
+\par
+\begingroup
+\leftskip=1cm
+\noindent Sollte es zu internen Fehlern kommen, ist der Schaden (Datenverlust etc.) so gering wie möglich zu halten. Ein Absturz der App sollte unter allen Umständen vermieden werden.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Wartung}
+
+\textbf{/LN0210/} Dokumentationen des Programmcodes
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Programmcode soll vollständig kommentiert und dokumentiert sein, um eine spätere Wartung zu erleichtern.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LN0220/} Modulierbarkeit und Wartung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Die Struktur des Programmcodes soll verhältnismäßig 'leicht' aufgebaut sein, so dass, von allen Personen der eventuellen Weiterentwicklung, Änderungen gezielt vorgenommen werden können.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Benutzeroberfläche}
+
+\textbf{/LN0310/} Intuitive grafische Interaktion
+\par
+\begingroup
+\leftskip=1cm
+\noindent Das UI (User-Interface) soll so einfach wie möglich gehalten werden, damit es intuitiv von dem Benutzer verwendet werden kann.\\
+\par
+\endgroup
+\newpage
+\leftskip=-1.5em
+\textbf{/LN0320/} Korrektheit der Eingaben
+\par
+\begingroup
+\leftskip=1cm
+\noindent Benutzereingaben müssen auf ihre Korrektheit (unerlaubte Zeichen, richtiges Format etc.) geprüft und gegebenenfalls abgefangen werde. (siehe Fehlerunanfälligkeit)\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsection{Kann-Ziele}
+\textbf{/LN0410/} Distributionen an andere Versionen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Das Programm soll von so vielen Android-Versionen wie möglich unterstützt werden.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LN0420/} Effiziente Implementierung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Das Programm soll möglichst effizient laufen, das heißt eine möglichst kleine Komplexität in Laufzeit und Speicherbedarf.\\
+\par
+\endgroup
+
+\section{Qualitätsmatrix nach ISO 25010}
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=1.0]{Qualitaet.png}
+\end{center}
+\end{figure}
+Besonders hohe Priorität hat bei uns die Sicherheit. Unternehmenswerte und Dokumente sollen ausschließlich von autorisierten Personen gesehen und bearbeitet werden können, da es sich hierbei um sehr sensible Daten handeln kann.
+Ebenfalls wichtig ist die Benutzbarkeit, da jeder Mitarbeiter die App nutzen soll und deshalb Schulungen für die Benutzung nicht notwendig sein sollen.
+Effizienz hingegen wird von uns als eher unwichtig eingestuft, da die Mengen an Daten überschaubar bleiben und keine rechenintensiven Berechnungen Teil der App sind.
+Die Kompatibilität haben wir ebenfalls niedrig eingestuft, da wir vorerst nur den Chrome-Browser unterstützen möchten.
+\newpage
+
+\section{Lieferumfang und Abnahmekriterien}
+\newpage
+
+\section{Vorprojekt}
+Im Rahmen des Vorprojekts soll das wesentliche Grundgerüst, bestehend aus Datenbank und Server- und Client-Grundkonzept, erstellt werden. Zu diesem Zeitpunkt sollte das Hinzufügen und Löschen von Inventarobjekten, sowie deren Darstellung, möglich sein. Der Darstellung der Inventarobjekte sollte am besten in Form einer Liste vorgenommen werden.
+Es muss ein Grundkonzept für diese Inventarobjekte bereits konzipiert und implementiert sein. Die Beziehungen der Mutter- und Tochterunternehmen, sowie die Darstellung und Modifizierung der Inventarobjekte von Tochterunternehmen, sollten ebenfalls fertiggestellt sein. Die Rechtevergabe an einzelne Personengruppen, damit Diese nicht alles einsehen können, sondern nur das was vom Admin für sie freigegeben ist, soll auch schon funktionieren. Sollte die Zeit es zulassen wird ebenfalls ein vereinfachter Login implementiert.
+
+\section{Glossar}
+
+\end{document}
