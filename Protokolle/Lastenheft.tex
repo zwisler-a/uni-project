@@ -70,32 +70,245 @@ Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. 
 \newpage
 
 \section{Funktionale Anforderungen}
-\subsection{Muss-Ziele}
 
-\subsection{Kann-Ziele}
-\newpage
-
-\section{Nicht-funktionale Anforderungen}
 \subsection{Muss-Ziele}
-\subsubsection{Datenschutz und Anonymität}
-\textbf{/LN0010/} Profildetails
+\subsubsection{An- und Abmeldung}
+\textbf{/LF0010/} Login
 \par
 \begingroup
 \leftskip=1cm
-\noindent Der Anwender der App sollte selber bestimmen können, wie viele seiner Daten angezeigt werden. Jedoch ist minimal ein Nutzername, beziehungsweise eine Nutzerkennung anzugeben.\\
+\noindent Der Anwender der App soll sich mit seinem Usernamen, sowie mit seinem Passwort, anmelden können.\\
 \par
 \endgroup
 
 \leftskip=-1.5em
-\textbf{/LN0020/} Bearbeitung der Profildaten
+\textbf{/LF0020/} Logout
 \par
 \begingroup
 \leftskip=1cm
-\noindent Der Admin soll stets die Option haben, die Profile der untergeordneten Benutzerklassen editieren zu können, sowie seine eigenen Daten zu ändern.\\
+\noindent Der Anwender soll sich jederzeit ausloggen können.\\
 \par
 \endgroup
 
-\textbf{/LN0030/} Löschen von Profilen
+\textbf{/LF0030/} Registrieren neuer Anwender
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll die Möglichkeit bestehen neue Nutzer der App hinzuzufügen und ihnen ihre Daten zur Anmeldung zu übermitteln.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Datenzugriff}
+\textbf{/LF0110/} Anzeigen aller erfassten Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Alle erfassten Items sollen als Tabelle ausgegeben werden.
+\begin{enumerate}
+\leftskip=3em
+\item[a)] Benutzerdefinierte Spalten
+\item[] Die anzuzeigenden Spalten können von jedem Anwender individuell definiert werden.
+\end{enumerate}
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0120/} Suche
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll ein Suchfeld vorhanden sein, womit es einem Anwender gestattet ist gezielt nach Items zu suchen.
+\begin{enumerate}
+\leftskip=3em
+\item[a)] Typspezifische Suche
+\item[] Es soll nach einem spezifischen Typ gesucht werden können, wie zum Beispiel nach dem Typ "Laptop".
+\item[b)]Feldspezifische Suche
+\item[] Es soll die Suche nach bestimmten Werten in Feldern ermöglicht sein, zum Beispiel die Suche nach "Benutzern" mit dem Wert "Max Mustermann".
+\end{enumerate}
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Dateneingabe}
+\textbf{/LF0210/} Neue Items hinzufügen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender soll neue Items hinzufügen können, mit den, passend zum Datentyp, entsprechenden Eigenschaften.\\
+\par
+\endgroup
+
+\leftskip=0em
+
+\leftskip=-1.5em
+\textbf{/LF0220/} Anhang von Dokumenten
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll möglich sein einem Item Dateien (PDF, Png etc.) versioniert anhängen zu können.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0230/} Bearbeiten von Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender soll die Möglichkeit haben bereits vorhandene Items überarbeiten zu können.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0240/} Entfernen von Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll für den Anwender möglich sein, Items restlos löschen zu können.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Typeneingabe}
+
+\textbf{/LF0310/} Hinzufügen neuer Itemtypen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll möglich sein neue Typen von Items hinzufügen zu können.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0320/} Bearbeitung von Itemtypen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender soll Typen überarbeiten können, zu dem sollen auch alle Items, welche dem Typ zugehörig sind, aktualisiert werden.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0330/} Löschen von Itemtypen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Das Löschen von bestimmten Itemtypen soll implementiert sein.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsubsection{Administration}
+
+\textbf{/LF0410/} Firmenverwaltung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll möglich sein neue Unternehmen/Firmen der App hinzuzufügen und zu bearbeiten, sowie mehrere Unternehmen/Firmen unter einer Dachgesellschaft zusammenzufügen.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0420/} Typenverwaltung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll das Hinzufügen, Bearbeiten und Löschen von Typen möglich sein. (siehe Typeneingabe)\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0430/} Globale Typenfelder
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll das Hinzufügen und Bearbeiten von Feldern ermöglicht sein, welche in jedem Item vorkommen.\\
+\par
+\endgroup
+
+\leftskip=0em
+\subsection{Kann-Ziele}
+
+\textbf{/LF0510/} E-Mail Adresse ändern
+\par
+\begingroup
+\leftskip=1cm
+\noindent Für den Anwender soll die Option bestehen, seine hinterlegte E-Mail Adresse jederzeit ändern zu können.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0520/} Passwort ändern
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender soll sein Passwort ändern können, solange wie er eingeloggt ist.\\
+\par
+\endgroup
+
+\textbf{/LF0530/} Wiederherstellung des Passworts
+\par
+\begingroup
+\leftskip=1cm
+\noindent Für den Fall das ein Anwender sein Passwort vergisst, soll es die Option geben ein neues zu erhalten.\\
+\par
+\endgroup
+
+\textbf{/LF0540/} Sortieren von Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Die Sortierung von Items nach dem Nutzerwunsch soll möglich sein.\\
+\par
+\endgroup
+
+\textbf{/LF0550/} Filtern von Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Anwender soll, nach seinen Wünschen, die vorhandene Liste filtern können, zum Beispiel damit keine Items mit dem Feld "defekt:true" angezeigt werden.\\
+\par
+\endgroup
+
+\textbf{/LF0560/} Item Feld "Input"
+\par
+\begingroup
+\leftskip=1cm
+\noindent Das Feld "Input", soll die Eingabe erleichtern, so könnte es zum Beispiel Color-Picker für Farben, Fileuploads etc. zur Verfügung stellen.\\
+\par
+\endgroup
+
+\newpage
+\textbf{/LF0570/} Verlinkung von Items
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll möglich sein Items untereinander zu verlinken, zum Beispiel existiert ein Item "Location X" , welches ein Feld von Item "Y" ist. Dies kann auf Orte, Personen etc. übertragen werden.\\
+\par
+\endgroup
+
+\textbf{/LF0580/} Pflichfelder von Itemtypen
+\par
+\begingroup
+\leftskip=1cm
+\noindent Itemtypen sollen, falls angebracht, Pflichtfelder zugeschrieben bekommen, welche bei jedem neuem Item des Typs vorhanden sein müssen.\\
+\par
+\endgroup
+
+\textbf{/LF0590/} Rollenverwaltung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Es soll, vorhandenen Anwenderrollen, Berechtigungen hinzugefügt, bzw. entfernt werden können.\\
+\par
+\endgroup
+
+\vskip 10em
+\section{Nicht-funktionale Anforderungen}
+\subsection{Muss-Ziele}
+\subsubsection{Datenschutz und Anonymität}
+
+\textbf{/LN0010/} Löschen von Profilen
 \par
 \begingroup
 \leftskip=1cm
@@ -103,7 +316,8 @@ Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. 
 \par
 \endgroup
 
-\textbf{/LN0040/} Sicherheit der Anmeldedaten
+\leftskip=-1.5em
+\textbf{/LN0020/} Sicherheit der Anmeldedaten
 \par
 \begingroup
 \leftskip=1cm
@@ -161,15 +375,6 @@ Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. 
 \noindent Das UI (User-Interface) soll so einfach wie möglich gehalten werden, damit es intuitiv von dem Benutzer verwendet werden kann.\\
 \par
 \endgroup
-\newpage
-\leftskip=-1.5em
-\textbf{/LN0320/} Korrektheit der Eingaben
-\par
-\begingroup
-\leftskip=1cm
-\noindent Benutzereingaben müssen auf ihre Korrektheit (unerlaubte Zeichen, richtiges Format etc.) geprüft und gegebenenfalls abgefangen werde. (siehe Fehlerunanfälligkeit)\\
-\par
-\endgroup
 
 \leftskip=0em
 \subsection{Kann-Ziele}
@@ -177,7 +382,7 @@ Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. 
 \par
 \begingroup
 \leftskip=1cm
-\noindent Das Programm soll von so vielen Android-Versionen wie möglich unterstützt werden.\\
+\noindent Das Programm soll von so vielen Browser-Versionen wie möglich unterstützt werden.\\
 \par
 \endgroup
 
@@ -190,6 +395,7 @@ Zielgruppe der Software sind Unternehmen, welche Inventarisierungsbedarf haben. 
 \par
 \endgroup
 
+\newpage
 \section{Qualitätsmatrix nach ISO 25010}
 \begin{figure}[h]
 \begin{center}
@@ -200,15 +406,22 @@ Besonders hohe Priorität hat bei uns die Sicherheit. Unternehmenswerte und Doku
 Ebenfalls wichtig ist die Benutzbarkeit, da jeder Mitarbeiter die App nutzen soll und deshalb Schulungen für die Benutzung nicht notwendig sein sollen.
 Effizienz hingegen wird von uns als eher unwichtig eingestuft, da die Mengen an Daten überschaubar bleiben und keine rechenintensiven Berechnungen Teil der App sind.
 Die Kompatibilität haben wir ebenfalls niedrig eingestuft, da wir vorerst nur den Chrome-Browser unterstützen möchten.
-\newpage
 
+\vskip 10em
 \section{Lieferumfang und Abnahmekriterien}
-\newpage
 
+\subsection{Lieferumfang}
+Geliefert werden soll eine Webanwendung zur Verwaltung unternehmensspezifischer Werte, welche wesentliche Funktionalitäten bereitstellt. Sie soll speziell für Bürounternehmen konzipiert sein. Es soll die Benutzeroberfläche, sowie die Nutzerverwaltung, bereits implementiert sein. Das Back-End wird durch "mongoDB" realisiert, um alle nötigen Informationen speichern, verwalten und synchronisieren zu können. Desweiteren wird eine vollständige Dokumentation zur Verfügung gestellt.
+
+\subsection{Abnahmekriterien}
+Als Hauptabnahmekriterium wird wird ein vollständig funktionstüchtiger Prototyp des Inventarisierungstools festgelegt. Es sollen alle Muss-Ziele und so viele Kann-Ziele wie möglich fertiggestellt sein. Der Lieferumfang soll eingehalten werden. Neben der vollständigen Dokumentation das Projekts, sollte darauf geachtet werden, dass die Qualitätsmatrix eingehalten wird.
+
+\vskip 10em
 \section{Vorprojekt}
 Im Rahmen des Vorprojekts soll das wesentliche Grundgerüst, bestehend aus Datenbank und Server- und Client-Grundkonzept, erstellt werden. Zu diesem Zeitpunkt sollte das Hinzufügen und Löschen von Inventarobjekten, sowie deren Darstellung, möglich sein. Der Darstellung der Inventarobjekte sollte am besten in Form einer Liste vorgenommen werden.
 Es muss ein Grundkonzept für diese Inventarobjekte bereits konzipiert und implementiert sein. Die Beziehungen der Mutter- und Tochterunternehmen, sowie die Darstellung und Modifizierung der Inventarobjekte von Tochterunternehmen, sollten ebenfalls fertiggestellt sein. Die Rechtevergabe an einzelne Personengruppen, damit Diese nicht alles einsehen können, sondern nur das was vom Admin für sie freigegeben ist, soll auch schon funktionieren. Sollte die Zeit es zulassen wird ebenfalls ein vereinfachter Login implementiert.
 
+\vskip 10em
 \section{Glossar}
-
+\Huge{\textbf{Work in Progress}}
 \end{document}
