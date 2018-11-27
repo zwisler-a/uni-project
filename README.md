@@ -35,8 +35,8 @@ sent with every request.
 | ---------- | :---------------------------------------------------------------------------------------------------------------------: | ------------: |
 | 05.11.18   | Abgabe A1: Projektressourcen eingerichtet (Praktikumsserver, gitlab-Server), Rollen besetzt, Risikoanalyse durchgeführt |        **Ja** |
 | 12.11.18   |                                          Abgabe A2: Recherchebericht erstellen                                          |        **Ja** |
-| 26.11.18   |                                             Abgabe A3: Lastenheft erstellt                                              |      **Nein** |
-| Termin\*\* |                      Review 1: Präsentation des Lastenhefts durch das Team für Betreuer und Tutor                       |      **Nein** |
+| 26.11.18   |                                             Abgabe A3: Lastenheft erstellt                                              |        **Ja** |
+| 06.12.18 <br> 15:15 |             Review 1: Präsentation des Lastenhefts durch das Team für Betreuer und Tutor                       |      **Nein** |
 | 17.12.18   |                                     Abgabe A4: Projektplan, Releaseplan, QS-Konzept                                     |      **Nein** |
 | Termin\*\* |                                                 Abgabe Releasebündel 1                                                  |      **Nein** |
 | Termin\*\* |                        Review 2: Präsentation des Entwurfs durch das Team für Betreuer und Tutor                        |      **Nein** |
