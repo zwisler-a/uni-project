@@ -1,0 +1,455 @@
+\documentclass{beamer}
+
+\mode<presentation>
+
+\usetheme[width=2.2cm]{Berkeley}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{graphicx}
+
+\title{Präsentation zum Lastenheft}
+\author{Gruppe: ak18b}
+\date{06. Dezember 2018}
+
+\begin{document}
+
+\setbeamertemplate{sidebar left}{}
+\begin{frame}
+\begin{figure}
+\includegraphics[scale=0.25]{Logo.png}
+\end{figure}
+\begin{center}
+\vskip -1em
+\tiny Wintersemester 2018/19\\
+\tiny Softwaretechnikpraktikum
+\end{center}
+\vskip -2em
+\titlepage
+\end{frame}
+
+\begin{frame}
+\frametitle{Inhaltsverzeichnis}
+\small
+\tableofcontents
+\end{frame}
+
+\section{Funktionale Anforderungen}
+
+\subsection{Muss-Ziele}
+
+\subsubsection{An- und Abmeldung}
+
+\setbeamertemplate{sidebar left}[sidebar theme]
+\makeatletter
+  \setbeamertemplate{sidebar \beamer@sidebarside}%{sidebar theme}
+  {
+    \beamer@tempdim=\beamer@sidebarwidth%
+    \advance\beamer@tempdim by -6pt%
+    \insertverticalnavigation{\beamer@sidebarwidth}%
+    \vfill
+    \ifx\beamer@sidebarside\beamer@lefttext%
+    \else%
+      \usebeamercolor{normal text}%
+      \llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+      \vskip2pt%
+    \fi%
+  }%
+\makeatother
+\begin{frame}
+\frametitle{An- und Abmeldung}
+
+\begin{block}{Login}
+\begin{itemize}
+\item über Username und Passwort
+\end{itemize}
+\end{block}
+
+\begin{block}{Logout}
+\begin{itemize}
+\item jederzeit möglich
+\end{itemize}
+\end{block}
+
+\begin{block}{Registrierung neuer Anwender}
+\begin{itemize}
+\item jederzeit neue Nutzer hinzufügen
+\item neue Nutzer Logindaten übermitteln
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Datenzugriff}
+
+\begin{frame}
+\frametitle{Datenzugriff}
+
+\begin{block}{Anzeigen aller erfassten Items}
+\begin{itemize}
+\item erfasste Items in einer Tabelle ausgeben
+\item anzuzeigende Spalten von jedem Anwender definierbar
+\end{itemize}
+\end{block}
+
+\begin{block}{Suche}
+\begin{itemize}
+\item gezieltes suchen nach Items über Suchfeld
+\begin{itemize}
+\item suche nach Typen (z.B. $"$Laptop$"$)
+\item suche nach Feldern (z.B. $"$Benutzer$"$)
+\end{itemize}
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Dateneingabe}
+
+\begin{frame}
+\frametitle{Dateneingabe}
+
+\begin{block}{Neue Items hinzufügen}
+\begin{itemize}
+\item Items hinzufügen, mit entsprechenden Eigenschaften
+\end{itemize}
+\end{block}
+
+\begin{block}{Anhang von Dokumenten}
+\begin{itemize}
+\item Items versionierte Dateien anhängen
+\end{itemize}
+\end{block}
+
+\begin{block}{Bearbeiten von Items}
+\begin{itemize}
+\item vorhandene Items überarbeiten/verändern
+\end{itemize}
+\end{block}
+
+\begin{block}{Entfernen von Items}
+\begin{itemize}
+\item restloses löschen von Items
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Typeneingabe}
+
+\begin{frame}
+\frametitle{Typeneingabe}
+
+\begin{block}{Hinzufügen von neuen Itemtypen}
+\begin{itemize}
+\item neue Itemtypen hinzufügen
+\end{itemize}
+\end{block}
+
+\begin{block}{Bearbeiten von Itemtypen}
+\begin{itemize}
+\item Typen überarbeiten/verändern
+\begin{itemize}
+\item zugehörige Items aktualisieren
+\end{itemize}
+\end{itemize}
+\end{block}
+
+\begin{block}{Löschen von Itemtypen}
+\begin{itemize}
+\item löschen bestimmter Itemtypen
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Administration}
+
+\begin{frame}
+\frametitle{Administration}
+
+\begin{block}{Firmenverwaltung}
+\begin{itemize}
+\item Unternehmen/Firma der App hinzufügen/bearbeiten
+\item mehrere Unternehmen/Firmen unter Dachgesellschaft zusammenfassen
+\end{itemize}
+\end{block}
+
+\begin{block}{Typenverwaltung}
+\begin{itemize}
+\item hinzufügen, bearbeiten, löschen von Itemtypen
+\end{itemize}
+\end{block}
+
+\begin{block}{Globale Pflichtfelder}
+\begin{itemize}
+\item hinzufügen/bearbeiten von globalen Pflichtfeldern
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsection{Kann-Ziele}
+
+\begin{frame}
+\frametitle{Kann-Ziele}
+
+\begin{block}{E-Mail Adresse ändern}
+\begin{itemize}
+\item hinterlegte E-Mail Adresse jederzeit veränderbar
+\end{itemize}
+\end{block}
+
+\begin{block}{Passwort ändern}
+\begin{itemize}
+\item Passwort ändern möglich
+\end{itemize}
+\end{block}
+
+\begin{block}{Mehrsprachigkeit}
+\begin{itemize}
+\item mehrere Sprachen verfügbar
+\item Übersetzungen einfach hinzuzufügen
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Kann-Ziele}
+
+\begin{block}{Itemtyp Vorlagen}
+\begin{itemize}
+\item häufig genutzte Itemtypen, bereits hinterlegt
+\end{itemize}
+\end{block}
+
+\begin{block}{Wiederherstellung des Passworts}
+\begin{itemize}
+\item Option neues Passwort zu erhalten
+\end{itemize}
+\end{block}
+
+\begin{block}{Sortieren von Items}
+\begin{itemize}
+\item nach Nutzerwunsch möglich
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Kann-Ziele}
+\begin{block}{Filtern von Items}
+\begin{itemize}
+\item filtern nach Nutzerwunsch (z.B. nur $"$defekt=false$"$)
+\end{itemize}
+\end{block}
+
+\begin{block}{Itemfeld $"$Input$"$}
+\begin{itemize}
+\item Erleichterung der Eingabe
+\item Beispiele: Colorpicker, Fileuploads etc.
+\end{itemize}
+\end{block}
+
+\begin{block}{Verlinkung von Items}
+\begin{itemize}
+\item Items untereinander verlinken
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Kann-Ziele}
+
+\begin{block}{Pflichtfelder von Itemtypen}
+\begin{itemize}
+\item Itemtypen mit Pflichtfeldern versehen (falls angebracht)
+\item neue Item des Typs erhält diese Felder
+\end{itemize}
+\end{block}
+
+\begin{block}{Rollenverwaltung}
+\begin{itemize}
+\item Anwenderrollen, Berechtigungen hinzufügen/bearbeiten/entfernen
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\section{Nicht-Funktionale Anforderungen}
+
+\subsection{Muss-Ziele}
+
+\subsubsection{Datenschutz und Anonymität}
+
+\begin{frame}
+\frametitle{Datenschutz und Anonymität}
+
+\begin{block}{Löschen von Profilen}
+\begin{itemize}
+\item Admin hat Berechtigung Benutzer zu löschen
+\end{itemize}
+\end{block}
+
+\begin{block}{Sicherheit der Anmeldedaten}
+\begin{itemize}
+\item Verschlüsselung von Nutzerdaten
+\item verschlüsseln durch hashen
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Fehlerunanfälligkeit}
+
+\begin{frame}
+\frametitle{Fehlerunanfälligkeit}
+
+\begin{block}{Validieren von Benutzereingaben}
+\begin{itemize}
+\item alle Eingaben validieren
+\item bei Fehlschlag Änderung nicht übernehmen
+\end{itemize}
+\end{block}
+
+\begin{block}{Datensicherheit}
+\begin{itemize}
+\item bei internen Fehlern Schaden gering wie möglich halten
+\item Absturz vermeiden
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Wartung}
+
+\begin{frame}
+\frametitle{Wartung}
+
+\begin{block}{Dokumentation des Programmcodes}
+\begin{itemize}
+\item Programmcode vollständig kommentiert/dokumentiert
+\end{itemize}
+\end{block}
+
+\begin{block}{Modulierbarkeit und Wartung}
+\begin{itemize}
+\item leichte Programmstruktur
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsubsection{Benutzeroberfläche}
+
+\begin{frame}
+\frametitle{Benutzeroberfläche}
+
+\begin{block}{Intuitive grafische Interaktion}
+\begin{itemize}
+\item UI so intuitiv wie möglich halten
+\item einfache Bedienung garantieren
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\subsection{Kann-Ziele}
+
+\begin{frame}
+\frametitle{Kann-Ziele}
+
+\begin{block}{Browsersupport}
+\begin{itemize}
+\item soll viele Browser unterstützen
+\end{itemize}
+\end{block}
+
+\begin{block}{Effiziente Implementierung}
+\begin{itemize}
+\item kleine Komplexität in Laufzeit und Speicherbedarf
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\section{Qualitätsmatrix nach ISO 25010}
+
+\begin{frame}
+\frametitle{Qualitätsmatrix nach ISO 25010}
+
+\begin{figure}
+\vskip -1em
+\includegraphics[scale=0.35]{Qualitaet.png}
+\vskip -1.3em
+\end{figure}
+
+\begin{block}{Beschreibung}
+\begin{itemize}
+\item hohe Priorität: Funktionalität, Sicherheit, Benutzbarkeit
+\item mittlere Priorität: Zuverlässigkeit, Wartbarkeit, Portierbarkeit
+\item niedrige Priorität: Effizienz, Kompatibilität
+\end{itemize}
+\end{block}
+
+\end{frame}
+
+\section{Lieferumfang}
+
+\begin{frame}
+\frametitle{Lieferumfang}
+\begin{block}{}
+\begin{itemize}
+\item Webanwendung zur Verwaltung unternehmensspezifischer Werte
+\item speziell für Bürounternehmen konzipiert
+\item Benutzeroberfläche/Nutzerverwaltung implementiert
+\item Back-End mit $"$mongoDB$"$
+\item vollständige Dokumentation
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Abnahmekriterien}
+
+\begin{frame}
+\frametitle{Abnahmekriterien}
+\begin{block}{}
+\begin{itemize}
+\item funktionstüchtiger Prototyp
+\item alle Muss-Ziele fertiggestellt
+\item so viele Kann-Ziele wie möglich fertiggestellt
+\item Lieferumfang einhalten
+\item Qualitätsmatrix einhalten
+\end{itemize}
+\end{block}
+\end{frame}
+
+\section{Vorprojekt}
+
+\begin{frame}
+\frametitle{Vorprojekt}
+
+\begin{block}{}
+\begin{itemize}
+\item Grundgerüst erstellen
+\begin{itemize}
+\item Datenbank
+\item Server- und Client-Grundkonzept
+\end{itemize}
+\item Hinzufügen/Löschen und Darstellung von Items
+\begin{itemize}
+\item Darstellung als Tabelle
+\end{itemize}
+\item Grundkonzept für Items konzipiert und implementiert
+\item Dachgesellschaft implementiert
+\begin{itemize}
+\item Darstellung und Modifizierung von Items zgh. zu entsprechenden Unternehmen
+\end{itemize}
+\item Rechtevergabe an Nutzer vom Admin
+\end{itemize}
+\end{block}
+\end{frame}
+
+\end{document}
