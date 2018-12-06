@@ -1,3 +1,8 @@
+---
+layout: page
+permalink: /documents/protocol/6/
+---
+
 # Protokoll 6. Gruppentreffen 30-11-2018
 ## Feedback Projektmanagement
 - Arbeitszeit ausgeglichen

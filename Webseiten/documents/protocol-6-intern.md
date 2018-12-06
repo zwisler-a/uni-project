@@ -1,3 +1,8 @@
+---
+layout: page
+permalink: /documents/protocol/6-i/
+---
+
 # Protokoll 6. internes Gruppentreffen
 ## Präsentation
 - Konzepte und Aspekte zeigen
