@@ -42,7 +42,7 @@
 
 #### Kundenanforderungen
 - Clickdummy auf Praktikumsserver 
-- MongoDB nicht effizient -> Endaslieferung in SQL
+- MongoDB nicht effizient -> Endauslieferung in SQL
 - Daten im Frontend bauen, im Backend Schema erstellen und auf Datenbank übertragen
 
 #### Ausblick
