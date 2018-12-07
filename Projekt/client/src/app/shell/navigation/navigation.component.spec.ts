@@ -1,6 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NavigationComponent } from './navigation.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {
+    MatButtonModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatProgressBarModule
+} from '@angular/material';
+import { NavigationService } from './navigation.service';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -8,7 +17,16 @@ describe('NavigationComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [NavigationComponent]
+            declarations: [NavigationComponent],
+            imports: [
+                RouterTestingModule,
+                MatProgressBarModule,
+                MatToolbarModule,
+                MatIconModule,
+                MatButtonModule,
+                FlexLayoutModule
+            ],
+            providers: [NavigationService]
         }).compileComponents();
     }));
 
