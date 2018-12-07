@@ -1,7 +1,7 @@
 # Protokoll internes Gruppentreffen
 
 ## Abgabe A4
-####Lastenheft überarbeiten
+#### Lastenheft überarbeiten
 - Punkte besprochen
 - Punkte vernommen
 - Assigned to: Leon Kamuf
