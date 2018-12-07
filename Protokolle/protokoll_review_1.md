@@ -38,7 +38,7 @@
 - Benutzer löschen = funktionale Anforderung
 - Code-Dokumentation selbstverständlich (weglassen)
 - effiziente Implementierung als Muss-Ziel
-- Login komplexer (Passowrt Sicherheitsstufen)
+- Login komplexer (Passwort Sicherheitsstufen)
 
 #### Kundenanforderungen
 - Clickdummy auf Praktikumsserver 
