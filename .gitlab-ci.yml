@@ -15,7 +15,7 @@ cache:
 
 test_client:
   stage: test
-  image: zenato/puppeteer:latest
+  image: davidjeddy/docker_puppeteer_jest:latest
   script:
     - cd Projekt/client/
     - sudo npm install
