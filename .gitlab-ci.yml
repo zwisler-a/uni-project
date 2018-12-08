@@ -1,6 +1,5 @@
 image: node:latest
 
-
 variables:
   MONGO_INITDB_DATABASE: ak18b
 
@@ -23,9 +22,9 @@ test_client:
     - npm run test
     - npm run e2e
   artifacts:
+    expire_in: 3 day
     paths:
-    - Projekt/client/e2e/screenshots
-      expire_in: 1 day
+      - Projekt/client/e2e/screenshots
     reports:
       junit:
         - Projekt/client/reports/TESTS-*.xml
