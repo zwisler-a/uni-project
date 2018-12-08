@@ -1,0 +1,18 @@
+<ng-container *ngIf="group">
+    <mat-divider></mat-divider>
+    <span [hidden]="collapsed" class="navigation-group-title">
+        {{ group.title }}
+    </span>
+    <mat-nav-list>
+        <a
+            mat-list-item
+            *ngFor="let navItem of group.items"
+            class="navigation-item"
+            [routerLink]="navItem.route"
+            routerLinkActive="active"
+        >
+            <mat-icon>{{ navItem.icon }}</mat-icon>
+            <span class="label">{{ navItem.label }}</span>
+        </a>
+    </mat-nav-list>
+</ng-container>

@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { NavigationService } from './navigation.service';
-import { NavigationGroup } from './navigation.interface';
+import { NavigationGroup } from './types/navigation-group.interface';
 
 describe('NavigationService', () => {
     beforeEach(() => TestBed.configureTestingModule({}));

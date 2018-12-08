@@ -1,11 +1,6 @@
 @import "~@angular/material/theming";
 
-.page-loading-indicator {
-    // Always keep it on top
-    position: fixed;
-    top: 0;
-    z-index: 9999;
-}
+
 .main-navigation-container {
     display: flex;
     height: 100%;
@@ -32,7 +27,7 @@
             width: 256px;
         }
         &.collapsed {
-            width: 60px;
+            width: 56px;
         }
         &.hidden {
             width: 0px;

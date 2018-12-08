@@ -1,21 +1,31 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationComponent } from './navigation/navigation.component';
-import { LoginComponent } from './login/login.component';
-import {
-    MatProgressBarModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule
-} from '@angular/material';
-import { NavigationService } from './navigation/navigation.service';
-import { RouterModule } from '@angular/router';
+import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import {
+    MatButtonModule,
+    MatIconModule,
+    MatListModule,
+    MatProgressBarModule,
+    MatToolbarModule
+} from '@angular/material';
+import { RouterModule } from '@angular/router';
+
+import { NavigationGroupComponent } from './navigation/navigation-group/navigation-group.component';
+import { NavigationComponent } from './navigation/navigation.component';
+import { NavigationService } from './navigation/navigation.service';
+import { SidenavControlButtonComponent } from './navigation/sidenav-control-button/sidenav-control-button.component';
+import { RouterLoadingIndicatorComponent } from './router-loading-indicator/router-loading-indicator.component';
+
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
  */
 @NgModule({
-    declarations: [NavigationComponent, LoginComponent],
+    declarations: [
+        NavigationComponent,
+        RouterLoadingIndicatorComponent,
+        SidenavControlButtonComponent,
+        NavigationGroupComponent
+    ],
     imports: [
         CommonModule,
         RouterModule,
@@ -23,7 +33,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
-        FlexLayoutModule
+        FlexLayoutModule,
+        MatListModule
     ],
     providers: [NavigationService]
 })

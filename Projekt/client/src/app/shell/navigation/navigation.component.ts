@@ -1,18 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NavigationGroup } from './navigation.interface';
-import { NavigationService } from './navigation.service';
-import {
-    Router,
-    RouterEvent,
-    NavigationStart,
-    RouteConfigLoadStart,
-    RouteConfigLoadEnd,
-    NavigationEnd,
-    NavigationError,
-    NavigationCancel
-} from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
+import { Subscription } from 'rxjs';
+
+import { NavigationService } from './navigation.service';
+import { NavigationGroup } from './types/navigation-group.interface';
+import { SidenavMode } from './types/sidenav-mode.enum';
+import { SidenavState } from './types/sidenav-state.enum';
 
 /**
  * Component to display a sidenav containing the navigation.
@@ -29,69 +22,28 @@ import { ObservableMedia } from '@angular/flex-layout';
     styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit, OnDestroy {
-    /** Value of the loading indicator */
-    loadingProgress = 0;
-
-    // Subscriptions
-    routerEventSub: Subscription;
     mediaSub: Subscription;
 
-    /** Possible states of the sidenav */
-    // no enum since it should be visible in view
-    readonly NavigationState = {
-        expanded: 1,
-        collapsed: 2,
-        hidden: 3
-    };
-    navigationState = this.NavigationState.expanded;
+    sidenavState = SidenavState.expanded;
 
-    /** How the sidenav should be displayed */
-    readonly NavigationMode = {
-        over: 1,
-        side: 2
-    };
-    navigationMode = this.NavigationMode.over;
+    sidenavMode = SidenavMode.over;
 
     constructor(
         private navigationService: NavigationService,
-        private mediaService: ObservableMedia,
-        private router: Router
+        private mediaService: ObservableMedia
     ) {}
 
     ngOnInit() {
-        // React to router events and show the loading indicator accoringly
-        // Values are 'hardcoded' since we dont know how long it will actually take
-        this.routerEventSub = this.router.events.subscribe(
-            (event: RouterEvent) => {
-                if (event instanceof NavigationStart) {
-                    this.loadingProgress = 0;
-                } else if (event instanceof RouteConfigLoadStart) {
-                    this.loadingProgress = 20;
-                } else if (event instanceof RouteConfigLoadEnd) {
-                    this.loadingProgress = 90;
-                } else if (event instanceof NavigationEnd) {
-                    this.loadingProgress = 0;
-                } else if (event instanceof NavigationError) {
-                    // Handle error
-                } else if (event instanceof NavigationCancel) {
-                    this.loadingProgress = 0;
-                }
-            }
-        );
-
         // Continuously react on resize events
+        // function is passed as argument to better test determineNavigationState
+        const isActive = this.mediaService.isActive.bind(this.mediaService);
         this.mediaSub = this.mediaService.subscribe(() => {
-            this.determineNavigationState();
+            this.determineNavigationState(isActive);
         });
         // initially handle resize
-        this.determineNavigationState();
+        this.determineNavigationState(isActive);
     }
-
     ngOnDestroy(): void {
-        // Dont react to router events once the component is destroyed
-        if (this.routerEventSub) {
-            this.routerEventSub.unsubscribe();
-        }
         // Dont react on resize if component isn loaded
         if (this.mediaSub) {
             this.mediaSub.unsubscribe();
@@ -104,21 +56,70 @@ export class NavigationComponent implements OnInit, OnDestroy {
     }
 
     /** Chooses a fitting state for the current display size */
-    private determineNavigationState() {
-        if (this.mediaService.isActive('lt-md')) {
+    // Done with function as paramerter for testing
+    determineNavigationState(isActive: (string) => boolean) {
+        if (isActive('lt-md')) {
             // Handset
-            this.navigationMode = this.NavigationMode.over;
-            this.navigationState = this.NavigationState.hidden;
+            this.sidenavMode = SidenavMode.over;
+            this.sidenavState = SidenavState.hidden;
         }
-        if (this.mediaService.isActive('md')) {
+        if (isActive('md')) {
             // tablet
-            this.navigationMode = this.NavigationMode.side;
-            this.navigationState = this.NavigationState.collapsed;
+            this.sidenavMode = SidenavMode.side;
+            this.sidenavState = SidenavState.collapsed;
         }
-        if (this.mediaService.isActive('gt-md')) {
+        if (isActive('gt-md')) {
             // computer
-            this.navigationMode = this.NavigationMode.side;
-            this.navigationState = this.NavigationState.expanded;
+            this.sidenavMode = SidenavMode.side;
+            this.sidenavState = SidenavState.expanded;
         }
+    }
+
+    /** Represents the styles the sidenav needs to display it properly */
+    get sidenavCssState() {
+        return {
+            'main-navigation': true,
+            expanded: this.sidenavIsExpanded,
+            collapsed: this.sidenavIsCollapsed,
+            hidden: this.sidenavIsHidden,
+            over: this.sidenavIsOver
+        };
+    }
+
+    /** Determines if the backdrop should be shown */
+    get displayBackdrop() {
+        return this.sidenavIsOver && this.sidenavIsExpanded;
+    }
+
+    // Actions that can be perfomed on the sidenav
+
+    /** Transition to sidenavState hide */
+    hideSidenav() {
+        this.sidenavState = SidenavState.hidden;
+    }
+    /** Transition to sidenavState collapsed */
+    collapseSidenav() {
+        this.sidenavState = SidenavState.collapsed;
+    }
+    /** Transition to sidenavState expanded */
+    expandSidenav() {
+        this.sidenavState = SidenavState.expanded;
+    }
+
+    // Helpers to make the code better readable
+    get sidenavIsExpanded() {
+        return this.sidenavState === SidenavState.expanded;
+    }
+    get sidenavIsCollapsed() {
+        return this.sidenavState === SidenavState.collapsed;
+    }
+    get sidenavIsHidden() {
+        return this.sidenavState === SidenavState.hidden;
+    }
+    get sidenavIsOver() {
+        return this.sidenavMode === SidenavMode.over;
+    }
+    get sidenavIsSide() {
+        return this.sidenavMode === SidenavMode.side;
     }
 }

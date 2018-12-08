@@ -1,71 +1,37 @@
-<!-- Progress indicator to show if the page is navigating -->
-<mat-progress-bar
-    [value]="loadingProgress"
-    [hidden]="loadingProgress === 0"
-    class="page-loading-indicator"
-></mat-progress-bar>
-
+<app-router-loading-indicator></app-router-loading-indicator>
 <!--
     Why dont use mat-sidenav? MatSidenav has problems resizing properly if the sidenav with changes
 -->
 <div class="main-navigation-container">
     <!-- backdrop for small devices if the sidenav is over the content -->
-    <div
-        class="backdrop"
-        *ngIf="
-            navigationMode === NavigationMode.over &&
-            navigationState === NavigationState.expanded
-        "
-        (click)="navigationState = NavigationState.hidden"
-    ></div>
+    <div class="backdrop" *ngIf="displayBackdrop" (click)="hideSidenav()"></div>
     <!-- actual sidenav -->
-    <nav
-        [ngClass]="{
-            'main-navigation': true,
-            expanded: navigationState === NavigationState.expanded,
-            collapsed: navigationState === NavigationState.collapsed,
-            hidden: navigationState === NavigationState.hidden,
-            over: navigationMode === NavigationMode.over
-        }"
-    >
-        <!-- Toolbar to contain the collapse mode handler -->
+    <nav [ngClass]="sidenavCssState">
+        <!-- Toolbar inside the navigation -->
         <mat-toolbar color="primary">
             <span fxFlex></span>
             <div fxShow.md>
-                <button
-                    mat-icon-button
-                    *ngIf="navigationState === NavigationState.collapsed"
-                    (click)="navigationState = NavigationState.expanded"
-                >
-                    <mat-icon>keyboard_arrow_right</mat-icon>
-                </button>
-                <!--
-                    The < button serves to purposes, 1. closing sidenav on over mode, 2. collapsing on side mode
-                -->
-                <button
-                    mat-icon-button
-                    *ngIf="navigationState === NavigationState.expanded"
-                    (click)="
-                        navigationState =
-                            navigationMode === NavigationMode.over
-                                ? NavigationState.hidden
-                                : NavigationState.collapsed
-                    "
-                >
-                    <mat-icon>keyboard_arrow_left</mat-icon>
-                </button>
+                <app-sidenav-control-button
+                    [mode]="sidenavMode"
+                    [state]="sidenavState"
+                    (expand)="expandSidenav()"
+                    (colapse)="collapseSidenav()"
+                    (hide)="hideSidenav()"
+                ></app-sidenav-control-button>
             </div>
         </mat-toolbar>
+
+        <app-navigation-group
+            *ngFor="let group of navigationModel"
+            [collapsed]="sidenavIsCollapsed"
+            [group]="group"
+        ></app-navigation-group>
     </nav>
 
     <main class="main-navigation-content">
         <mat-toolbar>
             <!-- Button to open the sidenav on over (small) mode -->
-            <button
-                fxHide.gt-sm
-                mat-icon-button
-                (click)="navigationState = NavigationState.expanded"
-            >
+            <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()">
                 <mat-icon>menu</mat-icon>
             </button>
         </mat-toolbar>

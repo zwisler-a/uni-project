@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { NavigationGroup } from './navigation.interface';
+import { NavigationGroup } from './types/navigation-group.interface';
 
 /**
  * Service to configure the navigation displayed
