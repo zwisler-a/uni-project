@@ -15,7 +15,7 @@ cache:
 
 test_client:
   stage: test
-  image: buildkite/puppeteer:latest
+  image: zenato/puppeteer:latest
   script:
     - cd Projekt/client/
     - npm install
