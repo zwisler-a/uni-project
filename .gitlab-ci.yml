@@ -29,6 +29,9 @@ test_server:
     - cd Projekt/server/
     - npm install
     - npm run test
+  reports:
+    junit:
+      - Projekt/client/reports/TESTS-*.xml
 
 deploy:
   stage: production
