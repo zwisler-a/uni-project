@@ -16,7 +16,7 @@ cache:
 
 test_client:
   stage: test
-  image: alekzonder/puppeteer:latest
+  image: buildkite/puppeteer:latest
   script:
     - cd Projekt/client/
     - yarn
