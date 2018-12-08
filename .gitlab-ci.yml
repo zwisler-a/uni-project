@@ -1,7 +1,5 @@
 image: node:latest
 
-services:
-  - mongo:latest
 
 variables:
   MONGO_INITDB_DATABASE: ak18b
@@ -21,10 +19,12 @@ test_client:
   image: alekzonder/puppeteer:latest
   script:
     - cd Projekt/client/
-    - npm install
+    - yarn
     - npm run test
 
 test_server:
+  services:
+    - mongo:latest
   stage: test
   script:
     - cd Projekt/server/
