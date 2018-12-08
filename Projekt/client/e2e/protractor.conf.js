@@ -51,11 +51,12 @@ exports.config = {
         print: function() {}
     },
 
+    /*
     beforeLaunch: function() {
         return new Promise(function(resolve) {
             reporter.beforeLaunch(resolve);
         });
-    },
+    },*/
 
     onPrepare() {
         require("ts-node").register({
@@ -66,13 +67,13 @@ exports.config = {
                 spec: { displayStacktrace: true }
             })
         );
-        jasmine.getEnv().addReporter(reporter);
+        // jasmine.getEnv().addReporter(reporter);
     },
 
     // Close the report after all tests finish
-    afterLaunch: function(exitCode) {
+    /* afterLaunch: function(exitCode) {
         return new Promise(function(resolve) {
             reporter.afterLaunch(resolve.bind(this, exitCode));
         });
-    }
+    }*/
 };
