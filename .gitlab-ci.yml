@@ -18,7 +18,7 @@ test_client:
   image: zenato/puppeteer:latest
   script:
     - cd Projekt/client/
-    - npm install
+    - sudo npm install
     - npm run test
     - npm run e2e
   artifacts:
