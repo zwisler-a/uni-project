@@ -21,6 +21,14 @@ test_client:
     - cd Projekt/client/
     - npm install
     - npm run test
+    - npm run e2e
+  artifacts:
+    paths:
+    - Projekt/client/e2e/screenshots
+      expire_in: 1 day
+    reports:
+      junit:
+        - Projekt/client/reports/TESTS-*.xml
 
 test_server:
   services:
@@ -30,10 +38,6 @@ test_server:
     - cd Projekt/server/
     - npm install
     - npm run test
-  artifacts:
-    reports:
-      junit:
-        - Projekt/client/reports/TESTS-*.xml
 
 deploy:
   stage: production
