@@ -1,3 +1,4 @@
+<!-- Display a loading bar when navigating -->
 <app-router-loading-indicator></app-router-loading-indicator>
 <!--
     Why dont use mat-sidenav? MatSidenav has problems resizing properly if the sidenav with changes
@@ -20,7 +21,7 @@
                 ></app-sidenav-control-button>
             </div>
         </mat-toolbar>
-
+        <!-- Actual navigation, loops through the navigation model -->
         <app-navigation-group
             *ngFor="let group of navigationModel"
             [collapsed]="sidenavIsCollapsed"
@@ -28,6 +29,7 @@
         ></app-navigation-group>
     </nav>
 
+    <!-- content wrapper -->
     <main class="main-navigation-content">
         <mat-toolbar>
             <!-- Button to open the sidenav on over (small) mode -->
