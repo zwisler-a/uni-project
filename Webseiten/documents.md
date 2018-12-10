@@ -10,6 +10,7 @@ permalink: /documents/
 |------------------|----------------------------------------------|------------|
 | Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)       | 04.11.2018 |
 | Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf) | 12.11.2018 |
+| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)             | 10.12.2018 |
 
 ### Protokolle
 
