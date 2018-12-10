@@ -14,15 +14,17 @@ permalink: /documents/
 
 ### Protokolle
 
-| Protokoll                  | Datum      |
-|----------------------------|------------|
-| [Protokoll 1](protocol/1/) | 26.10.2018 |
-| [Protokoll 2](protocol/2/) | 02.11.2018 |
-| [Protokoll 3](protocol/3/) | 09.11.2018 |
-| [Protokoll 4](protocol/4/) | 16.11.2018 |
-| [Protokoll 5](protocol/5/) | 16.11.2018 |
-| [Protokoll 6](protocol/6/) | 16.11.2018 |
-| [Protokoll 6 - intern](protocol/6-i/) | 16.11.2018 |
+| Protokoll                             | Datum      |
+|---------------------------------------|------------|
+| [Protokoll 1](protocol/1/)            | 26.10.2018 |
+| [Protokoll 2](protocol/2/)            | 02.11.2018 |
+| [Protokoll 3](protocol/3/)            | 09.11.2018 |
+| [Protokoll 4](protocol/4/)            | 16.11.2018 |
+| [Protokoll 5](protocol/5/)            | 23.11.2018 |
+| [Protokoll 6](protocol/6/)            | 30.11.2018 |
+| [Protokoll 6 - intern](protocol/6-i/) | 30.11.2018 |
+| [Protokoll 7](protocol/7/)            | 07.12.2018 |
+| [Protokoll 7 - intern](protocol/7-i/) | 07.12.2018 |
 
 ### Aufwandsberichte
 
@@ -30,3 +32,4 @@ permalink: /documents/
 |-----------------------|------------|
 | [Report 1](report/1/) | 05.11.2018 |
 | [Report 2](report/2/) | 12.11.2018 |
+| [Report 3](report/3/) | 26.11.2018 |
