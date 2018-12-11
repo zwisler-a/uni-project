@@ -147,33 +147,44 @@ DELETE /location/:id
 
 ### Company
 
-```
-{
-	id: integer,
-	name: string,
-	parent: ?<Company>
-}
-```
+| Field  | Type        | Note                  |
+|--------|-------------|-----------------------|
+| **id** | SMALLINT    | PRIMARY KEY           |
+| *name* | VARCHAR(64) | UNIQUE INDEX (`name`) |
 
-### User
+### Account
 
-```
-{
-	id: integer,
-	username: string,
-	password: string($pbdf2),
-	companyId: integer,
-	permissions: integer($bitmask)
-}
-```
+| Field           | Type        | Note                         |
+|-----------------|-------------|------------------------------|
+| **id**          | INT         | PRIMARY KEY                  |
+| ***companyId*** | SMALLINT    | FOREIGN KEY (`company`.`id`) |
+| *name*          | VARCHAR(64) | UNIQUE INDEX (`name`)        |
+| password        | VARCHAR(60) |                              |
 
-### Location
+### EntityType
 
-```
-{
-	id: integer,
-	companyId: integer,
-	name: string,
-	parent: ?<Location>
-}
-```
+| Field  | Type        | Note                  |
+|--------|-------------|-----------------------|
+| **id** | MEDIUMINT   | PRIMARY KEY           |
+| *name* | VARCHAR(64) | UNIQUE INDEX (`name`) |
+
+### EntityTypeField
+
+| Field           | Type        | Note                            |
+|-----------------|-------------|---------------------------------|
+| **id**          | INT         | PRIMARY KEY                     |
+| ***typeId***    | MEDIUMINT   | FOREIGN KEY (`type`.`id`)       |
+| *name*          | VARCHAR(64) | UNIQUE INDEX (`typeId`, `name`) |
+| type            | VARCHAR(32) | DEFAULT `text`                  |
+| required        | BIT         | DEFAULT `0`                     |
+| unique          | BIT         | DEFAULT `0`                     |
+
+### Entity:&lt;table_id&gt;
+
+Gets generated for each type where `table_id` is the id of type it represents.
+All fields except the id will be auto generated.
+
+| Field  | Type        | Note                  |
+|--------|-------------|-----------------------|
+| **id** | MEDIUMINT   | PRIMARY KEY           |
+| field  | type        | EACH `type_field` WHERE `typeId` == `table_id` |
