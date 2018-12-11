@@ -60,7 +60,7 @@
 In der Wirtschaft ist die Inventarisierung von Unternehmenswerten ein fester Bestandteil für einen organisierten Arbeitsablauf.
 Ob man wissen möchte was ein Unternehmen für Reserven zum wirtschaften hat oder ob man unternehmensintern Arbeitsmaterialien sucht, dies alles kann man in der Inventarisierung finden.
 Viele Unternehmen machen ihre Inventarisierung noch analog und nur wenige digital.
-Die Arbeitswelt ist jedoch im Wandel und immer mehr Unternehmen wollen auf eine digitale Lösungen umsteigen.
+Die Arbeitswelt ist jedoch im Wandel und immer mehr Unternehmen wollen auf eine digitale Lösungen umsteigen, um eine zentrale Datenverwaltung zu haben, um Backups zu erstellen etc.
 Es gibt bereits einige Apps um dies zu realisieren, allerdings sind diese meist auf spezielle Unternehmenstypen zugeschnitten.
 
 \vskip 8em
@@ -68,12 +68,14 @@ Es gibt bereits einige Apps um dies zu realisieren, allerdings sind diese meist 
 \subsection{Vision}
 Unternehmen sollen mit Hilfe der entstehenden App unternehmensintern besser organisieren können.
 Ziel des Projektes ist also eine leicht bedienbare Organisationshilfe.
-Wie bereits erwähnt gibt es noch die analoge Option, welche jedoch nicht so zentral anwendbar ist, wie eine digitale Lösung.
+Als Alternative zur digitalen Lösung gibt es noch die analoge Option, welche jedoch nicht so zentral anwendbar ist, wie die Digitale.
 Die anderen Apps, welche auf dem Markt sind, sind meist nur auf einen Unternehmenstypen spezialisiert.
-Aus diesem Grund soll eine App konzipiert werden, zur Inventarisierung von Unternehmenswerten, welche die Inventarisierung nicht als organisatorisch Last erscheinen lässt, sondern, durch ihre leichte Bedienbarkeit, den Arbeitsalltag erleichtert.
+Die bestehenden Apps sind, aufgrund ihrer Spezialisierung auf ein Unternehmen, des Öfteren nicht besonders Wandlungsfähig und daher nicht zentral, für jedes Unternehmen, anwendbar.
+Aus diesem Grund soll eine App konzipiert werden, zur Inventarisierung von Unternehmenswerten, welche hoch konfigurierbar ist.
 \subsection{Zielsetzung}
 Die zu entwickelnde Software soll eine organisatorische Erleichterung für Unternehmen sein, daher soll sie Leicht und intuitiv zu bedienen sein. 
 Die Listung der Items eines Unternehmens soll entsprechend anschaulich sein, vor Allem für die Beziehung von mehreren Unternehmen unter einer Dachgesellschaft. 
+Eine hohe Konfigurierbarkeit ist ebenfalls anzustreben, damit alle Eventualitäten abgedeckt werden können. 
 Es sollen Nutzerrollen festgelegt werden, damit nicht jeder Nutzer alles machen kann. 
 Des weiteren sollen Items Dokumente angehangen werden können.
 \subsection{Produkteinsatz}
@@ -222,13 +224,12 @@ Das geänderte Passwort muss jedoch ebenfalls die Kriterien für ein Passwort er
 \par
 \endgroup
 
-\textbf{/LF0350/} Itemfeld $"$Input$"$
+\textbf{/LF0350/} Eingabehilfe für Itemfelder
 \par
 \begingroup
 \leftskip=1cm
-\noindent $"$Input$"$-Felder, wobei $"$Input$"$ als Placeholder steht, sollen Felder sein, welche beispielsweise Dateien an ein Item anhängen oder Farbe für bestimmte Zwecke auswählen. 
-Für diese Fälle würde es sich anbieten Color-Picker für Farben, Fileuploads für das hochladen von Dateien etc. zur Verfügung stellen. 
-Es sollen also Itemfelder vorkonzipiert werden, welche automatisch diese Funktionalitäten zur Verfügung stellen, zum Beispiel sollen Felder mit dem Namen "Dokument" immer ein Fileupload bereitstellen.\\
+\noindent Beim Hinzufügen, beziehungsweise beim Bearbeiten, von Felder in einem Item, solllen bei bestimmten Feldertypen Eingabehilfen angeboten werden.
+So soll, zum Beispiel bei der Eingabe eines Farbwertes, ein Color-Picker erscheinen oder bei der Eingabe eines Dokuments ein Fileupload Dialog.\\
 \par
 \endgroup
 
@@ -384,6 +385,15 @@ sollen als Vorlage bereits zur Verfügung stehen, um das Aufsetzen der Software 
 \begingroup
 \leftskip=1cm
 \noindent Als zusätzliche Kommunikationsmöglichkeit, soll ein einfaches Chattool implementiert werden, damit kleine Nachrichten/Anmerkungen nicht als separate E-Mail verfasst werden müssen.\\
+\par
+\endgroup
+
+\leftskip=-1.5em
+\textbf{/LF0660/} Nutzerverwaltung
+\par
+\begingroup
+\leftskip=1cm
+\noindent Der Admin soll Berechtigung haben bestehende Nutzerrollen in ihren Berechtigungen anzupassen, sowie neue Nutzerrollen anzulegen und ihnen entsprechende Berechtigungen zuzuweisen.\\
 \par
 \endgroup
 
