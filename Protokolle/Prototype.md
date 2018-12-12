@@ -1,6 +1,42 @@
-# Prototype
-
 ## REST-API
+
+### Authentication
+
+All API requests require authentication. The only way to authenticate is a [JSON Web Token](https://jwt.io/)
+which has to be contained in every request header except to the `/authenticate` endpoint.
+
+```
+Authorization: Bearer <jwt>
+```
+
+#### JWT Payload
+
+| Field | Type    | Description   |
+|-------|---------|---------------|
+| id    | integer | the user's id |
+
+### Status Codes
+
+Every response has a specific status according to context and action. This is done so that a caller knows if a request resulted in an error.
+
+| Request type | Status code      | Description                                      |
+|--------------|------------------|--------------------------------------------------|
+| `GET`        | `200 OK`         | Returns if the resource is successfully created  |
+| `POST`       | `201 Created`    | Returns if the resource is successfully accessed |
+| `PUT`        | `200 OK`         | Returns if the resource is successfully modified |
+| `DELETE`     | `204 No Content` | Returns if the resource was successfully deleted |
+
+The following table shows possible error status codes.
+
+| Status code                 | Description                                                                |
+|-----------------------------|----------------------------------------------------------------------------|
+| `400 Bad Request`           | A required attribute of the request is missing                             |
+| `401 Unauthorized`          | The user is not authenticated, a valid [JWT](#Authentication) is necessary |
+| `403 Forbidden`             | The user lacks the required permissions for this request                   |
+| `404 Not Found`             | The requested resource couldn't be accessed or is missing                  |
+| `409 Conflict`              | A conflicting resource already exists                                      |
+| `422 Unprocessable Entity`  | The entity could not be processed due to semantic errors                   |
+| `500 Internal Server Error` | While handling the request an unexpected error occur on server-side        |
 
 ### Pagination
 
@@ -11,14 +47,14 @@ Sometimes the requested resource is too big to be send in a single response. Thi
 The following parameters can be used when accessing such resources:
 
 | Parameter  | Description                                          |
-| ---------- | :--------------------------------------------------: |
+|------------|------------------------------------------------------|
 | `page`     | Page number (default: `1`)                           |
 | `per_page` | Number of items per page (default: `25`, max: `100`) |
 
 The example below lists 3 items on the 2 page.
 
 ```
-curl "https://example.com/api/inventory?per_page=3&page=2"
+GET https://example.com/api/inventory?per_page=3&page=2
 ```
 
 #### Response
@@ -26,7 +62,7 @@ curl "https://example.com/api/inventory?per_page=3&page=2"
 Each response contains [link headers](https://www.w3.org/wiki/LinkHeader) which have a `rel` set to first/last/prev/next and contain the corresponding URLs. Additional headers containing pagination information are also sent.
 
 | Header          | Description              |
-| --------------- | :----------------------: |
+|-----------------|--------------------------|
 | `X-Total`       | Total number of items    |
 | `X-Total-Pages` | Total number of pages    |
 | `X-Per-Page`    | Number of items per page |
@@ -51,99 +87,110 @@ X-Prev-Page: 1
 X-Next-Page: 3
 ```
 
-### Company API
-
-#### List all companies
+### Authenticate
 
 ```
-GET /company
+POST /authenticate
 ```
 
-#### Create a new company
+Create a new valid JWT. Returns a [jwt](#jwt-payload) on success.
 
-```
-POST /company
-```
+##### JSON Params
 
-#### Get a single company
+| Field    | Type   | Description         |
+|----------|--------|---------------------|
+| username | string | the user's username |
+| password | string | the user's password |
 
-```
-GET /company/:id
-```
+### Users Resource
 
-#### Edit a company
+#### Usernames
 
-```
-PUT /company/:id
-```
+We enforce the following restrictions for usernames:
+1. Names can contain most valid [UTF-8](https://en.wikipedia.org/wiki/UTF-8) characters
+2. Names must be between 2 and 32 characters long
+3. Names are sanitized and trimmed of leading, trailing, and excessive internal whitespace
 
-#### Delete a company
+#### Passwords
 
-```
-DELETE /company/:id
-```
+We enforce the following restrictions for passwords:
+1. Passwords can contain upper-case and lower-case letters, numerical digits, special characters (``~!@#$%^&*_-+=`|\(){}[]:;"'<>,.?/``)
+2. Passwords must be between 8 and 32 characters long
+3. Passwords has to contain at least one upper-case and lower-case letter, one numerical digit and special character
 
-### User API
+#### User Object
 
-#### Create a new user
+| Field      | Type              | Description                       |
+|------------|-------------------|-----------------------------------|
+| id         | integer           | the user's id                     |
+| company_id | integer           | the id of the user's company      |
+| username   | string            | the user's username, unique       |
+| email?     | string            | the user's email, unique          |
+| roles      | array of integers | array of [role](#role) object ids |
 
-```
-POST /user
-```
+##### Example User Object
 
-#### Get a single user
-
-```
-GET /user/:id
-```
-
-#### Edit a user
-
-```
-PUT /user/:id
-```
-
-#### Delete a user
-
-```
-DELETE /user/:id
+```json
+{
+	"id": 40040,
+	"company_id": 2,
+	"username": "me11qygu",
+	"email": "me11qygu@studserv.uni-leipzig.de",
+	"roles": []
+}
 ```
 
-### Location API
-
-#### List all locations
+#### Create User
 
 ```
-GET /location
+POST /users
 ```
 
-#### Create a new location
+Create a new user. Returns a [user](#user-object) object on success.
+
+##### JSON Params
+
+| Field      | Type   | Description                  |
+|------------|--------|------------------------------|
+| company_id | int    | the id of the user's company |
+| username   | string | the user's username          |
+| password   | string | the user's password          |
+| email?     | string | the user's email             |
+
+#### Get User
 
 ```
-POST /location
+GET /users/{user.id}
 ```
 
-#### Get a single location
+Returns a [user](#user-object) object for a given user ID.
+
+#### Modify User
 
 ```
-GET /location/:id
+PATCH /users/{user.id}
 ```
 
-#### Edit a location
+Modify the user with a given user ID. Returns a [user](#user-object) object on success.
+
+##### JSON Params
+
+| Field       | Type   | Description                  |
+|-------------|--------|------------------------------|
+| company_id? | int    | the id of the user's company |
+| username?   | string | the user's username          |
+| password?   | string | the user's password          |
+| email?      | string | the user's email             |
+
+#### Delete User
 
 ```
-PUT /location/:id
+DELETE /users/{user.id}
 ```
 
-#### Delete a location
+Deletes the user with a given user ID. Returns a 204 empty response on success.
 
-```
-DELETE /location/:id
-```
-
-
-
-## Models
+## Schema
 
 ### Company
 
