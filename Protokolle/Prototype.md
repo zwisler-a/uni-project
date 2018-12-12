@@ -1,5 +1,13 @@
 ## REST-API
 
+### Table of Contents
+
+- [Authentication](#authentication)
+- [Status Codes](#status-codes)
+- [Pagination](#pagination)
+- [Authenticate](#authenticate)
+- [Users Resource](#users-resource)
+
 ### Authentication
 
 All API requests require authentication. The only way to authenticate is a [JSON Web Token](https://jwt.io/)
