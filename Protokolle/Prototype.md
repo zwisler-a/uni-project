@@ -5,8 +5,9 @@
 - [Authentication](#authentication)
 - [Status Codes](#status-codes)
 - [Pagination](#pagination)
-- [Authenticate](#authenticate)
-- [Users Resource](#users-resource)
+- Resources
+	- [Authenticate](#authenticate)
+	- [Users Resource](#users-resource)
 
 ### Authentication
 
@@ -19,9 +20,12 @@ Authorization: Bearer <jwt>
 
 #### JWT Payload
 
-| Field | Type    | Description   |
-|-------|---------|---------------|
-| id    | integer | the user's id |
+| Field      | Type              | Description                       |
+|------------|-------------------|-----------------------------------|
+| id         | integer           | the user's id                     |
+| company_id | integer           | the id of the user's company      |
+| username   | string            | the user's username, unique       |
+| roles      | array of objects  | array of [role](#role) objects    |
 
 ### Status Codes
 
@@ -109,6 +113,17 @@ Create a new valid JWT. Returns a [jwt](#jwt-payload) on success.
 |----------|--------|---------------------|
 | username | string | the user's username |
 | password | string | the user's password |
+
+### Company Resource
+
+#### Company Object
+
+| Field  | Type              | Description                       |
+|--------|-------------------|-----------------------------------|
+| id     | integer           | the company's id                  |
+| name   | string            | the user's username, unique       |
+| email?     | string            | the user's email, unique          |
+| roles      | array of integers | array of [role](#role) object ids |
 
 ### Users Resource
 
