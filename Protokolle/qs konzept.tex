@@ -1,0 +1,164 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{titling}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage[
+colorlinks=true,
+urlcolor=blue,
+linkcolor=black
+]{hyperref}
+\pagestyle{fancy}
+
+\lhead{Sina Opitz, Maurice Eisenblätter}
+\chead{ak18b}
+\rhead{13.12.2018}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+	\begin{titlepage}
+		
+		\pretitle{
+			\vskip -3em
+			\begin{figure}[h]
+				\begin{center}
+					\includegraphics[scale=0.55]{Logo.png}
+				\end{center}
+			\end{figure}
+			\begin{center}
+				\vskip -2em
+				\large{Wintersemester 2018/19\\Softwaretechnikpraktikum} \vskip 9em
+				\rule{5in}{0.4pt}\par \vskip 0.5em
+			}
+			\posttitle{\par\rule{5in}{0.4pt} \vskip 4em
+				\Large Gruppe: ak18b \vskip 1.5em
+				\normalsize Betreuer: Benjamin Lucas Friedland, Michael Fritz\vskip 1em
+				\normalsize Gruppenmitglieder: Alexander Zwisler, Leon Kamuf, Leon Rudolph, Maurice Eisenblätter, Maximilian Gläfcke, Robin Seidel, Sina Opitz, Steve Woywod
+		\end{center}}
+		
+		\title{\textbf{\Huge App zur Inventarisierung von Unternehmenswerten}\vskip 0.5em \huge QS-Konzept}
+		\date{}
+		\maketitle
+	\end{titlepage}
+	\setcounter{secnumdepth}{4}
+	\setcounter{tocdepth}{4}
+	\tableofcontents
+	\thispagestyle{empty}
+	\newpage
+	\setcounter{page}{1}
+	\renewcommand\thesection{\arabic{section}}
+
+\section{Dokumentationskonzept}
+Die gesamte Dokumententation wird in der englischen Sprache verfasst.\\
+\subsection{interne Dokumentation}
+Bei der internen Dokumentation gilt, sie auf ein Minimum zu reduzieren und nur dann anzuwenden, wenn der Code nur schwer nachzuvollziehen ist. Die internen Kommentare, die sich auf den Code beziehen, werden darüber gesetzt.\\
+Die Kommentare selbst sind möglichst kurz zu fassen und bei längeren Kommentaren sind sinnvolle Zeilenumbrüche zu setzen, um eine gute Übersicht zu gewährleisten. 
+\subsection{strukturelle Dokumentation}
+Die Komponenten und Funktionen des Quelltextes müssen soweit wie möglich kommentiert werden, damit davon ausgehend eine besonders umfassende und leicht zu navigierende Dokumentation generiert werden kann.
+Bei Funktionen und Komponenten, die von uns geändert werden ist die dazugehörige Dokumentation anzupassen. \\
+Für die strukturelle Dokumentation in Angular benutzen wir Compodoc(\url{https://compodoc.app}) und für die API tsdoc (\url{https://github.com/Microsoft/tsdoc}), damit eine Web-Dokumentation von JavaScript-Datein generiert werden kann.\\
+HTML- und CSS-Codes werden nur intern und nicht strukturell von uns dokumentiert.
+\subsection{Entwurfsbeschreibung}
+Die Entwurfsbeschreibung ist ein umfassendes Dokument, in dem alle unsere Struktur- und Modelierungs- und Designprinzipien enthalten und begründet sind. Mit Hilfe dieses Dokuments soll sich ein externer Dritter mit ausreichendem Grundwissen problemlos einarbeiten können, damit dieser gegebenenfalls Änderungen und Anpassungen vornehmen kann.\\
+Die Entwurfsbeschreibung entsteht im Verlauf des Praktikums, da sämtliche Entscheidungen erst nacheinander eindeutig gemacht und dementsprechende dokumentiert werden müssen.\\
+Generell wird ein Release alle relevanten Entwurfsbeschreibungen des Releases beinhalten.
+\section{Coding Standard}
+Mit dem Coding Standard wird festgehalten, an welche Style Guidelines es sich beim Coden zu halten gilt. Dies fördert zum Einen die Übersichtlichkeit und zu Anderen die Einheitlichkeit des Codes und sorgt damit für gute Lesbarkeit.\\
+TSLint (\url{https://palantir.github.io/tslint/}) benutzen wir als Linter und Angular speziell benutzt codelyzer (\url{http://codelyzer.com})(Set von Regeln für TSLint),da wir für das gesamte Projekt TypeScript (\url{https://www.typescriptlang.org}) benutzen.
+\clearpage
+\section{Testkonzept}
+\subsection{Durchzuführende Tests}
+Um eine generelle Funktionalität der Software zu gewährleisten, werden eine Reihe von Tests durchgeführt, die aufeinander aufbauen und somit bei fehlerhaften Anpassungen die Fehlersuche vereinfachen.\\
+Gegliedert sind die Tests in Komponententests, Integrationstests und Systemtests. 
+\subsubsection{Komponententests}
+Komponententests (siehe 3.2.1, 3.2.3), oder auch Unittests, prüfen die einzelnen Module auf ihre Funktionalität. Dafür
+sind je nach Anforderung an die entsprechende Komponente verschiedene Testreihen
+durchzuführen, um u.a. Genauigkeit, Geschwindigkeit sowie deren Grenzen zu überprüfen
+\subsubsection{Integrations- und Systemtests}
+Nachdem die einzelnen Module die Komponententests bestanden haben, werden sie im Integrationstest auf ihr korrektes Zusammenspiel als Einheit geprüft.\\
+Ein Systemtest (siehe 2.3.2), welcher einer ganzen Reihe von Integrationstests mit immer wachsenden Einheiten zu
+Grunde liegt, simuliert die Nutzung der Software durch einen Anwender. Um einen erfolgreichen Test zu garantieren, werden verschiedene Situationen mit erwarteten
+Ergebnissen verglichen und eventuell auftretende Fehler oder Missstände dokumentiert und behoben
+\subsection{Tools}
+Wir verwenden das Continuous Integration Tool von unserer GitLab-Instanz. Tests werden jedes Mal automatisch ausgeführt, wenn Änderungen commited werden. Für die einzelnen Tests werden die Tools Karma. Protractor und Mocha benutzt.
+\subsubsection{Karma}
+Zum Testen unser JavaScript-Clients benutzen wir Karma (\url{http://karma-runner.github.io/latest/index.html}), welches standardmäßig von Angular bereitgestellt wird.
+\subsubsection{Protractor}
+Um bei Angular E2E-Tests durchzuführen, wird von uns das Angular-Framework Protractor (\url{https://github.com/angular/protractor}) verwendet.
+\subsubsection{Mocha}
+Wir verwenden zum Testen vom JavaScript das Mocha-Framework (\url{https://mochajs.org/}) in Kombination mit Chai (\url{https://www.chaijs.com/}), welche eine Assertion Library ist. Um die API zu testen, benutzen wir supertest (\url{https://github.com/visionmedia/supertest#readme}. 
+\clearpage
+\section{Organisatorische Festlegungen}
+\subsection{Treffen}
+Zur Klärung aufkommender Fragen sowie zur Überprüfung des Fortschritts des Projekts gibt es jede Woche ein internes Gruppentreffen, wo nur das Team anwesend ist, und ein allgemeines Gruppentreffen zusammen mit den Tutoren und Betreuern.\\
+Das interne Treffen findet immer vor und auch manchmal nach dem allgemeinen Treffen statt und dient einerseits zur Absprache, was mit den Tutoren besprochen werden soll und andererseits zur Auswertung und weiterer Zielsetzung.\\
+Das Treffen mit den Tutoren findet stets freitags um 14Uhr in Raum P901 statt und dient zur Überprüfung des Projektfortschritts und zur Klärung aufgekommener Fragen.
+\subsection{Protokolle}
+Beide Gruppentreffen werden in separaten Protokollen festgehalten, die für jeden zugänglich auf Git bereitgestellt werden. Dort wird folgendes festgehalten:
+\begin{itemize}
+\item Datum
+\item Fragen und die dazugehörigen Antworten
+\item Verbesserungsvorschläge 
+\item Zielsetzungen für die nächste Woche
+\item Gruppenentscheidungen
+\end{itemize}
+\subsection{Abgaben und Termineinhaltung}
+Intern wurde festgelegt, Abgaben vor jedem Gruppentreffen fertigzustellen, damit genug Zeit bleibt, diese anzupassen und auch zu testen. Gemeinsam werden die Abgaben auf Mängel geprüft, Fragen geklärt und Feedback gegeben.\\
+So wird sichergestellt, dass die vorgebenden Termine eingehalten und Abgaben fehlerfrei abgegeben werden.
+\subsection{GitFlow}
+Genrell wird bei uns nicht direkt in den Master gepusht, sondern Feature-Branches gepusht, die anschließend in den Master gemerged werden. Dafür brauch jede Feature-Branch mindestens 2 Approvels (also mindestens zwei Zustimmungen von anderen Team-Mitgliedern).\\
+Ein Feature-Branche bezieht sich auf ein oder mehrere Issues, die abarbeitet werden. Außerdem ist beim Mergen darauf zu achten, dass Konflikte gelöst werden.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
