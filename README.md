@@ -1,5 +1,11 @@
 # ak18b - Inventarisierung
 
+` Wenn euere Issues nicht bis zu dem vereinbarten Zeitpunkt erledigt sind, gibt es einen Kuchen als Entschuldigung für die Gruppe! `
+
+(Bei Krankheitsfall so bald wie möglich in der Gruppe melden!)
+
+---
+
 - [Project-Website](http://pcai042.informatik.uni-leipzig.de/~ak18b/jekyll/)
 - [Git Report](http://pcai042.informatik.uni-leipzig.de/~ak18b/git-report/)
 - [Handreichung](http://pcai042.informatik.uni-leipzig.de/swp/SWP-18/handreichung.pdf)
