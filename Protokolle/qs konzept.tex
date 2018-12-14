@@ -70,7 +70,7 @@ Die Kommentare selbst sind möglichst kurz zu fassen und bei längeren Kommentar
 \subsection{strukturelle Dokumentation}
 Die Komponenten und Funktionen des Quelltextes müssen soweit wie möglich kommentiert werden, damit davon ausgehend eine besonders umfassende und leicht zu navigierende Dokumentation generiert werden kann.
 Bei Funktionen und Komponenten, die von uns geändert werden ist die dazugehörige Dokumentation anzupassen. \\
-Für die strukturelle Dokumentation benutzen wir für das Projekt JSDoc, damit eine Web-Dokumentation von JavaScript-Datein generiert werden kann.\\
+Für die strukturelle Dokumentation in Angular benutzen wir Compodoc(\url{https://compodoc.app}) und für die API tsdoc (\url{https://github.com/Microsoft/tsdoc}), damit eine Web-Dokumentation von JavaScript-Datein generiert werden kann.\\
 HTML- und CSS-Codes werden nur intern und nicht strukturell von uns dokumentiert.
 \subsection{Entwurfsbeschreibung}
 Die Entwurfsbeschreibung ist ein umfassendes Dokument, in dem alle unsere Struktur- und Modelierungs- und Designprinzipien enthalten und begründet sind. Mit Hilfe dieses Dokuments soll sich ein externer Dritter mit ausreichendem Grundwissen problemlos einarbeiten können, damit dieser gegebenenfalls Änderungen und Anpassungen vornehmen kann.\\
@@ -78,33 +78,35 @@ Die Entwurfsbeschreibung entsteht im Verlauf des Praktikums, da sämtliche Entsc
 Generell wird ein Release alle relevanten Entwurfsbeschreibungen des Releases beinhalten.
 \section{Coding Standard}
 Mit dem Coding Standard wird festgehalten, an welche Style Guidelines es sich beim Coden zu halten gilt. Dies fördert zum Einen die Übersichtlichkeit und zu Anderen die Einheitlichkeit des Codes und sorgt damit für gute Lesbarkeit.\\
-\textbf{\colorbox{yellow}{FEHLT NOCH}}
+TSLint (\url{https://palantir.github.io/tslint/}) benutzen wir als Linter und Angular speziell benutzt codelyzer (\url{http://codelyzer.com})(Set von Regeln für TSLint),da wir für das gesamte Projekt TypeScript (\url{https://www.typescriptlang.org}) benutzen.
+\clearpage
 \section{Testkonzept}
 \subsection{Durchzuführende Tests}
 Um eine generelle Funktionalität der Software zu gewährleisten, werden eine Reihe von Tests durchgeführt, die aufeinander aufbauen und somit bei fehlerhaften Anpassungen die Fehlersuche vereinfachen.\\
 Gegliedert sind die Tests in Komponententests, Integrationstests und Systemtests. 
 \subsubsection{Komponententests}
-Komponententests, oder auch Unittests, prüfen die einzelnen Module auf ihre Funktionalität. Dafür
+Komponententests (siehe 3.2.1, 3.2.3), oder auch Unittests, prüfen die einzelnen Module auf ihre Funktionalität. Dafür
 sind je nach Anforderung an die entsprechende Komponente verschiedene Testreihen
 durchzuführen, um u.a. Genauigkeit, Geschwindigkeit sowie deren Grenzen zu überprüfen
 \subsubsection{Integrations- und Systemtests}
 Nachdem die einzelnen Module die Komponententests bestanden haben, werden sie im Integrationstest auf ihr korrektes Zusammenspiel als Einheit geprüft.\\
-Ein Systemtest, welcher einer ganzen Reihe von Integrationstests mit immer wachsenden Einheiten zu
+Ein Systemtest (siehe 2.3.2), welcher einer ganzen Reihe von Integrationstests mit immer wachsenden Einheiten zu
 Grunde liegt, simuliert die Nutzung der Software durch einen Anwender. Um einen erfolgreichen Test zu garantieren, werden verschiedene Situationen mit erwarteten
 Ergebnissen verglichen und eventuell auftretende Fehler oder Missstände dokumentiert und behoben
 \subsection{Tools}
-Wir verwenden das Continuous Integration Tool von unserer GitLab-Instanz. Tests werden jedes Mal automatisch ausgeführt, wenn Änderungen commited werden.
+Wir verwenden das Continuous Integration Tool von unserer GitLab-Instanz. Tests werden jedes Mal automatisch ausgeführt, wenn Änderungen commited werden. Für die einzelnen Tests werden die Tools Karma. Protractor und Mocha benutzt.
 \subsubsection{Karma}
-Zum Testen unser JavaScript-Clients benutzen wir Karma (\url{http://karma-runner.github.io/latest/index.html}), welches standardmäßig von Angular bereitgestellt wird.\\
-Zusätzlich werden auch E2E-Tests vom Angular-Framework Protractor (\url{https://github.com/angular/protractor}) durchgeführt.
+Zum Testen unser JavaScript-Clients benutzen wir Karma (\url{http://karma-runner.github.io/latest/index.html}), welches standardmäßig von Angular bereitgestellt wird.
+\subsubsection{Protractor}
+Um bei Angular E2E-Tests durchzuführen, wird von uns das Angular-Framework Protractor (\url{https://github.com/angular/protractor}) verwendet.
 \subsubsection{Mocha}
 Wir verwenden zum Testen vom JavaScript das Mocha-Framework (\url{https://mochajs.org/}) in Kombination mit Chai (\url{https://www.chaijs.com/}), welche eine Assertion Library ist. Um die API zu testen, benutzen wir supertest (\url{https://github.com/visionmedia/supertest#readme}. 
+\clearpage
 \section{Organisatorische Festlegungen}
 \subsection{Treffen}
 Zur Klärung aufkommender Fragen sowie zur Überprüfung des Fortschritts des Projekts gibt es jede Woche ein internes Gruppentreffen, wo nur das Team anwesend ist, und ein allgemeines Gruppentreffen zusammen mit den Tutoren und Betreuern.\\
 Das interne Treffen findet immer vor und auch manchmal nach dem allgemeinen Treffen statt und dient einerseits zur Absprache, was mit den Tutoren besprochen werden soll und andererseits zur Auswertung und weiterer Zielsetzung.\\
 Das Treffen mit den Tutoren findet stets freitags um 14Uhr in Raum P901 statt und dient zur Überprüfung des Projektfortschritts und zur Klärung aufgekommener Fragen.
-
 \subsection{Protokolle}
 Beide Gruppentreffen werden in separaten Protokollen festgehalten, die für jeden zugänglich auf Git bereitgestellt werden. Dort wird folgendes festgehalten:
 \begin{itemize}
@@ -118,6 +120,45 @@ Beide Gruppentreffen werden in separaten Protokollen festgehalten, die für jede
 Intern wurde festgelegt, Abgaben vor jedem Gruppentreffen fertigzustellen, damit genug Zeit bleibt, diese anzupassen und auch zu testen. Gemeinsam werden die Abgaben auf Mängel geprüft, Fragen geklärt und Feedback gegeben.\\
 So wird sichergestellt, dass die vorgebenden Termine eingehalten und Abgaben fehlerfrei abgegeben werden.
 \subsection{GitFlow}
-\textbf{\colorbox{yellow}{FEHLT NOCH}} \url{https://nvie.com/posts/a-successful-git-branching-model/}
+Genrell wird bei uns nicht direkt in den Master gepusht, sondern Feature-Branches gepusht, die anschließend in den Master gemerged werden. Dafür brauch jede Feature-Branch mindestens 2 Approvels (also mindestens zwei Zustimmungen von anderen Team-Mitgliedern).\\
+Ein Feature-Branche bezieht sich auf ein oder mehrere Issues, die abarbeitet werden. Außerdem ist beim Mergen darauf zu achten, dass Konflikte gelöst werden.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \end{document}
