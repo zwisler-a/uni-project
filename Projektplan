@@ -1,0 +1,150 @@
+#Projektplan
+
+##*Inhaltsverzeichnis*
+
+###Ziele
+ 	
+
+> - *Muss/Kann Ziele sind aus den funktialen und nicht funktialen Anforderungen*
+> - *Insgesamt 18 Ziele*
+    - *9 Muss Ziele 72% des Gesamtprojekts*
+    - *9 Kann Ziele 45% des Gesamtprojekts*
+
+ - **Muss Ziele**
+   - An- und Abmeldung 
+   - Datenzugriff
+   - Dateneingabe
+   - Typeneingabe
+   - Administration
+   - Datenschutz und Anonymität
+   - Fehlerunanfälligkeit
+   - Wartung
+   - Benutzeroberfläche
+
+ - **Kann Ziele**
+   - Itemvorlage
+   - Passwortwiederherstellung
+   - Filterung und Sortierung
+   - Verlinkung von Items
+   - Rollenverwaltung
+   - Browsersupport
+   - Effizente Implementierung
+   - Mehrsprachigkeit
+   - Passwortänderung
+
+###Arbeitspakete
+
+ - **Abgabe Paket 1**
+   - An- und Abmeldung
+   - Passwortänderung
+   - Dateneingabe
+   - Typeneingabe
+   - Benutzeroberfläche
+
+ - **Abgabe Paket 2**
+   - Itemvorlage
+   - Verlinkung von Items
+   - Datenzugriff
+   - Administration
+
+ - **Abgabe Paket 3** 
+   - Filterung und Sortierung
+   - Datenschutz und Anonymität
+   - Passwortwiederherstellung
+   - Browsersupport
+
+ - **Abgabe Paket 4** 
+   - Fehlerunanfälligkeit
+   - Effizente Implementierung
+   - Wartung
+   - Rollenverwaltung
+   - Mehrsprachigkeit
+
+
+##Beschreibung der Arbeitspakete
+
+###Abgabe Paket 1
+> *37% des Gesamtprojekts*
+
+   - An- und Abmeldung
+    Biete die Möglichkeit sich über Nutzerdaten anzumelden, abzumelden oder sich zu regestrieren um neue Nutzerdaten zu erhalten.
+> *8% des Gesamtprojekts* 
+
+   - Passwortänderung
+    Beim vergessen des Passworts bietet diese Funktion die Wiederherstellung der Passwörter um wieder Zugang zu bekommen.
+> *5% des Gesamtprojekts* 
+
+   - Dateneingabe 
+    Umfasst das entfernen, bearbeiten, hinzufügen und anhängen neuer Items.
+> *8% des Gesamtprojekts*
+
+   - Typeneingabe 
+    Wie bei der Dateneingabe umfasst die Typeneingabe das hinzufügen, bearbeiten und entfernen der jeweiligen Itemtypen.
+> *8% des Gesamtprojekts*
+
+   - Benutzeroberfläche
+    Ein gut übersichtliches Userinterface erstellen.
+> *8% des Gesamtprojekts*
+
+
+###Abgabe Paket 2
+> *26% des Gesamtprojekts*
+
+   - Itemvorlage
+    Bei häufiger Verwendung von Items sollen diese bereits hinterlegt und vorgeschlagen werden.
+> *5% des Gesamtprojekts*
+
+   - Verlinkung von Items
+    Die Items werden unteinander verlinkt.
+> *5% des Gesamtprojekts*
+
+   - Datenzugriff
+    Erfassen der Items in einer Tabelle und bietet ebenfalls die Funktion nach Items zu suchen.
+> *8% des Gesamtprojekts*
+
+   - Administration
+    Die Administration umfasst das hinzufügen von Firmen oder Unternehmen sowie die Typenverwaltung als auch das hinzufügn von globalen Pflichtfeldern.
+> *8% des Gesamtprojekts*
+
+
+###Abgabe Paket 3 
+> *23% des Gesamtprojekts*
+
+   - Filterung und Sortierung
+    Nach Wunsch des Nutzers können Items gefiltert oder sortiert werden, nach bestimmten Eigenschften.
+> *5% des Gesamtprojekts*
+
+   - Datenschutz und Anonymität
+    Der Datenschutz und die Anonymität umfasst die Bearbeitung von Profilen durch den Administrator, sowie die Verschlüsselung der jeweiligen Passwörter.
+> *8% des Gesamtprojekts*
+
+   - Passwortwiederherstellung
+    Beim vergessen des Passworts bietet diese Funktion die Wiederherstellung der Passwörter um wieder Zugang zu bekommen.
+> *5% des Gesamtprojekts*
+
+   - Browsersupport
+    Ermöglicht die Unterstützung von anderen Browsern wie z.B. auf mobilen Geräten
+> *5% des Gesamtprojekts*
+
+###Abgabe Paket 4 
+> *31% des Gesamtprojekts*
+
+   - Fehlerunanfälligkeit
+    Das validieren von Eingaben sowie bei technischen Versagen einen kleinst möglichen Schaden verursachen
+> *8% des Gesamtprojekts*
+
+   - Effizente Implementierung
+    Umfasst, dass das Projekt mit möglichst geringer Laufzeit bei Prozessen arbeitet, als auch einen geringen Speicherbedarf nachweist.
+> *5% des Gesamtprojekts*
+
+   - Wartung
+    Der Programmcode soll gut dokumentiert und leicht strukturiert sein
+> *8% des Gesamtprojekts*
+
+   - Rollenverwaltung
+    Berechtigungen können hinzugefügt, bearbeitet oder entfernt werden, sowie die Verteilung von Anwenderrollen
+> *5% des Gesamtprojekts*
+
+   - Mehrsprachigkeit
+    Hinzufügen anderer Sprachen um ein größt mögliches Publikum zu erreichen.
+> *5% des Gesamtprojekts* 
