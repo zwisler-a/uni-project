@@ -14,6 +14,7 @@ cache:
   paths:
     - Projekt/node_modules/
     - Projekt/client/node_modules/
+    - Projekt/client/documentation/
     - Projekt/server/node_modules/
 
 test_client:
@@ -21,6 +22,7 @@ test_client:
   script:
     - cd Projekt/client/
     - npm install
+    - npm install @compodoc/compodoc
     - npm run test
 
 test_server:
@@ -33,6 +35,8 @@ test_server:
 deploy:
   stage: production
   script:
+    - cd Projekt/client/
+    - npm run compodoc
     - cd Projekt/
     - npm install
     - npm run build:all
