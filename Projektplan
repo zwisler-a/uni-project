@@ -67,7 +67,7 @@
 > *37% des Gesamtprojekts*
 
    - An- und Abmeldung
-    Biete die Möglichkeit sich über Nutzerdaten anzumelden, abzumelden oder sich zu regestrieren um neue Nutzerdaten zu erhalten.
+    Biete die Möglichkeit sich über Nutzerdaten anzumelden, abzumelden oder sich zu registrieren um neue Nutzerdaten zu erhalten.
 > *8% des Gesamtprojekts* 
 
    - Passwortänderung
@@ -95,7 +95,7 @@
 > *5% des Gesamtprojekts*
 
    - Verlinkung von Items
-    Die Items werden unteinander verlinkt.
+    Die Items werden untereinander verlinkt.
 > *5% des Gesamtprojekts*
 
    - Datenzugriff
@@ -111,7 +111,7 @@
 > *23% des Gesamtprojekts*
 
    - Filterung und Sortierung
-    Nach Wunsch des Nutzers können Items gefiltert oder sortiert werden, nach bestimmten Eigenschften.
+    Nach Wunsch des Nutzers können Items gefiltert oder sortiert werden, nach bestimmten Eigenschaften.
 > *5% des Gesamtprojekts*
 
    - Datenschutz und Anonymität
@@ -123,14 +123,14 @@
 > *5% des Gesamtprojekts*
 
    - Browsersupport
-    Ermöglicht die Unterstützung von anderen Browsern wie z.B. auf mobilen Geräten
+    Ermöglicht die Unterstützung von anderen Browsern, z.B. auf mobilen Geräten.
 > *5% des Gesamtprojekts*
 
 ###Abgabe Paket 4 
 > *31% des Gesamtprojekts*
 
    - Fehlerunanfälligkeit
-    Das validieren von Eingaben sowie bei technischen Versagen einen kleinst möglichen Schaden verursachen
+    Das validieren von Eingaben sowie bei technischem Versagen einen kleinst möglichen Schaden zu verursachen.
 > *8% des Gesamtprojekts*
 
    - Effizente Implementierung
@@ -138,11 +138,11 @@
 > *5% des Gesamtprojekts*
 
    - Wartung
-    Der Programmcode soll gut dokumentiert und leicht strukturiert sein
+    Der Programmcode soll gut dokumentiert und leicht strukturiert sein.
 > *8% des Gesamtprojekts*
 
    - Rollenverwaltung
-    Berechtigungen können hinzugefügt, bearbeitet oder entfernt werden, sowie die Verteilung von Anwenderrollen
+    Berechtigungen können hinzugefügt, bearbeitet oder entfernt werden, sowie die Verteilung von Anwenderrollen.
 > *5% des Gesamtprojekts*
 
    - Mehrsprachigkeit
