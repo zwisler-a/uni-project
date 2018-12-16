@@ -6,7 +6,7 @@ module.exports = {
 	buildPath: path.resolve(__dirname, 'dist'),
 	deployPath: 'demo/',
 	documentationDeployPath: '/public_html/doc',
-	documentationPath: '/client/documentation',
+	documentationPath: path.resolve(__dirname, 'client', 'documentation'),
 	configFile: 'config.json',
 	production: true
 };
