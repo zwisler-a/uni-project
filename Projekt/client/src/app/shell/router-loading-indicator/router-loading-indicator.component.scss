@@ -1,0 +1,9 @@
+.page-loading-indicator {
+    // Always keep it on top
+    position: fixed;
+    top: 0;
+    z-index: 9999;
+}
+[hidden] {
+    visibility: hidden;
+}

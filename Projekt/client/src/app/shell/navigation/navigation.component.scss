@@ -1,0 +1,40 @@
+@import "~@angular/material/theming";
+
+
+.main-navigation-container {
+    display: flex;
+    height: 100%;
+    .backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba($color: #000000, $alpha: 0.18);
+    }
+    .main-navigation {
+        @include mat-elevation(2);
+        transition: width 0.2s ease-in-out;
+        background: white;
+        overflow: hidden;
+        height: 100%;
+        z-index: 1;
+        // states the sidenav can take
+        &.over {
+            position: fixed;
+        }
+        &.expanded {
+            width: 256px;
+        }
+        &.collapsed {
+            width: 56px;
+        }
+        &.hidden {
+            width: 0px;
+        }
+    }
+    .main-navigation-content {
+        display: flex;
+        flex: 1 1 auto;
+    }
+}

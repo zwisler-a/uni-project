@@ -1,0 +1,44 @@
+<!-- Display a loading bar when navigating -->
+<app-router-loading-indicator></app-router-loading-indicator>
+<!--
+    Why dont use mat-sidenav? MatSidenav has problems resizing properly if the sidenav with changes
+-->
+<div class="main-navigation-container">
+    <!-- backdrop for small devices if the sidenav is over the content -->
+    <div class="backdrop" *ngIf="displayBackdrop" (click)="hideSidenav()"></div>
+    <!-- actual sidenav -->
+    <nav [ngClass]="sidenavCssState">
+        <!-- Toolbar inside the navigation -->
+        <mat-toolbar color="primary">
+            <span fxFlex></span>
+            <div fxShow.md>
+                <app-sidenav-control-button
+                    [mode]="sidenavMode"
+                    [state]="sidenavState"
+                    (expand)="expandSidenav()"
+                    (colapse)="collapseSidenav()"
+                    (hide)="hideSidenav()"
+                ></app-sidenav-control-button>
+            </div>
+        </mat-toolbar>
+        <!-- Actual navigation, loops through the navigation model -->
+        <app-navigation-group
+            *ngFor="let group of navigationModel"
+            [collapsed]="sidenavIsCollapsed"
+            [group]="group"
+        ></app-navigation-group>
+    </nav>
+
+    <!-- content wrapper -->
+    <main class="main-navigation-content">
+        <mat-toolbar>
+            <!-- Button to open the sidenav on over (small) mode -->
+            <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </mat-toolbar>
+
+        <!-- display the content of the route -->
+        <router-outlet></router-outlet>
+    </main>
+</div>

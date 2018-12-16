@@ -1,0 +1,57 @@
+@mixin app-navigation-group-theme($theme) {
+    $accent: map-get($theme, accent);
+    $background: map-get($theme, background);
+    $foreground: map-get($theme, foreground);
+
+
+    // Navigation item
+    .navigation-item {
+        display: flex;
+        text-decoration: none;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        padding: 12px 20px;
+        position: relative;
+        color: map-get($map: $foreground, $key: text);
+        .label {
+            margin-left: 18px;
+        }
+
+        // display of which route is active
+        &::before {
+            content: "";
+            display: block;
+            position: absolute;
+            height: 100%;
+            width: 0px;
+            transition: width 0.2s;
+            background: map-get($map: $accent, $key: 500);
+            top: 0;
+            left: 0;
+        }
+        &.active {
+            background: map-get($map: $background, $key: hover);
+            &::before {
+                width: 4px;
+            }
+            .mat-icon {
+                color: map-get($map: $accent, $key: 500);
+            }
+        }
+    }
+
+    // Navigation Group
+    .navigation-group-title[hidden] {
+        height: 0px;
+        padding: 0;
+        opacity: 0;
+    }
+    .navigation-group-title {
+        transition-duration: 0.2s;
+        transition-property: height, padding;
+        padding: 16px 16px 4px 16px;
+        display: block;
+        box-sizing: border-box;
+    }
+}

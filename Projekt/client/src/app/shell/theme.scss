@@ -1,0 +1,4 @@
+@import "./navigation/navigation-group/navigation-group.component.scss";
+@mixin app-shell-theme($theme) {
+    @include app-navigation-group-theme($theme);
+}
