@@ -7,7 +7,7 @@
  */
 const { Client } = require("ssh2");
 const { scp } = require("scp2");
-const { buildPath, deployPath, configFile } = require('./config');
+const { buildPath, deployPath, documentationDeployPath, documentationPath, configFile } = require('./config');
 
 /**
  * Little helper class to combine ssh2 and scp2
@@ -118,6 +118,9 @@ const deploy = async () => {
 
 		console.log("Uploading build ...");
 		await deployer.uploadBuild(buildPath, deployPath);
+		
+		console.log("Uploading documentation ...");
+		await deployer.uploadBuild(documentationPath, documentationDeployPath);
 
 		console.log("Installing dependencies ...");
 		await deployer.run(deployPath, "npm i");

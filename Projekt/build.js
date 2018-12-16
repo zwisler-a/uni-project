@@ -30,6 +30,14 @@ const buildClient = () => {
 	);
 }
 
+const buildDocumentation = () => {
+	childProcess.execFileSync(
+		getNpmPath(clientPath),
+		[ 'run', 'compodoc'],
+		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
+	);
+}
+
 const prepareDirectory = () => {
 	fs.removeSync(buildPath);
 
@@ -52,5 +60,6 @@ const prepareServer = () => {
 };
 
 buildClient();
+buildDocumentation();
 prepareDirectory();
 prepareServer();
