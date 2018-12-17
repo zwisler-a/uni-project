@@ -22,9 +22,9 @@ export class AppModule {
     constructor(private navigationService: NavigationService) {
         this.navigationService.navigationModel = [
             {
-                title: 'Group',
+                title: 'Inventar',
                 items: [
-                    { label: 'Test', icon: 'dashboard', route: ['/1'] },
+                    { label: 'Items', icon: 'dashboard', route: ['/items'] },
                     { label: 'Test2', icon: 'dashboard', route: ['/2'] }
                 ]
             }
