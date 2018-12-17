@@ -6,12 +6,12 @@ permalink: /documents/
 
 ### Abgaben
 
-| Abgabe           | Download                                     | Datum      |
-|------------------|----------------------------------------------|------------|
-| Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)       | 04.11.2018 |
-| Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf) | 12.11.2018 |
-| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)             | 12.12.2018 |
-| QS-Konzept       | [QS-Konzept.pdf](qs_konzept.pdf)             | 17.12.2018 |
+| Abgabe           | Download                                                         | Datum      |
+|------------------|------------------------------------------------------------------|------------|
+| Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)                           | 04.11.2018 |
+| Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf)                     | 12.11.2018 |
+| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
+| QS-Konzept       | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
 
 ### Protokolle
 

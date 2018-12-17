@@ -1,3 +1,8 @@
+---
+layout: page
+permalink: /documents/protocol/8/
+---
+
 # Protokoll 8. Gruppentreffen vom 14. 12. 2018
 
 ## Feedback QS-Konzept
