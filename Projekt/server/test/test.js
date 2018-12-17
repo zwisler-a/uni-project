@@ -1,10 +1,6 @@
 const App = require('../src/app');
 const request = require('supertest');
-
-const config = {
-	port: 0,
-	mongo: 'mongodb://mongo:27017/ak18b'
-};
+const config = require('./config.test');
 
 describe('http server', () => {
 	let app, server;
@@ -25,5 +21,14 @@ describe('http server', () => {
 		request(server)
 			.get('/foo')
 			.expect(404, done);
+	});
+	it('mariaDB connection', done => {
+		app.dbPool.getConnection()
+			.then(connection => {
+				connection.end();
+				done();
+			}).catch(err => {
+				throw err;
+			});
 	});
 });

@@ -1,20 +1,20 @@
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');
-const mongoose = require('mongoose');
+const mariadb = require('mariadb');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 module.exports = class {
 	constructor(config) {
-		this.app = express();
 		this.config = config;
-
 		this.initializeExpress();
-		this.initializeMongo();
+		this.initializeDatabase();
 	}
 	initializeExpress() {
+		this.app = express();
+
 		this.app.use(logger('dev'));
 		this.app.use(express.json());
 		this.app.use(express.urlencoded({ extended: false }));
@@ -23,15 +23,17 @@ module.exports = class {
 		this.app.use('/', indexRouter);
 		this.app.use('/users', usersRouter);
 	}
-	initializeMongo() {
-		mongoose.connect(this.config.mongo, {
-			useNewUrlParser: true
-		}).catch(error => {
-			console.error(error);
-			throw error;
+	initializeDatabase() {
+		const database = this.config.database;
+		this.dbPool = mariadb.createPool({
+			host: database.host,
+			port: database.port,
+			user: database.user,
+			password: database.password,
+			database: database.database,
 		});
 	}
 	close() {
-		mongoose.disconnect();
+		this.dbPool.end();
 	}
 };

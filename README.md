@@ -32,7 +32,7 @@ sent with every request.
 
 ## Environment
 
-- Node: `v11.2.0` - locally installed
+- Node: `v11.4.0` - locally installed
 - Portrange: `1590-1599`
 
 ## Abgabe Termine

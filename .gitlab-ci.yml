@@ -1,7 +1,8 @@
 image: node:latest
 
 variables:
-  MONGO_INITDB_DATABASE: ak18b
+  MYSQL_DATABASE: ak18b
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 stages:
   - test
@@ -37,7 +38,7 @@ test_client:
 
 test_server:
   services:
-    - mongo:latest
+    - mariadb:latest
   stage: test
   script:
     - cd Projekt/server/

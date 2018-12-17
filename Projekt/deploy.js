@@ -7,7 +7,7 @@
  */
 const { Client } = require("ssh2");
 const { scp } = require("scp2");
-const { buildPath, deployPath, documentationDeployPath, documentationPath, configFile } = require('./config');
+const { buildPath, deployPath, documentationDeployPath, documentationPath } = require('./config');
 
 /**
  * Little helper class to combine ssh2 and scp2
