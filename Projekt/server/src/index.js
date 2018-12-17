@@ -8,9 +8,10 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs-extra');
 
-const configFile = path.resolve(process.argv[2]);
-if (!fs.existsSync(configFile))
-	throw new Error(`File not found ${configFile}`);
+const configFile = path.resolve(process.argv[2] || './config.json');
+if (!fs.existsSync(configFile)) {
+	throw new Error(`No config file found: "${configFile}"`);
+}
 
 const config = fs.readJsonSync(configFile);
 const app = new App(config).app;

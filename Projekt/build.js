@@ -13,7 +13,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const childProcess = require('child_process');
 
-const { clientPath, serverPath, buildPath, configFile, production } = require('./config');
+const { clientPath, serverPath, buildPath, production } = require('./config');
 const buildPackage = path.join(buildPath, 'package.json');
 
 const getNpmPath = (basePath) => {
@@ -46,6 +46,7 @@ const prepareDirectory = () => {
 	fs.copySync(path.join(clientPath, 'dist', 'client'), publicPath);
 
 	fs.copyFileSync(path.join(serverPath, 'package.json'), buildPackage);
+	fs.copyFileSync(path.join(serverPath, 'config.example.json'), path.join(buildPath, 'config.example.json'));
 	fs.copySync(path.join(serverPath, 'src'), buildPath);
 };
 
@@ -53,10 +54,10 @@ const prepareServer = () => {
 	const package = fs.readJsonSync(buildPackage);
 	delete package.devDependencies;
 	package.scripts = {
-		'start': `forever start index.js ${configFile}`,
+		'start': `forever start index.js config.json`,
 		'stop': 'forever stopall'
 	};
-	fs.writeJsonSync(buildPackage, package);
+	fs.writeJsonSync(buildPackage, package, { spaces: '\t' });
 };
 
 buildClient();
