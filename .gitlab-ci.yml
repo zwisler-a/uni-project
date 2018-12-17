@@ -2,7 +2,7 @@ image: node:latest
 
 variables:
   MYSQL_DATABASE: ak18b
-  MYSQL_ALLOW_EMPTY_PASSWORD: yes
+  MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
 stages:
   - test
