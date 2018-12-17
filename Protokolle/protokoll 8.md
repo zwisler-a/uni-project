@@ -1,4 +1,4 @@
-# Protokoll 8. Gruppentreffen
+# Protokoll 8. Gruppentreffen vom 14. 12. 2018
 
 ## Feedback QS-Konzept
 - auf TypeScript eingehen
