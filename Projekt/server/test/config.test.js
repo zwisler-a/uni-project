@@ -8,7 +8,7 @@ module.exports = {
 	},
 	http2: false,
 	database: {
-		host: "0.0.0.0",
+		host: "mariadb",
 		port: 3306,
 		user: "root",
 		password: "",
