@@ -30,7 +30,7 @@
     </nav>
 
     <!-- content wrapper -->
-    <main class="main-navigation-content">
+    <div class="main-navigation-content">
         <mat-toolbar>
             <!-- Button to open the sidenav on over (small) mode -->
             <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()">
@@ -39,6 +39,8 @@
         </mat-toolbar>
 
         <!-- display the content of the route -->
-        <router-outlet></router-outlet>
-    </main>
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+    </div>
 </div>

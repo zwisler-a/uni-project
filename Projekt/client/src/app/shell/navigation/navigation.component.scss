@@ -1,4 +1,4 @@
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 
 .main-navigation-container {
     display: flex;
@@ -10,6 +10,13 @@
         width: 100%;
         height: 100%;
         background: rgba($color: #000000, $alpha: 0.18);
+    }
+    .main-content {
+        overflow: auto;
+        display: flex;
+        flex: 1 1;
+        justify-content: stretch;
+        flex-direction: column;
     }
     .main-navigation {
         @include mat-elevation(2);
