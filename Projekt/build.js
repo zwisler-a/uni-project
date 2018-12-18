@@ -1,12 +1,11 @@
 /**
  * Build script for the whole Project.
  * Steps:
- * - Builds the server via npm run build
  * - Builds the angular app via 'npm run build-prod' for prod build, 'npm run build' for dev,
- * - Copies the angular app into <buildPath>/public,
- * - Copies the package.json from the server into the dist folder,
- * - Copies the Server src folder into the folder defined in <buildPath>.
- * - Delete the devDependencies and unused scripts from package.json
+ * - copies the angular app into <buildPath>/public,
+ * - copies the package.json from the server into the dist folder,
+ * - copies the Server src folder into the folder defined in <buildPath>.
+ * - delete the devDependencies and unused scripts from package.json
  * 
  * @author Maurice
  */
@@ -30,13 +29,6 @@ const buildClient = () => {
 		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
 	);
 }
-const buildServer = () => {
-	childProcess.execFileSync(
-		getNpmPath(serverPath),
-		[ 'run', 'build' ],
-		{ env: process.env, cwd: serverPath, stdio: 'inherit' }
-	);
-}
 
 const buildDocumentation = () => {
 	childProcess.execFileSync(
@@ -55,7 +47,7 @@ const prepareDirectory = () => {
 
 	fs.copyFileSync(path.join(serverPath, 'package.json'), buildPackage);
 	fs.copyFileSync(path.join(serverPath, 'config.example.json'), path.join(buildPath, 'config.example.json'));
-	fs.copySync(path.join(serverPath, 'dist'), buildPath);
+	fs.copySync(path.join(serverPath, 'src'), buildPath);
 };
 
 const prepareServer = () => {
@@ -68,7 +60,6 @@ const prepareServer = () => {
 	fs.writeJsonSync(buildPackage, package, { spaces: '\t' });
 };
 
-buildServer();
 buildClient();
 buildDocumentation();
 prepareDirectory();
