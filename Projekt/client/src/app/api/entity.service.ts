@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 @Injectable({
     providedIn: 'root'
 })
-export class ItemService {
+export class EntityService {
     baseUrl = `${environment.baseUrl}/entities`;
     readonly apiUrls = {
         create: [this.baseUrl, 'create'].join('/')

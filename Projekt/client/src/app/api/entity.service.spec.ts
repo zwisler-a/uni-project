@@ -4,7 +4,11 @@ import {
     HttpTestingController
 } from '@angular/common/http/testing';
 
+<<<<<<< HEAD
 import { ItemService } from './entity.service';
+=======
+import { EntityService } from './entity.service';
+>>>>>>> ef46ddf... feat: createEntity
 
 describe('EntityService', () => {
     beforeEach(() =>
@@ -12,13 +16,22 @@ describe('EntityService', () => {
     );
 
     it('should be created', () => {
+<<<<<<< HEAD
         const service: ItemService = TestBed.get(ItemService);
+=======
+        const service: EntityService = TestBed.get(EntityService);
+>>>>>>> ef46ddf... feat: createEntity
         expect(service).toBeTruthy();
     });
 
     it('should send a create object request', inject(
+<<<<<<< HEAD
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
+=======
+        [HttpTestingController, EntityService],
+        (httpMock: HttpTestingController, service: EntityService) => {
+>>>>>>> ef46ddf... feat: createEntity
             const data = { fields: {}, entityTypeId: 50 };
             service.createEntity(data).subscribe();
             const req = httpMock.expectOne(service.apiUrls.create);
@@ -27,8 +40,13 @@ describe('EntityService', () => {
     ));
 
     it('should handle an error', inject(
+<<<<<<< HEAD
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
+=======
+        [HttpTestingController, EntityService],
+        (httpMock: HttpTestingController, service: EntityService) => {
+>>>>>>> ef46ddf... feat: createEntity
             const data = { fields: {}, entityTypeId: 50 };
             service.createEntity(data).subscribe(null, (err: ErrorEvent) => {
                 expect(err).toBeTruthy();
