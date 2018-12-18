@@ -11,25 +11,12 @@ import { environment } from '../../environments/environment';
 })
 export class EntityService {
     baseUrl = `${environment.baseUrl}/entities`;
-    readonly apiUrls = {
-        create: [this.baseUrl, 'create'].join('/')
-    };
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     /** Hier solltest du die pagination beachten */
-    allEntities(entityTypeId: number): Promise<Array<Entity>> {
-        return this.http
-            .get<Array<Entity>>(`${this.baseUrl}${entityTypeId}`)
-            .toPromise();
-    }
-
-    /**
-     * Creates a new Entity
-     * @param entity Entity to create
-     */
-    createEntity(entity: CreatableEntity) {
-        return this.http.post(this.apiUrls.create, entity).pipe(
+    allEntities(entityTypeId: number) {
+        return this.http.get(`${this.baseUrl}/${entityTypeId}`).pipe(
             catchError(err => {
                 // Do some always required error handling, like showing a snackbar if necessary
                 // rethrow the error
@@ -38,23 +25,48 @@ export class EntityService {
         );
     }
 
-    getEntity(entityTypeId: number, entityId: number) {}
-
-    modifyEntity(entityTypeId: number, entityId: number) {}
-
-    deleteEntity(entityTypeId: number, entityId: number) {}
-
-    /*
-  async test() {
-    try {
-      const response: HttpResponse<Array<Entity>> = await this.allEntities(0);
-      console.log(response.body);
-      if (response.status === 404) {
-        console.error('entity type not found');
-      }
-    } catch (error) {
-      console.error('connection problem', error);
+    /**
+     * Creates a new Entity
+     * @param entity Entity to create
+     */
+    createEntity(entity: CreatableEntity) {
+        return this.http.post(`${this.baseUrl}/${entity.entityTypeId}`, entity).pipe(
+            catchError(err => {
+                // Do some always required error handling, like showing a snackbar if necessary
+                // rethrow the error
+                return throwError(err);
+            })
+        );
     }
-  }
-  */
+
+    getEntity(entity: Entity) {
+        return this.http.get(`${this.baseUrl}/${entity.entityTypeId}/${entity.id}`).pipe(
+            catchError(err => {
+                // Do some always required error handling, like showing a snackbar if necessary
+                // rethrow the error
+                return throwError(err);
+            })
+        );
+    }
+
+    modifyEntity(entity: Entity) {
+        return this.http.patch(`${this.baseUrl}/${entity.entityTypeId}/${entity.id}`, entity).pipe(
+            catchError(err => {
+                // Do some always required error handling, like showing a snackbar if necessary
+                // rethrow the error
+                return throwError(err);
+            })
+        );
+    }
+
+    deleteEntity(entity: Entity) {
+        return this.http.delete(`${this.baseUrl}/${entity.entityTypeId}/${entity.id}`).pipe(
+            catchError(err => {
+                // Do some always required error handling, like showing a snackbar if necessary
+                // rethrow the error
+                return throwError(err);
+            })
+        );
+    }
+
 }

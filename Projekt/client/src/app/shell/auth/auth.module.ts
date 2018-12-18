@@ -19,6 +19,5 @@ import { AuthInterceptor } from './auth.interceptor';
 })
 export class AuthModule {
     constructor(private authService: AuthService) {
-        // this.authService.authenticate('a', 'b');
     }
 }
