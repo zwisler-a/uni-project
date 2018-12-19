@@ -12,6 +12,8 @@ permalink: /documents/
 | Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf)                     | 12.11.2018 |
 | Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
 | QS-Konzept       | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
+| Releaseplan      | [Releaseplan.pdf](Releaseplan.pdf)                               | 18.12.2018 |
+| Projektplan      | [Projektplan.pdf](Projektplan.pdf)                               | 18.12.2018 |
 
 ### Protokolle
 
