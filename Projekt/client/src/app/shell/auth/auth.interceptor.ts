@@ -8,6 +8,9 @@ import {
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
+/** Injector to append the Authorization header on every request done.
+ *  If the AuthService has a jwt available
+ */
 @Injectable({ providedIn: 'root' })
 export class AuthInterceptor implements HttpInterceptor {
     constructor(private authService: AuthService) {}

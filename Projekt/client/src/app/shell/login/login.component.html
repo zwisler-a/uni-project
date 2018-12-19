@@ -1,7 +1,8 @@
 <mat-card fxLayout="column" id="login-card">
-    <mat-toolbar color="primary">
+    <mat-toolbar color="primary" fxLayoutAlign="space-between center">
         <span translate>login.title</span>
     </mat-toolbar>
+    <mat-progress-bar *ngIf="laoding" mode="indeterminate"></mat-progress-bar>
     <form [formGroup]="loginForm" id="login-form" fxLayout="column" fxFlex>
         <mat-form-field>
             <input

@@ -1,5 +1,6 @@
 {
 	"login": {
+		"invalid-login": "",
 		"password": "",
 		"remember": "",
 		"submit": "",
