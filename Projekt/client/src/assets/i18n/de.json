@@ -1,0 +1,9 @@
+{
+    "login": {
+        "password": "Passwort",
+        "remember": "Angemeldet bleiben",
+        "submit": "Anmelden",
+        "title": "Anmelden",
+        "username": "Benutzername"
+    }
+}

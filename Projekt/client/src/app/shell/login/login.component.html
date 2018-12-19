@@ -1,0 +1,34 @@
+<mat-card fxLayout="column" id="login-card">
+    <mat-toolbar color="primary">
+        <span translate>login.title</span>
+    </mat-toolbar>
+    <form [formGroup]="loginForm" id="login-form" fxLayout="column" fxFlex>
+        <mat-form-field>
+            <input
+                matInput
+                formControlName="username"
+                [placeholder]="'login.username' | translate"
+            />
+        </mat-form-field>
+        <mat-form-field>
+            <input
+                matInput
+                type="password"
+                formControlName="password"
+                [placeholder]="'login.password' | translate"
+            />
+        </mat-form-field>
+        <mat-slide-toggle formControlName="rememberMe">
+            <span translate>login.remember</span>
+        </mat-slide-toggle>
+        <span fxFlex></span>
+        <button
+            (click)="login()"
+            mat-button
+            color="primary"
+            [disabled]="!loginForm.valid"
+        >
+            <span translate>login.submit</span>
+        </button>
+    </form>
+</mat-card>

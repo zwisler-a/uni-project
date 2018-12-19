@@ -15,6 +15,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { NavigationService } from './navigation/navigation.service';
 import { SidenavControlButtonComponent } from './navigation/sidenav-control-button/sidenav-control-button.component';
 import { RouterLoadingIndicatorComponent } from './router-loading-indicator/router-loading-indicator.component';
+import { AuthModule } from './auth/auth.module';
 
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
@@ -28,7 +29,10 @@ import { RouterLoadingIndicatorComponent } from './router-loading-indicator/rout
     ],
     imports: [
         CommonModule,
-        RouterModule,
+        AuthModule,
+        RouterModule.forChild([
+            { path: 'auth', loadChildren: './login/login.module#LoginModule' }
+        ]),
         MatProgressBarModule,
         MatToolbarModule,
         MatIconModule,

@@ -6,19 +6,11 @@ const routes: Routes = [
     {
         path: '',
         component: NavigationComponent,
-        children: [
-            {
-                path: '1',
-                children: []
-            }, {
-                path: '2',
-                children: []
-            }
-        ]
-    },
+        children: []
+    }
 
     // Redirect all unidentifiable routes to login
-    { path: '**', redirectTo: '/', pathMatch: 'full' }
+    // { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({

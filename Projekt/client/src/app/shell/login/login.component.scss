@@ -1,0 +1,16 @@
+#login-card {
+    width: 320px;
+    height: 330px;
+    margin: auto;
+    padding: 0;
+
+    #login-form {
+        padding: 16px;
+    }
+}
+:host {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex;
+}

@@ -1,0 +1,9 @@
+{
+    "login": {
+        "password": "Password",
+        "remember": "Remember me",
+        "submit": "Login",
+        "title": "Login",
+        "username": "Username"
+    }
+}
