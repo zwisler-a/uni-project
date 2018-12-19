@@ -36,7 +36,7 @@ describe('NavigationGroupComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have a "a" element', () => {
+   it('should have a "a" element', () => {
         component.group = {
             title: 'title',
             items: [{ icon: '', label: '', route: ['/1'] }]

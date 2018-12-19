@@ -5,8 +5,8 @@ import {
     MatInputModule,
     MatCardModule,
     MatButtonModule,
-    MatSlideToggleModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatCheckboxModule
 } from '@angular/material';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -25,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
         MatInputModule,
         MatCardModule,
         MatButtonModule,
-        MatSlideToggleModule,
+        MatCheckboxModule,
         RouterModule.forChild([{ path: 'login', component: LoginComponent }]),
         ReactiveFormsModule
     ]

@@ -18,9 +18,9 @@
                 [placeholder]="'login.password' | translate"
             />
         </mat-form-field>
-        <mat-slide-toggle formControlName="rememberMe">
+        <mat-checkbox formControlName="rememberMe">
             <span translate>login.remember</span>
-        </mat-slide-toggle>
+        </mat-checkbox>
         <span fxFlex></span>
         <button
             (click)="login()"
