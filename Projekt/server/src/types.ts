@@ -20,3 +20,17 @@ export class Config {
     http2: boolean;
     database: DatabaseConfig;
 }
+
+export class ApiError extends Error {
+    status: number;
+    cause: any;
+
+    constructor(name: string, message: string, status: number, cause?: any) {
+        super();
+
+        this.name = name;
+        this.message = message;
+        this.status = status;
+        this.cause = cause;
+    }
+}

@@ -1,9 +1,10 @@
 import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
+import compression from 'compression';
 import mariadb from 'mariadb';
 
-import { Config } from './config';
+import { Config } from './types';
 import { apiRouter } from './routes/api';
 
 export class App {
@@ -23,14 +24,29 @@ export class App {
     }
     initializeExpress() {
         this.app = express();
+        this.app.disable('x-powered-by');
 
+        // Add en-/decoder
         this.app.use(morgan('dev'));
+        this.app.use(compression());
         this.app.use(express.json());
-        this.app.use(express.urlencoded({ extended: false }));
+
+        // Add default request handler
         this.app.use(express.static(path.join(__dirname, 'public')));
         this.app.use('/api', apiRouter);
+
+        // Add default request handler for undefined routes
         this.app.get('*', (req, res) => {
             res.sendFile(path.join(__dirname, 'public/index.html'));
+        });
+
+        // Add default error handler
+        this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+            res.status('status' in err ? err.status : 500).send({
+                error: err.name,
+                message: err.message,
+                cause: err.cause
+            });
         });
     }
     initializeDatabase() {

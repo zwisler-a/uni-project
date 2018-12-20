@@ -9,7 +9,9 @@
     "lint": "tslint -c tslint.json -p tsconfig.json"
   },
   "dependencies": {
+    "@types/compression": "0.0.36",
     "bcrypt": "^3.0.2",
+    "compression": "^1.7.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
     "forever": "^0.15.3",
