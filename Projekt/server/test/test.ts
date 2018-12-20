@@ -6,16 +6,15 @@ import 'mocha';
 
 import { App } from '../src/app';
 import { config } from './config.test';
-import { beforeEach } from 'mocha';
 
 describe('authentication', () => {
     let app: App;
     let server: Server;
-    beforeEach(() => {
+    before(() => {
         app = new App(config);
         server = app.app.listen(0);
     });
-    afterEach(() => {
+    after(() => {
         server.close();
         app.close();
     });
@@ -23,7 +22,7 @@ describe('authentication', () => {
         request(server)
             .post('/api/authenticate')
             .send({
-                username: 'empty',
+                username: 'username',
                 password: 'password'
             })
             .end((error, res) => {
@@ -33,11 +32,20 @@ describe('authentication', () => {
                 done();
             });
     });
-    it('invalid credentials', done => {
+    it('invalid credentials username', done => {
         request(server)
             .post('/api/authenticate')
             .send({
-                username: 'empty',
+                username: 'usernames',
+                password: 'password'
+            })
+            .expect(401, done);
+    });
+    it('invalid credentials password', done => {
+        request(server)
+            .post('/api/authenticate')
+            .send({
+                username: 'username',
                 password: 'passwors'
             })
             .expect(401, done);

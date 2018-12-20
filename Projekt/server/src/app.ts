@@ -5,7 +5,8 @@ import compression from 'compression';
 import mariadb from 'mariadb';
 
 import { Config } from './types';
-import { apiRouter } from './routes/api';
+import { apiRouter } from './api/routes/api';
+import { initializeTables } from './database/controller';
 
 export class App {
     config: Config;
@@ -19,6 +20,7 @@ export class App {
         this.initializeExpress();
         this.initializeDatabase();
 
+        this.app.set('pool', this.dbPool);
         // TODO remove just for testing
         this.app.set('secret', 'SpecialJWTSecretWOW!');
     }
@@ -58,6 +60,7 @@ export class App {
             password: database.password,
             database: database.database,
         });
+        initializeTables(this.dbPool);
     }
     close() {
         this.dbPool.end();

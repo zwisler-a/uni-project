@@ -31,6 +31,14 @@ export class ApiError extends Error {
         this.name = name;
         this.message = message;
         this.status = status;
-        this.cause = cause;
+
+        if (cause instanceof Error) {
+            this.cause = {
+                name: cause.name,
+                message: cause.message
+            };
+        } else {
+            this.cause = cause;
+        }
     }
 }

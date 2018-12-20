@@ -1,4 +1,4 @@
-import { Config } from '../src/config';
+import { Config } from '../src/types';
 
 export const config: Config = {
     host: '0.0.0.0',
