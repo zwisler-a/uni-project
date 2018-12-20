@@ -2,10 +2,9 @@ import path from 'path';
 import express from 'express';
 import morgan from 'morgan';
 import mariadb from 'mariadb';
-import { Config } from './config';
 
-import { router as indexRouter } from './routes/index';
-import { router as usersRouter } from './routes/users';
+import { Config } from './config';
+import { apiRouter } from './routes/api';
 
 export class App {
     config: Config;
@@ -18,6 +17,9 @@ export class App {
         this.config = config;
         this.initializeExpress();
         this.initializeDatabase();
+
+        // TODO remove just for testing
+        this.app.set('secret', 'SpecialJWTSecretWOW!');
     }
     initializeExpress() {
         this.app = express();
@@ -26,9 +28,10 @@ export class App {
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.static(path.join(__dirname, 'public')));
-
-        this.app.use('/', indexRouter);
-        this.app.use('/users', usersRouter);
+        this.app.use('/api', apiRouter);
+        this.app.get('*', (req, res) => {
+            res.sendFile(path.join(__dirname, 'public/index.html'));
+        });
     }
     initializeDatabase() {
         const database = this.config.database;

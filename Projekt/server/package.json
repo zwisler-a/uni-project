@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon --watch 'src/**/*.ts' --exec ts-node src/index.ts",
+    "start": "nodemon",
     "build": "tsc",
     "test": "mocha -r ts-node/register test/**/*.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json"
