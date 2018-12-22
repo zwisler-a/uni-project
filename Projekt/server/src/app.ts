@@ -17,16 +17,25 @@ export class App {
 
     constructor(config: Config) {
         this.config = config;
-        this.initializeExpress();
-        this.initializeDatabase();
-
-        this.app.set('pool', this.dbPool);
-        // TODO remove just for testing
-        this.app.set('secret', 'SpecialJWTSecretWOW!');
     }
-    initializeExpress() {
+
+    /**
+     * Prepares the app for startup.
+     * Resolves promise once everything is ready
+     */
+    async setup() {
+        return Promise.all([
+            this.initializeExpress(),
+            this.initializeDatabase()
+        ]);
+    }
+
+    private initializeExpress() {
         this.app = express();
         this.app.disable('x-powered-by');
+
+        // TODO remove just for testing
+        this.app.set('secret', 'SpecialJWTSecretWOW!');
 
         // Add en-/decoder
         this.app.use(morgan('dev'));
@@ -51,7 +60,8 @@ export class App {
             });
         });
     }
-    initializeDatabase() {
+
+    private initializeDatabase() {
         const database = this.config.database;
         this.dbPool = mariadb.createPool({
             host: database.host,
@@ -60,9 +70,18 @@ export class App {
             password: database.password,
             database: database.database,
         });
-        initializeTables(this.dbPool);
+        this.app.set('pool', this.dbPool);
+        return initializeTables(this.dbPool);
     }
+
     close() {
         this.dbPool.end();
     }
+}
+
+/** Generates a new instance of the App */
+export async function AppFactory(config: Config) {
+    const app = new App(config);
+    await app.setup();
+    return app;
 }

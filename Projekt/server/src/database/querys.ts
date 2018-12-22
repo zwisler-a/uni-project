@@ -4,7 +4,11 @@ function queryFactory(sql: string) {
     return (pool: Pool, values?: any[] | any) => {
         return pool.query(sql, values)
             .then(res => res)
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.error('Error on query', sql);
+                console.error(err);
+                return err;
+            });
     };
 }
 
