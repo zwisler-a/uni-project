@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { User } from './user.interface';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { AuthenticateResponse } from './authenticate.response';
 
 /**
  * A service which handles user authentication.
@@ -15,6 +16,7 @@ import jwt_decode from 'jwt-decode';
 })
 export class AuthService {
     static readonly LOCALSTROAGE_KEY = 'auth_jwt';
+    readonly LOGIN_URL = ['/auth/login'];
     readonly authenticateUrl = [environment.apiBase, 'authenticate'].join('/');
 
     private _user: User;
@@ -36,7 +38,7 @@ export class AuthService {
                 console.log('Error while retireving stored jwt');
             }
         } else {
-            this.router.navigate(['/auth/login']);
+            this.router.navigate(this.LOGIN_URL);
         }
     }
 
@@ -57,10 +59,9 @@ export class AuthService {
         return (
             this.http
                 .post(this.authenticateUrl, { username, password })
-                // convert to promise because chaining is easier
                 .pipe(
-                    map((res: string) => {
-                        this.jwt = res;
+                    map((res: AuthenticateResponse) => {
+                        this.jwt = res.token;
                         if (rememberMe) {
                             localStorage.setItem(
                                 AuthService.LOCALSTROAGE_KEY,
@@ -78,6 +79,7 @@ export class AuthService {
         localStorage.removeItem(AuthService.LOCALSTROAGE_KEY);
         this._jwt = null;
         this._user = null;
+        this.router.navigate(this.LOGIN_URL);
     }
 
     get jwt() {
