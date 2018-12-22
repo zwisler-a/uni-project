@@ -2,7 +2,9 @@ import { Pool } from '../../types/mariadb';
 
 function queryFactory(sql: string) {
     return (pool: Pool, values?: any[] | any) => {
-        return pool.query(sql, values);
+        return pool.query(sql, values)
+            .then(res => res)
+            .catch(err => console.log(err));
     };
 }
 
