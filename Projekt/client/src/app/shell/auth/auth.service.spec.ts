@@ -7,6 +7,7 @@ import {
     HttpClientTestingModule,
     HttpTestingController
 } from '@angular/common/http/testing';
+import { AuthenticateResponse } from './authenticate.response';
 
 const test_jwt =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG' +
@@ -60,7 +61,8 @@ describe('AuthService', () => {
                 expect(service.jwt).toBe(test_jwt);
             });
             const req = controller.expectOne(service.authenticateUrl);
-            req.flush(test_jwt);
+            const res: AuthenticateResponse = {token: test_jwt};
+            req.flush(res);
             tick(2000);
         })
     ));
@@ -74,7 +76,8 @@ describe('AuthService', () => {
                 localStorage.removeItem(AuthService.LOCALSTROAGE_KEY);
             });
             const req = controller.expectOne(service.authenticateUrl);
-            req.flush(test_jwt);
+            const res: AuthenticateResponse = {token: test_jwt};
+            req.flush(res);
             tick(2000);
         })
     ));
