@@ -5,35 +5,19 @@
     matSort
     aria-label="Elements"
 >
-    <!-- Checkbox Column -->
-    <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-                color="warn"
-                (change)="$event ? masterToggle() : null"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-            >
-            </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row">
-            <mat-checkbox
-                color="warn"
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection.toggle(row) : null"
-                [checked]="selection.isSelected(row)"
-            >
-            </mat-checkbox>
-        </td>
+    <!-- Id Column -->
+    <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Id</th>
+        <td mat-cell *matCellDef="let row">{{ row.id }}</td>
     </ng-container>
 
-    <!-- Id Column -->
+    <!-- fields column -->
     <ng-container *ngFor="let dynCol of displayedColumns">
-        <ng-container [matColumnDef]="dynCol" *ngIf="dynCol !== 'select'">
+        <ng-container [matColumnDef]="dynCol" *ngIf="dynCol !== 'id'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ dynCol }}
             </th>
-            <td mat-cell *matCellDef="let row">{{ row[dynCol] }}</td>
+            <td mat-cell *matCellDef="let row">{{ row.fields[dynCol] }}</td>
         </ng-container>
     </ng-container>
 

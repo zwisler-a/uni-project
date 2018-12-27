@@ -3,6 +3,7 @@ import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ItemListDataSource } from './items-list.datasource';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-items-list',
@@ -16,16 +17,21 @@ export class ItemsListComponent implements OnInit {
     dataSource: ItemListDataSource;
     selection = new SelectionModel<any>(true, []);
 
-    /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-    displayedColumns = ['id', 'name'];
+    // displayedColumns = ['id', 'name'];
 
-    constructor(
-        private router: Router
-    ) {}
+    get displayedColumns() {
+        return this.dataSource.possibleColumnNames.concat('id') || [];
+    }
+
+    constructor(private router: Router, private http: HttpClient) {}
 
     ngOnInit() {
-        this.dataSource = new ItemListDataSource(this.paginator, this.sort);
-        this.displayedColumns = this.dataSource.cols;
+        this.dataSource = new ItemListDataSource(
+            this.paginator,
+            this.sort,
+            this.http
+        );
+        // this.displayedColumns = [];
     }
 
     /** Whether the number of selected elements matches the total number of rows. */

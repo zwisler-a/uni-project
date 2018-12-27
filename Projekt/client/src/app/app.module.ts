@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ShellModule } from './shell/shell.module';
 import { NavigationService } from './shell/navigation/navigation.service';
+import { ItemsModule } from './items/items.module';
 
 @NgModule({
     declarations: [AppComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
+        ItemsModule,
         BrowserAnimationsModule,
         ShellModule
     ],

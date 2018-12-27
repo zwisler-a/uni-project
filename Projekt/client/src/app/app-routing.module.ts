@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { NavigationComponent } from './shell/navigation/navigation.component';
+import { ItemsListComponent } from './items/items-list/items-list.component';
 
 const routes: Routes = [
     {
@@ -8,8 +9,8 @@ const routes: Routes = [
         component: NavigationComponent,
         children: [
             {
-                path: '1',
-                children: []
+                path: 'items',
+                component: ItemsListComponent
             }, {
                 path: '2',
                 children: []
