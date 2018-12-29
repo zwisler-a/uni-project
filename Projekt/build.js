@@ -1,20 +1,24 @@
 /**
  * Build script for the whole Project.
  * Steps:
- * - Builds the server via npm run build
- * - Builds the angular app via 'npm run build-prod' for prod build, 'npm run build' for dev,
- * - Copies the angular app into <buildPath>/public,
- * - Copies the package.json from the server into the dist folder,
- * - Copies the Server src folder into the folder defined in <buildPath>.
- * - Delete the devDependencies and unused scripts from package.json
+ * 1. Build client + server
+ * 2. Build client + server docs
+ * 3. Copy the just generated files in their respective directories
+ * 4. Edit the server's package.json to be deploy ready
  * 
  * @author Maurice
  */
+
 const fs = require('fs-extra');
 const path = require('path');
 const childProcess = require('child_process');
 
-const { clientPath, serverPath, buildPath, production } = require('./config');
+const { 
+	clientPath, serverPath,
+	buildPath, docsPath,
+	production
+} = require('./config');
+
 const buildPackage = path.join(buildPath, 'package.json');
 
 const getNpmPath = (basePath) => {
@@ -29,33 +33,49 @@ const buildClient = () => {
 		[ 'run', production ? 'build-prod' : 'build' ],
 		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
 	);
-}
+};
 const buildServer = () => {
 	childProcess.execFileSync(
 		getNpmPath(serverPath),
 		[ 'run', 'build' ],
 		{ env: process.env, cwd: serverPath, stdio: 'inherit' }
 	);
-}
+};
 
-const buildDocumentation = () => {
+const buildClientDocs = () => {
 	childProcess.execFileSync(
 		getNpmPath(clientPath),
 		[ 'run', 'compodoc'],
 		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
 	);
-}
+};
+const buildServerDocs = () => {
+	childProcess.execFileSync(
+		getNpmPath(serverPath),
+		[ 'run', 'doc'],
+		{ env: process.env, cwd: serverPath, stdio: 'inherit' }
+	);
+};
 
-const prepareDirectory = () => {
+const prepareBuild = () => {
 	fs.removeSync(buildPath);
 
+	// Move client to <buildPath>/public
 	const publicPath = path.join(buildPath, 'public');
 	fs.mkdirsSync(publicPath);
 	fs.copySync(path.join(clientPath, 'dist', 'client'), publicPath);
 
+	// Move server to <buildPath>
 	fs.copyFileSync(path.join(serverPath, 'package.json'), buildPackage);
 	fs.copyFileSync(path.join(serverPath, 'config.example.json'), path.join(buildPath, 'config.example.json'));
 	fs.copySync(path.join(serverPath, 'dist'), buildPath);
+};
+
+const prepareDocs = () => {
+	fs.removeSync(docsPath);
+
+	fs.copySync(path.join(clientPath, 'documentation'), path.join(docsPath, 'client'));
+	fs.copySync(path.join(serverPath, 'documentation'), path.join(docsPath, 'server'));
 };
 
 const prepareServer = () => {
@@ -68,8 +88,13 @@ const prepareServer = () => {
 	fs.writeJsonSync(buildPackage, package, { spaces: '\t' });
 };
 
-buildServer();
 buildClient();
-buildDocumentation();
-prepareDirectory();
+buildServer();
+
+buildClientDocs();
+buildServerDocs();
+
+prepareBuild();
+prepareDocs();
+
 prepareServer();

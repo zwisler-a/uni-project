@@ -7,7 +7,10 @@
  */
 const { Client } = require("ssh2");
 const { scp } = require("scp2");
-const { buildPath, deployPath, documentationDeployPath, documentationPath } = require('./config');
+const { 
+	buildPath, docsPath,
+	deployAppPath, deployDocPath
+} = require('./config');
 
 /**
  * Little helper class to combine ssh2 and scp2
@@ -117,19 +120,19 @@ const deploy = async () => {
 		await deployer.connect(config);
 
 		console.log("Uploading build ...");
-		await deployer.uploadBuild(buildPath, deployPath);
+		await deployer.uploadBuild(buildPath, deployAppPath);
 		
 		console.log("Uploading documentation ...");
-		await deployer.uploadBuild(documentationPath, documentationDeployPath);
+		await deployer.uploadBuild(docsPath, deployDocPath);
 
 		console.log("Installing dependencies ...");
-		await deployer.run(deployPath, "npm i");
+		await deployer.run(deployAppPath, "npm i");
 
 		console.log("Trying to stop old server ...");
-		await deployer.run(deployPath, "npm run stop");
+		await deployer.run(deployAppPath, "npm run stop");
 
 		console.log("Starting new Server ...");
-		await deployer.run(deployPath, "npm run start");
+		await deployer.run(deployAppPath, "npm run start");
 		deployer.close();
 		console.log("Deployed!");
 	} catch (err) {
