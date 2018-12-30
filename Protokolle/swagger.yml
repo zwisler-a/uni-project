@@ -6,7 +6,7 @@ info:
   version: 0.0.1
 
 servers:
-  - url: http://pcai042.informatik.uni-leipzig.de:1590/
+  - url: http://pcai042.informatik.uni-leipzig.de:1590/api/
     description: Demo server
 
 tags:
@@ -14,6 +14,8 @@ tags:
     description: Simple request for authentication
   - name: Users Resource
     description: CRUD operations for the user
+  - name: Items Resource
+    description: CRUD operations for Items
 
 paths:
   /authenticate:
@@ -74,6 +76,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '409':
           $ref: '#/components/responses/Conflict'
+          
   /users/{userId}:
     parameters:
       - in: path
@@ -133,6 +136,125 @@ paths:
           description: Successfully delete resource
         '404':
           $ref: '#/components/responses/NotFound'
+          
+          
+          
+  /items:
+    get:
+      parameters:
+      - in: query
+        name: page
+        description: Index of the current page
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: per_page
+        description: Items displayed per page
+        schema:
+          type: integer
+        required: true
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      operationId: user-get
+      summary: Get a list of items
+      responses:
+        '200':
+          headers:
+            X-Total:
+              description: Total amount of items
+              schema:
+                type: integer
+          description: The requested resource has been found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+  
+  /item:
+    post:
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Create a new Item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                typeId:
+                  type: integer
+                fields:
+                  type: object
+                  description: All Fields required or wanted on the item
+      responses:
+        '201':
+          description: New resource successfully created
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Item'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    put:
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Update an Item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  description: Id of the Item
+                typeId:
+                  type: integer
+                  description: Id of the type of the item
+                fields:
+                  type: object
+                  description: All Fields required or wanted on the item
+      responses:
+        '200':
+          description: Resource updated
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Item'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  
+  /item/{itemId}:    
+    delete:
+      parameters:
+      - in: path
+        name: itemId
+        schema:
+          type: integer
+        required: true
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Delete an Item
+      responses:
+        '204':
+          description: Resource has been deleted
+        '409':
+          $ref: '#/components/responses/Conflict'
+    
+    
 
 components:
   securitySchemes:
@@ -142,6 +264,22 @@ components:
       bearerFormat: JWT
   
   schemas:
+    Item:
+      description: Respresents a physical object with all its properties
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: The Items unique id
+        typeId:
+          type: integer
+          description: The ID of the type of the item
+        fields:
+          type: object
+          example: {'name':'Laptop1'}
+          description: An Object containing all fields of an item according to the item type
+          
+        
     User:
       description: Represents a user object
       properties:
