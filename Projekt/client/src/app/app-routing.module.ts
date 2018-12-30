@@ -19,7 +19,7 @@ const routes: Routes = [
     },
 
     // Redirect all unidentifiable routes to login
-    { path: '**', redirectTo: '/', pathMatch: 'full' }
+    // { path: '**', redirectTo: '/', pathMatch: 'full' }
 ];
 
 @NgModule({

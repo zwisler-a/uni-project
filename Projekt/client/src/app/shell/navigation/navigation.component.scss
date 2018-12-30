@@ -17,7 +17,7 @@
         background: white;
         overflow: hidden;
         height: 100%;
-        z-index: 1;
+        z-index: 500;
         // states the sidenav can take
         &.over {
             position: fixed;

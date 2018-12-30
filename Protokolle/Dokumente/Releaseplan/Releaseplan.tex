@@ -1,0 +1,139 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{titling}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{color}
+\usepackage[
+colorlinks=true,
+urlcolor=blue,
+linkcolor=black
+]{hyperref}
+\pagestyle{fancy}
+
+\lhead{Robin Seidel}
+\chead{ak18b}
+\rhead{13.12.2018}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+	\begin{titlepage}
+		
+		\pretitle{
+			\vskip -3em
+			\begin{figure}[h]
+				\begin{center}
+				\includegraphics[scale=0.55]{Logo.png}
+				\end{center}
+			\end{figure}
+			\begin{center}
+				\vskip -2em
+				\large{Wintersemester 2018/19\\Softwaretechnikpraktikum} \vskip 9em
+				\rule{5in}{0.4pt}\par \vskip 0.5em
+			}
+			\posttitle{\par\rule{5in}{0.4pt} \vskip 4em
+				\Large Gruppe: ak18b \vskip 1.5em
+				\normalsize Betreuer: Benjamin Lucas Friedland, Michael Fritz\vskip 1em
+				\normalsize Gruppenmitglieder: Alexander Zwisler, Leon Kamuf, Leon Rudolph, Maurice Eisenblätter, Maximilian Gläfcke, Robin Seidel, Sina Opitz, Steve Woywod
+		\end{center}}
+		
+		\title{\textbf{\Huge App zur Inventarisierung von Unternehmenswerten}\vskip 0.5em \huge Releaseplan}
+		\date{}
+		\maketitle
+	\end{titlepage}
+	\setcounter{secnumdepth}{4}
+	\setcounter{tocdepth}{4}
+	\tableofcontents
+	\thispagestyle{empty}
+	\newpage
+	\setcounter{page}{1}
+	\renewcommand\thesection{\arabic{section}}
+
+\section{Arbeitspaket 1 - Vorprojekt und Einarbeitung}
+Release: 15.1.2019\\\\
+Das Vorprojekt bildet das wesentliche Grundgerüst der Anwendung. Es basiert auf dem Server- Client-Grundkonzept.\\
+Es beinhaltet eine MariaDb Datenbank, eine REST-Schnittstelle sowie ein Frontend.\\
+Weiterhin wird für das Frontend eine App-Shell entwickelt die das generelle Layout wiederspiegelt. Eine MariaDb mit REST Api wird auf dem Praktikumsserver eingerichtet.
+Das Vorprojekt soll zur Einarbeitung in die verschiedenen Technologien dienen. 
+
+\subsection{Umsetzung}
+Folgende Muss-Ziele werden im Vorprojekt umgesetzt:
+\begin{itemize}
+\item Login und Logout /LF0010/ und /LF0020/
+\item Anzeigen aller erfassten Items /LF0210/
+\item Bearbeiten von Items /LF0330/
+\item Entfernen von Items /LF0340/
+\item Hinzufügen neuer Itemtypen /LF0410/
+\item Bearbeitung von Itemtypen /LF0420/
+\item Löschen von Itemtypen /LF0440/
+\item Mehrsprachigkeit /LF0610/
+\item Sicherheit der Anmeldedaten /LN0010/
+\item Validieren von Benutzereingaben /LN0110/
+\item Datensicherheit /LN0120/
+\item Intuitive grafische Interaktion /LN0310/
+\item Browsersupport /LN0410/
+\end{itemize}
+
+\section{Arbeitspaket 2 - Weitere Funktionale Anforderungen }
+Release: 29.1.2019
+\subsection{Umsetzung}
+Im zweiten Arbeitspaket ist das Hauptthema die Administration von Unternehmen.
+\begin{itemize}
+\item Suche /LF0220/
+\item Sortieren von Items /LF0230/
+\item Eingabehilfe für Itemfelder /LF0350/
+\item Verlinkung von Items /LF0360/
+\item Pflichtfelder von Itemtypen /LF0430/
+\item Löschen von Profilen /LF0520/
+\item Hinzufügen von Unternehmen /LF0530/
+\item Typenverwaltung /LF0540/
+\item Globale Pflichtfelder /LF0550/
+\end{itemize}
+
+\section{Arbeitspaket 3 - Dokumentenverwaltung}
+Release: 5.02.2019
+\subsection{Umsetzung}
+Im dritten Arbeitspaket wird sich hauptsächlich mit der Dokumentenverwaltung beschäftigt.
+
+\begin{itemize}
+\item Ändern Email Adresse /LF0110/
+\item Änderung Passwort /LF0120/
+\item Registrieren neuer Anwender /LF0030/
+\item Wiederherstellung des Passworts /LF0040/
+\item Anhang von Dokumenten /LF0320/
+\end{itemize}
+
+
+\section{Arbeitspaket 4 - Abrundung und Kann-Ziele }
+Release: 12.2.2019
+\subsection{Umsetzung}
+Im vorletzten Arbeitspaket werden eventuelle Restbestände der funktionalen und nicht-funktionalen Anforderungen nachgebessert oder fertiggestellt. Ab dann werden Kann-Ziele umgesetzt.
+\begin{itemize}
+\item Itemtyp Vorlagen /LF0620/
+\item Nutzerverwaltung /LF0660/
+\end{itemize}
+
+\section{Arbeitspaket 5 - Optimierung und abschließende Tests}
+Release 19.2.2019
+\subsection{Umsetzung}
+Vor Abgabe des finalen Releases werden abschließende Tests durchgeführt. Optional können Beta-User die Software testen um eventuelle Bugs und Ineffizienzen aufzuspüren.
+\begin{itemize}
+\item Statistiken für Itembestände /LF0630/
+\item Benutzerhandbuch /LF0640/
+\item Chat /LF0650/
+\end{itemize}
+
+\end{document}

@@ -6,11 +6,14 @@ permalink: /documents/
 
 ### Abgaben
 
-| Abgabe           | Download                                     | Datum      |
-|------------------|----------------------------------------------|------------|
-| Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)       | 04.11.2018 |
-| Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf) | 12.11.2018 |
-| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)             | 12.12.2018 |
+| Abgabe           | Download                                                         | Datum      |
+|------------------|------------------------------------------------------------------|------------|
+| Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)                           | 04.11.2018 |
+| Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf)                     | 12.11.2018 |
+| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
+| QS-Konzept       | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
+| Releaseplan      | [Releaseplan.pdf](Releaseplan.pdf)                               | 18.12.2018 |
+| Projektplan      | [Projektplan.pdf](Projektplan.pdf)                               | 18.12.2018 |
 
 ### Protokolle
 
@@ -25,6 +28,7 @@ permalink: /documents/
 | [Protokoll 6 - intern](protocol/6-i/) | 30.11.2018 |
 | [Protokoll 7](protocol/7/)            | 07.12.2018 |
 | [Protokoll 7 - intern](protocol/7-i/) | 07.12.2018 |
+| [Protokoll 8](protocol/8/)            | 14.12.2018 |
 
 ### Aufwandsberichte
 
@@ -33,3 +37,4 @@ permalink: /documents/
 | [Report 1](report/1/) | 05.11.2018 |
 | [Report 2](report/2/) | 12.11.2018 |
 | [Report 3](report/3/) | 26.11.2018 |
+| [Report 4](report/4/) | 17.12.2018 |

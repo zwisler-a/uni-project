@@ -1,0 +1,503 @@
+\documentclass[11pt,a4paper]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage{titling}
+\usepackage[german]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+
+\lhead{Leon Rudolph}
+\chead{ak18b}
+\rhead{17.12.2018}
+
+\lfoot{}
+\cfoot{\thepage}
+\rfoot{}
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\begin{document}
+\begin{titlepage}
+
+\pretitle{%
+\vskip -3em
+\begin{figure}[h]
+\begin{center}
+\includegraphics[scale=0.55]{Logo.png}
+\end{center}
+\end{figure}
+\begin{center}
+\vskip -2em
+\large{Wintersemester 2018/19\\Softwaretechnikpraktikum} \vskip 9em
+\rule{5in}{0.4pt}\par \vskip 0.5em
+}
+\posttitle{\par\rule{5in}{0.4pt} \vskip 4em
+\Large Gruppe: ak18b \vskip 1.5em
+\normalsize Betreuer: Benjamin Lucas Friedland, Michael Fritz\vskip 1em
+\normalsize Gruppenmitglieder: Alexander Zwisler, Leon Kamuf, Leon Rudolph, Maurice Eisenblätter, Maximilian Gläfcke, Robin Seidel, Sina Opitz, Steve Woywod
+\end{center}}
+
+\title{\textbf{\Huge App zur Inventarisierung von Unternehmenswerten}\vskip 0.5em \huge Projektplan}
+\date{}
+\maketitle
+\end{titlepage}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+\renewcommand\thesection{\arabic{section}}
+
+\section{Projektplan}
+
+\subsection{Inhaltsverzeichnis}
+
+\subsubsection{Ziele}
+
+Muss und Kann Ziele entstammen den funktionalen und nicht-funktionalen Anforderungen, des Lastenhefts
+  \begin{itemize}
+  \item 9 Muss Ziele 72\% des Gesamtprojekts
+  \item 7 Kann Ziele 45\% des Gesamtprojekts
+  \end{itemize}
+
+
+
+\begin{itemize}
+\item[]
+  \textbf{Muss Ziele}
+  
+  \begin{itemize}
+  	\item
+  		An- und Abmeldung
+  	\item
+  		User Self Care
+	\item
+  		Datenzugriff
+	\item
+ 		Dateneingabe
+	\item
+  		Typeneingabe
+	\item
+  		Administration
+	\item
+  		Datenschutz und Anonymität
+	\item
+  		Fehlerunanfälligkeit
+	\item
+  		Benutzeroberfläche
+  \end{itemize}
+
+\item[]
+  \textbf{Kann Ziele}
+  
+  \begin{itemize}
+  	\item
+  		Mehrsprachigkeit
+	\item
+  		Itemtyp Vorlagen
+	\item
+  		Statistiken für Itembestände
+	\item
+  		Benutzerhandbuch
+	\item
+  		Chat
+	\item
+  		Nutzerverwaltung
+	\item
+  		Browsersupport
+  \end{itemize}
+  
+\end{itemize}
+
+\newpage
+
+\subsubsection{Arbeitspakete}\label{arbeitspakete}
+
+\begin{itemize}
+\item
+  \textbf{Abgabe Arbeitspaket 1}
+  
+  \begin{itemize}
+  	\item
+  		An- und Abmeldung
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0010/] Login
+  		\item[/LF0020/] Logout
+  		\end{itemize}
+    \item
+    	Datenzugriff
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0210/] Anzeigen aller erfassten Items
+    	\end{itemize}
+   \item
+    	Dateneingabe
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0330/] Bearbeiten von Items
+    	\item[/LF0340/] Entfernen von Items
+    	\end{itemize}
+  \item
+    	Typeneingabe
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0410/] Hinzufügen neuer Itemtypen
+    	\item[/LF0420/] Bearbeiten von Itemtypen
+    	\item[/LF0440/] Löschen von Itemtypen
+    	\end{itemize}
+  \item
+  	Fehlerunanfälligkeit
+  	\begin{itemize}
+  	\leftskip=3em
+  	\item[/LN0110/] Validieren von Benutzereingaben
+  	\item[/LN0120/] Datensicherheit
+  	\end{itemize}
+  \item
+  		Mehrsprachigkeit und Browsersupport
+  	\begin{itemize}
+  	\leftskip=3em
+  	\item[/LN0410/] Browsersupport
+  	\item[/LF0610/] Mehrsprachigkeit
+  	\end{itemize}
+  \item
+  	Datenschutz und Anonymität
+  	\begin{itemize}
+  	\leftskip=3em
+  	\item[/LN0010/] Sicherheit der Anmeldedaten
+  	\end{itemize}
+  \item
+  	Benutzeroberfläche
+  	\begin{itemize}
+  	\leftskip=3em
+  	\item[/LN0310/] Intuitive grafische Interaktion
+  	\end{itemize}
+  \end{itemize}
+
+\item
+  \textbf{Abgabe Arbeitspaket 2}
+  \begin{itemize}
+	\item
+    	Datenzugriff
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0220/] Suche
+    	\item[/LF0230/] Sortieren von Items
+    	\end{itemize}
+	\item
+    	Dateneingabe
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0360/] Verlinkung von Items
+    	\end{itemize}
+	\item
+		Typeneingabe
+		\begin{itemize}
+		\leftskip=3em
+		\item[/LF0430/] Pflichtfelder von Itemtypen
+		\end{itemize}
+	\item
+    	Administration
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0520/] Löschen von Profilen
+    	\item[/LF0530/] Firmenverwaltung
+    	\item[/LF0540/] Typenverwaltung
+    	\item[/LF0550/] Globale Pflichtfelder
+    	\end{itemize}
+  \end{itemize}
+\newpage
+\item
+  \textbf{Abgabe Arbeitspaket 3}
+  \begin{itemize}
+  \item
+  		An- und Abmeldung
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0030/] Registrierung neuer Anwender
+  		\item[/LF0040/] Wiederherstellung des Passworts
+  		\end{itemize}
+  \item
+    	User Self Care
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0110/] E-Mail Adresse ändern
+    	\item[/LF0120/] Passwort ändern
+    	\end{itemize}
+  \item
+    	Dateneingabe
+    	\begin{itemize}
+    	\leftskip=3em
+    	\item[/LF0320/] Anhang von Dokumenten
+    	\end{itemize}
+  \end{itemize}
+
+\item
+  \textbf{Abgabe Arbeitspaket 4}
+  \begin{itemize}
+    \item
+  		Itemtyp Vorlagen
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0620/] Itemtyp Vorlagen
+  		\end{itemize}
+  	\item
+  		Nutzerverwaltung
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0660/] Nutzerverwaltung
+  		\end{itemize}
+  \end{itemize}
+	
+
+\item
+	\textbf{Abgabe Arbeitspaket 5}
+	\begin{itemize}
+	  \item
+  	    Statistiken für Itembestände
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0630/] Statistiken für Itembestände
+  		\end{itemize}
+	\item
+  		Benutzerhandbuch
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0640/] Benutzerhandbuch
+  		\end{itemize}
+	\item
+  		Chat
+  		\begin{itemize}
+  		\leftskip=3em
+  		\item[/LF0650/] Chat
+  		\end{itemize}
+	\end{itemize}
+	
+ \end{itemize}
+\newpage
+
+\subsection{Beschreibung der Arbeitspakete}
+
+\subsubsection{Abgabe Paket 1 (45\% des Gesamtprojekts)}
+Das Abgabe Paket 1 umfasst eine grobe Darstellung der Website, welches die grundlegende Bedienung für den Anwender bereitstellt.
+Es wird eine Benutzeroberfläche erstellt, die Funktionen sich an-, abzumelden, sowie die Typen- und Dateneingabe hinzugefügt.
+Die Typen- und Dateneingabe setzen sich mit der Thematik auseinander neue Items zum Inventar des Unternehmens hinzu zu fügen.
+An- und Abmeldung soll einem Unternehmen ermöglichen, dass nur bestimmte Personen zugriff zur Website besitzen.
+Unser erstes Abgabe Paket macht prozentual den größten Anteil im Gesamtprojekt aus, allerdings soll es auch für den Anfang möglichst viel bieten um eine grobe Idee der Inventarisierung darzustellen.
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  An- und Abmeldung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Diese Funktion bietet die Möglichkeit, sich über Nutzerdaten anzumelden, abzumelden
+    oder sich zu registrieren, um neue Nutzerdaten zu erhalten.
+  \end{itemize}
+  
+\item
+  Dateneingabe (8\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Diese Funktion ermöglicht das Entfernen, Bearbeiten, Hinzufügen und Anhängen neuer
+    Items.
+  \end{itemize}
+  
+\item
+  Typeneingabe (8\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Wie bei der Dateneingabe umfasst die Typeneingabe das Hinzufügen,
+    Bearbeiten und Entfernen der jeweiligen Itemtypen.
+  \end{itemize}
+  
+\item
+  Benutzeroberfläche (3\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Funktion ermöglicht ein übersichtliches Userinterface zu erstellen.
+  \end{itemize}
+\item
+  Datenschutz und Anonymität (3\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Der Datenschutz und die Anonymität umfassen die Bearbeitung von
+    Profilen durch den Administrator, sowie die Verschlüsselung der
+    jeweiligen Passwörter.
+  \end{itemize}
+  \item
+  Browsersupport (3\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Der Browsersupport ermöglicht die Unterstützung von anderen Browsern, z.B. auf mobilen
+    Geräten.
+  \end{itemize}
+  
+  \item
+  Fehlerunanfälligkeit (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Fehlerunanfälligkeit ermöglicht das Validieren von Eingaben. Zudem sorgt die Funktion 			dafür, dass bei technischem Versagen ein kleinst möglicher Schaden entsteht.
+  \end{itemize}
+  
+\item
+  Effiziente Implementierung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Funktion bietet die Möglichkeit, dass das Projekt mit geringer Laufzeit bei
+    Prozessen arbeitet. Durch die effiziente Implementierung wird von der Website ein geringer 			Speicherbedarf genutzt. 
+  \end{itemize}
+  \item
+  Mehrsprachigkeit (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Es besteht die Option, andere Sprachen hinzuzufügen, um ein großes Publikum zu
+    erreichen.
+  \end{itemize}
+  
+\end{itemize}
+
+\subsubsection{Abgabe Paket 2 (26\% des Gesamtprojekts)}
+Die Abgabe des zweiten Pakets umfasst das Hinzufügen neuer Funktion um die Website dem Ziel einer Iventarisierungs-App näher zu bringen.
+Nachdem das erste Paket eine grobe Darstellung lieferte, stellt das Abgabe Paket 2 das Hinzufügen der Funktion der Itemvorlage, Verlinkung, Sortierung, Administration und dem Datenzugriff bereit.
+Diese setzen sich aus den Kann und Muss Zielen zusammen und ermöglichen dem Nutzer beispielsweise, das Suchen nach bestimmten Items durch die Funktion Datenzugriff.
+Prozentual stellt das zweite Abgabe Paket weniger zum Gesamtprojekt bereit als sein Vörgänger, liefert dafür allerdings ein umfassendes hinzufügen neuer Funktion für den Anwender.
+\begin{itemize}
+
+\item
+  Filterung und Sortierung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Nach Wunsch des Nutzers können Items nach bestimmten Eigenschaften gefiltert oder sortiert 			werden.
+  \end{itemize}
+    
+\item
+  Verlinkung von Items (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Items werden untereinander verlinkt.
+  \end{itemize}
+  
+\item
+  Datenzugriff (8\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Items werden in einer Tabelle erfasst und können mit dieser Funktion ebenfalls
+    gesucht werden.
+  \end{itemize}
+  
+\item
+  Administration (8\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Die Administration umfasst das Hinzufügen von Firmen oder
+    Unternehmen, sowie die Typenverwaltung als auch das Hinzufügen von
+    globalen Pflichtfeldern.
+  \end{itemize}
+  
+\end{itemize}
+
+\subsubsection{Abgabe Paket 3 (20\% des Gesamtprojekts)}
+Abgabe Paket 3 beschäftigt sich hauptsächlich mit dem Hinzufügen von Dokumenten an Items.
+Außerdem wird eine Passwortverwaltung implementiert.
+\begin{itemize}
+
+\item
+  Dokumentenverwaltung (10\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Es wird ermöglicht den Items, versioniert Dokumente anzuhängen. 
+  \end{itemize}
+  \item
+  Passwortänderung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Diese Funktion ermöglicht das Passwort zu ändern.
+  \end{itemize}
+  
+\item
+  Passwortwiederherstellung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Wenn das Passwort vergessen wird, ermöglicht diese Funktion die Wiederherstellung des 				Passworts, um wieder Zugang zu erlangen.
+  \end{itemize}
+  
+\end{itemize}
+\newpage
+\subsubsection{Abgabe Paket 4 (10\% des Gesamtprojekts)}
+Abgabe Paket 4 beschreibt die Verbesserung und Optimierung der Inventarisierungs-App.
+Die App wird um Funktionen ergänzt die die Nutzerfreundlichkeit verbessern, darunter zählt das Hinzufügen von Itemvorlagen, wodurch Nutzer der Anwendung weniger Aufwand haben.
+\begin{itemize}
+
+\item
+  Itemvorlage (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Bei häufiger Verwendung von Items werden diese mithilfe dieser Funktion bereits hinterlegt
+    und vorgeschlagen.
+  \end{itemize}
+  
+\item
+  Rollenverwaltung (5\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Berechtigungen können hinzugefügt, bearbeitet oder entfernt werden,
+    außerdem können die Administratoren die Verteilung von Anwenderrollen vornehmen.
+  \end{itemize}
+  
+\end{itemize}
+
+\subsubsection{Abgabe Paket 5 (18\% des Gesamtprojekts)}
+Im letzten Paket wird der Programmcode kommentiert damit er für Außenstehende leicht nachvollziehbar ist. Außerdem werden abschließende Arbeiten zur Optimierung der Anwendung vorgenommen. Es wird ein Chat und Statistiken eingebaut, die die Nutzerfreundlichkeit weiter verbessern. 
+\begin{itemize}
+
+\item
+	Chat(5\% des Gesamtprojekts)
+	
+	\begin{itemize}
+	\item
+	Als zusätzliche Kommunikationsmöglichkeit, soll ein einfaches Chattool implementiert 		    werden, damit kleine Nachrichten/Anmerkungen nicht als separate E-Mail verfasst werden müssen. 
+	\end{itemize}
+	
+	\item   
+	Statistiken(5\% des Gesamtprojekts)
+	 \begin{itemize}
+	 \item
+	 Anlegen von Statistiken, für allgemeinen Überblick.
+	\end{itemize}
+	\item
+  Wartung (8\% des Gesamtprojekts)
+
+  \begin{itemize}
+  \item
+    Der Programmcode soll gut dokumentiert und leicht strukturiert sein.
+  \end{itemize}
+	
+\end{itemize}
+
+\end{document}

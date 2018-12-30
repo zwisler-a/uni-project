@@ -1,0 +1,10 @@
+{
+    "login": {
+		"invalid-login": "Falscher Benutzername oder flasches Passwort !",
+        "password": "Passwort",
+        "remember": "Angemeldet bleiben",
+        "submit": "Anmelden",
+        "title": "Anmelden",
+        "username": "Benutzername"
+    }
+}
