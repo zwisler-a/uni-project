@@ -139,7 +139,7 @@ paths:
           
           
           
-  /items:
+  /item/list:
     get:
       parameters:
       - in: query
