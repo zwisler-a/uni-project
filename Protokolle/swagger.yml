@@ -53,6 +53,7 @@ paths:
               example:
                 error: Unauthorized
                 message: Authentication failed due to invalid credentials
+
   /users:
     post:
       security:
@@ -60,7 +61,7 @@ paths:
       tags:
         - Users Resource
       operationId: user-create
-      summary: Create User
+      summary: Create an User
       requestBody:
         required: true
         content:
@@ -76,11 +77,12 @@ paths:
                 $ref: '#/components/schemas/User'
         '409':
           $ref: '#/components/responses/Conflict'
-          
+
   /users/{userId}:
     parameters:
       - in: path
         name: userId
+        description: The User's id
         schema:
           type: integer
         required: true
@@ -90,7 +92,7 @@ paths:
       tags:
         - Users Resource
       operationId: user-get
-      summary: Get a User
+      summary: Get an User
       responses:
         '200':
           description: The requested resource has been found
@@ -106,7 +108,7 @@ paths:
       tags:
         - Users Resource
       operationId: user-update
-      summary: Modify User
+      summary: Modify an User
       requestBody:
         required: true
         content:
@@ -115,7 +117,7 @@ paths:
               $ref: '#/components/schemas/User'
       responses:
         '200':
-          description: The requested resource has been found
+          description: The requested resource has been found and updated
           content:
             application/json:
               schema:
@@ -130,30 +132,18 @@ paths:
       tags:
         - Users Resource
       operationId: user-delete
-      summary: Delete User
+      summary: Delete an User
       responses:
         '204':
           description: Successfully delete resource
         '404':
           $ref: '#/components/responses/NotFound'
-          
-          
-          
-  /item/list:
+
+  /items:
     get:
       parameters:
-      - in: query
-        name: page
-        description: Index of the current page
-        schema:
-          type: integer
-        required: true
-      - in: query
-        name: per_page
-        description: Items displayed per page
-        schema:
-          type: integer
-        required: true
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       security:
         - jwt: []
       tags:
@@ -162,38 +152,80 @@ paths:
       summary: Get a list of items
       responses:
         '200':
+          description: The requested resource has been found
           headers:
             X-Total:
-              description: Total amount of items
-              schema:
-                type: integer
-          description: The requested resource has been found
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Item'
-  
-  /item:
+
+  /items/{typeId}:
+    parameters:
+      - in: path
+        name: typeId
+        description: The Item's type id
+        schema:
+          type: integer
+        required: true
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Get a list of Items by type
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: The requested resource has been found
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        '404':
+          $ref: '#/components/responses/NotFound'
     post:
       security:
         - jwt: []
       tags:
         - Items Resource
-      summary: Create a new Item
+      summary: Create an Item
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                typeId:
-                  type: integer
-                fields:
-                  type: object
-                  description: All Fields required or wanted on the item
+              $ref: '#/components/schemas/Item'
       responses:
         '201':
           description: New resource successfully created
@@ -203,46 +235,60 @@ paths:
                 $ref: '#/components/schemas/Item'
         '409':
           $ref: '#/components/responses/Conflict'
-    put:
+
+  /items/{typeId}/{itemId}:
+    parameters:
+      - in: path
+        name: typeId
+        description: The Item's type id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: itemId
+        description: The Item's internal id
+        schema:
+          type: integer
+        required: true
+    get:
       security:
         - jwt: []
       tags:
         - Items Resource
-      summary: Update an Item
+      summary: Get an Item
+      responses:
+        '200':
+          description: The requested resource has been found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Modify an Item
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                id:
-                  type: integer
-                  description: Id of the Item
-                typeId:
-                  type: integer
-                  description: Id of the type of the item
-                fields:
-                  type: object
-                  description: All Fields required or wanted on the item
+              $ref: '#/components/schemas/Item'
       responses:
         '200':
-          description: Resource updated
+          description: The requested resource has been found and updated
           content:
             application/json:
-              schema: 
+              schema:
                 $ref: '#/components/schemas/Item'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
-  
-  /item/{itemId}:    
     delete:
-      parameters:
-      - in: path
-        name: itemId
-        schema:
-          type: integer
-        required: true
       security:
         - jwt: []
       tags:
@@ -250,11 +296,9 @@ paths:
       summary: Delete an Item
       responses:
         '204':
-          description: Resource has been deleted
-        '409':
-          $ref: '#/components/responses/Conflict'
-    
-    
+          description: Successfully delete resource
+        '404':
+          $ref: '#/components/responses/NotFound'
 
 components:
   securitySchemes:
@@ -264,22 +308,6 @@ components:
       bearerFormat: JWT
   
   schemas:
-    Item:
-      description: Respresents a physical object with all its properties
-      properties:
-        id:
-          type: integer
-          readOnly: true
-          description: The Items unique id
-        typeId:
-          type: integer
-          description: The ID of the type of the item
-        fields:
-          type: object
-          example: {'name':'Laptop1'}
-          description: An Object containing all fields of an item according to the item type
-          
-        
     User:
       description: Represents a user object
       properties:
@@ -334,6 +362,25 @@ components:
         - username
         - password
         - roles
+    Item:
+      description: Respresents a physical object with all its properties
+      properties:
+        typeId:
+          type: integer
+          readOnly: true
+          description: The id of the type of the item
+        id:
+          type: integer
+          readOnly: true
+          description: The items internal (type dependant) unique id
+        fields:
+          type: object
+          example: {"location":"Room 201"}
+          description: An Object containing all fields of an item according to the item type
+      required:
+        - id
+        - typeId
+        - fields
     Error:
       type: object
       properties:
@@ -357,7 +404,50 @@ components:
       required:
         - error
         - message
-  
+
+  parameters:
+    page:
+      in: query
+      name: page
+      description: Index of the current page
+      schema:
+        type: integer
+      required: true
+    per_page:
+      in: query
+      name: per_page
+      description: Items displayed per page
+      schema:
+        type: integer
+      required: true
+    
+
+  headers:
+    X-Total:
+      description: Total number of entries
+      schema:
+        type: integer
+    X-Total-Pages:
+      description: Total number of pages
+      schema:
+        type: integer
+    X-Per-Page:
+      description: Number of entries per page
+      schema:
+        type: integer
+    X-Page:
+      description: Index of current page
+      schema:
+        type: integer
+    X-Prev-Page:
+      description: Index of previous page
+      schema:
+        type: integer
+    X-Next-Page:
+      description: Index of next page
+      schema:
+        type: integer
+
   responses:
     Conflict:
       description: The requeste could not be processed because of conflict in the current state of the resource
