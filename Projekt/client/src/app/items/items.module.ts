@@ -9,6 +9,7 @@ import {
 } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ItemService } from './item.service';
 
 @NgModule({
   declarations: [ItemsListComponent],
@@ -20,6 +21,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FlexLayoutModule,
     MatSortModule,
     HttpClientModule
-  ]
+  ],
+  providers: [ItemService]
 })
 export class ItemsModule {}

@@ -5,6 +5,7 @@ import { Observable, of as observableOf, merge, of } from 'rxjs';
 import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Item } from '../types/item.interface';
 import { environment } from 'src/environments/environment.prod';
+import { ItemService } from '../item.service';
 
 /**
  * Data source for the ItemList view. This class should
@@ -23,7 +24,7 @@ export class ItemListDataSource extends DataSource<any> {
   constructor(
     private paginator: MatPaginator,
     private sort: MatSort,
-    private http: HttpClient
+    private items: ItemService
   ) {
     super();
   }
@@ -57,22 +58,14 @@ export class ItemListDataSource extends DataSource<any> {
     asc: boolean
   ): Observable<Item[]> {
     this._loading = true;
-    const params = new HttpParams();
-    params.append('page', page.toString());
-    params.append('per_page', itemsPerPage.toString());
-    return this.http
-      .get([environment.apiBase, this.listItemsUrl].join('/'), {
-        observe: 'response',
-        params: { page: page.toString(), per_page: itemsPerPage.toString() }
+    return this.items.getItems(page, itemsPerPage).pipe(
+      map((res: HttpResponse<[]>) => {
+        this.paginator.length =
+          Number.parseInt(res.headers.get('X-Total'), 10) || 0;
+        this._loading = false;
+        return res.body;
       })
-      .pipe(
-        map((res: HttpResponse<[]>) => {
-          this.paginator.length =
-            Number.parseInt(res.headers.get('X-Total'), 10) || 0;
-          this._loading = false;
-          return res.body;
-        })
-      );
+    );
   }
 
   getPossibleColumnNames(data: Item[]): string[] {
