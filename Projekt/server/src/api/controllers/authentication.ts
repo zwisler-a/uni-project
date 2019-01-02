@@ -35,10 +35,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
             return;
         }
 
-        // Async methods couses app to crash in some cases
-        // TODO Switch back to async as soon as the problem is found
-        // https://github.com/kelektiv/node.bcrypt.js/issues/674
-        const success = bcrypt.compareSync(req.body.password, user.password);
+        const success = await bcrypt.compare(req.body.password, user.password);
 
         if (success) {
             const token = jsonwebtoken.sign(
