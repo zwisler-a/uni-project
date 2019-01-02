@@ -18,8 +18,8 @@ export class App {
     /** Generates a new instance of the App */
     static async factory(config: Config) {
         const app = new App(config);
-        await app.initializeExpress();
         await app.initializeDatabase();
+        await app.initializeExpress();
         return app;
     }
 
