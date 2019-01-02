@@ -45,6 +45,9 @@ export class App {
         this.express = express();
         this.express.disable('x-powered-by');
 
+        // Set database pool
+        this.express.set('pool', this.dbPool);
+
         // Generate cryptographic secure jwt secret
         this.express.set('secret', crypto.randomBytes(64));
 
@@ -82,7 +85,6 @@ export class App {
             password: database.password,
             database: database.database,
         });
-        this.express.set('pool', this.dbPool);
         return initializeTables(this.dbPool);
     }
 
