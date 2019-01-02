@@ -1,4 +1,5 @@
 import path from 'path';
+import crypto from 'crypto';
 import express from 'express';
 import morgan from 'morgan';
 import compression from 'compression';
@@ -8,51 +9,61 @@ import { Config } from './types';
 import { apiRouter } from './api/routes/api';
 import { initializeTables } from './database/controller';
 
+/**
+ * Represents the backend's core
+ * @author Maurice
+ */
 export class App {
+
+    /** Generates a new instance of the App */
+    static async factory(config: Config) {
+        const app = new App(config);
+        await app.initializeExpress();
+        await app.initializeDatabase();
+        return app;
+    }
+
+    /** The app's configuration */
     config: Config;
 
-    app: express.Express;
+    /** The app's express instance */
+    express: express.Express;
 
+    /** The app's mariadb connection pool */
     dbPool: mariadb.Pool;
 
+    /**
+     * Creates new instance of the app
+     * @param config App's configuration
+     */
     constructor(config: Config) {
         this.config = config;
     }
 
-    /**
-     * Prepares the app for startup.
-     * Resolves promise once everything is ready
-     */
-    async setup() {
-        return Promise.all([
-            this.initializeExpress(),
-            this.initializeDatabase()
-        ]);
-    }
+    /** Initializes the app's express instance */
+    initializeExpress() {
+        this.express = express();
+        this.express.disable('x-powered-by');
 
-    private initializeExpress() {
-        this.app = express();
-        this.app.disable('x-powered-by');
-
-        // TODO remove just for testing
-        this.app.set('secret', 'SpecialJWTSecretWOW!');
+        // Generate cryptographic secure jwt secret
+        this.express.set('secret', crypto.randomBytes(64));
 
         // Add en-/decoder
-        this.app.use(morgan('dev'));
-        this.app.use(compression());
-        this.app.use(express.json());
+        this.express.use(morgan('dev'));
+        this.express.use(compression());
+        this.express.use(express.json());
 
         // Add default request handler
-        this.app.use(express.static(path.join(__dirname, 'public')));
-        this.app.use('/api', apiRouter);
+        this.express.use(express.static(path.join(__dirname, 'public')));
+        this.express.use('/api', apiRouter);
 
         // Add default request handler for undefined routes
-        this.app.get('*', (req, res) => {
+        this.express.get('*', (req: express.Request, res: express.Response) => {
             res.sendFile(path.join(__dirname, 'public/index.html'));
         });
 
         // Add default error handler
-        this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+        this.express.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
             res.status('status' in err ? err.status : 500).send({
                 error: err.name,
                 message: err.message,
@@ -61,7 +72,8 @@ export class App {
         });
     }
 
-    private initializeDatabase() {
+    /** Initializes the app's mariadb connection pool and initializes all tables */
+    initializeDatabase() {
         const database = this.config.database;
         this.dbPool = mariadb.createPool({
             host: database.host,
@@ -70,18 +82,12 @@ export class App {
             password: database.password,
             database: database.database,
         });
-        this.app.set('pool', this.dbPool);
+        this.express.set('pool', this.dbPool);
         return initializeTables(this.dbPool);
     }
 
+    /** Closes all resources currently opened by the app (shutdown the app) */
     close() {
         this.dbPool.end();
     }
-}
-
-/** Generates a new instance of the App */
-export async function AppFactory(config: Config) {
-    const app = new App(config);
-    await app.setup();
-    return app;
 }

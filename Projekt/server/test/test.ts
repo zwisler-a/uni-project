@@ -4,15 +4,15 @@ import request from 'supertest';
 import { expect } from 'chai';
 import 'mocha';
 
-import { App, AppFactory } from '../src/app';
+import { App } from '../src/app';
 import { config } from './config.test';
 
 describe('authentication', () => {
     let app: App;
     let server: Server;
     before(async () => {
-        app = await AppFactory(config);
-        server = app.app.listen(0);
+        app = await App.factory(config);
+        server = app.express.listen(0);
     });
     after(() => {
         server.close();

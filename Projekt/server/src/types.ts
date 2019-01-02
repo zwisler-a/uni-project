@@ -14,8 +14,9 @@ export class SslConfig {
 }
 
 export class Config {
-    host: string;
-    port: number;
+    host?: string;
+    port?: number;
+    socket?: string;
     ssl: SslConfig;
     http2: boolean;
     database: DatabaseConfig;

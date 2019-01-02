@@ -1,101 +1,85 @@
-import { App, AppFactory } from './app';
-import debug from 'debug';
-import http from 'http';
 import path from 'path';
+import net from 'net';
+import http from 'http';
+import https from 'https';
+import debug from 'debug';
 import fs from 'fs-extra';
+import { App } from './app';
+import { Config } from './types';
 
-const configFile = path.resolve(process.argv[2] || './config.json');
+const configFile = path.resolve(process.argv[process.argv.length - 1] || './config.json');
 if (!fs.existsSync(configFile)) {
     throw new Error(`No config file found: "${configFile}"`);
 }
 
-const config = fs.readJsonSync(configFile);
+const config: Config = fs.readJsonSync(configFile);
 
-AppFactory(config).then(appInstance => {
-    const app = appInstance.app;
-    /**
-     * Get port from environment and store in Express.
-     */
+if (process.argv.indexOf('--debug') !== -1) {
+    debug.enable('*');
+}
 
-    const port = normalizePort(config.port || process.env.PORT || '3000');
-    app.set('port', port);
+App.factory(config).then(app => {
+    const express = app.express;
 
-    /**
-     * Create HTTP server.
-     */
+    // Create HTTP server.
+    let server: net.Server;
+    if (config.ssl.enabled) {
+        server = https.createServer({
+            key: fs.readFileSync(config.ssl.key),
+            cert: fs.readFileSync(config.ssl.cert)
+        }, express);
+    } else {
+        server = http.createServer(express);
+    }
 
-    const server = http.createServer(app);
+    // Bind HTTP server
+    let address: string;
+    if ('port' in config) {
+        if ('host' in config) {
+            server.listen(config.port, config.host);
+            address = `address ${config.host}:${config.port}`;
+        } else {
+            server.listen(config.port);
+            address = `address 0.0.0.0:${config.port}`;
+        }
+    } else if ('socket' in config) {
+        server.listen(config.socket);
+        address = `socket '${config.socket}'`;
+    } else {
+        server.listen(config.socket);
+        address = 'address 0.0.0.0:0';
+    }
+    console.info(`Binding to ${address}`);
 
-    /**
-     * Listen on provided port, on all network interfaces.
-     */
-
-    server.listen(port);
-    server.on('error', onError);
-    server.on('listening', onListening);
-
-
-
-    /**
-     * Event listener for HTTP server "error" event.
-     */
-    function onError(error: any) {
+    // Check for network errors
+    server.on('error', (error: any) => {
         if (error.syscall !== 'listen') {
             throw error;
         }
 
-        const bind = typeof port === 'string'
-            ? 'Pipe ' + port
-            : 'Port ' + port;
-
         // handle specific listen errors with friendly messages
         switch (error.code) {
             case 'EACCES':
-                console.error(bind + ' requires elevated privileges');
+                console.error(`${address} requires elevated privileges`);
                 process.exit(1);
                 break;
             case 'EADDRINUSE':
-                console.error(bind + ' is already in use');
+                console.error(`${address} is already in use`);
                 process.exit(1);
                 break;
             default:
                 throw error;
         }
-    }
+    });
 
-    /**
-     * Event listener for HTTP server "listening" event.
-     */
-    function onListening() {
-        const addr = server.address();
-        const bind = typeof addr === 'string'
-            ? 'pipe ' + addr
-            : 'port ' + addr.port;
-        debug('Listening on ' + bind);
-    }
-
+    // Check for successful address bind
+    server.on('listening', () => {
+        const address = server.address();
+        const bind = typeof address === 'string'
+            ? `socket ${address}`
+            : `address ${address.address}:${address.port}`;
+        debug('http')(`Listening on ${bind}`);
+    });
+}).catch(error => {
+    console.error(error);
 });
-
-
-
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val: string) {
-    const port = parseInt(val, 10);
-
-    if (isNaN(port)) {
-        // named pipe
-        return val;
-    }
-
-    if (port >= 0) {
-        // port number
-        return port;
-    }
-
-    return false;
-}
-
