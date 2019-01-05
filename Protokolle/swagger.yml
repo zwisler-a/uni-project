@@ -16,6 +16,8 @@ tags:
     description: CRUD operations for the user
   - name: Items Resource
     description: CRUD operations for Items
+  - name: Fields Resource
+    description: Available field information
 
 paths:
   /authenticate:
@@ -299,6 +301,55 @@ paths:
           description: Successfully delete resource
         '404':
           $ref: '#/components/responses/NotFound'
+          
+  /fields/{typeId}:
+    parameters:
+      - in: path
+        name: typeId
+        description: The Item's type id
+        schema:
+          type: integer
+        required: true
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Fields Resource
+      summary: Get an Item
+      responses:
+        '200':
+          description: The requested resource has been found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fields'
+        '404':
+          $ref: '#/components/responses/NotFound'
+          
+  /fields:
+    parameters:
+      - in: path
+        name: typeId
+        description: The Item's type id
+        schema:
+          type: integer
+        required: true
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Fields Resource
+      summary: Get an Item
+      responses:
+        '200':
+          description: The requested resource has been found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fields'
+        '404':
+          $ref: '#/components/responses/NotFound'
+          
 
 components:
   securitySchemes:
@@ -381,6 +432,16 @@ components:
         - id
         - typeId
         - fields
+    Fields:
+      description: Respresents a list of available field names
+      properties:
+        fields:
+          readOnly: true
+          description: Names of the fields
+          type: array
+          items:
+            type: string
+
     Error:
       type: object
       properties:
