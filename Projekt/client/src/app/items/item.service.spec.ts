@@ -19,8 +19,19 @@ describe('EntityService', () => {
   it('should send a all object request', inject(
     [HttpTestingController, ItemService],
     (httpMock: HttpTestingController, service: ItemService) => {
-      service.getItems(50).subscribe();
-      const req = httpMock.expectOne(`${service.baseUrl}/50`);
+      service.getItems(1, 50).subscribe();
+      const req = httpMock.expectOne(`${service.baseUrl}`);
+      expect(req.request.method).toBe('GET');
+    }
+  ));
+
+  it('should send a type object request', inject(
+    [HttpTestingController, ItemService],
+    (httpMock: HttpTestingController, service: ItemService) => {
+      service.getItems(1, 50, 10).subscribe();
+      const req = httpMock.expectOne(
+        `${service.baseUrl}/10`
+      );
       expect(req.request.method).toBe('GET');
     }
   ));
@@ -28,10 +39,10 @@ describe('EntityService', () => {
   it('should handle an error', inject(
     [HttpTestingController, ItemService],
     (httpMock: HttpTestingController, service: ItemService) => {
-      service.getItems(50).subscribe(null, (err: ErrorEvent) => {
+      service.getItems(1, 50).subscribe(null, (err: ErrorEvent) => {
         expect(err).toBeTruthy();
       });
-      const req = httpMock.expectOne(`${service.baseUrl}/50`);
+      const req = httpMock.expectOne(`${service.baseUrl}`);
       req.error(new ErrorEvent('test'));
     }
   ));

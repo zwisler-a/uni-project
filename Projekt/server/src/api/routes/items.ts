@@ -3,4 +3,4 @@ import { validateJsonWebToken } from '../controllers/authentication';
 import { listItems } from '../controllers/item';
 
 export const itemsRoute: Router = Router();
-itemsRoute.get('/list', validateJsonWebToken, listItems);
+itemsRoute.get('/', validateJsonWebToken, listItems);

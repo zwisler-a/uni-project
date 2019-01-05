@@ -10,6 +10,7 @@ import {
 import { HttpClientModule } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ItemService } from './item.service';
+import { FieldsService } from './fields.service';
 
 @NgModule({
   declarations: [ItemsListComponent],
@@ -22,6 +23,6 @@ import { ItemService } from './item.service';
     MatSortModule,
     HttpClientModule
   ],
-  providers: [ItemService]
+  providers: [ItemService, FieldsService]
 })
 export class ItemsModule {}

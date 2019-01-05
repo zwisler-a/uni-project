@@ -3,24 +3,24 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Item } from './types/item.interface';
 import { CreatableItem } from './types/creatable-item.interface';
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ItemService {
-  baseUrl = `${environment.baseUrl}/item`;
+  baseUrl = `${environment.baseUrl}/items`;
 
   constructor(private http: HttpClient) {}
 
   /** Hier solltest du die pagination beachten */
-  getItems(page: number, perPage: number) {
+  getItems(page: number, perPage: number, type?: string | number) {
     const params = new HttpParams();
     params.append('page', page.toString());
     params.append('per_page', perPage.toString());
     return this.http
-      .get([this.baseUrl, 'list'].join('/'), {
+      .get([this.baseUrl, type].join('/'), {
         observe: 'response',
         params: { page: page.toString(), per_page: perPage.toString() }
       })

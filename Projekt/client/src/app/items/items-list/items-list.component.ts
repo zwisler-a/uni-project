@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ItemListDataSource } from './items-list.datasource';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { ItemService } from '../item.service';
 
@@ -18,13 +18,13 @@ export class ItemsListComponent implements OnInit {
   dataSource: ItemListDataSource;
   selection = new SelectionModel<any>(true, []);
 
-  // displayedColumns = ['id', 'name'];
+  displayedColumns = [];
 
-  get displayedColumns() {
-    return this.dataSource.possibleColumnNames.concat('id') || [];
-  }
-
-  constructor(private router: Router, private items: ItemService) {}
+  constructor(
+    private router: Router,
+    private items: ItemService,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.dataSource = new ItemListDataSource(
@@ -32,6 +32,10 @@ export class ItemsListComponent implements OnInit {
       this.sort,
       this.items
     );
+    this.activatedRoute.data.subscribe(data => {
+      console.log(data);
+      this.displayedColumns = data.fields;
+    });
     // this.displayedColumns = [];
   }
 
