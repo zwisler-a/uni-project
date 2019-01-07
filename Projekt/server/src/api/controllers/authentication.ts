@@ -40,9 +40,8 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
         if (success) {
             const token = jsonwebtoken.sign(
                 {
-                    some: 'nice',
-                    test: 'data',
-                    '!': 1
+                    username: 'AK18B',
+                    companyId: 10
                 },
                 req.app.get('secret'),
                 {

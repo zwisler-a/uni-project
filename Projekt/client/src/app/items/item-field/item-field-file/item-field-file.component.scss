@@ -1,0 +1,22 @@
+@import "~@angular/material/theming";
+
+.file-preview {
+    @include mat-elevation(1);
+    width: 150px;
+    height: 200px;
+    background: white;
+    margin: 8px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.file-history {
+    bottom: 4px;
+    right: 4px;
+    position: absolute;
+    font-size: 14px;
+    color: lightblue;
+    cursor: pointer;
+    border-bottom: dashed 1px lightblue;
+}

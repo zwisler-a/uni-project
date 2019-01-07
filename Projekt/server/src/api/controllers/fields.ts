@@ -5,7 +5,7 @@ export async function getFields(
   res: Response,
   next: NextFunction
 ) {
-  res.send({ fields: ['id', 'a'] });
+  res.send({ fields: ['id', 'a', 'typeId'] });
 }
 
 export async function getFieldsForType(

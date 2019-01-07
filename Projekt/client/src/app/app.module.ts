@@ -25,7 +25,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   imports: [
     BrowserModule,
     AppRoutingModule,
-    ItemsModule,
     BrowserAnimationsModule,
     TranslateModule.forRoot({
       loader: {

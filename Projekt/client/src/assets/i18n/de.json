@@ -1,6 +1,18 @@
 {
+    "items": {
+        "error": {
+            "delete": "Item konnte nicht gelöscht werden!"
+        },
+        "confirm": {
+            "delete": "Soll das Item wirklich gelöscht werden?"
+        }
+    },
+    "confirm": {
+        "cancel": "Abbrechen",
+        "confirm": "Bestätigen"
+    },
     "login": {
-		"invalid-login": "Falscher Benutzername oder flasches Passwort !",
+        "invalid-login": "Falscher Benutzername oder flasches Passwort !",
         "password": "Passwort",
         "remember": "Angemeldet bleiben",
         "submit": "Anmelden",

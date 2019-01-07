@@ -10,16 +10,41 @@
     <nav [ngClass]="sidenavCssState">
         <!-- Toolbar inside the navigation -->
         <mat-toolbar color="primary">
-            <span fxFlex></span>
-            <div fxShow.md>
-                <app-sidenav-control-button
-                    [mode]="sidenavMode"
-                    [state]="sidenavState"
-                    (expand)="expandSidenav()"
-                    (colapse)="collapseSidenav()"
-                    (hide)="hideSidenav()"
-                ></app-sidenav-control-button>
-            </div>
+            <mat-toolbar-row>
+                <span fxFlex></span>
+                <div fxShow.md>
+                    <app-sidenav-control-button
+                        [mode]="sidenavMode"
+                        [state]="sidenavState"
+                        (expand)="expandSidenav()"
+                        (colapse)="collapseSidenav()"
+                        (hide)="hideSidenav()"
+                    ></app-sidenav-control-button>
+                </div>
+            </mat-toolbar-row>
+            <!-- Display user information -->
+            <mat-toolbar-row
+                *ngIf="sidenavIsExpanded"
+                fxLayout="column"
+                fxLayoutAlign="center start"
+                class="user-info"
+            >
+                <div
+                    fxLayoutAlign="start center"
+                    [matMenuTriggerFor]="userMenu"
+                >
+                    <mat-icon>account_circle</mat-icon>
+                    <span>{{ user ? user.username : "" }}</span>
+                    <mat-icon>arrow_drop_down</mat-icon>
+                </div>
+                <mat-menu #userMenu="matMenu">
+                    <button mat-menu-item (click)="logout()">Logout</button>
+                </mat-menu>
+                <div fxLayoutAlign="start center">
+                    <mat-icon>work</mat-icon>
+                    <span>{{ user ? user.companyId : "" }}</span>
+                </div>
+            </mat-toolbar-row>
         </mat-toolbar>
         <!-- Actual navigation, loops through the navigation model -->
         <app-navigation-group
@@ -39,8 +64,6 @@
         </mat-toolbar>
 
         <!-- display the content of the route -->
-        <main class="main-content">
-            <router-outlet></router-outlet>
-        </main>
+        <main class="main-content"><router-outlet></router-outlet></main>
     </div>
 </div>

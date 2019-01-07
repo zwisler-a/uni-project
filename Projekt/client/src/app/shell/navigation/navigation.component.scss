@@ -1,10 +1,11 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
 .main-navigation-container {
     display: flex;
     height: 100%;
     .backdrop {
         position: fixed;
+        z-index: 500;
         top: 0;
         left: 0;
         width: 100%;
@@ -20,11 +21,11 @@
     }
     .main-navigation {
         @include mat-elevation(2);
+        z-index: 501;
         transition: width 0.2s ease-in-out;
         background: white;
         overflow: hidden;
         height: 100%;
-        z-index: 500;
         // states the sidenav can take
         &.over {
             position: fixed;
@@ -43,5 +44,14 @@
         display: flex;
         flex: 1 1 auto;
         flex-direction: column;
+    }
+
+    .user-info {
+        height: 80px;
+        font-size: 0.85rem;
+        font-weight: 400;
+        span {
+            margin-left: 8px;
+        }
     }
 }

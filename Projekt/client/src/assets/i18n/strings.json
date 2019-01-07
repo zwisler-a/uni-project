@@ -1,4 +1,9 @@
 {
+	"items": {
+		"error": {
+			"delete": ""
+		}
+	},
 	"login": {
 		"invalid-login": "",
 		"password": "",

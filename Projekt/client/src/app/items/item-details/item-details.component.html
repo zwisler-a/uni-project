@@ -1,0 +1,26 @@
+<form #form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off" *ngIf="item">
+    <mat-toolbar fxFlex="0 0 auto">
+        <button mat-icon-button (click)="back()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span>ItemType {{ item.itemTypeId }}</span> <span fxFlex></span>
+        <button [hidden]="edit" (click)="editFields()" mat-icon-button>
+            <mat-icon>edit</mat-icon>
+        </button>
+        <button (click)="delete()" mat-icon-button>
+            <mat-icon>delete</mat-icon>
+        </button>
+    </mat-toolbar>
+    <app-item-field
+        *ngFor="let field of item.fields"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field>
+
+    <div *ngIf="edit" fxLayoutAlign="end center">
+        <button color="primary" mat-raised-button (click)="submit()">
+            Save
+        </button>
+        <button mat-button (click)="editFields(false)">Cancel</button>
+    </div>
+</form>

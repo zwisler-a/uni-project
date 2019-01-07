@@ -6,6 +6,8 @@ import { NavigationService } from './navigation.service';
 import { NavigationGroup } from './types/navigation-group.interface';
 import { SidenavMode } from './types/sidenav-mode.enum';
 import { SidenavState } from './types/sidenav-state.enum';
+import { User } from '../auth/user.interface';
+import { AuthService } from '../auth/auth.service';
 
 /**
  * Component to display a sidenav containing the navigation.
@@ -30,7 +32,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     constructor(
         private navigationService: NavigationService,
-        private mediaService: ObservableMedia
+        private mediaService: ObservableMedia,
+        private authService: AuthService
     ) {}
 
     ngOnInit() {
@@ -53,6 +56,15 @@ export class NavigationComponent implements OnInit, OnDestroy {
     /** Expose navigation model */
     get navigationModel(): NavigationGroup[] {
         return this.navigationService.navigationModel;
+    }
+
+    /** Expose user */
+    get user(): User {
+        return this.authService.user;
+    }
+
+    logout() {
+        this.authService.logout();
     }
 
     /** Chooses a fitting state for the current display size */

@@ -48,12 +48,17 @@ export class RouterLoadingIndicatorComponent implements OnInit, OnDestroy {
                 } else if (event instanceof ResolveStart) {
                     // Route starts fetching its data
                     this.loadingProgress = 60;
+                    setTimeout(() => {
+                        this.loadingProgress === 60
+                            ? (this.loadingProgress = 80)
+                            : (this.loadingProgress = 0);
+                    }, 1000);
                 } else if (event instanceof RouteConfigLoadEnd) {
                     // Route fetched its data
                     this.loadingProgress = 90;
                 } else if (event instanceof NavigationEnd) {
                     // Navigation has finished
-                    this.loadingProgress = 100;
+                    this.loadingProgress = 0;
                 } else if (event instanceof NavigationCancel) {
                     this.loadingProgress = 0;
                 } else if (event instanceof NavigationError) {

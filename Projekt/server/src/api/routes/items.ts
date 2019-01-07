@@ -1,6 +1,9 @@
-import { Router, Response, Request, NextFunction } from 'express';
+import { Router } from 'express';
+
 import { validateJsonWebToken } from '../controllers/authentication';
-import { listItems } from '../controllers/item';
+import { getItem, listItems } from '../controllers/item';
 
 export const itemsRoute: Router = Router();
 itemsRoute.get('/', validateJsonWebToken, listItems);
+itemsRoute.get('/:typeId', validateJsonWebToken, listItems);
+itemsRoute.get('/:typeId/:itemId', validateJsonWebToken, getItem);

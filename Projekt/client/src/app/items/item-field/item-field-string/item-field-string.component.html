@@ -1,0 +1,9 @@
+<mat-form-field fxFlex>
+    <span matPrefix class="field-type"> {{ field.type }} </span>
+    <input
+        [placeholder]="field.name"
+        [(ngModel)]="field.value"
+        [disabled]="!edit"
+        matInput
+    />
+</mat-form-field>

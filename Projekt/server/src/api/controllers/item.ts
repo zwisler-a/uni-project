@@ -15,7 +15,25 @@ export async function listItems(
   }));
   setTimeout(() => {
     res.header('X-Total', '100').send(items);
-  }, 2000);
+  }, 50);
+}
+export async function getItem(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  res.send({
+    id: 0,
+    itemTypeId: 0,
+    fields: [
+      {name: 'name', value: 'name', type: 'string'},
+      {name: 'color', value: 'red', type: 'color'},
+      {name: 'number', value: 5, type: 'number'},
+      {name: 'bool', value: true, type: 'boolean'},
+      {name: 'file', value: '/asd/ad', type: 'file'},
+      {name: 'link', value: '/150/155', type: 'link'}
+    ]
+  });
 }
 export async function addItem(
   req: Request,

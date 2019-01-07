@@ -1,28 +1,82 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ItemsListComponent } from './items-list/items-list.component';
-import {
-  MatPaginatorModule,
-  MatTableModule,
-  MatSortModule,
-  MatProgressBarModule
-} from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ItemService } from './item.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+    MatCheckboxModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatSidenavModule,
+    MatSortModule,
+    MatTableModule,
+    MatTooltipModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatSnackBarModule
+} from '@angular/material';
+import { RouterModule } from '@angular/router';
+
+import { AuthModule } from '../shell/auth/auth.module';
 import { FieldsService } from './fields.service';
+import { ItemDetailsComponent } from './item-details/item-details.component';
+import { ItemResolver } from './item-details/item.resolver';
+import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
+import { ItemFieldColorComponent } from './item-field/item-field-color/item-field-color.component';
+import { ItemFieldFileComponent } from './item-field/item-field-file/item-field-file.component';
+import { ItemFieldLinkComponent } from './item-field/item-field-link/item-field-link.component';
+import { ItemFieldNumberComponent } from './item-field/item-field-number/item-field-number.component';
+import { ItemFieldStringComponent } from './item-field/item-field-string/item-field-string.component';
+import { ItemFieldComponent } from './item-field/item-field.component';
+import { ItemService } from './item.service';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { ItemsListComponent } from './items-list/items-list.component';
+import { ItemsListResolver } from './items-list/items-list.resolver';
+import { itemsRoutes } from './items.routes';
+import { TranslateModule } from '@ngx-translate/core';
+import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
+import { ItemPageComponent } from './item-page/item-page.component';
 
 @NgModule({
-  declarations: [ItemsListComponent],
-  imports: [
-    CommonModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatProgressBarModule,
-    FlexLayoutModule,
-    MatSortModule,
-    HttpClientModule
-  ],
-  providers: [ItemService, FieldsService]
+    declarations: [
+        ItemsListComponent,
+        ItemDetailsComponent,
+        ItemFieldComponent,
+        ItemFieldStringComponent,
+        ItemFieldNumberComponent,
+        ItemFieldColorComponent,
+        ItemFieldFileComponent,
+        ItemFieldBoolComponent,
+        ItemFieldLinkComponent,
+        ItemPageComponent
+    ],
+    imports: [
+        CommonModule,
+        MatPaginatorModule,
+        MatTableModule,
+        MatProgressBarModule,
+        MatInputModule,
+        MatSidenavModule,
+        MatListModule,
+        MatIconModule,
+        MatCheckboxModule,
+        MatTooltipModule,
+        MatButtonModule,
+        MatToolbarModule,
+        MatSnackBarModule,
+        MatListModule,
+        TranslateModule.forChild(),
+        ColorPickerModule,
+        ConfirmDialogModule,
+        FlexLayoutModule,
+        MatSortModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forChild(itemsRoutes)
+    ],
+    providers: [ItemService, FieldsService, ItemResolver, ItemsListResolver]
 })
 export class ItemsModule {}

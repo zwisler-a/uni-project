@@ -51,12 +51,12 @@ describe('RouterLoadingIndicatorComponent', () => {
         expect(component).toBeTruthy();
     });
 
-    it('should have a full progressbar after navigation', fakeAsync(() => {
+    it('should have a empty progressbar after navigation', fakeAsync(() => {
         fixture.ngZone.run(() => {
             router.navigateByUrl('/1');
         });
-        tick();
-        expect(component.loadingProgress).toBe(100);
+        tick(5000);
+        expect(component.loadingProgress).toBe(0);
     }));
 
     it('should be hidden if not navigating', fakeAsync(() => {
@@ -64,7 +64,7 @@ describe('RouterLoadingIndicatorComponent', () => {
         fixture.ngZone.run(() => {
             router.navigateByUrl('/1');
         });
-        tick();
+        tick(5000);
         expect(component.hide).toBeTruthy();
     }));
 
@@ -76,6 +76,6 @@ describe('RouterLoadingIndicatorComponent', () => {
         tick();
         expect(component.loadingProgress).toBe(60);
         tick(6000);
-        expect(component.loadingProgress).toBe(100);
+        expect(component.loadingProgress).toBe(0);
     }));
 });

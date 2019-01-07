@@ -6,7 +6,8 @@ import {
     MatIconModule,
     MatListModule,
     MatProgressBarModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatMenuModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
@@ -37,6 +38,7 @@ import { AuthModule } from './auth/auth.module';
         MatToolbarModule,
         MatIconModule,
         MatButtonModule,
+        MatMenuModule,
         FlexLayoutModule,
         MatListModule
     ],

@@ -1,0 +1,38 @@
+<mat-drawer-container fxFlex>
+    <mat-drawer mode="side" [opened]="itemTypeSidenavOpen" fxFlex="0 0 150px">
+        <div fxLayout="column">
+            <div fxFlex="80px" fxLayoutAlign="center center">ItemTypen</div>
+            <mat-nav-list>
+                <a
+                    mat-list-item
+                    class="navigation-item"
+                    [routerLink]="['/items', page, perPage]"
+                    [routerLinkActiveOptions]="{exact: true}"
+                    [routerLinkActive]="'active'"
+                >
+                    Alle
+                </a>
+                <a
+                    mat-list-item
+                    class="navigation-item"
+                    *ngFor="let i of [1, 2, 3]"
+                    [routerLink]="['/items', page, perPage, i]"
+                    [routerLinkActive]="'active'"
+                >
+                    ItemType {{ i }}
+                </a>
+            </mat-nav-list>
+        </div>
+    </mat-drawer>
+    <mat-drawer-content fxLayout="column" fxFlex="1 1 auto">
+        <div fxFlex="1 1 80px" fxLayoutAlign="start center" class="searchbox">
+            <button mat-icon-button (click)="openItemType()">
+                <mat-icon>list</mat-icon>
+            </button>
+            <mat-form-field fxFlex>
+                <input matInput placeholder="Search" />
+            </mat-form-field>
+        </div>
+        <div fxFlex="1 1 auto"><app-items-list></app-items-list></div>
+    </mat-drawer-content>
+</mat-drawer-container>

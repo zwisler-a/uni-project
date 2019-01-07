@@ -1,4 +1,16 @@
 {
+    "items": {
+		"error": {
+			"delete": "Something went wrong while deleting the item!"
+		},
+        "confirm": {
+            "delete": "Are you sure you want to delete the Item?"
+        }
+    },
+    "confirm": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
     "login": {
 		"invalid-login": "Wrong username or password!",
         "password": "Password",
