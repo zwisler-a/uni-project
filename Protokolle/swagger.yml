@@ -14,6 +14,8 @@ tags:
     description: Simple request for authentication
   - name: Users Resource
     description: CRUD operations for the user
+  - name: Types Resource
+    description: CRUD operations for Types
   - name: Items Resource
     description: CRUD operations for Items
 
@@ -139,17 +141,16 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /items:
+  /types:
     get:
-      parameters:
-        - $ref: '#/components/parameters/page'
-        - $ref: '#/components/parameters/per_page'
       security:
         - jwt: []
       tags:
-        - Items Resource
-      operationId: user-get
-      summary: Get a list of items
+        - Types Resource
+      summary: Get a list of all types
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
       responses:
         '200':
           description: The requested resource has been found
@@ -171,7 +172,116 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Item'
+                  $ref: '#/components/schemas/Type'
+    post:
+      security:
+        - jwt: []
+      tags:
+        - Types Resource
+      summary: Create a Type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Type'
+      responses:
+        '201':
+          description: New resource successfully created
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/Type'
+        '409':
+          $ref: '#/components/responses/Conflict'
+  /types/{typeId}:
+    parameters:
+      - in: path
+        name: typeId
+        description: The Type's id
+        schema:
+          type: integer
+        required: true
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Types Resource
+      summary: Get a Type
+      responses:
+        '200':
+          description: The requested resource has been found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Type'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      security:
+        - jwt: []
+      tags:
+        - Types Resource
+      summary: Modify a Type
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Type'
+      responses:
+        '200':
+          description: The requested resource has been found and updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Type'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    delete:
+      security:
+        - jwt: []
+      tags:
+        - Types Resource
+      summary: Delete a Type
+      responses:
+        '204':
+          description: Successfully delete resource
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /items:
+    get:
+      security:
+        - jwt: []
+      tags:
+        - Items Resource
+      summary: Get a list of Items
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/per_page'
+      responses:
+        '200':
+          description: The requested resource has been found
+          headers:
+            X-Total:
+              $ref: '#/components/headers/X-Total'
+            X-Total-Pages:
+              $ref: '#/components/headers/X-Total-Pages'
+            X-Per-Page:
+              $ref: '#/components/headers/X-Per-Page'
+            X-Page:
+              $ref: '#/components/headers/X-Page'
+            X-Prev-Page:
+              $ref: '#/components/headers/X-Prev-Page'
+            X-Next-Page:
+              $ref: '#/components/headers/X-Next-Page'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmbeddedItem'
 
   /items/{typeId}:
     parameters:
@@ -209,9 +319,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/EmbeddedItem'
         '404':
           $ref: '#/components/responses/NotFound'
     post:
@@ -232,7 +340,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/EmbeddedItem'
         '409':
           $ref: '#/components/responses/Conflict'
 
@@ -262,7 +370,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/EmbeddedItem'
         '404':
           $ref: '#/components/responses/NotFound'
     patch:
@@ -283,7 +391,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/EmbeddedItem'
         '404':
           $ref: '#/components/responses/NotFound'
         '409':
@@ -309,6 +417,7 @@ components:
   
   schemas:
     User:
+      type: object
       description: Represents a user object
       properties:
         id:
@@ -362,7 +471,67 @@ components:
         - username
         - password
         - roles
+    Type:
+      type: object
+      description: Respresents an object's type (metadata)
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 12
+          description: The type's unique id
+        name:
+          type: string
+          example: Laptop
+          description: The type's name
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: MAC-Address
+                description: Name of the field
+              type:
+                type: string
+                enum:
+                  - string
+                  - number
+                  - boolean
+                  - file
+                  - color
+                  - date
+                  - reference
+                example: string
+                description: Type of the field
+              required:
+                type: boolean
+                example: true
+                description: Is the field required to be filled out
+              unique:
+                type: boolean
+                example: false
+                description: Should the field's value be unique
+              referenceTypeId:
+                type: integer
+                example: 3
+                description: |
+                  Id of the type the field references\
+                  Only set when type is `reference`
+            required:
+              - name
+              - type
+              - required
+              - unique
+            description: Represents a single field of a type
+          description: A list of all properties an type owns
+      required:
+        - id
+        - name
+        - fields
     Item:
+      type: object
       description: Respresents a physical object with all its properties
       properties:
         typeId:
@@ -375,12 +544,26 @@ components:
           description: The items internal (type dependant) unique id
         fields:
           type: object
-          example: {"location":"Room 201"}
+          example: {"MAC-Address":"12-34-56-78-9A-BC"}
           description: An Object containing all fields of an item according to the item type
       required:
         - id
         - typeId
         - fields
+    EmbeddedItem:
+      type: object
+      description: A combination of types and items
+      properties:
+        types:
+          type: array
+          description: List of all types based on the list of items
+          items:
+            $ref: '#/components/schemas/Type'
+        items:
+          type: array
+          description: List of all requested items
+          items:
+            $ref: '#/components/schemas/Item'
     Error:
       type: object
       properties:
