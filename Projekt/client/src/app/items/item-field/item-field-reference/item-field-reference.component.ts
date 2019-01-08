@@ -11,7 +11,7 @@ export class ItemFieldReferenceComponent implements OnInit {
     @Input()
     field: DeterminedField<LinkField> = {
         name: '',
-        type: FieldType.link,
+        type: FieldType.reference,
         value: { name: '', ref: '' }
     };
     @Input()

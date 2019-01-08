@@ -2,7 +2,7 @@ export enum FieldType {
     string = 'string',
     number = 'number',
     boolean = 'boolean',
-    link = 'link',
+    reference = 'reference',
     color = 'color',
     file = 'file'
 }

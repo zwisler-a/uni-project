@@ -29,9 +29,9 @@
         [edit]="edit"
     ></app-item-field-bool>
 
-    <app-item-field-link
-        *ngIf="field.type === FieldType.link"
+    <app-item-field-reference
+        *ngIf="field.type === FieldType.reference"
         [field]="field"
         [edit]="edit"
-    ></app-item-field-link>
+    ></app-item-field-reference>
 </ng-container>

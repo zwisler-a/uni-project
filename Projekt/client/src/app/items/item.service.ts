@@ -7,6 +7,7 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { Item } from './types/item.interface';
 import { TranslateService } from '@ngx-translate/core';
+import { ApiItemType } from './types/api/api-item-type.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -57,7 +58,7 @@ export class ItemService {
     }
 
     getItem(typeId: number, itemId: number) {
-        return this.http.get<Item>(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
+        return this.http.get(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             catchError(err => {
                 this.translate
                     .get('items.error.get')
@@ -69,7 +70,7 @@ export class ItemService {
 
     updateItem(entity: Item) {
         return this.http
-            .patch(`${this.baseUrl}/${entity.itemTypeId}/${entity.id}`, entity)
+            .patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity)
             .pipe(
                 catchError(err => {
                     this.translate
@@ -82,7 +83,7 @@ export class ItemService {
 
     deleteItem(entity: Item) {
         return this.http
-            .delete(`${this.baseUrl}/${entity.itemTypeId}/${entity.id}`)
+            .delete(`${this.baseUrl}/${entity.typeId}/${entity.id}`)
             .pipe(
                 catchError(err => {
                     this.translate

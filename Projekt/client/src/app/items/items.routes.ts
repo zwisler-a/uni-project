@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { FieldsService } from './fields.service';
 import { ItemDetailsComponent } from './item-details/item-details.component';
-import { ItemResolver } from './item-details/item.resolver';
+import { ItemDetailResolver } from './item-details/item-details.resolver';
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemPageComponent } from './item-page/item-page.component';
@@ -11,7 +11,7 @@ export const itemsRoutes: Routes = [
     {
         path: 'view/:typeId/:id',
         component: ItemDetailsComponent,
-        resolve: { item: ItemResolver },
+        resolve: { item: ItemDetailResolver },
         runGuardsAndResolvers: 'always'
     },
     {

@@ -24,7 +24,7 @@ import { RouterModule } from '@angular/router';
 import { AuthModule } from '../shell/auth/auth.module';
 import { FieldsService } from './fields.service';
 import { ItemDetailsComponent } from './item-details/item-details.component';
-import { ItemResolver } from './item-details/item.resolver';
+import { ItemDetailResolver } from './item-details/item-details.resolver';
 import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
 import { ItemFieldColorComponent } from './item-field/item-field-color/item-field-color.component';
 import { ItemFieldFileComponent } from './item-field/item-field-file/item-field-file.component';
@@ -40,6 +40,7 @@ import { itemsRoutes } from './items.routes';
 import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
 import { ItemPageComponent } from './item-page/item-page.component';
+import { ItemTransformationService } from './item-transformation.service';
 
 @NgModule({
     declarations: [
@@ -79,6 +80,6 @@ import { ItemPageComponent } from './item-page/item-page.component';
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)
     ],
-    providers: [ItemService, FieldsService, ItemResolver, ItemsListResolver]
+    providers: [ItemService, FieldsService, ItemDetailResolver, ItemsListResolver, ItemTransformationService]
 })
 export class ItemsModule {}

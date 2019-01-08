@@ -3,6 +3,10 @@
         $map: $theme,
         $key: primary
     );
+    app-item-page {
+        display: flex;
+        flex: 1 1 auto;
+    }
     .item-searchbox {
         padding: 8px;
         color: map-get(map-get($map: $primary, $key: contrast), 300);

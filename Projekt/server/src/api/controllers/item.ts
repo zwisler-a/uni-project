@@ -14,7 +14,7 @@ export async function listItems(
     fields: { a: 1 }
   }));
   setTimeout(() => {
-    res.header('X-Total', '100').send(items);
+    res.header('X-Total', '100').send({ items: items, types: [{ id: page, name: 'Typ1', fields: [{ name: 'a', type: 'string', required: false }] }]});
   }, 50);
 }
 export async function getItem(
@@ -23,16 +23,30 @@ export async function getItem(
   next: NextFunction
 ) {
   res.send({
-    id: 0,
-    itemTypeId: 0,
-    fields: [
-      {name: 'name', value: 'name', type: 'string'},
-      {name: 'color', value: 'red', type: 'color'},
-      {name: 'number', value: 5, type: 'number'},
-      {name: 'bool', value: true, type: 'boolean'},
-      {name: 'file', value: '/asd/ad', type: 'file'},
-      {name: 'link', value: '/150/155', type: 'link'}
-    ]
+    item: {
+      id: 0,
+      itemTypeId: 0,
+      fields: {
+        name: 'name',
+        color: '#FFAAFF',
+        number: 5,
+        bool: true,
+        file: 'IDK',
+        reference: 'ref'
+      }
+    },
+    type: {
+      id: 0,
+      itemTypeId: 0,
+      fields: [
+        {name: 'name', type: 'string'},
+        {name: 'color', type: 'color'},
+        {name: 'number', type: 'number'},
+        {name: 'bool', type: 'boolean'},
+        {name: 'file', type: 'file'},
+        {name: 'reference', type: 'reference'}
+      ]
+    }
   });
 }
 export async function addItem(
