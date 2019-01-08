@@ -28,7 +28,7 @@ import { ItemResolver } from './item-details/item.resolver';
 import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
 import { ItemFieldColorComponent } from './item-field/item-field-color/item-field-color.component';
 import { ItemFieldFileComponent } from './item-field/item-field-file/item-field-file.component';
-import { ItemFieldLinkComponent } from './item-field/item-field-link/item-field-link.component';
+import { ItemFieldReferenceComponent } from './item-field/item-field-reference/item-field-reference.component';
 import { ItemFieldNumberComponent } from './item-field/item-field-number/item-field-number.component';
 import { ItemFieldStringComponent } from './item-field/item-field-string/item-field-string.component';
 import { ItemFieldComponent } from './item-field/item-field.component';
@@ -51,7 +51,7 @@ import { ItemPageComponent } from './item-page/item-page.component';
         ItemFieldColorComponent,
         ItemFieldFileComponent,
         ItemFieldBoolComponent,
-        ItemFieldLinkComponent,
+        ItemFieldReferenceComponent,
         ItemPageComponent
     ],
     imports: [

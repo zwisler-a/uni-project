@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ItemFieldLinkComponent } from './item-field-link.component';
+import { ItemFieldReferenceComponent } from './item-field-reference.component';
 import {
     MatInputModule,
     MatIconModule,
@@ -12,12 +12,12 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ItemFieldLinkComponent', () => {
-    let component: ItemFieldLinkComponent;
-    let fixture: ComponentFixture<ItemFieldLinkComponent>;
+    let component: ItemFieldReferenceComponent;
+    let fixture: ComponentFixture<ItemFieldReferenceComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ItemFieldLinkComponent],
+            declarations: [ItemFieldReferenceComponent],
             imports: [
                 MatInputModule,
                 FormsModule,
@@ -31,7 +31,7 @@ describe('ItemFieldLinkComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ItemFieldLinkComponent);
+        fixture = TestBed.createComponent(ItemFieldReferenceComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
