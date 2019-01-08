@@ -1,3 +1,22 @@
-.searchbox {
-    padding: 8px;
+@mixin app-item-page-theme($theme) {
+    $primary: map-get(
+        $map: $theme,
+        $key: primary
+    );
+    .item-searchbox {
+        padding: 8px;
+        color: map-get(map-get($map: $primary, $key: contrast), 300);
+        .mat-form-field-label {
+            color: map-get(map-get($map: $primary, $key: contrast), 300);
+        }
+        .mat-form-field-underline {
+            background: map-get(map-get($map: $primary, $key: contrast), 300);
+        }
+        background: map-get($map: $primary, $key: 400);
+    }
+    .item-type-header {
+        padding: 8px;
+        color: map-get(map-get($map: $primary, $key: contrast), 400);
+        background: map-get($map: $primary, $key: 500);
+    }
 }

@@ -20,8 +20,7 @@ import { AuthService } from '../auth/auth.service';
  */
 @Component({
     selector: 'app-navigation',
-    templateUrl: './navigation.component.html',
-    styleUrls: ['./navigation.component.scss']
+    templateUrl: './navigation.component.html'
 })
 export class NavigationComponent implements OnInit, OnDestroy {
     mediaSub: Subscription;

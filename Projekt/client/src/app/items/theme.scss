@@ -1,0 +1,5 @@
+@import "./item-page/item-page.component.scss";
+
+@mixin app-items-theme($theme) {
+    @include app-item-page-theme($theme);
+}

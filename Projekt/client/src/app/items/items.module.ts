@@ -16,7 +16,8 @@ import {
     MatTooltipModule,
     MatButtonModule,
     MatToolbarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
@@ -68,6 +69,7 @@ import { ItemPageComponent } from './item-page/item-page.component';
         MatToolbarModule,
         MatSnackBarModule,
         MatListModule,
+        MatCardModule,
         TranslateModule.forChild(),
         ColorPickerModule,
         ConfirmDialogModule,

@@ -41,7 +41,7 @@ describe('ItemsListComponent', () => {
             providers: [
                 {
                     provide: ActivatedRoute,
-                    useValue: { data: of({ fields: ['test'] }) }
+                    useValue: { data: of({ fields: ['test'], list: [] }) }
                 }
             ]
         }).compileComponents();

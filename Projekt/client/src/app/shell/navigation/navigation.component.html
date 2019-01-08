@@ -26,23 +26,25 @@
             <mat-toolbar-row
                 *ngIf="sidenavIsExpanded"
                 fxLayout="column"
-                fxLayoutAlign="center start"
+                fxLayoutAlign="center center"
                 class="user-info"
             >
-                <div
-                    fxLayoutAlign="start center"
-                    [matMenuTriggerFor]="userMenu"
-                >
-                    <mat-icon>account_circle</mat-icon>
-                    <span>{{ user ? user.username : "" }}</span>
-                    <mat-icon>arrow_drop_down</mat-icon>
-                </div>
-                <mat-menu #userMenu="matMenu">
-                    <button mat-menu-item (click)="logout()">Logout</button>
-                </mat-menu>
-                <div fxLayoutAlign="start center">
-                    <mat-icon>work</mat-icon>
-                    <span>{{ user ? user.companyId : "" }}</span>
+                <div>
+                    <div
+                        fxLayoutAlign="start center"
+                        [matMenuTriggerFor]="userMenu"
+                    >
+                        <mat-icon>account_circle</mat-icon>
+                        <span>{{ user ? user.username : "" }}</span>
+                        <mat-icon>arrow_drop_down</mat-icon>
+                    </div>
+                    <mat-menu #userMenu="matMenu">
+                        <button mat-menu-item (click)="logout()">Logout</button>
+                    </mat-menu>
+                    <div fxLayoutAlign="start center">
+                        <mat-icon>work</mat-icon>
+                        <span>{{ user ? user.companyId : "" }}</span>
+                    </div>
                 </div>
             </mat-toolbar-row>
         </mat-toolbar>

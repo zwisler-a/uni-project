@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { ConfirmDialogModule } from './confirm-dialog.module';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 describe('ConfirmDialogComponent', () => {
     let component: ConfirmDialogComponent;
@@ -11,10 +11,9 @@ describe('ConfirmDialogComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [ConfirmDialogModule],
+            imports: [ConfirmDialogModule, TranslateModule.forRoot()],
             providers: [
-                { provide: MAT_DIALOG_DATA, useValue: '' },
-                { provide: TranslateService, useValue: {} }
+                { provide: MAT_DIALOG_DATA, useValue: '' }
             ]
         }).compileComponents();
     }));

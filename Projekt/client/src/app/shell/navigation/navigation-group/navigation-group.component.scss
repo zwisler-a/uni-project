@@ -53,5 +53,6 @@
         padding: 16px 16px 4px 16px;
         display: block;
         box-sizing: border-box;
+        color: map-get($map: $foreground, $key: text);
     }
 }

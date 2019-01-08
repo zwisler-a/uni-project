@@ -1,57 +1,62 @@
 @import "~@angular/material/theming";
 
-.main-navigation-container {
-    display: flex;
-    height: 100%;
-    .backdrop {
-        position: fixed;
-        z-index: 500;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba($color: #000000, $alpha: 0.18);
-    }
-    .main-content {
-        overflow: auto;
-        display: flex;
-        flex: 1 1;
-        justify-content: stretch;
-        flex-direction: column;
-    }
-    .main-navigation {
-        @include mat-elevation(2);
-        z-index: 501;
-        transition: width 0.2s ease-in-out;
-        background: white;
-        overflow: hidden;
-        height: 100%;
-        // states the sidenav can take
-        &.over {
-            position: fixed;
-        }
-        &.expanded {
-            width: 256px;
-        }
-        &.collapsed {
-            width: 56px;
-        }
-        &.hidden {
-            width: 0px;
-        }
-    }
-    .main-navigation-content {
-        display: flex;
-        flex: 1 1 auto;
-        flex-direction: column;
-    }
+@mixin app-navigation-theme($theme) {
 
-    .user-info {
-        height: 80px;
-        font-size: 0.85rem;
-        font-weight: 400;
-        span {
-            margin-left: 8px;
+    $background: map-get($map: $theme, $key: background);
+    @debug($background);
+    .main-navigation-container {
+        display: flex;
+        height: 100%;
+        .backdrop {
+            position: fixed;
+            z-index: 500;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba($color: #000000, $alpha: 0.18);
+        }
+        .main-content {
+            overflow: auto;
+            display: flex;
+            flex: 1 1;
+            justify-content: stretch;
+            flex-direction: column;
+        }
+        .main-navigation {
+            @include mat-elevation(2);
+            z-index: 501;
+            background: map-get($map: $background, $key: background);
+            transition: width 0.2s ease-in-out;
+            overflow: hidden;
+            height: 100%;
+            // states the sidenav can take
+            &.over {
+                position: fixed;
+            }
+            &.expanded {
+                width: 256px;
+            }
+            &.collapsed {
+                width: 56px;
+            }
+            &.hidden {
+                width: 0px;
+            }
+        }
+        .main-navigation-content {
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+        }
+
+        .user-info {
+            height: 100px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            span {
+                margin-left: 8px;
+            }
         }
     }
 }

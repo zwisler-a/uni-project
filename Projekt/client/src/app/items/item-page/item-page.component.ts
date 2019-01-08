@@ -10,14 +10,14 @@ import { ObservableMedia } from '@angular/flex-layout';
  */
 @Component({
     selector: 'app-item-page',
-    templateUrl: './item-page.component.html',
-    styleUrls: ['./item-page.component.scss']
+    templateUrl: './item-page.component.html'
 })
 @AutoUnsubscribe()
 export class ItemPageComponent implements OnInit {
     page: any;
     perPage: any;
     itemTypeSidenavOpen = true;
+    itemTypeSidenavMode = 'side';
 
     paramsSub: Subscription;
     mediaSub: Subscription;
@@ -35,11 +35,12 @@ export class ItemPageComponent implements OnInit {
     }
 
     private sidenavState() {
-        console.log('asd');
         if (this.media.isActive('lt-md')) {
             this.itemTypeSidenavOpen = false;
+            this.itemTypeSidenavMode = 'over';
         } else {
             this.itemTypeSidenavOpen = true;
+            this.itemTypeSidenavMode = 'side';
         }
     }
 
