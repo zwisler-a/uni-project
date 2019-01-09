@@ -601,7 +601,6 @@ components:
         - id
         - typeId
         - fields
-<<<<<<< HEAD
     EmbeddedItem:
       type: object
       description: A combination of types and items
@@ -616,18 +615,6 @@ components:
           description: List of all requested items
           items:
             $ref: '#/components/schemas/Item'
-=======
-    Fields:
-      description: Respresents a list of available field names
-      properties:
-        fields:
-          readOnly: true
-          description: Names of the fields
-          type: array
-          items:
-            type: string
-
->>>>>>> 5d43928422547a352d3042e9db46262916e2e0fe
     Error:
       type: object
       properties:
