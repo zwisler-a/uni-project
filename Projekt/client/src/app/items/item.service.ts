@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Item } from './types/item.interface';
 import { TranslateService } from '@ngx-translate/core';
 import { ApiItemType } from './types/api/api-item-type.interface';
+import { ApiItem } from './types/api/api-item.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -44,17 +45,15 @@ export class ItemService {
      * Creates a new Entity
      * @param entity Entity to create
      */
-    createItem(entity) {
-        return this.http
-            .post(`${this.baseUrl}/${entity.itemTypeId}`, entity)
-            .pipe(
-                catchError(err => {
-                    this.translate
-                        .get('items.error.list')
-                        .subscribe(message => this.showError(message));
-                    return throwError(err);
-                })
-            );
+    createItem(entity: ApiItem) {
+        return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity).pipe(
+            catchError(err => {
+                this.translate
+                    .get('items.error.list')
+                    .subscribe(message => this.showError(message));
+                return throwError(err);
+            })
+        );
     }
 
     getItem(typeId: number, itemId: number) {
@@ -68,7 +67,7 @@ export class ItemService {
         );
     }
 
-    updateItem(entity: Item) {
+    updateItem(entity: ApiItem) {
         return this.http
             .patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity)
             .pipe(
@@ -81,17 +80,15 @@ export class ItemService {
             );
     }
 
-    deleteItem(entity: Item) {
-        return this.http
-            .delete(`${this.baseUrl}/${entity.typeId}/${entity.id}`)
-            .pipe(
-                catchError(err => {
-                    this.translate
-                        .get('items.error.delete')
-                        .subscribe(message => this.showError(message));
-                    return throwError(err);
-                })
-            );
+    deleteItem(typeId: number, itemId: number) {
+        return this.http.delete(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
+            catchError(err => {
+                this.translate
+                    .get('items.error.delete')
+                    .subscribe(message => this.showError(message));
+                return throwError(err);
+            })
+        );
     }
 
     showError(message) {

@@ -1,19 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot,
-    Resolve,
-    RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { empty, Observable } from 'rxjs';
-
-import { ItemService } from '../item.service';
-import { Item } from '../types/item.interface';
-import { ApiItem } from '../types/api/api-item.interface';
-import { ApiTypeField } from '../types/api/api-type-field.interface';
-import { ApiItemType } from '../types/api/api-item-type.interface';
-import { ItemTransformationService } from '../item-transformation.service';
 import { map } from 'rxjs/operators';
-import { ApiItemResponse } from '../types/api/api-item-response.interface';
+
+import { ItemTransformationService } from '../item-transformation.service';
+import { ItemService } from '../item.service';
+import { ApiItemsResponse } from '../types/api/api-items-response.interface';
+import { Item } from '../types/item.interface';
 
 /**
  * Loads the item defined in :id and :typeId in the url
@@ -32,8 +25,8 @@ export class ItemDetailResolver implements Resolve<Item> {
         const { id, typeId } = route.params;
         if (id && typeId) {
             return this.itemService.getItem(typeId, id).pipe(
-                map((res: ApiItemResponse) => {
-                    return this.transform.transformItem(res.item, res.type);
+                map((res: ApiItemsResponse) => {
+                    return this.transform.transformItems(res.items, res.types)[0];
                 })
             );
         } else {

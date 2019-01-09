@@ -59,10 +59,10 @@ describe('ItemsService', () => {
     it('should send a create object request', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, itemTypeId: 50, companyId: 2 };
+            const data = { fields: {}, typeId: 50, companyId: 2, id: 0 };
             service.createItem(data).subscribe();
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}`
+                `${service.baseUrl}/${data.typeId}`
             );
             expect(req.request.method).toBe('POST');
             expect(req.request.body).toBe(data);
@@ -72,12 +72,12 @@ describe('ItemsService', () => {
     it('should handle an error', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, itemTypeId: 50, companyId: 2 };
+            const data = { fields: {}, typeId: 50, companyId: 2, id: 0 };
             service.createItem(data).subscribe(null, (err: ErrorEvent) => {
                 expect(err).toBeTruthy();
             });
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}`
+                `${service.baseUrl}/${data.typeId}`
             );
             req.error(new ErrorEvent('test'));
         }
@@ -114,10 +114,10 @@ describe('ItemsService', () => {
     it('should send a modify object request', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: [], companyId: 2, itemTypeId: 50, id: 25 };
+            const data = { fields: {}, companyId: 2, typeId: 50, id: 25 };
             service.updateItem(data).subscribe();
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}/${data.id}`
+                `${service.baseUrl}/${data.typeId}/${data.id}`
             );
             expect(req.request.method).toBe('PATCH');
             expect(req.request.body).toBe(data);
@@ -127,12 +127,12 @@ describe('ItemsService', () => {
     it('should handle an error', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: [], companyId: 2, itemTypeId: 50, id: 25 };
+            const data = { fields: {}, companyId: 2, typeId: 50, id: 25 };
             service.updateItem(data).subscribe(null, (err: ErrorEvent) => {
                 expect(err).toBeTruthy();
             });
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}/${data.id}`
+                `${service.baseUrl}/${data.typeId}/${data.id}`
             );
             req.error(new ErrorEvent('test'));
         }
@@ -141,10 +141,10 @@ describe('ItemsService', () => {
     it('should send a delete object request', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: [], companyId: 2, itemTypeId: 50, id: 25 };
-            service.deleteItem(data).subscribe();
+            const data = { fields: {}, companyId: 2, typeId: 50, id: 25 };
+            service.deleteItem(data.typeId, data.id).subscribe();
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}/${data.id}`
+                `${service.baseUrl}/${data.typeId}/${data.id}`
             );
             expect(req.request.method).toBe('DELETE');
         }
@@ -153,12 +153,14 @@ describe('ItemsService', () => {
     it('should handle an error', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: [], companyId: 2, itemTypeId: 50, id: 25 };
-            service.deleteItem(data).subscribe(null, (err: ErrorEvent) => {
-                expect(err).toBeTruthy();
-            });
+            const data = { fields: [], companyId: 2, typeId: 50, id: 25 };
+            service
+                .deleteItem(data.typeId, data.id)
+                .subscribe(null, (err: ErrorEvent) => {
+                    expect(err).toBeTruthy();
+                });
             const req = httpMock.expectOne(
-                `${service.baseUrl}/${data.itemTypeId}/${data.id}`
+                `${service.baseUrl}/${data.typeId}/${data.id}`
             );
             req.error(new ErrorEvent('test'));
         }

@@ -3,7 +3,6 @@
 @mixin app-navigation-theme($theme) {
 
     $background: map-get($map: $theme, $key: background);
-    @debug($background);
     .main-navigation-container {
         display: flex;
         height: 100%;

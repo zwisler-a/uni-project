@@ -4,6 +4,7 @@ import { Item } from '../types/item.interface';
 import { Location } from '@angular/common';
 import { ItemService } from '../item.service';
 import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { ItemTransformationService } from '../item-transformation.service';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -21,6 +22,7 @@ export class ItemDetailsComponent implements OnInit {
     constructor(
         private acitvatedRoute: ActivatedRoute,
         private confirmService: ConfirmDialogService,
+        private itemTransform: ItemTransformationService,
         private itemService: ItemService,
         private location: Location,
         private router: Router
@@ -35,9 +37,11 @@ export class ItemDetailsComponent implements OnInit {
     /** Send a request to the backend to delete the displayed item. Navigates back on success. */
     delete() {
         this.confirmService.open('items.confirm.delete', true).subscribe(() => {
-            this.itemService.deleteItem(this.item).subscribe(res => {
-                this.location.back();
-            });
+            this.itemService
+                .deleteItem(this.item.typeId, this.item.id)
+                .subscribe(res => {
+                    this.location.back();
+                });
         });
     }
 
@@ -51,7 +55,8 @@ export class ItemDetailsComponent implements OnInit {
 
     /** Sends a request to update the item */
     submit() {
-        this.itemService.updateItem(this.item).subscribe(res => {});
+        const apiItem = this.itemTransform.retransformItem(this.item);
+        this.itemService.updateItem(apiItem).subscribe(res => {});
     }
 
     /** Navigate back */

@@ -59,4 +59,17 @@ export class ItemTransformationService {
         });
         return uiItem;
     }
+
+    /** Converts an item to an item usable by the backend */
+    retransformItem(item: Item): ApiItem {
+        const apiItemFields = {};
+        item.fields.forEach(field => {
+            apiItemFields[field.name] = field.value;
+        });
+        return {
+            fields: apiItemFields,
+            id: item.id,
+            typeId: item.typeId
+        };
+    }
 }
