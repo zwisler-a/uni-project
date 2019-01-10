@@ -4,13 +4,12 @@
   "private": true,
   "scripts": {
     "start": "nodemon",
-    "build": "tsc",
+    "build": "tsc --removeComments",
     "test": "mocha -r ts-node/register test/**/*.ts",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "doc": "typedoc --out ./documentation/ ./src/"
   },
   "dependencies": {
-    "@types/compression": "0.0.36",
     "bcrypt": "^3.0.2",
     "compression": "^1.7.3",
     "debug": "~2.6.9",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/compression": "0.0.36",
     "@types/chai": "^4.1.7",
     "@types/debug": "0.0.31",
     "@types/express": "^4.16.0",
