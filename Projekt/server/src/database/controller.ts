@@ -34,10 +34,10 @@ export interface DatabaseController extends Queries, Pool {
 export async function initializeDatabaseController(pool: Pool, prefix: string): Promise<DatabaseController> {
     const controller: DatabaseController = extend(pool, factory(pool, prefix), {
         async beginTransaction(handler: TransactionHandler): Promise<void> {
-            const connection: Connection = this.getConnection();
+            const connection: Connection = await this.getConnection();
             await connection.beginTransaction();
             try {
-                handler(connection);
+                await handler(connection);
                 await connection.commit();
             } catch (error) {
                 await connection.rollback();

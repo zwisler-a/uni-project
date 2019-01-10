@@ -61,7 +61,7 @@ export function factory(pool: Pool, prefix: string): Queries {
                 if (typeof field.referenceTypeId !== 'number') {
                     throw new Error(`Invalid referenceTypeId '${field.referenceTypeId}' is not a number`);
                 }
-                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.referenceTypeId}\` (\`id\`) ON DELETE NO ACTION ON UPDATE CASCADE`;
+                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.referenceTypeId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`;
             }
         });
         sql += constraints + ');';
