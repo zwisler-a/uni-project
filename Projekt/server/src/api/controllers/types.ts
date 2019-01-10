@@ -1,5 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
-import { Connection } from 'mariadb';
+import { Connection, ObjectResultsets } from 'mariadb';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
@@ -7,23 +7,32 @@ import { ApiError } from '../../types';
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const body = req.body;
-        /*const database: DatabaseController = req.app.get('database');
+
+        const database: DatabaseController = req.app.get('database');
         const connection: Connection = await database.getConnection();
 
         await connection.beginTransaction();
         try {
             const typeId = (await database.TYPE_CREATE.executeConnection(connection, body.name)).insertId;
 
-            const promises = [];
-            for (let i = 0; i < body.fields.length; i++) {
-                const field = body.fields[i];
-                promises.push(database.TYPE_FIELD_CREATE.executeConnection(connection, [ typeId, field.name, field.type, field.required, field.unique ]));
+            const query: any = {
+                id: typeId,
+                fields: body.fields
+            };
+
+            const promises: Promise<ObjectResultsets>[] = body.fields.map(function mapper(field: any) {
+                return database.TYPE_FIELD_CREATE.executeConnection(connection, [ typeId, field.name, field.type, field.required, field.unique ]);
+            });
+            const fieldIds = await Promise.all(promises);
+            for (let i = 0; i < fieldIds.length; i++) {
+                query.fields[i].id = fieldIds[i].insertId;
             }
-            await Promise.all(promises);
+
+            await database.CREATE_TYPE_TABLE.execute(query);
 
             await connection.commit();
         } catch (error) {
-            console.dir(error);
+            console.error('Inner: ', error);
             await connection.rollback();
 
             if (error.errno === 1062) {
@@ -31,12 +40,13 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
             } else {
                 next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
             }
+            await connection.end();
             return;
         }
-        connection.end();*/
+        await connection.end();
 
     } catch (error) {
-        console.dir(error);
+        console.error('Outer: ', error);
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         return;
     }

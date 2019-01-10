@@ -8,7 +8,6 @@ export const config: Config = {
         cert: null,
         key: null
     },
-    http2: false,
     database: {
         host: 'mariadb',
         port: 3306,

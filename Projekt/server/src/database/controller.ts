@@ -1,8 +1,8 @@
-import { Pool } from '../../types/mariadb';
-import { factory, Queries } from './querys';
+import { Pool, Connection } from '../../types/mariadb';
+import { factory, Queries } from './queries';
 
-function extend<T, U>(first: T, second: U): T & U {
-    const result = <T & U>{};
+function extend<T, U, V>(first: T, second: U, third: V): T & U & V {
+    const result = <T & U & V>{};
     for (const id in first) {
         (<any>result)[id] = (<any>first)[id];
     }
@@ -13,22 +13,45 @@ function extend<T, U>(first: T, second: U): T & U {
             console.warn('Duplicate key: ', id);
         }
     }
+    for (const id in third) {
+        if (!result.hasOwnProperty(id)) {
+            (<any>result)[id] = (<any>third)[id];
+        } else {
+            console.warn('Duplicate key: ', id);
+        }
+    }
     return result;
 }
 
+export interface TransactionHandler {
+    (connection: Connection): void;
+}
+
 export interface DatabaseController extends Queries, Pool {
+    beginTransaction(handler: TransactionHandler): Promise<void>;
 }
 
 export async function initializeDatabaseController(pool: Pool, prefix: string): Promise<DatabaseController> {
-    const controller: DatabaseController = extend(pool, factory(pool, prefix));
+    const controller: DatabaseController = extend(pool, factory(pool, prefix), {
+        async beginTransaction(handler: TransactionHandler): Promise<void> {
+            const connection: Connection = this.getConnection();
+            await connection.beginTransaction();
+            try {
+                handler(connection);
+                await connection.commit();
+            } catch (error) {
+                await connection.rollback();
+                throw error;
+            }
+            await connection.end();
+        }
+    });
 
     // Initilize all tables
-    await Promise.all([
-        controller.CREATE_TABLE_COMPANY.execute(),
-        controller.CREATE_TABLE_USER.execute(),
-        controller.CREATE_TABLE_TYPE.execute(),
-        controller.CREATE_TABLE_TYPE_FIELD.execute()
-    ]);
+    await controller.CREATE_TABLE_COMPANY.execute();
+    await controller.CREATE_TABLE_USER.execute();
+    await controller.CREATE_TABLE_TYPE.execute();
+    await controller.CREATE_TABLE_TYPE_FIELD.execute();
 
     // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
     let companyId;

@@ -47,7 +47,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
                 },
                 req.app.get('secret'),
                 {
-                    expiresIn: '1h'
+                    expiresIn: '1d'
                 }
             );
 
