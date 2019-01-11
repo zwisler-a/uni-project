@@ -23,7 +23,7 @@ export async function getItem(
   next: NextFunction
 ) {
   res.send({
-    item: {
+    items: [{
       id: 0,
       typeId: 0,
       fields: {
@@ -34,8 +34,8 @@ export async function getItem(
         file: 'IDK',
         reference: 'ref'
       }
-    },
-    type: {
+    }],
+    types: [{
       id: 0,
       itemTypeId: 0,
       fields: [
@@ -46,7 +46,7 @@ export async function getItem(
         {name: 'file', type: 'file'},
         {name: 'reference', type: 'reference'}
       ]
-    }
+    }]
   });
 }
 export async function addItem(
