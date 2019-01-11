@@ -21,9 +21,10 @@ async function getTypeFields(database: DatabaseController, id: number): Promise<
     }
 }
 
-function checkType(type: Type, values: Field[]) {
+function checkType(type: Type, values: Field[], mapping: any[]) {
     typeLoop:
-    for (const field of type.fields) {
+    for (let j = 0; j < type.fields.length; j++) {
+        const field = type.fields[j];
 
         for (let i = 0; i < values.length; i++) {
             const value = values[i];
@@ -31,6 +32,9 @@ function checkType(type: Type, values: Field[]) {
             if (value.id === field.id) {
                 // Remove already check values for speed
                 values.splice(i--, 1);
+
+                // Add value to mapping for correct insert order
+                mapping[j] = value.value;
 
                 // If field is not required and value is false skip checks
                 if (!field.required && !value.value) {
@@ -87,11 +91,10 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId);
 
-        const values: any[] = fields.map(field => field.value);
-        // TODO Remove, this should later be the company currently there is only one
-        values.unshift(1);
+        // TODO Remove 1. arg, this should later be the company currently there is only one
+        const values: any[] = [ 1 ];
 
-        const errors: any = checkType(type, fields);
+        const errors: any = checkType(type, fields, values);
         if (errors !== null) {
             next(new ApiError('Bad Request', 'The request contains invalid values', 400, errors));
             return;
