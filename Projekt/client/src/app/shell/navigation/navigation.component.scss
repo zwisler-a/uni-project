@@ -20,7 +20,6 @@
             display: flex;
             flex: 1 1;
             justify-content: stretch;
-            flex-direction: column;
         }
         .main-navigation {
             @include mat-elevation(2);

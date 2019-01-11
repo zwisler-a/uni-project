@@ -25,7 +25,7 @@ export async function getItem(
   res.send({
     item: {
       id: 0,
-      itemTypeId: 0,
+      typeId: 0,
       fields: {
         name: 'name',
         color: '#FFAAFF',
