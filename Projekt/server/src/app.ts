@@ -7,7 +7,7 @@ import mariadb from 'mariadb';
 
 import { Config } from './types';
 import { apiRouter } from './api/routes/api';
-import { initializeTables } from './database/controller';
+import { DatabaseController, initializeDatabaseController } from './database/controller';
 
 /**
  * Represents the backend's core
@@ -32,6 +32,9 @@ export class App {
     /** The app's mariadb connection pool */
     dbPool: mariadb.Pool;
 
+    /** The app's database controller */
+    dbController: DatabaseController;
+
     /**
      * Creates new instance of the app
      * @param config App's configuration
@@ -45,11 +48,11 @@ export class App {
         this.express = express();
         this.express.disable('x-powered-by');
 
-        // Set database pool
-        this.express.set('pool', this.dbPool);
+        // Set database controller
+        this.express.set('database', this.dbController);
 
         // Generate cryptographic secure jwt secret
-        this.express.set('secret', crypto.randomBytes(64));
+        this.express.set('secret', process.env.NODE_ENV === 'production' ? crypto.randomBytes(64) : 'Secret');
 
         // Add en-/decoder
         this.express.use(morgan('dev'));
@@ -76,7 +79,7 @@ export class App {
     }
 
     /** Initializes the app's mariadb connection pool and initializes all tables */
-    initializeDatabase() {
+    async initializeDatabase() {
         const database = this.config.database;
         this.dbPool = mariadb.createPool({
             host: database.host,
@@ -85,7 +88,7 @@ export class App {
             password: database.password,
             database: database.database,
         });
-        return initializeTables(this.dbPool);
+        this.dbController = await initializeDatabaseController(this.dbPool, database.prefix);
     }
 
     /** Closes all resources currently opened by the app (shutdown the app) */
