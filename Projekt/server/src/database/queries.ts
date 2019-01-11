@@ -7,8 +7,6 @@ export interface Queries {
     CREATE_TABLE_TYPE: StaticQuery<ObjectResultsets>;
     CREATE_TABLE_TYPE_FIELD: StaticQuery<ObjectResultsets>;
 
-    CREATE_TYPE_TABLE: DynamicQuery<ObjectResultsets>;
-
     COMPANY_CREATE: StaticQuery<ObjectResultsets>;
     COMPANY_GET: StaticQuery<ArrayResultsets>;
 
@@ -19,7 +17,12 @@ export interface Queries {
     TYPE_GET: StaticQuery<ArrayResultsets>;
 
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
-    TYPE_FIELD_GET: StaticQuery<ArrayResultsets>;
+    TYPE_FIELD_GET_ID: StaticQuery<ArrayResultsets>;
+    TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
+
+    CREATE_TYPE_TABLE: DynamicQuery<ObjectResultsets>;
+
+    ITEM_CREATE: DynamicQuery<ObjectResultsets>;
 }
 
 export function factory(pool: Pool, prefix: string): Queries {
@@ -42,7 +45,7 @@ export function factory(pool: Pool, prefix: string): Queries {
     function generateTabel(structure: any) {
         let constraints = 'PRIMARY KEY (\`id\`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE';
         let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, \`companyId\` SMALLINT UNSIGNED NOT NULL, `;
-        structure.fields.forEach((field: any) => {
+        structure.fields.forEach(function(field: any) {
             if (!Object.keys(types).some((type: string) => type === field.type)) {
                 throw new Error(`Invalid type '${field.type}'`);
             }
@@ -68,13 +71,23 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
+    function generateItem(structure: any) {
+        let values = 'NULL, ?';
+        let sql = `INSERT INTO \`%_item_${structure.id}\` (\`id\`, \`companyId\``;
+        structure.fields.forEach(function(field: any) {
+            sql += `, \`field_${field.id}\``;
+            values += ', ?';
+        });
+        sql += ') VALUES (';
+        sql += values + ');';
+        return sql.split('%_').join(prefix);
+    }
+
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` VARCHAR(32) NOT NULL DEFAULT \'text\', `required` BIT NOT NULL DEFAULT 0, `unique` BIT NOT NULL DEFAULT 0, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
-
-        CREATE_TYPE_TABLE: new DynamicQuery(pool, generateTabel),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
         COMPANY_GET: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
@@ -86,7 +99,12 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`) VALUES (NULL, ?,?,?,?,?);'),
-        TYPE_FIELD_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
+        TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
+        TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
+
+        CREATE_TYPE_TABLE: new DynamicQuery(pool, generateTabel),
+
+        ITEM_CREATE: new DynamicQuery(pool, generateItem),
     };
 }
 
