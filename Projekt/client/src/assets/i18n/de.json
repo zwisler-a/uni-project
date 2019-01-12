@@ -1,22 +1,45 @@
 {
     "items": {
         "error": {
-            "delete": "Item konnte nicht gelöscht werden!"
+            "delete": "Item konnte nicht gelöscht werden!",
+            "create": "Item konnte nicht erstellt werden!",
+            "get": "Item konnte nicht geladen werden!",
+            "update": "Item konnte nicht verändert werden!"
         },
         "confirm": {
-            "delete": "Soll das Item wirklich gelöscht werden?"
-        }
+            "delete": "Sind Sie sicher das Sie das Item löschen wollen?"
+        },
+        "create": {
+            "selectType": "Bitte wählen Sie einen Typen aus.",
+            "itemTyp": "Item Typ"
+        },
+        "edit": {
+            "cancel": "Abbrechen",
+            "save": "Speichern"
+        },
+        "list": {
+            "allTypes": "Alle",
+            "search": "Suche",
+            "types": "Item Typen"
+        },
+		"field": {
+			"boolean": "Wahr/Falsch",
+			"color": "Farbe",
+			"number": "Nummer",
+			"reference": "Ref.",
+			"string": "Text"
+		}
     },
     "confirm": {
         "cancel": "Abbrechen",
         "confirm": "Bestätigen"
     },
     "login": {
-        "invalid-login": "Falscher Benutzername oder flasches Passwort !",
+        "invalid-login": "Benutzername oder Passwort sind falsch!",
         "password": "Passwort",
         "remember": "Angemeldet bleiben",
-        "submit": "Anmelden",
-        "title": "Anmelden",
+        "submit": "Login",
+        "title": "Login",
         "username": "Benutzername"
     }
 }

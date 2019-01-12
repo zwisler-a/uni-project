@@ -45,6 +45,7 @@ import { ItemTransformationService } from './item-transformation.service';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +61,8 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         ItemPageComponent,
         AddItemComponent,
         ItemTypeListComponent,
-        SidenavOverlayComponent
+        SidenavOverlayComponent,
+        SearchComponent
     ],
     imports: [
         CommonModule,

@@ -17,6 +17,7 @@ import { NavigationService } from './navigation/navigation.service';
 import { SidenavControlButtonComponent } from './navigation/sidenav-control-button/sidenav-control-button.component';
 import { RouterLoadingIndicatorComponent } from './router-loading-indicator/router-loading-indicator.component';
 import { AuthModule } from './auth/auth.module';
+import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
@@ -26,7 +27,8 @@ import { AuthModule } from './auth/auth.module';
         NavigationComponent,
         RouterLoadingIndicatorComponent,
         SidenavControlButtonComponent,
-        NavigationGroupComponent
+        NavigationGroupComponent,
+        LanguageSelectorComponent
     ],
     imports: [
         CommonModule,

@@ -11,7 +11,7 @@
     <mat-form-field class="example-full-width">
         <input
             type="text"
-            placeholder="Item Typ"
+            [placeholder]="'items.create.itemTyp'| translate"
             matInput
             (input)="selectTypeByName($event)"
             [matAutocomplete]="auto"
@@ -36,7 +36,7 @@
 
     <div *ngIf="item.typeId !== -1" fxLayoutAlign="end center" class="actions">
         <button color="primary" mat-raised-button (click)="submit()">
-            Save
+            {{'items.edit.save'|translate}}
         </button>
     </div>
 </form>

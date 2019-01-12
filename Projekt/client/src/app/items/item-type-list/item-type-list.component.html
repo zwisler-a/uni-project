@@ -1,30 +1,18 @@
 <div fxLayout="column">
-    <div fxFlex="100px" fxLayoutAlign="start center" class="item-type-header">
-        ItemTypen
-    </div>
+    <div fxFlex="100px" fxLayoutAlign="start center" class="item-type-header" translate>items.list.types</div>
     <mat-nav-list>
         <a
             mat-list-item
             class="navigation-item"
-            [routerLink]="[
-                '/items',
-                'view',
-                { outlets: { content: [page, perPage] } }
-            ]"
+            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage] } }]"
             [routerLinkActiveOptions]="{ exact: true }"
             [routerLinkActive]="'active'"
-        >
-            Alle
-        </a>
+        >{{'items.list.allTypes'|translate}}</a>
         <a
             mat-list-item
             class="navigation-item"
-            *ngFor="let i of [1, 2, 3]"
-            [routerLink]="[
-                '/items',
-                'view',
-                { outlets: { content: [page, perPage, i] } }
-            ]"
+            *ngFor="let i of [1, 2, 3,4,5,6,7,8,9,0,10,12,11,13]"
+            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage, i] } }]"
             [routerLinkActive]="'active'"
         >
             ItemType {{ i }}

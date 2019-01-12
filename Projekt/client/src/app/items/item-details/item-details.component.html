@@ -1,6 +1,6 @@
 <mat-toolbar fxFlex="0 0 auto">
     <button mat-icon-button (click)="back()"><mat-icon>close</mat-icon></button>
-    <span>ItemType {{ item.typeId }}</span> <span fxFlex></span>
+    <span>{{ item.typeId }}</span> <span fxFlex></span>
     <button [hidden]="edit" (click)="editFields()" mat-icon-button>
         <mat-icon>edit</mat-icon>
     </button>
@@ -23,9 +23,9 @@
     ></app-item-field>
 
     <div *ngIf="edit" fxLayoutAlign="end center" class="actions">
-            <button mat-button (click)="editFields(false)">Cancel</button>
+        <button mat-button (click)="editFields(false)"> {{'items.edit.cancel'|translate}} </button>
         <button color="primary" mat-raised-button (click)="submit()">
-            Save
+            {{'items.edit.save'|translate}}
         </button>
     </div>
 </form>

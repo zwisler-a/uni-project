@@ -1,8 +1,10 @@
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 
 @mixin app-navigation-theme($theme) {
-
-    $background: map-get($map: $theme, $key: background);
+    $background: map-get(
+        $map: $theme,
+        $key: background
+    );
     .main-navigation-container {
         display: flex;
         height: 100%;
@@ -27,6 +29,7 @@
             background: map-get($map: $background, $key: background);
             transition: width 0.2s ease-in-out;
             overflow: hidden;
+            flex-direction: column;
             height: 100%;
             // states the sidenav can take
             &.over {
@@ -41,6 +44,10 @@
             &.hidden {
                 width: 0px;
             }
+        }
+        .account-action-toolbar {
+            max-height: 54px;
+            height: 54px;
         }
         .main-navigation-content {
             display: flex;

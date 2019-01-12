@@ -1,7 +1,33 @@
 {
+	"confirm": {
+		"cancel": "",
+		"confirm": ""
+	},
 	"items": {
+		"create": {
+			"selectType": ""
+		},
+		"edit": {
+			"cancel": "",
+			"save": ""
+		},
 		"error": {
-			"delete": ""
+			"create": "",
+			"delete": "",
+			"get": "",
+			"update": ""
+		},
+		"field": {
+			"boolean": "",
+			"color": "",
+			"number": "",
+			"reference": "",
+			"string": ""
+		},
+		"list": {
+			"allTypes": "",
+			"search": "",
+			"types": ""
 		}
 	},
 	"login": {
