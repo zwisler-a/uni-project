@@ -23,6 +23,11 @@ export interface Queries {
     CREATE_TYPE_TABLE: DynamicQuery<ObjectResultsets>;
 
     ITEM_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_GET: DynamicQuery<ArrayResultsets>;
+    ITEM_GET_LIST: DynamicQuery<ArrayResultsets>;
+    ITEM_GET_TOTAL: DynamicQuery<ArrayResultsets>;
+    ITEM_UPDATE: DynamicQuery<ObjectResultsets>;
+    ITEM_DELETE: DynamicQuery<ObjectResultsets>;
 }
 
 export function factory(pool: Pool, prefix: string): Queries {
@@ -83,6 +88,31 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
+    function getItem(structure: any) {
+        return `SELECT * FROM \`%_item_${structure.id}\` WHERE \`id\` = ?`.replace('%_', prefix);
+    }
+
+    function getItemList(structure: any) {
+        return `SELECT * FROM \`%_item_${structure.id}\` LIMIT ?, ?`.replace('%_', prefix);
+    }
+
+    function getItemTotal(structure: any) {
+        return `SELECT COUNT(*) FROM \`%_item_${structure.id}\``.replace('%_', prefix);
+    }
+
+    function updateItem(structure: any) {
+        let sql = `UPDATE \`%_item_${structure.id}\` SET \`companyId\` = ?`;
+        structure.fields.forEach(function(field: any) {
+            sql += `, \`field_${field.id}\` = ?`;
+        });
+        sql += ' WHERE `id` = ?;';
+        return sql.split('%_').join(prefix);
+    }
+
+    function deleteItem(structure: any) {
+        return `DELETE FROM \`%_item_${structure.id}\` WHERE \`id\` = ?`.replace('%_', prefix);
+    }
+
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
@@ -105,6 +135,11 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TYPE_TABLE: new DynamicQuery(pool, generateTabel),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
+        ITEM_GET: new DynamicQuery(pool, getItem),
+        ITEM_GET_LIST: new DynamicQuery(pool, getItemList),
+        ITEM_GET_TOTAL: new DynamicQuery(pool, getItemTotal),
+        ITEM_UPDATE: new DynamicQuery(pool, updateItem),
+        ITEM_DELETE: new DynamicQuery(pool, deleteItem),
     };
 }
 

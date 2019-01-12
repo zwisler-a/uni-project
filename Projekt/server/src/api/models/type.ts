@@ -12,3 +12,13 @@ export interface TypeField {
     unique: boolean;
     referenceTypeId?: number;
 }
+
+export enum TypeFieldType {
+    string = 'string',
+    number = 'number',
+    boolean = 'boolean',
+    file = 'file',
+    color = 'color',
+    date = 'date',
+    reference = 'reference'
+}

@@ -58,6 +58,9 @@ export class App {
         this.express.use(morgan('dev'));
         this.express.use(compression());
         this.express.use(express.json());
+        this.express.use(express.urlencoded({
+            extended: true
+        }));
 
         // Add default request handler
         this.express.use(express.static(path.join(__dirname, 'public')));
