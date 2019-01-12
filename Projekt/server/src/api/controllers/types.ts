@@ -3,6 +3,8 @@ import { ObjectResultsets } from 'mariadb';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
+import {Type, TypeField} from '../models/type'
+import bodyParser = require('body-parser');
 
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
@@ -40,20 +42,23 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
     }
 }
 
-export function typeGet(req: Request, res: Response, next: NextFunction) {
+export async function typeGet(req: Request, res: Response, next: NextFunction) {
 try {
-    res.send('hey');
-} catch (error) {
+
+    const typeId = req.params.id;
+    const database: DatabaseController = req.app.get("database");
+
+    const type = await database.TYPE_GET.execute(typeId);
+
+    res.status(200).send(type);
     
+} catch (error) {
+    next(new ApiError("Internal Server Error", "Request failed due to unexpected error", 500, error));
 }
 }
 
-export function typeGetAll(req: Request, res: Response, next: NextFunction){
-    try {
-        res.send('hey');
-    } catch (error) {
-        
-    }
+export async function typeGetAll(req: Request, res: Response, next: NextFunction){
+    const database: DatabaseController = req.app.get("database");
 }
 
 export function typeDelete(req: Request, res: Response, next: NextFunction) {
