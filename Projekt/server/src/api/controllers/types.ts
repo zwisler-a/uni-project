@@ -41,7 +41,19 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
 }
 
 export function typeGet(req: Request, res: Response, next: NextFunction) {
+try {
+    res.send('hey');
+} catch (error) {
+    
+}
+}
 
+export function typeGetAll(req: Request, res: Response, next: NextFunction){
+    try {
+        res.send('hey');
+    } catch (error) {
+        
+    }
 }
 
 export function typeDelete(req: Request, res: Response, next: NextFunction) {
