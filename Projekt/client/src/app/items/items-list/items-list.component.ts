@@ -54,6 +54,10 @@ export class ItemsListComponent implements OnInit {
 
     async open(row) {
         const id = 1;
-        await this.router.navigate(['/items', 'view', 1, 1]);
+        await this.router.navigate([
+            '/items',
+            'view',
+            { outlets: { detail: ['details', 1, 1] } }
+        ]);
     }
 }

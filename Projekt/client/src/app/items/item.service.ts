@@ -49,7 +49,7 @@ export class ItemService {
         return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity).pipe(
             catchError(err => {
                 this.translate
-                    .get('items.error.list')
+                    .get('items.error.create')
                     .subscribe(message => this.showError(message));
                 return throwError(err);
             })

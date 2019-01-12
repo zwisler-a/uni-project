@@ -17,7 +17,8 @@ import {
     MatButtonModule,
     MatToolbarModule,
     MatSnackBarModule,
-    MatCardModule
+    MatCardModule,
+    MatAutocompleteModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 
@@ -41,6 +42,9 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
 import { ItemPageComponent } from './item-page/item-page.component';
 import { ItemTransformationService } from './item-transformation.service';
+import { AddItemComponent } from './add-item/add-item.component';
+import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
+import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
 
 @NgModule({
     declarations: [
@@ -53,7 +57,10 @@ import { ItemTransformationService } from './item-transformation.service';
         ItemFieldFileComponent,
         ItemFieldBoolComponent,
         ItemFieldReferenceComponent,
-        ItemPageComponent
+        ItemPageComponent,
+        AddItemComponent,
+        ItemTypeListComponent,
+        SidenavOverlayComponent
     ],
     imports: [
         CommonModule,
@@ -70,6 +77,7 @@ import { ItemTransformationService } from './item-transformation.service';
         MatToolbarModule,
         MatSnackBarModule,
         MatListModule,
+        MatAutocompleteModule,
         MatCardModule,
         TranslateModule.forChild(),
         ColorPickerModule,

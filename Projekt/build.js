@@ -30,7 +30,7 @@ const getNpmPath = (basePath) => {
 const buildClient = () => {
 	childProcess.execFileSync(
 		getNpmPath(clientPath),
-		[ 'run', production ? 'build-prod' : 'build' ],
+		[ 'run', production ? 'build-prod' : 'build-demo' ],
 		{ env: process.env, cwd: clientPath, stdio: 'inherit' }
 	);
 };

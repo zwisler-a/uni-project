@@ -30,7 +30,11 @@ export class ItemsListResolver implements Resolve<Item> {
     ): Observable<any> {
         const { page, perPage, itemTypeId } = route.params;
         if (page === undefined || perPage === undefined) {
-            const defaultRoute = ['/items', 0, 50];
+            const defaultRoute = [
+                '/items',
+                'view',
+                { outlets: { content: [0, 50] } }
+            ];
             if (itemTypeId !== undefined) {
                 defaultRoute.push(itemTypeId);
             }

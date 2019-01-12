@@ -44,8 +44,15 @@ export class ItemListDataSource extends DataSource<any> {
         merge(...dataMutations).subscribe(ev => {
             this.router.navigate([
                 '/items',
-                this.paginator.pageIndex,
-                this.paginator.pageSize
+                'view',
+                {
+                    outlets: {
+                        content: [
+                            this.paginator.pageIndex,
+                            this.paginator.pageSize
+                        ]
+                    }
+                }
             ]);
         });
 

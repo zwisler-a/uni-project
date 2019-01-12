@@ -14,23 +14,13 @@ import { ObservableMedia } from '@angular/flex-layout';
 })
 @AutoUnsubscribe()
 export class ItemPageComponent implements OnInit {
-    page: any;
-    perPage: any;
     itemTypeSidenavOpen = true;
     itemTypeSidenavMode = 'side';
 
-    paramsSub: Subscription;
     mediaSub: Subscription;
-    constructor(
-        private route: ActivatedRoute,
-        private media: ObservableMedia
-    ) {}
+    constructor(private media: ObservableMedia) {}
 
     ngOnInit() {
-        this.paramsSub = this.route.params.subscribe(params => {
-            this.page = params['page'];
-            this.perPage = params['perPage'];
-        });
         this.mediaSub = this.media.subscribe(this.sidenavState.bind(this));
     }
 

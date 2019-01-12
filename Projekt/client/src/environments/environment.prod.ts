@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiBase: '/api',
-  baseUrl: `/api`
+  baseUrl: `/api`,
+  showLoginDemoInfo: false
 };
