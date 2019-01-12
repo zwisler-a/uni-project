@@ -15,10 +15,13 @@ export interface Queries {
 
     TYPE_CREATE: StaticQuery<ObjectResultsets>;
     TYPE_GET: StaticQuery<ArrayResultsets>;
+    TYPE_GETALL: StaticQuery<ArrayResultsets>;
 
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
     TYPE_FIELD_GET_ID: StaticQuery<ArrayResultsets>;
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
+    TYPE_FIELD_GET: StaticQuery<ArrayResultsets>;
+    TYPE_FIELD_GETALL: StaticQuery<ArrayResultsets>;
 
     CREATE_TYPE_TABLE: DynamicQuery<ObjectResultsets>;
 
@@ -127,11 +130,14 @@ export function factory(pool: Pool, prefix: string): Queries {
 
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `name`) VALUES (NULL,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
+        TYPE_GETALL: queryFactory('SELECT * FROM `%_types`'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`) VALUES (NULL, ?,?,?,?,?);'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
 
+        TYPE_FIELD_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
+        TYPE_FIELD_GETALL: queryFactory('SELECT * FROM `%_types`'),
         CREATE_TYPE_TABLE: new DynamicQuery(pool, generateTabel),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),

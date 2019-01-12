@@ -18,7 +18,7 @@
             #autoCompleteTrigger="matAutocompleteTrigger"
         />
         <mat-autocomplete
-            (optionSelected)="typeChange($event.option.value)"
+            (optionSelected)="typeChange($event.option.value.id)"
             #auto="matAutocomplete"
             [displayWith]="toItemTypeName"
         >

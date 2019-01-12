@@ -7,15 +7,16 @@
             [routerLink]="['/items', 'view', { outlets: { content: [page, perPage] } }]"
             [routerLinkActiveOptions]="{ exact: true }"
             [routerLinkActive]="'active'"
-        >{{'items.list.allTypes'|translate}}</a>
+            >{{ 'items.list.allTypes' | translate }}</a
+        >
         <a
             mat-list-item
             class="navigation-item"
-            *ngFor="let i of [1, 2, 3]"
-            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage, i] } }]"
+            *ngFor="let type of types"
+            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage, type.id] } }]"
             [routerLinkActive]="'active'"
         >
-            ItemType {{ i }}
+            {{ type.name }}
         </a>
     </mat-nav-list>
 </div>
