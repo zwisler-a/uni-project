@@ -2,6 +2,7 @@
 // For more information: https://material.angular.io/guide/theming
 @import "~@angular/material/theming";
 @import "./app/shell/theme.scss";
+@import "./app/items/theme.scss";
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
@@ -26,6 +27,7 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 // that you are using.
 @include angular-material-theme($client-theme);
 @include app-shell-theme($client-theme);
+@include app-items-theme($client-theme);
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -41,5 +43,3 @@ body {
 [hidden] {
     visibility: hidden;
 }
-
-

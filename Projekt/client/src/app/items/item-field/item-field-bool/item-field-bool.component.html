@@ -1,0 +1,17 @@
+<mat-form-field fxFlex>
+    <span matPrefix class="field-type">{{'items.field.boolean'|translate}}</span>
+    <input
+        [placeholder]="field.name"
+        [value]="field.value ? 'Ja' : 'Nein'"
+        [disabled]="!edit"
+        matInput
+    />
+    <mat-checkbox
+        style="margin:16px;"
+        [(ngModel)]="field.value"
+        name="1"
+        [disabled]="!edit"
+        matSuffix
+        color="warn"
+    ></mat-checkbox>
+</mat-form-field>

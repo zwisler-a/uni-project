@@ -10,16 +10,38 @@
     <nav [ngClass]="sidenavCssState">
         <!-- Toolbar inside the navigation -->
         <mat-toolbar color="primary">
-            <span fxFlex></span>
-            <div fxShow.md>
-                <app-sidenav-control-button
-                    [mode]="sidenavMode"
-                    [state]="sidenavState"
-                    (expand)="expandSidenav()"
-                    (colapse)="collapseSidenav()"
-                    (hide)="hideSidenav()"
-                ></app-sidenav-control-button>
-            </div>
+            <mat-toolbar-row>
+                <span fxFlex></span>
+                <div fxShow.md>
+                    <app-sidenav-control-button
+                        [mode]="sidenavMode"
+                        [state]="sidenavState"
+                        (expand)="expandSidenav()"
+                        (colapse)="collapseSidenav()"
+                        (hide)="hideSidenav()"
+                    ></app-sidenav-control-button>
+                </div>
+            </mat-toolbar-row>
+            <!-- Display user information -->
+            <mat-toolbar-row
+                *ngIf="sidenavIsExpanded"
+                fxLayout="column"
+                fxLayoutAlign="center start"
+                class="user-info"
+            >
+                <div>
+                    <div
+                        fxLayoutAlign="start center"
+                    >
+                        <mat-icon>account_circle</mat-icon>
+                        <span>{{ user ? user.username : "" }}</span>
+                    </div>
+                    <div fxLayoutAlign="start center">
+                        <mat-icon>work</mat-icon>
+                        <span>{{ user ? user.companyId : "" }}</span>
+                    </div>
+                </div>
+            </mat-toolbar-row>
         </mat-toolbar>
         <!-- Actual navigation, loops through the navigation model -->
         <app-navigation-group
@@ -27,18 +49,27 @@
             [collapsed]="sidenavIsCollapsed"
             [group]="group"
         ></app-navigation-group>
+        <span fxFlex="1 1 auto"></span>
+        <mat-toolbar class="account-action-toolbar" *ngIf="sidenavIsExpanded" color="accent">
+            <span fxFlex="1 1 auto"></span>
+            <button mat-icon-button (click)="logout()">
+                <mat-icon>power_settings_new</mat-icon>
+            </button>
+        </mat-toolbar>
     </nav>
 
     <!-- content wrapper -->
-    <main class="main-navigation-content">
+    <div class="main-navigation-content">
         <mat-toolbar>
             <!-- Button to open the sidenav on over (small) mode -->
             <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()">
                 <mat-icon>menu</mat-icon>
             </button>
+            <span fxFlex="1 1 auto"></span>
+            <app-language-selector></app-language-selector>
         </mat-toolbar>
 
         <!-- display the content of the route -->
-        <router-outlet></router-outlet>
-    </main>
+        <main class="main-content"><router-outlet></router-outlet></main>
+    </div>
 </div>

@@ -5,7 +5,8 @@ import {
     MatIconModule,
     MatProgressBarModule,
     MatToolbarModule,
-    MatListModule
+    MatListModule,
+    MatMenuModule
 } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -14,6 +15,8 @@ import { NavigationComponent } from './navigation.component';
 import { NavigationService } from './navigation.service';
 import { SidenavControlButtonComponent } from './sidenav-control-button/sidenav-control-button.component';
 import { NavigationGroupComponent } from './navigation-group/navigation-group.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { AuthService } from '../auth/auth.service';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -33,10 +36,15 @@ describe('NavigationComponent', () => {
                 MatToolbarModule,
                 MatIconModule,
                 MatButtonModule,
+                MatMenuModule,
+                HttpClientTestingModule,
                 FlexLayoutModule,
                 MatListModule
             ],
-            providers: [NavigationService]
+            providers: [
+                NavigationService,
+                { provide: AuthService, useValue: {} }
+            ]
         }).compileComponents();
     }));
 

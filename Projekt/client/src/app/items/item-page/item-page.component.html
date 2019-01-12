@@ -1,0 +1,37 @@
+<mat-drawer-container fxFlex>
+    <mat-drawer
+        mode="side"
+        [(opened)]="itemTypeSidenavOpen"
+        [mode]="itemTypeSidenavMode"
+        fxFlex="0 0 150px"
+    >
+        <app-item-type-list></app-item-type-list>
+    </mat-drawer>
+    <mat-drawer-content fxLayout="column" fxFlex="1 1 auto">
+        <div
+            fxFlex="1 1 100px"
+            fxLayoutAlign="start center"
+            class="item-searchbox"
+        >
+            <button
+                mat-icon-button
+                (click)="openItemType()"
+                *ngIf="itemTypeSidenavMode === 'over'"
+            >
+                <mat-icon>list</mat-icon>
+            </button>
+            <button
+                mat-icon-button
+                [routerLink]="[
+                    '/items',
+                    'view',
+                    { outlets: { detail: ['add'] } }
+                ]"
+            >
+                <mat-icon>add</mat-icon>
+            </button>
+            <app-search></app-search>
+        </div>
+        <div fxFlex="1 1 auto"><app-items-list></app-items-list></div>
+    </mat-drawer-content>
+</mat-drawer-container>

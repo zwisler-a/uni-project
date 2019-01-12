@@ -1,0 +1,11 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    form {
+        padding: 16px;
+        .actions {
+            margin: 16px 0;
+            padding-bottom: 16px;
+        }
+    }
+}

@@ -1,0 +1,20 @@
+// These are not scoped styles. ViewEncapsulation is set to none
+
+app-item-field .mat-input-element:disabled {
+    color: black;
+}
+
+.field-type {
+    width: 80px;
+    opacity: 0.6;
+    overflow: hidden;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+    padding-left: 8px;
+    .mat-icon {
+        font-size: 20px;
+        height: 22px;
+    }
+}

@@ -1,6 +1,41 @@
 {
+    "items": {
+        "error": {
+            "delete": "Something went wrong while deleting the item!",
+            "create": "Something went wrong while createing the item!",
+            "get": "Could not get Item!",
+            "update": "Could not update Item!"
+        },
+        "confirm": {
+            "delete": "Are you sure you want to delete the Item?"
+        },
+        "create": {
+            "selectType": "Please select an item type",
+            "itemTyp": "Item type"
+        },
+        "edit": {
+            "cancel": "Cancel",
+            "save": "Save"
+        },
+        "list": {
+            "allTypes": "All",
+            "search": "Search",
+            "types": "Item types"
+        },
+        "field": {
+            "boolean": "Boolean",
+            "color": "Color",
+            "number": "Number",
+            "reference": "Ref.",
+            "string": "Text"
+        }
+    },
+    "confirm": {
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    },
     "login": {
-		"invalid-login": "Wrong username or password!",
+        "invalid-login": "Wrong username or password!",
         "password": "Password",
         "remember": "Remember me",
         "submit": "Login",
