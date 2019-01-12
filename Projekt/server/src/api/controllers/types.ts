@@ -43,14 +43,18 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
 
 export async function typeGet(req: Request, res: Response, next: NextFunction) {
     try {
-
-        const typeId = req.params.id;
+        const id = req.params.id;
         const database: DatabaseController = req.app.get('database');
 
-        const type = await database.TYPE_GET.execute(typeId);
+        const type: Type = (await database.TYPE_GET.execute(id)).pop();
+        type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
+            delete row.typeId;
+            row.required = row.required.readUInt8() === 1;
+            row.unique = row.unique.readUInt8() === 1;
+            return row as TypeField;
+        });
 
         res.status(200).send(type);
-
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
     }
