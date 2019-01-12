@@ -58,7 +58,13 @@ try {
 }
 
 export async function typeGetAll(req: Request, res: Response, next: NextFunction){
-    const database: DatabaseController = req.app.get("database");
+    try{
+        const database: DatabaseController = req.app.get("database");
+        const types: Type[]  = await database.TYPE_GETALL.execute();
+        res.status(200).send(types);
+    } catch(error){
+        next(new ApiError("Internal Server Error", "Request failed due to unexpected error", 500, error));
+    }
 }
 
 export function typeDelete(req: Request, res: Response, next: NextFunction) {
