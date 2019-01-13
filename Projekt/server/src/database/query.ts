@@ -62,7 +62,7 @@ export class DynamicQuery<T extends Resultsets> extends Query {
         return this.pool.query(sql, values).catch(error => this.errorDynamic(error, sql)) as Promise<T>;
     }
 
-    async executeConnection(structure: any, connection: Connection, values?: any[] | any): Promise<T> {
+    async executeConnection(connection: Connection, structure: any, values?: any[] | any): Promise<T> {
         const sql = this.builder(structure);
         return connection.query(sql, values).catch(error => this.errorDynamic(error, sql)) as Promise<T>;
     }

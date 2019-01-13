@@ -37,7 +37,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
                 query.fields[i].id = fieldIds[i].insertId;
             }
 
-            await database.CREATE_TYPE_TABLE.execute(query);
+            await database.ITEM_TABLE_CREATE.execute(query);
         });
 
         res.status(200).send(query);
@@ -74,9 +74,20 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
     try {
         const database: DatabaseController = req.app.get('database');
         const types: Type[]  = await database.TYPE_GET.execute();
+
+        for (const type of types) {
+            type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(type.id)).map((row: any) => {
+                delete row.typeId;
+                row.required = row.required.readUInt8() === 1;
+                row.unique = row.unique.readUInt8() === 1;
+                return row as TypeField;
+            });
+        }
+
         res.status(200).send(types);
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        console.error(error);
     }
 }
 
@@ -87,12 +98,19 @@ export async function typeDelete(req: Request, res: Response, next: NextFunction
         const database: DatabaseController = req.app.get('database');
         const references: TypeField[] = await database.TYPE_FIELD_GET_REFERENCEID.execute(typeId);
 
-        database.beginTransaction(async function(connection) {
+        await database.beginTransaction(async function(connection) {
             for (const reference of references) {
-
+                await database.ITEM_TABLE_FK_DROP.executeConnection(connection, reference);
+                await database.ITEM_TABLE_FIELD_DROP.executeConnection(connection, reference);
             }
+
+            await database.ITEM_TABLE_DROP.executeConnection(connection, typeId);
+            await database.TYPE_DELTE.executeConnection(connection, typeId);
         });
+
+        res.status(204).send();
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        console.error(error);
     }
 }

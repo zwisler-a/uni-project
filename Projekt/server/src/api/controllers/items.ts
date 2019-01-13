@@ -113,7 +113,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId, true);
-        const total: number = (await database.ITEM_GET_TOTAL.execute(type)).pop()['COUNT(*)'];
+        const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
 
         const totalPages = Math.ceil(total / perPage);
         res.set('X-Total', total.toString());
@@ -128,7 +128,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             return;
         }
 
-        const items: Item[] = (await database.ITEM_GET_LIST.execute(type, [page * perPage, perPage]))
+        const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
             .map((item: any) => {
                 const fields: Field[] = [];
                 for (let i = 0; i < type.fields.length; i++) {
@@ -182,7 +182,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId, true);
 
-        const items = await database.ITEM_GET.execute(type, id);
+        const items = await database.ITEM_GET_ID.execute(type, id);
         if (items.length === 0) {
             next(ApiError.NOT_FOUND);
             return;

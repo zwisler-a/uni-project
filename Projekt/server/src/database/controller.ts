@@ -1,28 +1,6 @@
 import { Pool, Connection } from '../../types/mariadb';
 import { factory, Queries } from './queries';
 
-function extend<T, U, V>(first: T, second: U, third: V): T & U & V {
-    const result = <T & U & V>{};
-    for (const id in first) {
-        (<any>result)[id] = (<any>first)[id];
-    }
-    for (const id in second) {
-        if (!result.hasOwnProperty(id)) {
-            (<any>result)[id] = (<any>second)[id];
-        } else {
-            console.warn('Duplicate key: ', id);
-        }
-    }
-    for (const id in third) {
-        if (!result.hasOwnProperty(id)) {
-            (<any>result)[id] = (<any>third)[id];
-        } else {
-            console.warn('Duplicate key: ', id);
-        }
-    }
-    return result;
-}
-
 export interface TransactionHandler {
     (connection: Connection): void;
 }
@@ -32,7 +10,10 @@ export interface DatabaseController extends Queries, Pool {
 }
 
 export async function initializeDatabaseController(pool: Pool, prefix: string): Promise<DatabaseController> {
-    const controller: DatabaseController = extend(pool, factory(pool, prefix), {
+    const controller: DatabaseController = {
+        ...pool,
+        ...factory(pool, prefix),
+
         async beginTransaction(handler: TransactionHandler): Promise<void> {
             const connection: Connection = await this.getConnection();
             await connection.beginTransaction();
@@ -45,7 +26,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
             }
             await connection.end();
         }
-    });
+    };
 
     // Initilize all tables
     await controller.CREATE_TABLE_COMPANY.execute();
@@ -55,7 +36,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
 
     // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
     let companyId;
-    const company = (await controller.COMPANY_GET.execute('company')).pop();
+    const company = (await controller.COMPANY_GET_ID.execute('company')).pop();
     if (!company) {
         companyId = (await controller.COMPANY_CREATE.execute([ 'company' ])).insertId;
     } else {
@@ -63,7 +44,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     }
 
     // TODO REMOVE Add a mock user as long as there is no other way to add users ('username', 'password')
-    if (!(await controller.USER_GET.execute('username')).pop()) {
+    if (!(await controller.USER_GET_ID.execute('username')).pop()) {
         await controller.USER_CREATE.execute([ companyId, 'username', '$2b$10$sFut8f1wXaMisJ750uiGbOD8UefoIZLLad5a66M7f/YMV5okNUgEC' ]);
     }
 

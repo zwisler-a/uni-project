@@ -31,7 +31,7 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
 
     try {
         const database: DatabaseController = req.app.get('database');
-        const user = (await database.USER_GET.execute(req.body.username)).pop();
+        const user = (await database.USER_GET_ID.execute(req.body.username)).pop();
         if (!user) {
             next(new ApiError('Unauthorized', 'Authentication failed due to invalid credentials', 401));
             return;

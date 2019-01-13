@@ -6,6 +6,7 @@ export interface Type {
 
 export interface TypeField {
     id: number;
+    typeId: number;
     name: string;
     type: string;
     required: boolean;
