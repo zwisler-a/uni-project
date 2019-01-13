@@ -1,12 +1,10 @@
 import { Routes } from '@angular/router';
 
-import { FieldsService } from './fields.service';
+import { AddItemComponent } from './add-item/add-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemDetailResolver } from './item-details/item-details.resolver';
-import { ItemsListComponent } from './items-list/items-list.component';
-import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemPageComponent } from './item-page/item-page.component';
-import { AddItemComponent } from './add-item/add-item.component';
+import { ItemsListResolver } from './items-list/items-list.resolver';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
 
 export const itemsRoutes: Routes = [
@@ -43,7 +41,7 @@ export const itemsRoutes: Routes = [
             {
                 path: '',
                 component: ItemPageComponent,
-                resolve: { list: ItemsListResolver, fields: FieldsService },
+                resolve: { list: ItemsListResolver },
                 outlet: 'content'
             }
         ]

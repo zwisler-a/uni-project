@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
-import { FieldsService } from './fields.service';
+import { TypesService } from './types.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-describe('FieldsService', () => {
+describe('TypesService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({ imports: [HttpClientTestingModule] })
     );
 
     it('should be created', () => {
-        const service: FieldsService = TestBed.get(FieldsService);
+        const service: TypesService = TestBed.get(TypesService);
         expect(service).toBeTruthy();
     });
 });

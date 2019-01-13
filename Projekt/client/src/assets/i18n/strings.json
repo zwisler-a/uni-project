@@ -5,6 +5,7 @@
 	},
 	"items": {
 		"create": {
+			"itemTyp": "",
 			"selectType": ""
 		},
 		"edit": {
@@ -20,6 +21,7 @@
 		"field": {
 			"boolean": "",
 			"color": "",
+			"date": "",
 			"number": "",
 			"reference": "",
 			"string": ""
@@ -37,5 +39,15 @@
 		"submit": "",
 		"title": "",
 		"username": ""
+	},
+	"types": {
+		"edit": {
+			"addField": "",
+			"cancel": "",
+			"required": "",
+			"save": "",
+			"typeName": "",
+			"unique": ""
+		}
 	}
 }

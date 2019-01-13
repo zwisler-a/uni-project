@@ -22,14 +22,35 @@
             "search": "Suche",
             "types": "Item Typen"
         },
-		"field": {
-			"boolean": "Wahr/Falsch",
-			"color": "Farbe",
-			"number": "Nummer",
-			"reference": "Ref.",
-			"date": "Datum",
-			"string": "Text"
-		}
+        "field": {
+            "boolean": "Wahr/Falsch",
+            "color": "Farbe",
+            "number": "Nummer",
+            "reference": "Ref.",
+            "date": "Datum",
+            "string": "Text"
+        }
+    },
+    "types": {
+        "title": "Objekttypen",
+        "select": "Bitte wählen Sie ein Typen aus",
+        "edit": {
+            "addField": "Neues Feld hinzufügen",
+            "cancel": "Abbrechen",
+            "required": "Benötigt",
+            "save": "Speichern",
+            "confirmDelete": "Wollen Sie den Typen wirklich löschen?",
+            "typeName": "Name des Typs",
+            "unique": "Einzigartig",
+            "field": {
+                "boolean": "Wahr/Falsch",
+                "color": "Farbe",
+                "number": "Nummer",
+                "reference": "Ref.",
+                "date": "Datum",
+                "string": "Text"
+            }
+        }
     },
     "confirm": {
         "cancel": "Abbrechen",
