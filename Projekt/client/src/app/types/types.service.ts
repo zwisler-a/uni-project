@@ -24,7 +24,6 @@ export class TypesService {
 
     getType(id: number): Observable<ApiItemType> {
         const storedType = this.store.find(type => type.id === id);
-        console.log(id, this.store, storedType);
         if (storedType) {
             return of(storedType);
         }
