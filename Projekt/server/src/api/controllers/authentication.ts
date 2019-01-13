@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import jsonwebtoken from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-import { USER_GET } from '../../database/querys';
+import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 
 export function validateJsonWebToken(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +29,8 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
     }
 
     try {
-        const user = (await USER_GET(req.app.get('pool'), req.body.username)).pop();
+        const database: DatabaseController = req.app.get('database');
+        const user = (await database.USER_GET_ID.execute(req.body.username)).pop();
         if (!user) {
             next(new ApiError('Unauthorized', 'Authentication failed due to invalid credentials', 401));
             return;
@@ -38,15 +39,13 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
         const success = await bcrypt.compare(req.body.password, user.password);
 
         if (success) {
+            delete user.password;
+
             const token = jsonwebtoken.sign(
-                {
-                    some: 'nice',
-                    test: 'data',
-                    '!': 1
-                },
+                user,
                 req.app.get('secret'),
                 {
-                    expiresIn: '1h'
+                    expiresIn: '1d'
                 }
             );
 

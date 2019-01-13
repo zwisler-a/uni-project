@@ -1,0 +1,40 @@
+@mixin app-item-page-theme($theme, $colors) {
+    $primary: map-get(
+        $map: $theme,
+        $key: accent
+    );
+    $background: map-get(
+        $map: $theme,
+        $key: background
+    );
+    app-item-page {
+        display: flex;
+        flex: 1 1 auto;
+        .content-card {
+            flex: 1 1 auto;
+            margin: 8px;
+        }
+        .content-card-handset {
+            margin: 0;
+            padding: 0;
+        }
+    }
+    .item-searchbox {
+        padding: 16px;
+        background: map-get($map: $colors, $key: page-header-background);
+        color: map-get($map: $colors, $key: page-header-text);
+    }
+    .item-type-header {
+        padding: 16px;
+        background: map-get($map: $colors, $key: page-header-background);
+        color: map-get($map: $colors, $key: page-header-text);
+    }
+    .mat-drawer-side.item-type-drawer {
+        border-right: none;
+        background: map-get($map: $background, $key: background);
+        overflow: visible;
+        .mat-drawer-inner-container {
+            overflow: visible;
+        }
+    }
+}

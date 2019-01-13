@@ -1,0 +1,23 @@
+<div fxLayout="column">
+    <div fxFlex="100px" fxLayoutAlign="start center" class="item-type-header" translate>items.list.types</div>
+    <mat-nav-list>
+        <!--<a
+            style="pointer-events:none;cursor: not-allowed;"
+            mat-list-item
+            class="navigation-item"
+            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage] } }]"
+            [routerLinkActiveOptions]="{ exact: true }"
+            [routerLinkActive]="'active'"
+            >{{ 'items.list.allTypes' | translate }}</a
+        > -->
+        <a
+            mat-list-item
+            class="navigation-item"
+            *ngFor="let type of types"
+            [routerLink]="['/items', 'view', { outlets: { content: [page, perPage, type.id] } }]"
+            [routerLinkActive]="'active'"
+        >
+            {{ type.name }}
+        </a>
+    </mat-nav-list>
+</div>

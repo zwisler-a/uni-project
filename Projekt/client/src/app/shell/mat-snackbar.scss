@@ -1,0 +1,19 @@
+@mixin mat-snackbar-override($theme) {
+    $warn: map-get(
+        $map: $theme,
+        $key: warn
+    );
+    snack-bar-container.mat-snack-bar-container {
+        border-radius: 0;
+    }
+    .mat-snack-bar-container::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 4px;
+        right: 0;
+        top: 0;
+        height: 100%;
+        background: map-get($map: $warn, $key: 500);
+    }
+}

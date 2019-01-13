@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
 
 /** Contains a login form for user authentication */
 @Component({
@@ -10,9 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
     loginForm: FormGroup;
     laoding = false;
+    userDemoInfo: MatSnackBarRef<any>;
 
     constructor(
         private fromBuilder: FormBuilder,
@@ -27,7 +29,20 @@ export class LoginComponent implements OnInit {
         });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        if (environment.showLoginDemoInfo) {
+            setTimeout(() => {
+                this.userDemoInfo = this.snackbar.open(
+                    'Demo Username: "username", password: "password"'
+                );
+            });
+        }
+    }
+    ngOnDestroy(): void {
+        if (environment.showLoginDemoInfo) {
+            this.userDemoInfo.closeWithAction();
+        }
+    }
 
     /** triggers the login process */
     login() {

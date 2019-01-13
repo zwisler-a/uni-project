@@ -17,7 +17,7 @@ import { AuthenticateResponse } from './authenticate.response';
 export class AuthService {
     static readonly LOCALSTROAGE_KEY = 'auth_jwt';
     readonly LOGIN_URL = ['/auth/login'];
-    readonly authenticateUrl = [environment.apiBase, 'authenticate'].join('/');
+    readonly authenticateUrl = [environment.baseUrl, 'authenticate'].join('/');
 
     private _user: User;
     private _jwt: string;

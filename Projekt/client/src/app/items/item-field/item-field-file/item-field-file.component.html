@@ -1,0 +1,30 @@
+<div class="file-input">
+    <span class="field-type">File</span>
+    <mat-sidenav-container>
+        <mat-sidenav #sidenav mode="over" style="width:200px;">
+            <mat-list dense>
+                <mat-list-item> 10.05.2001 </mat-list-item>
+                <mat-list-item> 10.05.2002 </mat-list-item>
+                <mat-list-item> 10.05.2003 </mat-list-item>
+            </mat-list>
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <div class="file-preview">
+                <mat-icon> insert_drive_file </mat-icon>
+            </div>
+            <span class="file-history" (click)="sidenav.open()">
+                Versionshistory
+            </span>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+    <div style="margin:8px;display:flex;" *ngIf="!!edit">
+        <span style="flex: 1 1 auto"></span>
+        <button
+            (click)="$event.preventDefault()"
+            mat-button
+            color="primary"
+        >
+            Upload new File
+        </button>
+    </div>
+</div>

@@ -10,5 +10,5 @@ module.exports = {
 	deployAppPath: 'demo/',
 	deployDocPath: 'public_html/doc',
 
-	production: true
+	production: false
 };

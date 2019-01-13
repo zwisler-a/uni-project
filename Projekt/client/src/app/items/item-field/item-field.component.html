@@ -1,0 +1,43 @@
+<ng-container *ngIf="field">
+    <app-item-field-string
+        *ngIf="field.type === FieldType.string"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-string>
+
+    <app-item-field-number
+        *ngIf="field.type === FieldType.number"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-number>
+
+    <app-item-field-color
+        *ngIf="field.type === FieldType.color"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-color>
+
+    <app-item-field-file
+        *ngIf="field.type === FieldType.file"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-file>
+
+    <app-item-field-bool
+        *ngIf="field.type === FieldType.boolean"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-bool>
+
+    <app-item-field-reference
+        *ngIf="field.type === FieldType.reference"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-reference>
+
+    <app-item-field-date
+        *ngIf="field.type === FieldType.date"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-date>
+</ng-container>
