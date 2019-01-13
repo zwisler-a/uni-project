@@ -1,5 +1,4 @@
 import { Response, Request, NextFunction } from 'express';
-import { ObjectResultsets } from 'mariadb';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
@@ -8,7 +7,12 @@ import { Item, Field } from '../models/item';
 
 async function getTypeFields(database: DatabaseController, id: number, fields: boolean): Promise<Type> {
     try {
-        const type: Type = (await database.TYPE_GET_ID.execute(id)).pop();
+        const types = await database.TYPE_GET_ID.execute(id);
+        if (types.length === 0) {
+            throw ApiError.NOT_FOUND;
+        }
+
+        const type: Type = types.pop();
         if (fields) {
             type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
                 delete row.typeId;
@@ -40,8 +44,8 @@ function checkType(type: Type, values: Field[], mapping: any[]) {
                 // Add value to mapping for correct insert order
                 mapping.push(value.value);
 
-                // If field is not required and value is false skip checks
-                if (!field.required && !value.value) {
+                // If field is not required and value is null skip checks
+                if (!field.required && value.value == null) {
                     continue typeLoop;
                 }
 
@@ -83,6 +87,9 @@ function checkType(type: Type, values: Field[], mapping: any[]) {
         // A required field is null
         if (field.required) {
             return field;
+        } else {
+            // If field isn't required and cannot be found default to null
+            mapping.push(null);
         }
     }
     return null;
@@ -168,7 +175,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
-        res.status(200).send(new EmbeddedItem([ type ], [ { typeId, id, fields } ]));
+        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
     }
@@ -199,7 +206,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
             fields.push({ id: field.id, value });
         }
 
-        res.status(200).send(new EmbeddedItem([ type ], [ { typeId, id, fields } ]));
+        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         console.error(error);
@@ -229,7 +236,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
 
         const affectedRows = (await database.ITEM_UPDATE.execute(type, values)).affectedRows;
         if (affectedRows > 0) {
-            res.status(200).send(new EmbeddedItem([ type ], [ { typeId, id, fields } ]));
+            res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
         } else {
             next(ApiError.NOT_FOUND);
         }
