@@ -24,6 +24,7 @@ export class AddItemComponent implements OnInit {
 
     @ViewChild(MatAutocompleteTrigger)
     autocompleteTrigger: MatAutocompleteTrigger;
+    isSubmitting: boolean;
 
     constructor(
         private itemTransform: ItemTransformationService,
@@ -42,10 +43,10 @@ export class AddItemComponent implements OnInit {
 
     /** Sends a request to update the item */
     submit() {
+        this.isSubmitting = true;
         const apiItem = this.itemTransform.retransformItem(this.item);
-        this.itemService
-            .createItem(apiItem)
-            .subscribe((res: ApiItemsResponse) => {
+        this.itemService.createItem(apiItem).subscribe(
+            (res: ApiItemsResponse) => {
                 this.router.navigate(
                     [
                         '/items',
@@ -64,7 +65,12 @@ export class AddItemComponent implements OnInit {
                         relativeTo: this.activatedRoute
                     }
                 );
-            });
+                this.isSubmitting = false;
+            },
+            () => {
+                this.isSubmitting = false;
+            }
+        );
     }
 
     /** Navigate back */

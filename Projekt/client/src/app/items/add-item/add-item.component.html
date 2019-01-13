@@ -35,7 +35,7 @@
     ></app-item-field>
 
     <div *ngIf="item.typeId !== -1" fxLayoutAlign="end center" class="actions">
-        <button color="primary" mat-raised-button (click)="submit()">
+        <button color="primary" [disabled]="isSubmitting" mat-raised-button (click)="submit()">
             {{ "items.edit.save" | translate }}
         </button>
     </div>
