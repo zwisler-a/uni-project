@@ -47,6 +47,7 @@ export class ItemsListResolver implements Resolve<Item> {
                     page,
                     perPage,
                     list: this.transform.transformItems(body.items, body.types),
+                    types: body.types,
                     length: Number.parseInt(res.headers.get('X-Total'), 10) || 0
                 };
             })

@@ -48,7 +48,7 @@ export class AppModule {
       {
         title: 'Inventar',
         items: [
-          { label: 'Items', icon: 'dashboard', route: ['/items'] },
+          { label: 'Items', icon: 'view_list', route: ['/items'] },
           { label: 'Test2', icon: 'dashboard', route: ['/2'] }
         ]
       }

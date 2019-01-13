@@ -4,5 +4,6 @@ export enum FieldType {
     boolean = 'boolean',
     reference = 'reference',
     color = 'color',
-    file = 'file'
+    file = 'file',
+    date = 'date'
 }

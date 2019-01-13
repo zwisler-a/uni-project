@@ -1,10 +1,12 @@
+import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { Item } from '../types/item.interface';
 import { ItemListDataSource } from './items-list.datasource';
-import { SelectionModel } from '@angular/cdk/collections';
-import { Router, ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { ItemService } from '../item.service';
+import { ApiItemType } from '../types/api/api-item-type.interface';
+import { Field } from '../types/field.interface';
 
 @Component({
     selector: 'app-items-list',
@@ -33,7 +35,12 @@ export class ItemsListComponent implements OnInit {
             this.router
         );
         this.activatedRoute.data.subscribe(data => {
-            this.displayedColumns = data.fields;
+            this.displayedColumns = [];
+            data.list.types.forEach((type: ApiItemType) => {
+                type.fields.forEach(field => {
+                    this.displayedColumns.push(field.name);
+                });
+            });
         });
         // this.displayedColumns = [];
     }
@@ -52,12 +59,15 @@ export class ItemsListComponent implements OnInit {
             : this.dataSource.data.forEach(row => this.selection.select(row));
     }
 
-    async open(row) {
-        const id = 1;
+    async open(row: Item) {
         await this.router.navigate([
             '/items',
             'view',
-            { outlets: { detail: ['details', 1, 1] } }
+            { outlets: { detail: ['details', row.typeId, row.id] } }
         ]);
+    }
+
+    findByName(fields: Field[], name: string) {
+        return fields.find(field => field.name === name).value || '';
     }
 }

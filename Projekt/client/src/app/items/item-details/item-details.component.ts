@@ -56,7 +56,10 @@ export class ItemDetailsComponent implements OnInit {
     /** Sends a request to update the item */
     submit() {
         const apiItem = this.itemTransform.retransformItem(this.item);
-        this.itemService.updateItem(apiItem).subscribe(res => {});
+        this.itemService.updateItem(apiItem).subscribe(res => {
+            this.router.navigate(['.'], { relativeTo: this.acitvatedRoute });
+            this.edit = false;
+        });
     }
 
     /** Navigate back */

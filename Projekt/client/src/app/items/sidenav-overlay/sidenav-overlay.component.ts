@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { MatDrawer } from '@angular/material';
+import { RouterOutlet, Router, ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-sidenav-overlay',
@@ -9,15 +10,21 @@ import { MatDrawer } from '@angular/material';
 })
 export class SidenavOverlayComponent implements OnInit {
     @ViewChild(MatDrawer) private drawer: MatDrawer;
+    @ViewChild('detailOutlet') private detailOutlet: RouterOutlet;
     private outletActive = false;
 
-    constructor(private location: Location) {}
+    constructor(
+        private router: Router,
+        private activatedRoute: ActivatedRoute
+    ) {}
 
     ngOnInit() {}
 
     drawerClose() {
         if (this.outletActive) {
-            this.location.back();
+            this.router.navigate(['.', { outlets: { detail: null } }], {
+                relativeTo: this.activatedRoute
+            });
         }
     }
 

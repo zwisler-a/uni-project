@@ -17,7 +17,7 @@
     <ng-container *ngFor="let dynCol of displayedColumns">
         <ng-container [matColumnDef]="dynCol" *ngIf="dynCol !== 'id' && dynCol !== 'typeId'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ dynCol }}</th>
-            <td mat-cell *matCellDef="let row">{{ row.fields[dynCol] }}</td>
+            <td mat-cell *matCellDef="let row">{{ findByName(row.fields, dynCol) }}</td>
         </ng-container>
     </ng-container>
 

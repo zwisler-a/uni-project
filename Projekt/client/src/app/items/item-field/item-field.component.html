@@ -34,4 +34,10 @@
         [field]="field"
         [edit]="edit"
     ></app-item-field-reference>
+
+    <app-item-field-date
+        *ngIf="field.type === FieldType.date"
+        [field]="field"
+        [edit]="edit"
+    ></app-item-field-date>
 </ng-container>
