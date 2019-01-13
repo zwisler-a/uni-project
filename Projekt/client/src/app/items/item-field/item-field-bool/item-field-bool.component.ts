@@ -8,12 +8,20 @@ import { FieldType } from '../../types/field-type.enum';
     styleUrls: ['./item-field-bool.component.scss']
 })
 export class ItemFieldBoolComponent implements OnInit {
-    @Input()
-    field: DeterminedField<boolean> = {
+    _field: DeterminedField<boolean> = {
         name: '',
         type: FieldType.boolean,
         value: false
     };
+
+    @Input()
+    set field(val: DeterminedField<boolean>) {
+        this._field = val;
+        this._field.value = !!this._field.value;
+    }
+    get field() {
+        return this._field;
+    }
     @Input()
     edit: boolean;
     constructor() {}

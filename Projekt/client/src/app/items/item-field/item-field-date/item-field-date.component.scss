@@ -1,0 +1,14 @@
+app-item-field-date {
+    .mat-form-field-appearance-legacy
+        .mat-form-field-suffix
+        .mat-datepicker-toggle-default-icon {
+        width: 22px;
+    }
+    mat-datepicker-toggle {
+        width: 36px;
+        display: block;
+        &:focus {
+            outline: none;
+        }
+    }
+}

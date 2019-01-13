@@ -1,8 +1,9 @@
-@mixin app-navigation-group-theme($theme) {
-    $accent: map-get($theme, accent);
-    $background: map-get($theme, background);
-    $foreground: map-get($theme, foreground);
-
+@mixin app-navigation-group-theme($colors) {
+    app-navigation-group {
+        .mat-list-item-content {
+            color: map-get($map: $colors, $key: navigation-text);
+        }
+    }
 
     // Navigation item
     .navigation-item {
@@ -13,9 +14,13 @@
         width: 100%;
         padding: 12px 20px;
         position: relative;
-        color: map-get($map: $foreground, $key: text);
+        //color: map-get($map: $foreground, $key: text);
         .label {
             margin-left: 18px;
+        }
+
+        &.mat-list-item:hover {
+            background: map-get($map: $colors, $key: navigation-item-hover);
         }
 
         // display of which route is active
@@ -26,17 +31,17 @@
             height: 100%;
             width: 0px;
             transition: width 0.2s;
-            background: map-get($map: $accent, $key: 500);
+            background: map-get($map: $colors, $key: navigation-item-accent);
             top: 0;
             left: 0;
         }
         &.active {
-            background: map-get($map: $background, $key: hover);
+            background: map-get($map: $colors, $key: navigation-item-active);
             &::before {
                 width: 4px;
             }
             .mat-icon {
-                color: map-get($map: $accent, $key: 500);
+                color: map-get($map: $colors, $key: navigation-item-accent);
             }
         }
     }
@@ -53,6 +58,6 @@
         padding: 16px 16px 4px 16px;
         display: block;
         box-sizing: border-box;
-        color: map-get($map: $foreground, $key: text);
+        // color: map-get($map: $foreground, $key: text);
     }
 }

@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('ItemFieldStringComponent', () => {
     let component: ItemFieldStringComponent;
@@ -17,7 +18,8 @@ describe('ItemFieldStringComponent', () => {
                 MatInputModule,
                 FormsModule,
                 FlexLayoutModule,
-                NoopAnimationsModule
+                NoopAnimationsModule,
+                TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();
     }));

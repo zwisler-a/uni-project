@@ -5,6 +5,7 @@ import { MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ItemFieldNumberComponent } from './item-field-number.component';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('ItemFieldNumberComponent', () => {
     let component: ItemFieldNumberComponent;
@@ -17,7 +18,8 @@ describe('ItemFieldNumberComponent', () => {
                 MatInputModule,
                 FormsModule,
                 FlexLayoutModule,
-                NoopAnimationsModule
+                NoopAnimationsModule,
+                TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();
     }));

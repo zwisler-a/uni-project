@@ -27,6 +27,7 @@
 			"color": "Farbe",
 			"number": "Nummer",
 			"reference": "Ref.",
+			"date": "Datum",
 			"string": "Text"
 		}
     },

@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Item } from './types/item.interface';
+
 import { ApiItemType } from './types/api/api-item-type.interface';
 import { ApiItem } from './types/api/api-item.interface';
+import { FieldType } from './types/field-type.enum';
+import { Item } from './types/item.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -57,10 +59,35 @@ export class ItemTransformationService {
                 name: fieldType.name,
                 value: apiField.value,
                 id: apiField.id,
-                type: fieldType.type
+                required: fieldType.required,
+                unique: fieldType.unique,
+                type: fieldType.type,
+                displayValue: this.getFieldDisplayValue(
+                    apiField.value,
+                    fieldType.type as FieldType
+                )
             };
         });
         return uiItem;
+    }
+
+    private getFieldDisplayValue(value: any, type: FieldType) {
+        switch (type) {
+            case FieldType.boolean:
+                return value ? 'Wahr' : 'Falsch';
+            case FieldType.date:
+                return new Date(value).toLocaleDateString('de-De');
+            case FieldType.number:
+                return value + '';
+            case FieldType.reference:
+                return (
+                    '<span class="table-cell-reference"><i class="material-icons">link</i> ' +
+                    value +
+                    '</span>'
+                );
+            default:
+                return value;
+        }
     }
 
     /** Converts an item to an item usable by the backend */

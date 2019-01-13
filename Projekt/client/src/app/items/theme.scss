@@ -1,5 +1,22 @@
 @import "./item-page/item-page.component.scss";
+@import "./item-type-list/item-type-list.component.scss";
 
-@mixin app-items-theme($theme) {
-    @include app-item-page-theme($theme);
+@mixin app-items-theme($theme, $colors) {
+    @include app-item-page-theme($theme, $app-colors);
+    @include app-item-type-list-theme($theme);
+
+    // TODO refac
+    mat-toolbar[color="form"] {
+        background: map-get($colors, form-toolbar-background);
+        color: map-get($colors, form-toolbar-text);
+    }
+
+    .table-cell-reference {
+        display: flex;
+        align-items: center;
+        .material-icons {
+            opacity: 0.5;
+            font-size: 16px;
+        }
+    }
 }

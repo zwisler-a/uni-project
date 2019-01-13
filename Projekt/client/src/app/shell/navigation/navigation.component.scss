@@ -1,10 +1,6 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 
-@mixin app-navigation-theme($theme) {
-    $background: map-get(
-        $map: $theme,
-        $key: background
-    );
+@mixin app-navigation-theme($colors) {
     .main-navigation-container {
         display: flex;
         height: 100%;
@@ -26,7 +22,8 @@
         .main-navigation {
             @include mat-elevation(2);
             z-index: 501;
-            background: map-get($map: $background, $key: background);
+            background: map-get($map: $colors, $key: navigation-body);
+            color: map-get($map: $colors, $key: navigation-text);
             transition: width 0.2s ease-in-out;
             overflow: hidden;
             flex-direction: column;
@@ -46,15 +43,16 @@
             }
         }
         .account-action-toolbar {
-            max-height: 54px;
-            height: 54px;
+            height: 32px;
         }
         .main-navigation-content {
             display: flex;
             flex: 1 1 auto;
             flex-direction: column;
         }
-
+        .navigation-header {
+            background: map-get($map: $colors, $key: navigation-header);
+        }
         .user-info {
             height: 100px;
             font-size: 0.85rem;

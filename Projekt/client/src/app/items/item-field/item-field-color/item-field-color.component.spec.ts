@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('ItemFieldColorComponent', () => {
     let component: ItemFieldColorComponent;
@@ -20,7 +21,8 @@ describe('ItemFieldColorComponent', () => {
                 FlexLayoutModule,
                 NoopAnimationsModule,
                 ColorPickerModule,
-                ReactiveFormsModule
+                ReactiveFormsModule,
+                TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();
     }));

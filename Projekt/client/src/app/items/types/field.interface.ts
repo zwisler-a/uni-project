@@ -5,12 +5,17 @@ export interface Field {
     id: number;
     type: FieldType;
     value: string | number | LinkField | FileField;
+    displayValue: string;
+    required: boolean;
+    unique: boolean;
 }
 
 export interface DeterminedField<T> {
     name: string;
     type: FieldType;
     value: T;
+    required?: boolean;
+    unique?: boolean;
 }
 
 export interface LinkField {

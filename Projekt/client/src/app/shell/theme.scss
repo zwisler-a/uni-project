@@ -1,8 +1,8 @@
 @import "./navigation/navigation-group/navigation-group.component.scss";
 @import "./navigation/navigation.component.scss";
 @import "./mat-snackbar.scss";
-@mixin app-shell-theme($theme) {
-    @include app-navigation-group-theme($theme);
-    @include app-navigation-theme($theme);
+@mixin app-shell-theme($theme, $colors) {
+    @include app-navigation-group-theme($colors);
+    @include app-navigation-theme($colors);
     @include mat-snackbar-override($theme);
 }

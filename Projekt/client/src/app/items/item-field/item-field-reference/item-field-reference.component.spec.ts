@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('ItemFieldLinkComponent', () => {
     let component: ItemFieldReferenceComponent;
@@ -25,7 +26,8 @@ describe('ItemFieldLinkComponent', () => {
                 NoopAnimationsModule,
                 RouterTestingModule,
                 MatIconModule,
-                MatTooltipModule
+                MatTooltipModule,
+                TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();
     }));

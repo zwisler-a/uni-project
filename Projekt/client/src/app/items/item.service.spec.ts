@@ -59,20 +59,20 @@ describe('ItemsService', () => {
     it('should send a create object request', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, typeId: 50, companyId: 2, id: 0 };
+            const data = { fields: [], typeId: 50, companyId: 2, id: 0 };
             service.createItem(data).subscribe();
             const req = httpMock.expectOne(
                 `${service.baseUrl}/${data.typeId}`
             );
             expect(req.request.method).toBe('POST');
-            expect(req.request.body).toBe(data);
+            expect(req.request.body).toBe(data.fields);
         }
     ));
 
     it('should handle an error', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, typeId: 50, companyId: 2, id: 0 };
+            const data = { fields: [], typeId: 50, companyId: 2, id: 0 };
             service.createItem(data).subscribe(null, (err: ErrorEvent) => {
                 expect(err).toBeTruthy();
             });
@@ -114,20 +114,20 @@ describe('ItemsService', () => {
     it('should send a modify object request', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, companyId: 2, typeId: 50, id: 25 };
+            const data = { fields: [], companyId: 2, typeId: 50, id: 25 };
             service.updateItem(data).subscribe();
             const req = httpMock.expectOne(
                 `${service.baseUrl}/${data.typeId}/${data.id}`
             );
             expect(req.request.method).toBe('PATCH');
-            expect(req.request.body).toBe(data);
+            expect(req.request.body).toBe(data.fields);
         }
     ));
 
     it('should handle an error', inject(
         [HttpTestingController, ItemService],
         (httpMock: HttpTestingController, service: ItemService) => {
-            const data = { fields: {}, companyId: 2, typeId: 50, id: 25 };
+            const data = { fields: [], companyId: 2, typeId: 50, id: 25 };
             service.updateItem(data).subscribe(null, (err: ErrorEvent) => {
                 expect(err).toBeTruthy();
             });

@@ -6,4 +6,3 @@ export interface Item {
     typeId: number;
     fields: Field[];
 }
-

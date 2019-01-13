@@ -5,6 +5,7 @@ import { MatInputModule, MatCheckboxModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('ItemFieldBoolComponent', () => {
     let component: ItemFieldBoolComponent;
@@ -18,7 +19,8 @@ describe('ItemFieldBoolComponent', () => {
                 FormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
-                MatCheckboxModule
+                MatCheckboxModule,
+                TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();
     }));

@@ -68,6 +68,6 @@ export class ItemsListComponent implements OnInit {
     }
 
     findByName(fields: Field[], name: string) {
-        return fields.find(field => field.name === name).value || '';
+        return fields.find(field => field.name === name).displayValue || '';
     }
 }

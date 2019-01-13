@@ -10,11 +10,24 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
+$app-colors: (
+    navigation-header: #1e2129,
+    navigation-body: #353a48,
+    navigation-text: white,
+    navigation-item-active: #3f4453,
+    navigation-item-accent: rgb(64, 196, 255),
+    navigation-item-hover: #3d4250,
+    page-header-background: #0277bd,
+    page-header-text: white,
+    form-toolbar-background: #3f4453,
+    form-toolbar-text: white
+);
+
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $client-primary: mat-palette($mat-indigo);
-$client-accent: mat-palette($mat-pink, A200, A100, A400);
+$client-accent: mat-palette($mat-light-blue, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
 $client-warn: mat-palette($mat-red);
@@ -26,8 +39,8 @@ $client-theme: mat-light-theme($client-primary, $client-accent, $client-warn);
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($client-theme);
-@include app-shell-theme($client-theme);
-@include app-items-theme($client-theme);
+@include app-shell-theme($client-theme, $app-colors);
+@include app-items-theme($client-theme, $app-colors);
 
 /* You can add global styles to this file, and also import other style files */
 
@@ -42,4 +55,9 @@ body {
 // Hide elements with the hidden attibute
 [hidden] {
     visibility: hidden;
+}
+
+.mat-card {
+    border: solid 1px rgba($color: #000000, $alpha: 0.14);
+    box-shadow: none !important;
 }

@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutoUnsubscribe } from 'src/app/util/autounsubscribe.decorator';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-item-type-list',
-  templateUrl: './item-type-list.component.html',
-  styleUrls: ['./item-type-list.component.scss']
+  templateUrl: './item-type-list.component.html'
 })
 @AutoUnsubscribe()
 export class ItemTypeListComponent implements OnInit {

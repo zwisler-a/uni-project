@@ -9,6 +9,7 @@
         [cpOutputFormat]="'hex'"
         [formControl]="control"
         matInput
+        [required]="field.required"
         autocomplete="off"
     />
     <mat-error *ngIf="control.hasError('not-a-color')">Input is not a color!</mat-error>

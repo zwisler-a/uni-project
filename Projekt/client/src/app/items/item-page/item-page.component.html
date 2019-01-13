@@ -1,5 +1,6 @@
 <mat-drawer-container fxFlex>
     <mat-drawer
+        class="item-type-drawer"
         mode="side"
         [(opened)]="itemTypeSidenavOpen"
         [mode]="itemTypeSidenavMode"
@@ -32,6 +33,6 @@
             </button>
             <app-search></app-search>
         </div>
-        <div fxFlex="1 1 auto"><app-items-list></app-items-list></div>
+        <mat-card [ngClass.lt-md]="'content-card-handset'" class="content-card" fxFlex="1 1 auto"><app-items-list></app-items-list></mat-card>
     </mat-drawer-content>
 </mat-drawer-container>

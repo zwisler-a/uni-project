@@ -17,6 +17,8 @@ import { SidenavControlButtonComponent } from './sidenav-control-button/sidenav-
 import { NavigationGroupComponent } from './navigation-group/navigation-group.component';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthService } from '../auth/auth.service';
+import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -28,7 +30,8 @@ describe('NavigationComponent', () => {
                 NavigationComponent,
                 RouterLoadingIndicatorComponent,
                 SidenavControlButtonComponent,
-                NavigationGroupComponent
+                NavigationGroupComponent,
+                LanguageSelectorComponent
             ],
             imports: [
                 RouterTestingModule,
@@ -43,7 +46,8 @@ describe('NavigationComponent', () => {
             ],
             providers: [
                 NavigationService,
-                { provide: AuthService, useValue: {} }
+                { provide: AuthService, useValue: {} },
+                { provide: TranslateService, useValue: {} }
             ]
         }).compileComponents();
     }));

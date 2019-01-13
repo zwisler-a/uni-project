@@ -18,6 +18,8 @@ import {
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -81,6 +83,8 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         MatListModule,
         MatAutocompleteModule,
         MatCardModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
         TranslateModule.forChild(),
         ColorPickerModule,
         ConfirmDialogModule,

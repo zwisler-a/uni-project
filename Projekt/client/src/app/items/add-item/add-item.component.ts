@@ -83,6 +83,9 @@ export class AddItemComponent implements OnInit {
                     name: field.name,
                     type: field.type as FieldType,
                     value: undefined,
+                    displayValue: '',
+                    unique: field.unique,
+                    required: field.required,
                     id: field.id
                 };
             });

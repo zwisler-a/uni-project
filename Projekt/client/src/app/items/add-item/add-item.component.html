@@ -1,4 +1,4 @@
-<mat-toolbar fxFlex="0 0 auto">
+<mat-toolbar fxFlex="0 0 auto" color="form">
     <button mat-icon-button (click)="back()"><mat-icon>close</mat-icon></button>
 </mat-toolbar>
 <form
@@ -8,10 +8,11 @@
     fxLayoutAlign="start stretch"
     autocomplete="off"
 >
+    <span *ngIf="item.typeId === -1" translate>items.create.selectType</span>
     <mat-form-field class="example-full-width">
         <input
             type="text"
-            [placeholder]="'items.create.itemTyp'| translate"
+            [placeholder]="'items.create.itemTyp' | translate"
             matInput
             (input)="selectTypeByName($event)"
             [matAutocomplete]="auto"
@@ -27,7 +28,6 @@
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>
-    <span *ngIf="item.typeId === -1" translate>items.create.selectType</span>
     <app-item-field
         *ngFor="let field of item.fields"
         [field]="field"
@@ -36,7 +36,7 @@
 
     <div *ngIf="item.typeId !== -1" fxLayoutAlign="end center" class="actions">
         <button color="primary" mat-raised-button (click)="submit()">
-            {{'items.edit.save'|translate}}
+            {{ "items.edit.save" | translate }}
         </button>
     </div>
 </form>
