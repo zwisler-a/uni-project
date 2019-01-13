@@ -8,7 +8,7 @@ import { Item, Field } from '../models/item';
 
 async function getTypeFields(database: DatabaseController, id: number, fields: boolean): Promise<Type> {
     try {
-        const type: Type = (await database.TYPE_GET.execute(id)).pop();
+        const type: Type = (await database.TYPE_GET_ID.execute(id)).pop();
         if (fields) {
             type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
                 delete row.typeId;
@@ -113,7 +113,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId, true);
-        const total: number = (await database.ITEM_GET_TOTAL.execute(type)).pop()['COUNT(*)'];
+        const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
 
         const totalPages = Math.ceil(total / perPage);
         res.set('X-Total', total.toString());
@@ -128,7 +128,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             return;
         }
 
-        const items: Item[] = (await database.ITEM_GET_LIST.execute(type, [page * perPage, perPage]))
+        const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
             .map((item: any) => {
                 const fields: Field[] = [];
                 for (let i = 0; i < type.fields.length; i++) {
@@ -182,7 +182,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId, true);
 
-        const items = await database.ITEM_GET.execute(type, id);
+        const items = await database.ITEM_GET_ID.execute(type, id);
         if (items.length === 0) {
             next(ApiError.NOT_FOUND);
             return;

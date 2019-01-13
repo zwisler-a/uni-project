@@ -6,11 +6,12 @@ export interface Type {
 
 export interface TypeField {
     id: number;
+    typeId: number;
     name: string;
     type: string;
     required: boolean;
     unique: boolean;
-    referenceTypeId?: number;
+    referenceId?: number;
 }
 
 export enum TypeFieldType {
