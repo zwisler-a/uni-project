@@ -8,7 +8,7 @@ import { Item, Field } from '../models/item';
 
 async function getTypeFields(database: DatabaseController, id: number, fields: boolean): Promise<Type> {
     try {
-        const type: Type = (await database.TYPE_GET.execute(id)).pop();
+        const type: Type = (await database.TYPE_GET_ID.execute(id)).pop();
         if (fields) {
             type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
                 delete row.typeId;

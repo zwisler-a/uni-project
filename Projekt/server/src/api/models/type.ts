@@ -10,7 +10,7 @@ export interface TypeField {
     type: string;
     required: boolean;
     unique: boolean;
-    referenceTypeId?: number;
+    referenceId?: number;
 }
 
 export enum TypeFieldType {

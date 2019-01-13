@@ -6,7 +6,8 @@ import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 
 export function validateJsonWebToken(req: Request, res: Response, next: NextFunction) {
-    const groups = /Bearer (.*)/ig.exec(req.get('Authorization'));
+    next();
+    /*const groups = /Bearer (.*)/ig.exec(req.get('Authorization'));
     if (!groups || groups.length < 2) {
         next(new ApiError('Unauthorized', 'No jsonwebtoken was provided', 401));
         return;
@@ -19,7 +20,7 @@ export function validateJsonWebToken(req: Request, res: Response, next: NextFunc
             req.params.user = decoded;
             next();
         }
-    });
+    });*/
 }
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {

@@ -15,13 +15,13 @@ export interface Queries {
 
     TYPE_CREATE: StaticQuery<ObjectResultsets>;
     TYPE_GET: StaticQuery<ArrayResultsets>;
-    TYPE_GETALL: StaticQuery<ArrayResultsets>;
+    TYPE_GET_ID: StaticQuery<ArrayResultsets>;
 
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
+    TYPE_FIELD_GET: StaticQuery<ArrayResultsets>;
     TYPE_FIELD_GET_ID: StaticQuery<ArrayResultsets>;
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
-    TYPE_FIELD_GET: StaticQuery<ArrayResultsets>;
-    TYPE_FIELD_GETALL: StaticQuery<ArrayResultsets>;
+    TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
 
     CREATE_TYPE_TABLE: DynamicQuery<ObjectResultsets>;
 
@@ -69,10 +69,10 @@ export function factory(pool: Pool, prefix: string): Queries {
                 constraints += `, CONSTRAINT ${name} UNIQUE INDEX (${name})`;
             }
             if (field.type === 'reference') {
-                if (typeof field.referenceTypeId !== 'number') {
-                    throw new Error(`Invalid referenceTypeId '${field.referenceTypeId}' is not a number`);
+                if (typeof field.referenceId !== 'number') {
+                    throw new Error(`Invalid referenceTypeId '${field.referenceId}' is not a number`);
                 }
-                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.referenceTypeId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`;
+                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`;
             }
         });
         sql += constraints + ');';
@@ -120,7 +120,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
-        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` VARCHAR(32) NOT NULL DEFAULT \'text\', `required` BIT NOT NULL DEFAULT 0, `unique` BIT NOT NULL DEFAULT 0, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
         COMPANY_GET: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
@@ -129,15 +129,15 @@ export function factory(pool: Pool, prefix: string): Queries {
         USER_GET: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
 
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `name`) VALUES (NULL,?)'),
-        TYPE_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
-        TYPE_GETALL: queryFactory('SELECT * FROM `%_types`'),
+        TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
+        TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
 
-        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`) VALUES (NULL, ?,?,?,?,?);'),
+        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
+        TYPE_FIELD_GET: queryFactory('SELECT * FROM `%_types_field`'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
+        TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
 
-        TYPE_FIELD_GET: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
-        TYPE_FIELD_GETALL: queryFactory('SELECT * FROM `%_types`'),
         CREATE_TYPE_TABLE: new DynamicQuery(pool, generateTabel),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
