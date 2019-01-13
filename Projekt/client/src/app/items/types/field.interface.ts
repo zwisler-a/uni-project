@@ -2,6 +2,7 @@ import { FieldType } from './field-type.enum';
 
 export interface Field {
     name: string;
+    id: number;
     type: FieldType;
     value: string | number | LinkField | FileField;
 }

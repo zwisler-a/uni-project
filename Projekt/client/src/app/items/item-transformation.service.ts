@@ -17,7 +17,9 @@ export class ItemTransformationService {
      */
     transformItems(items: ApiItem[], types: ApiItemType[]): Item[] {
         return items.map(item => {
-            const itemType = types.find(type => item.typeId === type.id);
+            const itemType = types.find(
+                type => item.typeId + '' === type.id + ''
+            );
             if (!itemType) {
                 throw new Error(
                     `Type ID ${item.typeId} of item ${item.id} not found!`
@@ -39,21 +41,22 @@ export class ItemTransformationService {
             typeId: item.typeId,
             fields: []
         };
-        uiItem.fields = Object.keys(fields).map(fieldKey => {
+        // TODO refac
+        uiItem.fields = item.fields.map(apiField => {
             const fieldType = itemType.fields.find(
-                fieldTypeDef => fieldTypeDef.name === fieldKey
+                fieldTypeDef => fieldTypeDef.id === apiField.id
             );
             if (!fieldType) {
                 throw new Error(
-                    `No field with the name ${fieldKey} found in Type definition for ${
-                        item.typeId
-                    }`
+                    `No field with the id ${
+                        apiField.id
+                    } found in Type definition for ${item.typeId}`
                 );
             }
-            const fieldValue = fields[fieldKey];
             return {
-                name: fieldKey,
-                value: fieldValue,
+                name: fieldType.name,
+                value: apiField.value,
+                id: apiField.id,
                 type: fieldType.type
             };
         });
@@ -62,9 +65,11 @@ export class ItemTransformationService {
 
     /** Converts an item to an item usable by the backend */
     retransformItem(item: Item): ApiItem {
-        const apiItemFields = {};
+        const apiItemFields: { id: number; value: any }[] = [];
         item.fields.forEach(field => {
-            apiItemFields[field.name] = field.value;
+            if (field.value !== undefined) {
+                apiItemFields.push({ id: field.id, value: field.value });
+            }
         });
         return {
             fields: apiItemFields,

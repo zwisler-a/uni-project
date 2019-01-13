@@ -1,5 +1,5 @@
 export interface ApiItem {
     id: number;
     typeId: number;
-    fields: { [key: string]: any };
+    fields: { id: number; value: any }[];
 }

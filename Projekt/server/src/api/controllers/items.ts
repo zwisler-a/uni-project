@@ -171,7 +171,6 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
     }
 }
 
@@ -248,7 +247,7 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         const database: DatabaseController = req.app.get('database');
         const type: Type = await getTypeFields(database, typeId, false);
 
-        const affectedRows = (await database.ITEM_UPDATE.execute(type, id)).affectedRows;
+        const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {

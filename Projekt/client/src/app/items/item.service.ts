@@ -46,7 +46,7 @@ export class ItemService {
      * @param entity Entity to create
      */
     createItem(entity: ApiItem) {
-        return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity).pipe(
+        return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity.fields).pipe(
             catchError(err => {
                 this.translate
                     .get('items.error.create')
@@ -69,7 +69,7 @@ export class ItemService {
 
     updateItem(entity: ApiItem) {
         return this.http
-            .patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity)
+            .patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity.fields)
             .pipe(
                 catchError(err => {
                     this.translate

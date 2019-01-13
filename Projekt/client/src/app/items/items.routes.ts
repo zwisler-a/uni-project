@@ -29,13 +29,15 @@ export const itemsRoutes: Routes = [
             {
                 path: ':page/:perPage',
                 component: ItemPageComponent,
-                resolve: { list: ItemsListResolver, fields: FieldsService },
+                resolve: { list: ItemsListResolver },
+                runGuardsAndResolvers: 'always',
                 outlet: 'content'
             },
             {
                 path: ':page/:perPage/:itemTypeId',
                 component: ItemPageComponent,
-                resolve: { list: ItemsListResolver, fields: FieldsService },
+                resolve: { list: ItemsListResolver },
+                runGuardsAndResolvers: 'always',
                 outlet: 'content'
             },
             {
