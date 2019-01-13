@@ -6,8 +6,7 @@ import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 
 export function validateJsonWebToken(req: Request, res: Response, next: NextFunction) {
-    next();
-    /*const groups = /Bearer (.*)/ig.exec(req.get('Authorization'));
+    const groups = /Bearer (.*)/ig.exec(req.get('Authorization'));
     if (!groups || groups.length < 2) {
         next(new ApiError('Unauthorized', 'No jsonwebtoken was provided', 401));
         return;
@@ -20,7 +19,7 @@ export function validateJsonWebToken(req: Request, res: Response, next: NextFunc
             req.params.user = decoded;
             next();
         }
-    });*/
+    });
 }
 
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
@@ -40,11 +39,10 @@ export async function authenticate(req: Request, res: Response, next: NextFuncti
         const success = await bcrypt.compare(req.body.password, user.password);
 
         if (success) {
+            delete user.password;
+
             const token = jsonwebtoken.sign(
-                {
-                    username: 'AK18B',
-                    companyId: 10
-                },
+                user,
                 req.app.get('secret'),
                 {
                     expiresIn: '1d'
