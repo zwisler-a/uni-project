@@ -56,7 +56,13 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
         const id = req.params.id;
         const database: DatabaseController = req.app.get('database');
 
-        const type: Type = (await database.TYPE_GET_ID.execute(id)).pop();
+        const types = await database.TYPE_GET_ID.execute(id);
+        if (types.length === 0) {
+            next(ApiError.NOT_FOUND);
+            return;
+        }
+
+        const type: Type = types.pop();
         type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
             delete row.typeId;
             row.required = row.required.readUInt8() === 1;
@@ -73,7 +79,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     try {
         const database: DatabaseController = req.app.get('database');
-        const types: Type[]  = await database.TYPE_GET.execute();
+        const types: Type[] = await database.TYPE_GET.execute();
 
         for (const type of types) {
             type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(type.id)).map((row: any) => {
