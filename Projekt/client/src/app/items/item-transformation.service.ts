@@ -1,16 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, SecurityContext } from '@angular/core';
 
 import { ApiItemType } from './types/api/api-item-type.interface';
 import { ApiItem } from './types/api/api-item.interface';
 import { FieldType } from './types/field-type.enum';
 import { Item } from './types/item.interface';
 import { TypesService } from './types.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ItemTransformationService {
-    constructor(private typesService: TypesService) {}
+    constructor(
+        private typesService: TypesService,
+        private sanatizer: DomSanitizer
+    ) {}
 
     /**
      * Transforms the items recieved from the backend in a form for easy use in the frontend
@@ -79,6 +83,15 @@ export class ItemTransformationService {
                 return new Date(value).toLocaleDateString('de-De');
             case FieldType.number:
                 return value + '';
+            case FieldType.color:
+                // sanatize color beforehand and than bypass the display value
+                const svalue = this.sanatizer.sanitize(
+                    SecurityContext.HTML,
+                    value
+                );
+                return this.sanatizer.bypassSecurityTrustHtml(
+                    `${svalue} <span style="display: inline-block;width: 10px;height: 10px;background:${svalue}"></span>`
+                );
             case FieldType.reference:
                 return (
                     '<span class="table-cell-reference"><i class="material-icons">link</i> ' +
