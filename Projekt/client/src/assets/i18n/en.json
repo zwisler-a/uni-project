@@ -1,5 +1,6 @@
 {
     "items": {
+        "noData": "No Items available",
         "error": {
             "delete": "Something went wrong while deleting the item!",
             "create": "Something went wrong while createing the item!",

@@ -1,5 +1,6 @@
 {
     "items": {
+        "noData": "Keine Items vorhanden",
         "error": {
             "delete": "Item konnte nicht gelöscht werden!",
             "create": "Item konnte nicht erstellt werden!",

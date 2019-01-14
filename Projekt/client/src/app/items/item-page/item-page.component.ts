@@ -22,6 +22,7 @@ export class ItemPageComponent implements OnInit {
 
     ngOnInit() {
         this.mediaSub = this.media.subscribe(this.sidenavState.bind(this));
+        this.sidenavState();
     }
 
     private sidenavState() {

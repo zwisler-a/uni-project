@@ -1,7 +1,7 @@
 export interface User {
     id: number;
     companyId: number;
-    username: String;
+    name: String;
     email?: string;
     roles: number[];
 }
