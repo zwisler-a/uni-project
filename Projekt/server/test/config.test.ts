@@ -9,7 +9,7 @@ export const config: Config = {
         key: null
     },
     database: {
-        host: '0.0.0.0',
+        host: 'mariadb',
         port: 3306,
         user: 'root',
         password: '',

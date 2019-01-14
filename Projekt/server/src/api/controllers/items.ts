@@ -201,6 +201,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
+        // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
