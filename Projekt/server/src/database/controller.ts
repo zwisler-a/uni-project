@@ -1,14 +1,34 @@
 import { Pool, Connection } from '../../types/mariadb';
 import { factory, Queries } from './queries';
 
+/**
+ * Function that gets invoked inside a transaction
+ * @author Maurice
+ */
 export interface TransactionHandler {
-    (connection: Connection): void;
+    /**
+     * This function gets called inside a transaction
+     * @param connection Connection of the current transaction (all query calls should use this connection instance)
+     * @returns Promise which finishes once the TransactionHandler is finished
+     */
+    (connection: Connection): Promise<void>;
 }
 
 export interface DatabaseController extends Queries, Pool {
+    /**
+     * Helper function for database transactions that automatically begins, commits and rollbacks
+     * @param handler handler which contains code which want's to be executed inside a transaction
+     * @returns Promise which finishes when the transaction is finished
+     */
     beginTransaction(handler: TransactionHandler): Promise<void>;
 }
 
+/**
+ * Initializes the datbase and {@link DatabaseController}
+ * @param pool current database pool instance
+ * @param prefix database config's table prefix
+ * @returns A Promise<DatabaseController> which is finished as soon as the database is ready to use
+ */
 export async function initializeDatabaseController(pool: Pool, prefix: string): Promise<DatabaseController> {
     const controller: DatabaseController = {
         ...pool,

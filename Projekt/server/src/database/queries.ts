@@ -2,44 +2,78 @@ import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
 
 export interface Queries {
+    /** Creates the company table */
     CREATE_TABLE_COMPANY: StaticQuery<ObjectResultsets>;
+    /** Creates the user table */
     CREATE_TABLE_USER: StaticQuery<ObjectResultsets>;
+    /** Creates the type table */
     CREATE_TABLE_TYPE: StaticQuery<ObjectResultsets>;
+    /** Creates the type field table */
     CREATE_TABLE_TYPE_FIELD: StaticQuery<ObjectResultsets>;
 
+    /** Creates a new company */
     COMPANY_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets a company by id */
     COMPANY_GET_ID: StaticQuery<ArrayResultsets>;
 
+    /** Create a new user */
     USER_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets a user by id */
     USER_GET_ID: StaticQuery<ArrayResultsets>;
 
+    /** Creates a new type */
     TYPE_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets all types */
     TYPE_GET: StaticQuery<ArrayResultsets>;
+    /** Gets a type by id */
     TYPE_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Deletes a type by id */
     TYPE_DELTE: StaticQuery<ObjectResultsets>;
 
+    /** Creates a new type field */
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
-    TYPE_FIELD_GET: StaticQuery<ArrayResultsets>;
+    /** Gets a type field by id */
     TYPE_FIELD_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Gets a type field by typeId */
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
+    /** Gets a type field by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
 
+    /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Deletes an item table */
     ITEM_TABLE_DROP: DynamicQuery<ObjectResultsets>;
+    /** Deletes a specific field in an item table */
     ITEM_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets>;
+    /** Creates a new foreign key constraint in an item table */
     ITEM_TABLE_FK_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Deltes a foreign key constraint in an item table */
     ITEM_TABLE_FK_DROP: DynamicQuery<ObjectResultsets>;
+    /** Creates a new unique index constraint in an item table */
     ITEM_TABLE_UI_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Deltes a unique index constraint in an item table */
     ITEM_TABLE_UI_DROP: DynamicQuery<ObjectResultsets>;
 
+    /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Gets all items of one type in range(offset, length) */
     ITEM_GET: DynamicQuery<ArrayResultsets>;
+    /** Gets an item by id on one type */
     ITEM_GET_ID: DynamicQuery<ArrayResultsets>;
+    /** Gets the number of items of one type */
     ITEM_GET_COUNT: DynamicQuery<ArrayResultsets>;
+    /** Updates (overwrites) an item by id of one type */
     ITEM_UPDATE: DynamicQuery<ObjectResultsets>;
+    /** Deletes an item by id of one type */
     ITEM_DELETE: DynamicQuery<ObjectResultsets>;
 }
 
+/**
+ * Generates a new instance of Queries
+ * @param pool current database pool instance
+ * @param prefix database config's table prefix
+ * @returns new {@link Queries} instance
+ */
 export function factory(pool: Pool, prefix: string): Queries {
 
     function queryFactory(sql: string): StaticQuery<any> {
@@ -158,7 +192,6 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_DELTE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
-        TYPE_FIELD_GET: queryFactory('SELECT * FROM `%_types_field`'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),

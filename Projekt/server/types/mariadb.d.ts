@@ -73,7 +73,7 @@ declare namespace mariadb {
 
     export interface Pool {
         getConnection(): Promise<Connection>;
-        query(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
+        query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
         //batch(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
         end(): Promise<void>;
         activeConnections(): number;
@@ -88,9 +88,9 @@ declare namespace mariadb {
         beginTransaction(): Promise<void>;
         commit(): Promise<void>;
         rollback(): Promise<void>;
-        query(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
+        query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
         //batch(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
-        queryStream(sql: string | QueryOptions, values: any[] | any): EventEmitter;
+        queryStream(sql: string | QueryOptions, values?: any[] | any): EventEmitter;
         ping(): Promise<void>;
         //reset(): Promise<void>;
         isValid(): boolean;

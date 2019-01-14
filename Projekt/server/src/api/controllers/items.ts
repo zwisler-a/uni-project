@@ -5,6 +5,13 @@ import { ApiError } from '../../types';
 import { Type, TypeField } from '../models/type';
 import { Item, Field } from '../models/item';
 
+/**
+ * Retrieves a Type from the database
+ * @param database instance of the database controller
+ * @param id id of the Type that should be retrieved
+ * @param fields true if fields should also be retrieved
+ * @returns Promise that finishes once the Type is completely retrieved
+ */
 async function getTypeFields(database: DatabaseController, id: number, fields: boolean): Promise<Type> {
     try {
         const types = await database.TYPE_GET_ID.execute(id);
@@ -29,6 +36,13 @@ async function getTypeFields(database: DatabaseController, id: number, fields: b
     }
 }
 
+/**
+ * Checks the integrity of all values based on a type and maps them for SQL calls
+ * @param type Type to check against
+ * @param values List of values to check
+ * @param mapping Remapped version of values based on the field order of a type
+ * @returns The type field whose value doesn't meet the conditions
+ */
 function checkType(type: Type, values: Field[], mapping: any[]) {
     typeLoop:
     for (const field of type.fields) {
@@ -95,6 +109,12 @@ function checkType(type: Type, values: Field[], mapping: any[]) {
     return null;
 }
 
+/**
+ * Route endpoint `GET /api/items/:type`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function itemGetList(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
@@ -152,10 +172,16 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         res.status(200).send(new EmbeddedItem([ type ], items));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `POST /api/items/:type`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
@@ -175,12 +201,20 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
+        // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `GET /api/items/:type/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function itemGet(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
@@ -209,10 +243,16 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `PATCH /api/items/:type/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function itemUpdate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
@@ -242,10 +282,16 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         }
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `DELETE /api/items/:type/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function itemDelete(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
@@ -262,14 +308,24 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         }
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * A combine object of Types and Items
+ */
 export class EmbeddedItem {
+    /** The Types need to understand all items in the items[] */
     types: Type[];
+    /** List of all items */
     items: Item[];
 
+    /**
+     * Creates a new EmbeddedItem
+     * @param types All Types used by the given Items
+     * @param items List of Items
+     */
     constructor(types: Type[], items: Item[]) {
         this.types = types;
         this.items = items;

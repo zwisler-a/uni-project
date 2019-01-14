@@ -5,6 +5,12 @@ import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 import { Type, TypeField, TypeFieldType } from '../models/type';
 
+/**
+ * Route endpoint `POST /api/types`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = req.body;
@@ -25,6 +31,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
 
             query = {
                 id: typeId,
+                name: type.name,
                 fields: type.fields
             };
 
@@ -47,10 +54,16 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
         } else {
             next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         }
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `GET /api/types/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeGet(req: Request, res: Response, next: NextFunction) {
     try {
         const id = req.params.id;
@@ -73,9 +86,16 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
         res.status(200).send(type);
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `GET /api/types`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     try {
         const database: DatabaseController = req.app.get('database');
@@ -93,10 +113,16 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
         res.status(200).send(types);
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
+/**
+ * Route endpoint `DELETE /api/types/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeDelete(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.id;
@@ -117,6 +143,6 @@ export async function typeDelete(req: Request, res: Response, next: NextFunction
         res.status(204).send();
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }

@@ -14,9 +14,9 @@ describe('authentication', () => {
         app = await App.factory(config);
         server = app.express.listen(0);
     });
-    after(() => {
+    after(async () => {
         server.close();
-        app.close();
+        await app.close();
     });
     it('valid credentials', done => {
         request(server)
@@ -49,14 +49,5 @@ describe('authentication', () => {
                 password: 'passwors'
             })
             .expect(401, done);
-    });
-    it('mariaDB connection', done => {
-        app.dbPool.getConnection()
-            .then(connection => {
-                connection.end();
-                done();
-            }).catch(err => {
-                throw err;
-            });
     });
 });
