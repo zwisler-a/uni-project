@@ -23,6 +23,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     declarations: [AppComponent],
     imports: [
         BrowserModule,
+        ShellModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         TranslateModule.forRoot({
@@ -32,7 +33,6 @@ export function HttpLoaderFactory(http: HttpClient) {
                 deps: [HttpClient]
             }
         }),
-        ShellModule
     ],
     providers: [],
     bootstrap: [AppComponent]
