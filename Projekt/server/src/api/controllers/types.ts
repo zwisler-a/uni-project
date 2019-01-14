@@ -31,6 +31,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
 
             query = {
                 id: typeId,
+                name: type.name,
                 fields: type.fields
             };
 
@@ -53,7 +54,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
         } else {
             next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         }
-        console.error(error);
+        // console.error(error);
     }
 }
 
@@ -85,6 +86,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
         res.status(200).send(type);
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        // console.error(error);
     }
 }
 
@@ -111,7 +113,7 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
         res.status(200).send(types);
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
@@ -141,6 +143,6 @@ export async function typeDelete(req: Request, res: Response, next: NextFunction
         res.status(204).send();
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }

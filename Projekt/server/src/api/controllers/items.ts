@@ -172,7 +172,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         res.status(200).send(new EmbeddedItem([ type ], items));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
@@ -204,6 +204,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        // console.error(error);
     }
 }
 
@@ -241,7 +242,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
@@ -280,7 +281,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         }
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 
@@ -306,7 +307,7 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         }
     } catch (error) {
         next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        console.error(error);
+        // console.error(error);
     }
 }
 

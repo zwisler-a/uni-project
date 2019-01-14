@@ -95,7 +95,7 @@ export class App {
     }
 
     /** Closes all resources currently opened by the app (shutdown the app) */
-    close() {
-        this.dbPool.end();
+    async close() {
+        await this.dbPool.end();
     }
 }
