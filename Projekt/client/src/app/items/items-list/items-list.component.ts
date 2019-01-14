@@ -7,6 +7,8 @@ import { Item } from '../types/item.interface';
 import { ItemListDataSource } from './items-list.datasource';
 import { ApiItemType } from '../types/api/api-item-type.interface';
 import { Field } from '../types/field.interface';
+import { TypesService } from '../types.service';
+import { ItemService } from '../item.service';
 
 @Component({
     selector: 'app-items-list',
@@ -24,6 +26,7 @@ export class ItemsListComponent implements OnInit {
 
     constructor(
         private router: Router,
+        private itemService: ItemService,
         private activatedRoute: ActivatedRoute
     ) {}
 
@@ -31,6 +34,7 @@ export class ItemsListComponent implements OnInit {
         this.dataSource = new ItemListDataSource(
             this.paginator,
             this.sort,
+            this.itemService,
             this.activatedRoute,
             this.router
         );
@@ -45,20 +49,6 @@ export class ItemsListComponent implements OnInit {
         // this.displayedColumns = [];
     }
 
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
-        const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-    /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-        this.isAllSelected()
-            ? this.selection.clear()
-            : this.dataSource.data.forEach(row => this.selection.select(row));
-    }
-
     async open(row: Item) {
         await this.router.navigate([
             '/items',
@@ -68,6 +58,7 @@ export class ItemsListComponent implements OnInit {
     }
 
     findByName(fields: Field[], name: string) {
-        return fields.find(field => field.name === name).displayValue || '';
+        const displayField = fields.find(field => field.name === name);
+        return displayField ? displayField.displayValue : '';
     }
 }

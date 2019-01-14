@@ -19,7 +19,7 @@ import {
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -46,6 +46,7 @@ import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
 import { SearchModule } from '../shared/search/search.module';
+import { TypesService } from './types.service';
 
 @NgModule({
     declarations: [
@@ -93,6 +94,12 @@ import { SearchModule } from '../shared/search/search.module';
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)
     ],
-    providers: [ItemService, ItemDetailResolver, ItemsListResolver, ItemTransformationService]
+    providers: [
+        ItemService,
+        ItemDetailResolver,
+        ItemsListResolver,
+        ItemTransformationService,
+        TypesService
+    ]
 })
 export class ItemsModule {}

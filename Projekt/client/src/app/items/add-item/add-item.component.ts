@@ -12,6 +12,7 @@ import { FieldType } from '../types/field-type.enum';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiItemsResponse } from '../types/api/api-items-response.interface';
+import { TypesService } from '../types.service';
 
 @Component({
     selector: 'app-add-item',
@@ -31,12 +32,13 @@ export class AddItemComponent implements OnInit {
         private itemService: ItemService,
         private location: Location,
         private router: Router,
+        private typesService: TypesService,
         private activatedRoute: ActivatedRoute,
         private http: HttpClient
     ) {}
 
     ngOnInit() {
-        this.http.get('api/types').subscribe((res: any) => {
+        this.typesService.getTypes(true).then((res: any) => {
             this.itemTypes = res;
         });
     }

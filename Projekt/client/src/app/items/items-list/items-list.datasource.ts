@@ -7,6 +7,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { ItemService } from '../item.service';
 import { Item } from '../types/item.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ItemListData } from '../types/item-list.interface';
 
 /**
  * Data source for the ItemList view. This class should
@@ -21,6 +22,7 @@ export class ItemListDataSource extends DataSource<any> {
     constructor(
         private paginator: MatPaginator,
         private sort: MatSort,
+        private itemService: ItemService,
         private route: ActivatedRoute,
         private router: Router
     ) {
@@ -40,8 +42,7 @@ export class ItemListDataSource extends DataSource<any> {
             this.typeId = params.itemTypeId;
         });
 
-        merge(...dataMutations).subscribe(ev => {
-            console.log(this.typeId);
+        merge(...dataMutations).subscribe((ev: any) => {
             this.router.navigate([
                 '/items',
                 'view',
@@ -62,12 +63,18 @@ export class ItemListDataSource extends DataSource<any> {
             ]);
         });
 
-        return this.route.data.pipe(
+        return merge(this.itemService.storeUpdated, this.route.data).pipe(
             map(data => {
-                const listData = data['list'];
-                this.paginator.pageIndex = listData.page;
-                this.paginator.pageSize = listData.perPage;
-                this.paginator.length = listData.length;
+                const listData: ItemListData = data['list'];
+                this.paginator.pageIndex =
+                    listData.page || this.paginator.pageIndex;
+                this.paginator.pageSize =
+                    listData.perPage || this.paginator.pageSize;
+                this.paginator.length =
+                    listData.length ||
+                    (listData.updateLength
+                        ? this.paginator.length + listData.updateLength
+                        : this.paginator.length);
                 return listData.list;
             })
         );

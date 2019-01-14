@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AutoUnsubscribe } from 'src/app/util/autounsubscribe.decorator';
 import { HttpClient } from '@angular/common/http';
+import { TypesService } from '../types.service';
 
 @Component({
   selector: 'app-item-type-list',
@@ -14,14 +15,14 @@ export class ItemTypeListComponent implements OnInit {
   perPage = 0;
   types: { id: number; name: string }[];
 
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private typesService: TypesService) {}
 
   ngOnInit() {
     this.paramsSub = this.route.params.subscribe(params => {
       this.page = params['page'];
       this.perPage = params['perPage'];
     });
-    this.http.get('api/types').subscribe((res: any) => {
+    this.typesService.getTypes().then((res: any) => {
       this.types = res;
     });
   }

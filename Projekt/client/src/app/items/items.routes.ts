@@ -6,11 +6,13 @@ import { ItemDetailResolver } from './item-details/item-details.resolver';
 import { ItemPageComponent } from './item-page/item-page.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
+import { TypesService } from './types.service';
 
 export const itemsRoutes: Routes = [
     {
         path: 'view',
         component: SidenavOverlayComponent,
+        resolve: { types: TypesService },
         children: [
             {
                 path: 'add',
@@ -21,21 +23,18 @@ export const itemsRoutes: Routes = [
                 path: 'details/:typeId/:id',
                 component: ItemDetailsComponent,
                 resolve: { item: ItemDetailResolver },
-                runGuardsAndResolvers: 'always',
                 outlet: 'detail'
             },
             {
                 path: ':page/:perPage',
                 component: ItemPageComponent,
                 resolve: { list: ItemsListResolver },
-                runGuardsAndResolvers: 'always',
                 outlet: 'content'
             },
             {
                 path: ':page/:perPage/:itemTypeId',
                 component: ItemPageComponent,
                 resolve: { list: ItemsListResolver },
-                runGuardsAndResolvers: 'always',
                 outlet: 'content'
             },
             {

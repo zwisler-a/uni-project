@@ -4,12 +4,13 @@ import { ApiItemType } from './types/api/api-item-type.interface';
 import { ApiItem } from './types/api/api-item.interface';
 import { FieldType } from './types/field-type.enum';
 import { Item } from './types/item.interface';
+import { TypesService } from './types.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ItemTransformationService {
-    constructor() {}
+    constructor(private typesService: TypesService) {}
 
     /**
      * Transforms the items recieved from the backend in a form for easy use in the frontend
@@ -17,11 +18,9 @@ export class ItemTransformationService {
      * @param items Items recieved from the API
      * @param types Types Recieved from the API
      */
-    transformItems(items: ApiItem[], types: ApiItemType[]): Item[] {
-        return items.map(item => {
-            const itemType = types.find(
-                type => item.typeId + '' === type.id + ''
-            );
+    async transformItems(items: ApiItem[]): Promise<Item[]> {
+        const promises = items.map(async item => {
+            const itemType = await this.typesService.getType(item.typeId);
             if (!itemType) {
                 throw new Error(
                     `Type ID ${item.typeId} of item ${item.id} not found!`
@@ -29,6 +28,7 @@ export class ItemTransformationService {
             }
             return this.transformItem(item, itemType);
         });
+        return await Promise.all(promises);
     }
 
     /**
@@ -37,7 +37,6 @@ export class ItemTransformationService {
      * @param itemType ItemType recieved from the API
      */
     transformItem(item: ApiItem, itemType: ApiItemType) {
-        const fields = item.fields;
         const uiItem: Item = {
             id: item.id,
             typeId: item.typeId,
