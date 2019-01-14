@@ -26,7 +26,6 @@ export class TypeFieldComponent implements OnInit {
             'string',
             'number',
             'boolean',
-            'reference',
             'color',
             'date'
         ];
