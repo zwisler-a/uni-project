@@ -127,7 +127,8 @@ export class ItemService {
     deleteItem(typeId: number, itemId: number) {
         return this.http.delete(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             map(res => {
-                this.emitStoreUpdate(this.invalidateStore(typeId, itemId));
+                this.invalidateStore(typeId, itemId);
+                this.emitStoreUpdate(-1);
                 return res;
             }),
             catchError(err => {
