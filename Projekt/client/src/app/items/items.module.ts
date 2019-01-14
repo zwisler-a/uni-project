@@ -7,9 +7,11 @@ import {
     MatButtonModule,
     MatCardModule,
     MatCheckboxModule,
+    MatDatepickerModule,
     MatIconModule,
     MatInputModule,
     MatListModule,
+    MatNativeDateModule,
     MatPaginatorModule,
     MatProgressBarModule,
     MatSidenavModule,
@@ -17,17 +19,14 @@ import {
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
+    MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 
-import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
+import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
 import { AddItemComponent } from './add-item/add-item.component';
-import { FieldsService } from './fields.service';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemDetailResolver } from './item-details/item-details.resolver';
 import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
@@ -45,8 +44,9 @@ import { ItemService } from './item.service';
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
-import { SearchComponent } from './search/search.component';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
+import { SearchModule } from '../shared/search/search.module';
+import { TypesService } from './types.service';
 
 @NgModule({
     declarations: [
@@ -63,8 +63,7 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         ItemPageComponent,
         AddItemComponent,
         ItemTypeListComponent,
-        SidenavOverlayComponent,
-        SearchComponent
+        SidenavOverlayComponent
     ],
     imports: [
         CommonModule,
@@ -90,10 +89,17 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         ConfirmDialogModule,
         FlexLayoutModule,
         MatSortModule,
+        SearchModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)
     ],
-    providers: [ItemService, FieldsService, ItemDetailResolver, ItemsListResolver, ItemTransformationService]
+    providers: [
+        ItemService,
+        ItemDetailResolver,
+        ItemsListResolver,
+        ItemTransformationService,
+        TypesService
+    ]
 })
 export class ItemsModule {}

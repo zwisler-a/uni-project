@@ -48,8 +48,8 @@ export class AppModule {
       {
         title: 'Inventar',
         items: [
-          { label: 'Items', icon: 'view_list', route: ['/items'] },
-          { label: 'Test2', icon: 'dashboard', route: ['/2'] }
+          { label: 'Inventar', icon: 'view_list', route: ['/items'] },
+          { label: 'Objekttypen', icon: 'dashboard', route: ['/types'] }
         ]
       }
     ];

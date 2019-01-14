@@ -27,8 +27,29 @@
             "color": "Color",
             "number": "Number",
             "reference": "Ref.",
-			"date": "Date",
+            "date": "Date",
             "string": "Text"
+        }
+    },
+    "types": {
+        "title": "Objecttypes",
+        "select": "Please select a type",
+        "edit": {
+            "addField": "Add new property",
+            "cancel": "Cancel",
+            "required": "required",
+            "save": "Save",
+            "confirmDelete": "Are you sure you want to delete the type?",
+            "typeName": "Name of the type",
+            "unique": "unique",
+            "field": {
+                "boolean": "Boolean",
+                "color": "Color",
+                "number": "Number",
+                "reference": "Ref.",
+                "date": "Date",
+                "string": "Text"
+            }
         }
     },
     "confirm": {

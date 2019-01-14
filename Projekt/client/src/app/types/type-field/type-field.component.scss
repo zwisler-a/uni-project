@@ -1,0 +1,18 @@
+.field-type {
+    margin-right: 16px;
+    opacity: 0.5;
+    font-size: 14px;
+    min-width: 100px;
+    display: flex;
+    align-items: center;
+    .mat-icon {
+        font-size: 20px;
+        height: 22px;
+        margin-right: 4px;
+    }
+}
+.field-suffix {
+    .mat-checkbox {
+        margin-right: 8px;
+    }
+}

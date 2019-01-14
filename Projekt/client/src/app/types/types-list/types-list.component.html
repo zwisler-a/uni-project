@@ -1,0 +1,11 @@
+<mat-nav-list>
+    <a
+        mat-list-item
+        class="navigation-item"
+        *ngFor="let type of types"
+        [routerLink]="['/types', type.id]"
+        [routerLinkActive]="'active'"
+    >
+        {{ type.name }}
+    </a>
+</mat-nav-list>

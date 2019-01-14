@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '../types/item.interface';
 import { Location } from '@angular/common';
 import { ItemService } from '../item.service';
-import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 import { ItemTransformationService } from '../item-transformation.service';
 
 /**

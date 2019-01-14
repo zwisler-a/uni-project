@@ -1,0 +1,30 @@
+<ng-container *ngIf="type">
+    <mat-form-field>
+        <input
+            matInput
+            [placeholder]="'types.edit.typeName' | translate"
+            [(ngModel)]="type.name"
+        />
+    </mat-form-field>
+    <div fxLayout="column" fxLayoutAlign="start center">
+        <app-type-field
+            *ngFor="let field of type.fields"
+            [field]="field"
+            [edit]="true"
+            (deleteMe)="removeField(field)"
+        ></app-type-field>
+
+        <button mat-button (click)="addField()">
+            {{ "types.edit.addField" | translate }}
+        </button>
+        <span fxFlex></span>
+    </div>
+    <div fxLayoutAlign="end center">
+        <button mat-button [routerLink]="['/types']">
+            {{ "types.edit.cancel" | translate }}
+        </button>
+        <button mat-raised-button color="primary" (click)="save()">
+            {{ "types.edit.save" | translate }}
+        </button>
+    </div>
+</ng-container>

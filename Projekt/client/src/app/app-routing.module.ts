@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+
 import { NavigationComponent } from './shell/navigation/navigation.component';
-import { ItemsListComponent } from './items/items-list/items-list.component';
-import { FieldsService } from './items/fields.service';
 
 const routes: Routes = [
     {
@@ -14,8 +13,8 @@ const routes: Routes = [
                 loadChildren: './items/items.module#ItemsModule'
             },
             {
-                path: '2',
-                children: []
+                path: 'types',
+                loadChildren: './types/types.module#TypesModule'
             }
         ]
     }

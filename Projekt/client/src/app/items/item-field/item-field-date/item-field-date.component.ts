@@ -23,7 +23,6 @@ export class ItemFieldDateComponent implements OnInit {
 
     ngOnInit() {}
     test(input){
-        console.log(input.control);
         return true;
     }
 }

@@ -7,6 +7,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { ItemService } from '../item.service';
 import { Item } from '../types/item.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ItemListData } from '../types/item-list.interface';
 
 /**
  * Data source for the ItemList view. This class should
@@ -14,17 +15,14 @@ import { ActivatedRoute, Router } from '@angular/router';
  * (including sorting, pagination, and filtering).
  */
 export class ItemListDataSource extends DataSource<any> {
-    data: any[] = [];
     possibleColumnNames: string[] = [];
-    _loading = false;
-    get loading() {
-        return this._loading;
-    }
     readonly listItemsUrl = 'item/list';
+    private typeId: any;
 
     constructor(
         private paginator: MatPaginator,
         private sort: MatSort,
+        private itemService: ItemService,
         private route: ActivatedRoute,
         private router: Router
     ) {
@@ -40,28 +38,43 @@ export class ItemListDataSource extends DataSource<any> {
         // Combine everything that affects the rendered data into one update
         // stream for the data-table to consume.
         const dataMutations = [this.paginator.page, this.sort.sortChange];
+        this.route.params.subscribe(params => {
+            this.typeId = params.itemTypeId;
+        });
 
-        merge(...dataMutations).subscribe(ev => {
+        merge(...dataMutations).subscribe((ev: any) => {
             this.router.navigate([
                 '/items',
                 'view',
                 {
                     outlets: {
-                        content: [
-                            this.paginator.pageIndex,
-                            this.paginator.pageSize
-                        ]
+                        content: this.typeId
+                            ? [
+                                  this.paginator.pageIndex,
+                                  this.paginator.pageSize,
+                                  this.typeId
+                              ]
+                            : [
+                                  this.paginator.pageIndex,
+                                  this.paginator.pageSize
+                              ]
                     }
                 }
             ]);
         });
 
-        return this.route.data.pipe(
+        return merge(this.itemService.storeUpdated, this.route.data).pipe(
             map(data => {
-                const listData = data['list'];
-                this.paginator.pageIndex = listData.page;
-                this.paginator.pageSize = listData.perPage;
-                this.paginator.length = listData.length;
+                const listData: ItemListData = data['list'];
+                this.paginator.pageIndex =
+                    listData.page || this.paginator.pageIndex;
+                this.paginator.pageSize =
+                    listData.perPage || this.paginator.pageSize;
+                this.paginator.length =
+                    listData.length ||
+                    (listData.updateLength
+                        ? this.paginator.length + listData.updateLength
+                        : this.paginator.length);
                 return listData.list;
             })
         );
