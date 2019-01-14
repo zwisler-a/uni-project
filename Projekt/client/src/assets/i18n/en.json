@@ -1,4 +1,8 @@
 {
+    "nav": {
+        "inventory": "Inventory",
+        "types": "Object types"
+    },
     "items": {
         "noData": "No Items available",
         "error": {

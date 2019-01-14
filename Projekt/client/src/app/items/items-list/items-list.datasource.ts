@@ -70,7 +70,6 @@ export class ItemListDataSource extends DataSource<any> {
                     listData.page || this.paginator.pageIndex;
                 this.paginator.pageSize =
                     listData.perPage || this.paginator.pageSize;
-                console.log(listData.length, listData.updateLength);
                 this.paginator.length = listData.length
                     ? listData.length
                     : listData.updateLength

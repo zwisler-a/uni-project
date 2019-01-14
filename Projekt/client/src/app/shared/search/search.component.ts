@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+/**
+ * A component for a nice searchbar
+ */
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',

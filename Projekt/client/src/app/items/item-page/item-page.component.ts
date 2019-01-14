@@ -25,6 +25,7 @@ export class ItemPageComponent implements OnInit {
         this.sidenavState();
     }
 
+    /** Determine if the sidenav should be open or close */
     private sidenavState() {
         if (this.media.isActive('lt-md')) {
             this.itemTypeSidenavOpen = false;
@@ -35,6 +36,7 @@ export class ItemPageComponent implements OnInit {
         }
     }
 
+    /** Toggle item type */
     openItemType() {
         this.itemTypeSidenavOpen = !this.itemTypeSidenavOpen;
     }

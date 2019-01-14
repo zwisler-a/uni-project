@@ -2,13 +2,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable, of, throwError, Subject } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { ItemTransformationService } from './item-transformation.service';
 import { ApiItem } from './types/api/api-item.interface';
 import { ApiItemsResponse } from './types/api/api-items-response.interface';
-import { ItemTransformationService } from './item-transformation.service';
 import { ItemListData } from './types/item-list.interface';
 
 @Injectable({
@@ -17,9 +17,12 @@ import { ItemListData } from './types/item-list.interface';
 export class ItemService {
     baseUrl = `${environment.baseUrl}/items`;
 
+    /** cache of the items to lower backend requests */
     private store: ApiItemsResponse = { items: [], types: [] };
     private _storeUpdated = new Subject<{ list: ItemListData }>();
+    /** Triggered once the store gets updated */
     storeUpdated = this._storeUpdated.asObservable();
+    /** Type which has gotten fetched last */
     private lastFetchedType: string | number;
 
     constructor(
@@ -29,7 +32,12 @@ export class ItemService {
         private transformService: ItemTransformationService
     ) {}
 
-    /** Hier solltest du die pagination beachten */
+    /**
+     * Loads a list of items
+     * @param page current page index
+     * @param perPage items per page
+     * @param type the type of items which should be loaded
+     */
     getItems(page: number, perPage: number, type?: string | number) {
         this.lastFetchedType = type;
         const params = new HttpParams();
@@ -77,6 +85,11 @@ export class ItemService {
             );
     }
 
+    /**
+     * Loads one item
+     * @param typeId type of the item
+     * @param itemId item to load
+     */
     getItem(typeId: number, itemId: number): Observable<ApiItem> {
         const storedItem = this.store.items.find(
             storeItem =>
@@ -100,6 +113,10 @@ export class ItemService {
         );
     }
 
+    /**
+     * Updates a an item
+     * @param entity item to update
+     */
     updateItem(entity: ApiItem) {
         return this.http
             .patch(
@@ -124,6 +141,11 @@ export class ItemService {
             );
     }
 
+    /**
+     * Deletes an item
+     * @param typeId type of the item
+     * @param itemId id of the item
+     */
     deleteItem(typeId: number, itemId: number) {
         return this.http.delete(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             map(res => {
@@ -140,6 +162,7 @@ export class ItemService {
         );
     }
 
+    /** Opens a snackbar in case of error */
     showError(message) {
         this.snackbar.open(message, null, {
             duration: 2000,
@@ -147,6 +170,11 @@ export class ItemService {
         });
     }
 
+    /**
+     * Removes an item from the store
+     * @param forTypeId item type id
+     * @param forItemId item id
+     */
     private invalidateStore(forTypeId: number, forItemId: number) {
         let removedItems = 0;
         this.store.items = this.store.items.filter(item => {
@@ -162,6 +190,7 @@ export class ItemService {
         return removedItems;
     }
 
+    /** Triggers the storeUpdated with the proper data from the store */
     private async emitStoreUpdate(sizeChange?: number) {
         this._storeUpdated.next({
             list: {

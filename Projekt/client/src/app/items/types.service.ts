@@ -5,6 +5,7 @@ import { Resolve } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { ApiItemType } from './types/api/api-item-type.interface';
 
+/** Service to handle types for the items */
 @Injectable({
     providedIn: 'root'
 })
@@ -17,6 +18,10 @@ export class TypesService implements Resolve<void> {
         this.store = undefined;
     }
 
+    /**
+     * Get item types
+     * @param reload dont take data from the store
+     */
     async getTypes(reload = false) {
         if (!this.store || reload) {
             const res = await this.http
@@ -27,6 +32,10 @@ export class TypesService implements Resolve<void> {
         return this.store;
     }
 
+    /**
+     * Load a type
+     * @param id type id
+     */
     async getType(id: number): Promise<ApiItemType> {
         const types = await this.getTypes();
         const storedType = types.find(type => type.id + '' === id + '');

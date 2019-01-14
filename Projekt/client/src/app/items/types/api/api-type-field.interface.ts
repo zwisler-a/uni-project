@@ -1,3 +1,4 @@
+/** Property of an API Item */
 export interface ApiTypeField {
     name: string;
     id: number;

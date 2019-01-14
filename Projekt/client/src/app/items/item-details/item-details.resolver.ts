@@ -1,19 +1,13 @@
 import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot,
-    Resolve,
-    RouterStateSnapshot
-} from '@angular/router';
-import { empty, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 
 import { ItemTransformationService } from '../item-transformation.service';
 import { ItemService } from '../item.service';
-import { ApiItemsResponse } from '../types/api/api-items-response.interface';
 import { Item } from '../types/item.interface';
 
 /**
- * Loads the item defined in :id and :typeId in the url
+ * Loads the item defined in :id and :typeId in the url.
+ * Transforms the item to a easily usable format to.
  */
 @Injectable({ providedIn: 'root' })
 export class ItemDetailResolver implements Resolve<Item> {
@@ -28,7 +22,9 @@ export class ItemDetailResolver implements Resolve<Item> {
     ): Promise<Item> {
         const { id, typeId } = route.params;
         if (id && typeId) {
-            const item: any = await this.itemService.getItem(typeId, id).toPromise();
+            const item: any = await this.itemService
+                .getItem(typeId, id)
+                .toPromise();
             const transformedItem = (await this.transform.transformItems([
                 item
             ]))[0];

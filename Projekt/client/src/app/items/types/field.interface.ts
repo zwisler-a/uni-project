@@ -1,5 +1,5 @@
 import { FieldType } from './field-type.enum';
-
+/** A property of an item */
 export interface Field {
     name: string;
     id: number;
@@ -9,7 +9,7 @@ export interface Field {
     required: boolean;
     unique: boolean;
 }
-
+/** A property of an item in a better usable state for ts */
 export interface DeterminedField<T> {
     name: string;
     type: FieldType;
@@ -17,12 +17,12 @@ export interface DeterminedField<T> {
     required?: boolean;
     unique?: boolean;
 }
-
+/** @deprecated */
 export interface LinkField {
     name: string;
     ref: string;
 }
-
+/** @deprecated */
 export interface FileField {
     name: string;
     ref: string;

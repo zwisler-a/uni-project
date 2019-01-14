@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiItemType } from '../types/api-item-type.interface';
-import { TypesService } from '../types.service';
-import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
+import { TypesService } from '../types.service';
+import { ApiItemType } from '../types/api-item-type.interface';
+
+/** Display the detail of a type. Also allows editing/deleting. */
 @Component({
     selector: 'app-type-detail',
     templateUrl: './type-detail.component.html',
@@ -25,6 +27,7 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /** Add a field to the type */
     addField() {
         this.type.fields.push({
             name: '',
@@ -35,7 +38,9 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /** Delete the type */
     delete() {
+        // Open confirm first
         this.confirm.open('types.edit.confirmDelete', true).subscribe(() => {
             this.typesService.deleteType(this.type.id).subscribe(() => {
                 this.router.navigate(['/types']);
@@ -43,6 +48,7 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /** Save changes to the item */
     save() {
         this.typesService.updateType(this.type).subscribe(() => {
             this.router.navigate(['/types', this.type.id]);

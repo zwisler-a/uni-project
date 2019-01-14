@@ -1,26 +1,29 @@
-import { Component, OnInit, ViewChildren, ViewChild } from '@angular/core';
-import { Item } from '../types/item.interface';
-import { ItemService } from '../item.service';
 import { Location } from '@angular/common';
-import { ItemTransformationService } from '../item-transformation.service';
-import { ApiItemType } from '../types/api/api-item-type.interface';
-import {
-    MatAutocompleteSelectedEvent,
-    MatAutocompleteTrigger
-} from '@angular/material';
-import { FieldType } from '../types/field-type.enum';
 import { HttpClient } from '@angular/common/http';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ApiItemsResponse } from '../types/api/api-items-response.interface';
-import { TypesService } from '../types.service';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatAutocompleteTrigger } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 
+import { ItemTransformationService } from '../item-transformation.service';
+import { ItemService } from '../item.service';
+import { TypesService } from '../types.service';
+import { ApiItemType } from '../types/api/api-item-type.interface';
+import { ApiItemsResponse } from '../types/api/api-items-response.interface';
+import { FieldType } from '../types/field-type.enum';
+import { Item } from '../types/item.interface';
+
+/**
+ * UI to create an new Item
+ */
 @Component({
     selector: 'app-add-item',
     templateUrl: './add-item.component.html',
     styleUrls: ['./add-item.component.scss']
 })
 export class AddItemComponent implements OnInit {
+    /** Item beeing edited */
     item: Item = { id: -1, fields: [], typeId: -1 };
+    /** Possible types the item can be */
     itemTypes: { name: string; id: number }[] = [];
 
     @ViewChild(MatAutocompleteTrigger)
@@ -38,17 +41,19 @@ export class AddItemComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        // load all possible types
         this.typesService.getTypes(true).then((res: any) => {
             this.itemTypes = res;
         });
     }
 
-    /** Sends a request to update the item */
+    /** Sends a request to add the new item */
     submit() {
         this.isSubmitting = true;
         const apiItem = this.itemTransform.retransformItem(this.item);
         this.itemService.createItem(apiItem).subscribe(
             (res: ApiItemsResponse) => {
+                // redirect to details of the newly created item
                 this.router.navigate(
                     [
                         '/items',
@@ -80,10 +85,12 @@ export class AddItemComponent implements OnInit {
         this.location.back();
     }
 
+    /** Displayable value of an type */
     toItemTypeName(itemType: ApiItemType) {
         return itemType.name;
     }
 
+    /** Changes the type of the item and creates apropriate fields */
     typeChange(id: number) {
         this.http.get('api/types/' + id).subscribe((type: ApiItemType) => {
             this.item.fields = type.fields.map(field => {
@@ -101,6 +108,7 @@ export class AddItemComponent implements OnInit {
         });
     }
 
+    /** Try fining an item type by name and select it if found */
     selectTypeByName(ev) {
         const type = this.itemTypes.find(
             option => option.name === ev.target.value

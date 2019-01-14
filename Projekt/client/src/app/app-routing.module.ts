@@ -17,10 +17,10 @@ const routes: Routes = [
                 loadChildren: './types/types.module#TypesModule'
             }
         ]
-    }
+    },
 
-    // Redirect all unidentifiable routes to login
-    // { path: '**', redirectTo: '/', pathMatch: 'full' }
+    // Redirect all unidentifiable routes to items
+    { path: '**', redirectTo: '/items/view', pathMatch: 'full' }
 ];
 
 @NgModule({
