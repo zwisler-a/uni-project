@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { ApiItemType } from './types/api-item-type.interface';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+
+import { ApiItemType } from './types/api-item-type.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -59,6 +60,7 @@ export class TypesService {
             );
     }
 
+    /** Transforms a type into a valid form for the backend */
     private transformType(type: ApiItemType) {
         const fields = type.fields.map(field => ({
             name: field.name,

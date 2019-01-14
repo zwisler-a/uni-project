@@ -70,6 +70,7 @@ export class ItemTransformationService {
         return uiItem;
     }
 
+    /** Determines how a value should be displayed */
     private getFieldDisplayValue(value: any, type: FieldType) {
         switch (type) {
             case FieldType.boolean:

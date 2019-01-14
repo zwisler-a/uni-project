@@ -1,3 +1,4 @@
+/** Possible types a field can have */
 export enum FieldType {
     string = 'string',
     number = 'number',

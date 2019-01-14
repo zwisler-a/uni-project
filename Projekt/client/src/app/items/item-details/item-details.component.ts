@@ -1,10 +1,11 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Item } from '../types/item.interface';
-import { Location } from '@angular/common';
-import { ItemService } from '../item.service';
+
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 import { ItemTransformationService } from '../item-transformation.service';
+import { ItemService } from '../item.service';
+import { Item } from '../types/item.interface';
 
 /**
  * Displays and allows editing of the fields of an Item

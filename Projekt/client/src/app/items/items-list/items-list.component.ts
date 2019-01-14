@@ -3,13 +3,15 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Item } from '../types/item.interface';
-import { ItemListDataSource } from './items-list.datasource';
+import { ItemService } from '../item.service';
 import { ApiItemType } from '../types/api/api-item-type.interface';
 import { Field } from '../types/field.interface';
-import { TypesService } from '../types.service';
-import { ItemService } from '../item.service';
+import { Item } from '../types/item.interface';
+import { ItemListDataSource } from './items-list.datasource';
 
+/**
+ * Display of items given in the resolve data
+ */
 @Component({
     selector: 'app-items-list',
     templateUrl: './items-list.component.html',
@@ -49,6 +51,7 @@ export class ItemsListComponent implements OnInit {
         // this.displayedColumns = [];
     }
 
+    /** Open item detail page (sidenav) */
     async open(row: Item) {
         await this.router.navigate([
             '/items',
@@ -57,6 +60,7 @@ export class ItemsListComponent implements OnInit {
         ]);
     }
 
+    /** Returns a displayable value for a field */
     findByName(fields: Field[], name: string) {
         const displayField = fields.find(field => field.name === name);
         return displayField ? displayField.displayValue : '';

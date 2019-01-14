@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ApiItemType } from '../types/api-item-type.interface';
 
+import { ApiItemType } from '../types/api-item-type.interface';
+/** Lists all types */
 @Component({
     selector: 'app-types-list',
     templateUrl: './types-list.component.html',

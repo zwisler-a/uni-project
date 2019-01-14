@@ -1,20 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiItemType } from '../types/api-item-type.interface';
-import { TypesService } from '../types.service';
 import { Router } from '@angular/router';
 
+import { TypesService } from '../types.service';
+import { ApiItemType } from '../types/api-item-type.interface';
+
+/**
+ * UI to create a new Type
+ */
 @Component({
     selector: 'app-add-type',
     templateUrl: './add-type.component.html',
     styleUrls: ['./add-type.component.scss']
 })
 export class AddTypeComponent implements OnInit {
+    /** type which gets created */
     type: ApiItemType = { id: 0, name: '', fields: [] };
 
     constructor(private typesService: TypesService, private router: Router) {}
 
     ngOnInit() {}
 
+    /** Add a new field to the type */
     addField() {
         this.type.fields.push({
             id: 0,
@@ -25,11 +31,13 @@ export class AddTypeComponent implements OnInit {
         });
     }
 
+    /** Remove a field from the type */
     removeField(field) {
         const fields = this.type.fields;
         fields.splice(fields.indexOf(field), 1);
     }
 
+    /** Create the new type */
     save() {
         this.typesService.createType(this.type).subscribe(res => {
             this.router.navigate(['/types']);

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { Subscription } from 'rxjs';
-
+/** Layout page for the item types */
 @Component({
     selector: 'app-types-page',
     templateUrl: './types-page.component.html',
@@ -19,6 +19,7 @@ export class TypesPageComponent implements OnInit {
         this.sidenavState();
     }
 
+    /** Determine how the sidenav should be displayed */
     private sidenavState() {
         if (this.media.isActive('lt-md')) {
             this.itemTypeSidenavOpen = false;
@@ -29,6 +30,7 @@ export class TypesPageComponent implements OnInit {
         }
     }
 
+    /** toggle sidenav */
     openItemType() {
         this.itemTypeSidenavOpen = !this.itemTypeSidenavOpen;
     }
