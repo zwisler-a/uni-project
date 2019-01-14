@@ -71,10 +71,11 @@ export class ItemListDataSource extends DataSource<any> {
                 this.paginator.pageSize =
                     listData.perPage || this.paginator.pageSize;
                 this.paginator.length =
-                    listData.length ||
-                    (listData.updateLength
+                    listData.length !== undefined
+                        ? listData.length
+                        : listData.updateLength
                         ? this.paginator.length + listData.updateLength
-                        : this.paginator.length);
+                        : this.paginator.length;
                 return listData.list;
             })
         );
