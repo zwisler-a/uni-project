@@ -19,8 +19,8 @@ const routes: Routes = [
         ]
     },
 
-    // Redirect all unidentifiable routes to items
-    { path: '**', redirectTo: '/items/view', pathMatch: 'full' }
+    // Redirect all unidentifiable routes to login
+    { path: '**', redirectTo: '/auth/login', pathMatch: 'full' }
 ];
 
 @NgModule({
