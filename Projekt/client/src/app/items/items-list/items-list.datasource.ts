@@ -14,13 +14,9 @@ import { ActivatedRoute, Router } from '@angular/router';
  * (including sorting, pagination, and filtering).
  */
 export class ItemListDataSource extends DataSource<any> {
-    data: any[] = [];
     possibleColumnNames: string[] = [];
-    _loading = false;
-    get loading() {
-        return this._loading;
-    }
     readonly listItemsUrl = 'item/list';
+    private typeId: any;
 
     constructor(
         private paginator: MatPaginator,
@@ -40,17 +36,27 @@ export class ItemListDataSource extends DataSource<any> {
         // Combine everything that affects the rendered data into one update
         // stream for the data-table to consume.
         const dataMutations = [this.paginator.page, this.sort.sortChange];
+        this.route.params.subscribe(params => {
+            this.typeId = params.itemTypeId;
+        });
 
         merge(...dataMutations).subscribe(ev => {
+            console.log(this.typeId);
             this.router.navigate([
                 '/items',
                 'view',
                 {
                     outlets: {
-                        content: [
-                            this.paginator.pageIndex,
-                            this.paginator.pageSize
-                        ]
+                        content: this.typeId
+                            ? [
+                                  this.paginator.pageIndex,
+                                  this.paginator.pageSize,
+                                  this.typeId
+                              ]
+                            : [
+                                  this.paginator.pageIndex,
+                                  this.paginator.pageSize
+                              ]
                     }
                 }
             ]);

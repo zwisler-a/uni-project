@@ -1,5 +1,4 @@
 <div fxFlex="1 1 100px" fxLayoutAlign="start center" class="item-searchbox">
-    <span fxFlex="150px" translate>types.title</span>
     <button
         mat-icon-button
         (click)="openItemType()"
@@ -7,6 +6,7 @@
     >
         <mat-icon>list</mat-icon>
     </button>
+    <span fxFlex="140px" fxHide.lt-md translate>types.title</span>
     <button mat-icon-button [routerLink]="['/types', 'add']">
         <mat-icon>add</mat-icon>
     </button>

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiItemType } from '../types/api-item-type.interface';
 import { TypesService } from '../types.service';
-import { ConfirmDialogService } from 'src/app/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 
 @Component({
     selector: 'app-type-detail',

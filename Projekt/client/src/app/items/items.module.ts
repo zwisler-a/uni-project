@@ -25,7 +25,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 
-import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
+import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemDetailResolver } from './item-details/item-details.resolver';
@@ -45,7 +45,7 @@ import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
-import { SearchModule } from '../search/search.module';
+import { SearchModule } from '../shared/search/search.module';
 
 @NgModule({
     declarations: [

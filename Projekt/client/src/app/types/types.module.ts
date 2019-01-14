@@ -25,8 +25,8 @@ import { TypesPageComponent } from './types-page/types-page.component';
 import { TypesService } from './types.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { AddTypeComponent } from './add-type/add-type.component';
-import { ConfirmDialogModule } from '../confirm-dialog/confirm-dialog.module';
-import { SearchModule } from '../search/search.module';
+import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
+import { SearchModule } from '../shared/search/search.module';
 import { SelectTypeComponent } from './select-type/select-type.component';
 
 @NgModule({

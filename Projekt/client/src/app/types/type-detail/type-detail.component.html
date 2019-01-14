@@ -1,7 +1,7 @@
 <ng-container *ngIf="type">
     <div>
         <span>{{ type.name }}</span> <span fxFlex></span>
-        <button mat-icon-button [hidden]="edit" (click)="edit = true">
+        <button disabled mat-icon-button [hidden]="edit" (click)="edit = true">
             <mat-icon>edit</mat-icon>
         </button>
         <button mat-icon-button (click)="delete()">

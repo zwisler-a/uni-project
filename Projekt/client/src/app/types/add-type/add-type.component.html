@@ -20,7 +20,9 @@
         <span fxFlex></span>
     </div>
     <div fxLayoutAlign="end center">
-        <button mat-button>{{ "types.edit.cancel" | translate }}</button>
+        <button mat-button [routerLink]="['/types']">
+            {{ "types.edit.cancel" | translate }}
+        </button>
         <button mat-raised-button color="primary" (click)="save()">
             {{ "types.edit.save" | translate }}
         </button>
