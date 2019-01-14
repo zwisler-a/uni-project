@@ -5,6 +5,12 @@ import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 import { Type, TypeField, TypeFieldType } from '../models/type';
 
+/**
+ * Route endpoint `POST /api/types`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = req.body;
@@ -51,6 +57,12 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
     }
 }
 
+/**
+ * Route endpoint `GET /api/types/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeGet(req: Request, res: Response, next: NextFunction) {
     try {
         const id = req.params.id;
@@ -76,6 +88,12 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
     }
 }
 
+/**
+ * Route endpoint `GET /api/types`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     try {
         const database: DatabaseController = req.app.get('database');
@@ -97,6 +115,12 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
     }
 }
 
+/**
+ * Route endpoint `DELETE /api/types/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function typeDelete(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.id;

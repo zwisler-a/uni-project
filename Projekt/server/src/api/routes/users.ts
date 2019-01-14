@@ -1,6 +1,7 @@
 import { Router, Response, Request, NextFunction } from 'express';
 import { validateJsonWebToken } from '../controllers/authentication';
 
+/** express.Router for path `/api/users` */
 export const usersRoute: Router = Router();
 usersRoute.post('/', validateJsonWebToken, (req: Request, res: Response, next: NextFunction) => {
   res.send('create user');

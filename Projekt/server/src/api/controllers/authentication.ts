@@ -5,6 +5,12 @@ import bcrypt from 'bcrypt';
 import { DatabaseController } from '../../database/controller';
 import { ApiError } from '../../types';
 
+/**
+ * Middleware that checks if the user is authenticated and attaches user object to req.params
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export function validateJsonWebToken(req: Request, res: Response, next: NextFunction) {
     const groups = /Bearer (.*)/ig.exec(req.get('Authorization'));
     if (!groups || groups.length < 2) {
@@ -22,6 +28,12 @@ export function validateJsonWebToken(req: Request, res: Response, next: NextFunc
     });
 }
 
+/**
+ * Route endpoint `POST /api/authenticate` used to authenticate and to generate JWT
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
 export async function authenticate(req: Request, res: Response, next: NextFunction) {
     if (!('username' in req.body) || !('password' in req.body)) {
         next(new ApiError('Bad Request', 'Required field: username, password', 400));
