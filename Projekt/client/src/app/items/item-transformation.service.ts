@@ -78,7 +78,7 @@ export class ItemTransformationService {
     private getFieldDisplayValue(value: any, type: FieldType) {
         switch (type) {
             case FieldType.boolean:
-                return value ? 'Wahr' : 'Falsch';
+                return value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
             case FieldType.date:
                 return new Date(value).toLocaleDateString('de-De');
             case FieldType.number:

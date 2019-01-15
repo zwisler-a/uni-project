@@ -1,9 +1,15 @@
 <mat-form-field fxFlex>
-    <span matPrefix class="field-type">{{'items.field.boolean'|translate}}</span>
+    <span matPrefix class="field-type">{{
+        "items.field.boolean" | translate
+    }}</span>
     <input
         [placeholder]="field.name"
-        [value]="field.value ? 'Ja' : 'Nein'"
-        [disabled]="!edit"
+        [value]="
+            field.value
+                ? ('items.boolean.true' | translate)
+                : ('items.boolean.false' | translate)
+        "
+        disabled
         matInput
         [required]="field.required"
     />

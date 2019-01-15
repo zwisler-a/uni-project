@@ -15,6 +15,7 @@
             class="navigation-item"
             *ngFor="let type of types"
             [routerLink]="['/items', 'view', { outlets: { content: [page, perPage, type.id] } }]"
+            [routerLinkActiveOptions]="{ exact: true,  __change_detection_hack__: [page, perPage, type.id]  }"
             [routerLinkActive]="'active'"
         >
             {{ type.name }}
