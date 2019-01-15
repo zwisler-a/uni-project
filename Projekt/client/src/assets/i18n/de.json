@@ -11,6 +11,10 @@
             "get": "Item konnte nicht geladen werden!",
             "update": "Item konnte nicht verändert werden!"
         },
+        "boolean": {
+            "false": "Ja",
+            "true": "Nein"
+        },
         "confirm": {
             "delete": "Sind Sie sicher das Sie das Item löschen wollen?"
         },
@@ -44,7 +48,7 @@
             "cancel": "Abbrechen",
             "required": "Benötigt",
             "save": "Speichern",
-            "confirmDelete": "Wollen Sie den Typen wirklich löschen?",
+            "confirmDelete": "Wollen Sie den Typen und all Items des Typs wirklich löschen?",
             "typeName": "Name des Typs",
             "unique": "Einzigartig",
             "field": {

@@ -11,6 +11,10 @@
             "get": "Could not get Item!",
             "update": "Could not update Item!"
         },
+        "boolean": {
+            "false": "Yes",
+            "true": "No"
+        },
         "confirm": {
             "delete": "Are you sure you want to delete the Item?"
         },
@@ -44,7 +48,7 @@
             "cancel": "Cancel",
             "required": "required",
             "save": "Save",
-            "confirmDelete": "Are you sure you want to delete the type?",
+            "confirmDelete": "Are you sure you want to delete the type and all its items?",
             "typeName": "Name of the type",
             "unique": "unique",
             "field": {

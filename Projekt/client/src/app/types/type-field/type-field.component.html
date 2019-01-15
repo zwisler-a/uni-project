@@ -65,7 +65,7 @@
             >
                 {{ "types.edit.unique" | translate }}
             </mat-checkbox>
-            <button mat-icon-button (click)="deleteMe.emit()">
+            <button mat-icon-button [disabled]="!edit" (click)="deleteMe.emit()">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>

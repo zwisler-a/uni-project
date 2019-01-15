@@ -1,10 +1,10 @@
 <mat-dialog-content> {{ text }} </mat-dialog-content>
-<mat-dialog-actions >
+<mat-dialog-actions>
     <span fxFlex></span>
-    <button color="primary" mat-button [mat-dialog-close]="true">
-        <span translate>confirm.confirm</span>
-    </button>
     <button mat-button [mat-dialog-close]="false">
         <span translate>confirm.cancel</span>
+    </button>
+    <button color="primary" mat-button [mat-dialog-close]="true">
+        <span translate>confirm.confirm</span>
     </button>
 </mat-dialog-actions>

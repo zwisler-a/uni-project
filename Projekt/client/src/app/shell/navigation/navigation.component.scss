@@ -24,7 +24,9 @@
             z-index: 501;
             background: map-get($map: $colors, $key: navigation-body);
             color: map-get($map: $colors, $key: navigation-text);
-            transition: width 0.2s ease-in-out;
+            transition-duration: 0.2s;
+            transition-timing-function: ease-in-out;
+            transition-property: width min-width;
             overflow: hidden;
             flex-direction: column;
             height: 100%;
@@ -34,12 +36,15 @@
             }
             &.expanded {
                 width: 256px;
+                min-width: 256px;
             }
             &.collapsed {
                 width: 56px;
+                min-width: 56px;
             }
             &.hidden {
                 width: 0px;
+                min-width: 0px;
             }
         }
         .account-action-toolbar {

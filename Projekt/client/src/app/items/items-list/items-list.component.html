@@ -1,6 +1,7 @@
 <table
     fxFill
     mat-table
+    [ngClass.lt-md]="'mobile'"
     class="table"
     [dataSource]="dataSource"
     matSort
@@ -27,7 +28,7 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ dynCol }}
             </th>
-            <td mat-cell *matCellDef="let row">
+            <td mat-cell *matCellDef="let row" [attr.label]="dynCol">
                 <span [innerHTML]="findByName(row.fields, dynCol)"></span>
             </td>
         </ng-container>
