@@ -18,9 +18,9 @@ linkcolor=black
 ]{hyperref}
 \pagestyle{fancy}
 
-\lhead{Robin Seidel}
+\lhead{Leon Kamuf}
 \chead{ak18b}
-\rhead{13.12.2018}
+\rhead{14.01.2019}
 
 \lfoot{}
 \cfoot{\thepage}
@@ -62,22 +62,25 @@ linkcolor=black
 	\setcounter{page}{1}
 	\renewcommand\thesection{\arabic{section}}
 
-\section{Arbeitspaket 1 - Vorprojekt und Einarbeitung}
-Release: 15.1.2019\\\\
+\section{Arbeitspaket 1}
+Release: 14.01.2019\\\\
 Das Vorprojekt bildet das wesentliche Grundgerüst der Anwendung. Es basiert auf dem Server- Client-Grundkonzept.\\
 Es beinhaltet eine MariaDb Datenbank, eine REST-Schnittstelle sowie ein Frontend.\\
-Weiterhin wird für das Frontend eine App-Shell entwickelt die das generelle Layout wiederspiegelt. Eine MariaDb mit REST Api wird auf dem Praktikumsserver eingerichtet.
+Weiterhin wird für das Frontend eine App-Shell entwickelt, welche das generelle Layout widerspiegelt. Eine MariaDb mit REST Api wird auf dem Praktikumsserver eingerichtet.
 Das Vorprojekt soll zur Einarbeitung in die verschiedenen Technologien dienen. 
 
 \subsection{Umsetzung}
-Folgende Muss-Ziele werden im Vorprojekt umgesetzt:
+Im Vorprojekt werden alle essentiellen Funktionalitäten umgesetzt:
 \begin{itemize}
-\item Login und Logout /LF0010/ und /LF0020/
-\item Anzeigen aller erfassten Items /LF0210/
+\item Login /LF0010/
+\item Logout /LF0020/
+\item Hinzufügen neuer Items /LF0310/
 \item Bearbeiten von Items /LF0330/
 \item Entfernen von Items /LF0340/
+\item Eingabehilfe für Itemfelder /LF0350/
+\item Verlinkung von Items /LF0360/
 \item Hinzufügen neuer Itemtypen /LF0410/
-\item Bearbeitung von Itemtypen /LF0420/
+\item Pflichtfelder von Itemtypen /LF0430/
 \item Löschen von Itemtypen /LF0440/
 \item Mehrsprachigkeit /LF0610/
 \item Sicherheit der Anmeldedaten /LN0010/
@@ -87,47 +90,54 @@ Folgende Muss-Ziele werden im Vorprojekt umgesetzt:
 \item Browsersupport /LN0410/
 \end{itemize}
 
-\section{Arbeitspaket 2 - Weitere Funktionale Anforderungen }
-Release: 29.1.2019
+\subsection{Status}
+Alle vorgenommenen Funktionalitäten wurden implementiert, bis auf /LF0210/ und /LF0420/, welche in $"$Arbeitspaket 2$"$ verschoben wurden.\\
+Zusätzlich wurden folgende Funktionalitäten bearbeitet: /LF0310/, /LF0350/, /LF0360/ und /LF0430/
+
+\section{Arbeitspaket 2}
+Release: 28.01.2019
 \subsection{Umsetzung}
 Im zweiten Arbeitspaket ist das Hauptthema die Administration von Unternehmen.
 \begin{itemize}
+\item Anzeigen aller erfassten Items /LF0210/
 \item Suche /LF0220/
 \item Sortieren von Items /LF0230/
-\item Eingabehilfe für Itemfelder /LF0350/
-\item Verlinkung von Items /LF0360/
-\item Pflichtfelder von Itemtypen /LF0430/
+\item Bearbeitung von Itemtypen /LF0420/
+\item Benutzerrollen /LF0510/
 \item Löschen von Profilen /LF0520/
-\item Hinzufügen von Unternehmen /LF0530/
+\item Firmenverwaltung /LF0530/
 \item Typenverwaltung /LF0540/
 \item Globale Pflichtfelder /LF0550/
 \end{itemize}
 
-\section{Arbeitspaket 3 - Dokumentenverwaltung}
-Release: 5.02.2019
+\subsection{Status}
+Die Funktionalitäten /LF0210/ und /LF0420/, wurden in $"$Arbeitspaket 2$"$ aufgenommen.
+
+\section{Arbeitspaket 3}
+Release: 04.02.2019
 \subsection{Umsetzung}
 Im dritten Arbeitspaket wird sich hauptsächlich mit der Dokumentenverwaltung beschäftigt.
 
 \begin{itemize}
-\item Ändern Email Adresse /LF0110/
-\item Änderung Passwort /LF0120/
 \item Registrieren neuer Anwender /LF0030/
 \item Wiederherstellung des Passworts /LF0040/
+\item Ändern E-Mail Adresse /LF0110/
+\item Änderung Passwort /LF0120/
 \item Anhang von Dokumenten /LF0320/
 \end{itemize}
 
 
-\section{Arbeitspaket 4 - Abrundung und Kann-Ziele }
-Release: 12.2.2019
+\section{Arbeitspaket 4}
+Release: 11.02.2019
 \subsection{Umsetzung}
-Im vorletzten Arbeitspaket werden eventuelle Restbestände der funktionalen und nicht-funktionalen Anforderungen nachgebessert oder fertiggestellt. Ab dann werden Kann-Ziele umgesetzt.
+Im vorletzten Arbeitspaket werden eventuelle Restbestände der funktionalen Anforderungen nachgebessert oder fertiggestellt.
 \begin{itemize}
 \item Itemtyp Vorlagen /LF0620/
 \item Nutzerverwaltung /LF0660/
 \end{itemize}
 
-\section{Arbeitspaket 5 - Optimierung und abschließende Tests}
-Release 19.2.2019
+\section{Arbeitspaket 5}
+Release 18.02.2019
 \subsection{Umsetzung}
 Vor Abgabe des finalen Releases werden abschließende Tests durchgeführt. Optional können Beta-User die Software testen um eventuelle Bugs und Ineffizienzen aufzuspüren.
 \begin{itemize}
