@@ -34,6 +34,12 @@ export const itemsRoutes: Routes = [
                 outlet: 'content'
             },
             {
+                path: ':page/:perPage/:itemTypeId/:orderBy/:order',
+                component: ItemPageComponent,
+                resolve: { list: ItemsListResolver },
+                outlet: 'content'
+            },
+            {
                 path: '',
                 component: ItemPageComponent,
                 resolve: { list: ItemsListResolver },

@@ -30,7 +30,7 @@ export class ItemService {
     private _total = 0;
     private _type = 0;
     private _orderBy = '';
-    private _order = '';
+    private _order: 'asc' | 'desc' = 'asc';
 
     /** current page index of the store */
     get page() {
@@ -43,6 +43,14 @@ export class ItemService {
     /** amount of items in the store per page */
     get perPage() {
         return this._perPage;
+    }
+    /** amount of items in the store per page */
+    get orderBy() {
+        return this._orderBy;
+    }
+    /** amount of items in the store per page */
+    get order() {
+        return this._order;
     }
     /** amount of items of this type available in the backend */
     get total() {

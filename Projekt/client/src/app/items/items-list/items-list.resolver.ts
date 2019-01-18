@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
+import {
+    ActivatedRouteSnapshot,
+    Resolve,
+    Router,
+    RouterStateSnapshot
+} from '@angular/router';
 import { empty, Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
@@ -31,7 +36,13 @@ export class ItemsListResolver implements Resolve<Item> {
                     });
                     return empty();
                 }
-                const { page, perPage, itemTypeId } = route.params;
+                const {
+                    page,
+                    perPage,
+                    itemTypeId,
+                    order,
+                    orderBy
+                } = route.params;
                 // check if route has all important info
                 if (
                     page === undefined ||
@@ -50,7 +61,13 @@ export class ItemsListResolver implements Resolve<Item> {
                     this.router.navigate(defaultRoute);
                     return empty();
                 }
-                return this.itemService.loadItems(page, perPage, itemTypeId);
+                return this.itemService.loadItems(
+                    page,
+                    perPage,
+                    itemTypeId,
+                    orderBy,
+                    order
+                );
             })
         );
     }
