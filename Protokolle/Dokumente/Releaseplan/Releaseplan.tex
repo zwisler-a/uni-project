@@ -1,10 +1,11 @@
-\documentclass[11pt,a4paper]{report}
-
+\documentclass[11pt,a4paper]{report} 
 \usepackage[utf8]{inputenc}
 \usepackage{titling}
 \usepackage[german]{babel}
 \usepackage[T1]{fontenc}
 \usepackage{amsmath}
+\usepackage{csquotes}
+\usepackage[dvipsnames]{xcolor}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage[left=3cm,right=2cm,top=2.5cm,bottom=2cm]{geometry}
@@ -20,7 +21,7 @@ linkcolor=black
 
 \lhead{Leon Kamuf}
 \chead{ak18b}
-\rhead{14.01.2019}
+\rhead{18.01.2019}
 
 \lfoot{}
 \cfoot{\thepage}
@@ -30,8 +31,7 @@ linkcolor=black
 \renewcommand{\footrulewidth}{0.4pt}
 
 \begin{document}
-	\begin{titlepage}
-		
+	\begin{titlepage}		
 		\pretitle{
 			\vskip -3em
 			\begin{figure}[h]
@@ -62,6 +62,7 @@ linkcolor=black
 	\setcounter{page}{1}
 	\renewcommand\thesection{\arabic{section}}
 
+
 \section{Arbeitspaket 1}
 Release: 14.01.2019\\\\
 Das Vorprojekt bildet das wesentliche Grundgerüst der Anwendung. Es basiert auf dem Server- Client-Grundkonzept.\\
@@ -74,13 +75,15 @@ Im Vorprojekt werden alle essentiellen Funktionalitäten umgesetzt:
 \begin{itemize}
 \item Login /LF0010/
 \item Logout /LF0020/
-\item Hinzufügen neuer Items /LF0310/
+\item \textcolor{Red}{Anzeigen aller erfassten Items /LF0210/}
+\item \textcolor{Green}{Hinzufügen neuer Items /LF0310/}
 \item Bearbeiten von Items /LF0330/
 \item Entfernen von Items /LF0340/
-\item Eingabehilfe für Itemfelder /LF0350/
-\item Verlinkung von Items /LF0360/
+\item \textcolor{Green}{Eingabehilfe für Itemfelder /LF0350/}
+\item \textcolor{Green}{Verlinkung von Items /LF0360/}
 \item Hinzufügen neuer Itemtypen /LF0410/
-\item Pflichtfelder von Itemtypen /LF0430/
+\item \textcolor{Red}{Bearbeitung von Itemtypen /LF0420/}
+\item \textcolor{Green}{Pflichtfelder von Itemtypen /LF0430/}
 \item Löschen von Itemtypen /LF0440/
 \item Mehrsprachigkeit /LF0610/
 \item Sicherheit der Anmeldedaten /LN0010/
@@ -91,18 +94,21 @@ Im Vorprojekt werden alle essentiellen Funktionalitäten umgesetzt:
 \end{itemize}
 
 \subsection{Status}
-Alle vorgenommenen Funktionalitäten wurden implementiert, bis auf /LF0210/ und /LF0420/, welche in $"$Arbeitspaket 2$"$ verschoben wurden.\\
-Zusätzlich wurden folgende Funktionalitäten bearbeitet: /LF0310/, /LF0350/, /LF0360/ und /LF0430/
+Alle vorgenommenen Funktionalitäten wurden implementiert, bis auf \textcolor{Red}{/LF0210/} und \textcolor{Red}{/LF0420/}, welche in \enquote{\hskip0.1em Arbeitspaket 2\hskip0.1em} verschoben wurden.\\
+Zusätzlich wurden folgende Funktionalitäten bearbeitet: \textcolor{Green}{/LF0310/}, \textcolor{Green}{/LF0350/}, \textcolor{Green}{/LF0360/} und \textcolor{Green}{/LF0430/}
 
 \section{Arbeitspaket 2}
 Release: 28.01.2019
 \subsection{Umsetzung}
 Im zweiten Arbeitspaket ist das Hauptthema die Administration von Unternehmen.
 \begin{itemize}
-\item Anzeigen aller erfassten Items /LF0210/
+\item \textcolor{Green}{ Anzeigen aller erfassten Items /LF0210/}
 \item Suche /LF0220/
 \item Sortieren von Items /LF0230/
-\item Bearbeitung von Itemtypen /LF0420/
+\item \textcolor{Red}{Eingabehilfe für Itemfelder /LF0350/}
+\item \textcolor{Red}{Verlinkung von Items /LF0360/}
+\item \textcolor{Green}{Bearbeitung von Itemtypen /LF0420/}
+\item \textcolor{Red}{Pflichtfelder von Itemtypen /LF0430/}
 \item Benutzerrollen /LF0510/
 \item Löschen von Profilen /LF0520/
 \item Firmenverwaltung /LF0530/
@@ -111,7 +117,9 @@ Im zweiten Arbeitspaket ist das Hauptthema die Administration von Unternehmen.
 \end{itemize}
 
 \subsection{Status}
-Die Funktionalitäten /LF0210/ und /LF0420/, wurden in $"$Arbeitspaket 2$"$ aufgenommen.
+Die Funktionalitäten \textcolor{Red}{/LF0350/}, \textcolor{Red}{/LF0360/} und \textcolor{Red}{/LF0430/} wurden bereits im \enquote{\hskip0.1em Arbeitspaket 1\hskip0.1em} implementiert.\\
+Folgende Funktionalitäten wurden in \enquote{\hskip0.1em Arbeitspaket 2\hskip0.1em} aufgenommen:
+\textcolor{Green}{/LF0210/} und \textcolor{Green}{/LF0420/}
 
 \section{Arbeitspaket 3}
 Release: 04.02.2019
@@ -125,7 +133,7 @@ Im dritten Arbeitspaket wird sich hauptsächlich mit der Dokumentenverwaltung be
 \item Änderung Passwort /LF0120/
 \item Anhang von Dokumenten /LF0320/
 \end{itemize}
-
+\newpage
 
 \section{Arbeitspaket 4}
 Release: 11.02.2019
