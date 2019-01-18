@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
-import { ApiError } from '../../types';
+import { OldApiError } from '../../types';
 import { Type, TypeField } from '../models/type';
 import { Item, Field } from '../models/item';
 
@@ -16,7 +16,7 @@ async function getTypeFields(database: DatabaseController, id: number, fields: b
     try {
         const types = await database.TYPE_GET_ID.execute(id);
         if (types.length === 0) {
-            throw ApiError.NOT_FOUND;
+            throw OldApiError.NOT_FOUND;
         }
 
         const type: Type = types.pop();
@@ -124,7 +124,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         if ('page' in query) {
             page = parseInt(query.page);
             if (isNaN(page) || page < 0) {
-                next(ApiError.BAD_REQUEST);
+                next(OldApiError.BAD_REQUEST);
                 return;
             }
         }
@@ -133,7 +133,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         if ('per_page' in query) {
             perPage = parseInt(query.per_page);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                next(ApiError.BAD_REQUEST);
+                next(OldApiError.BAD_REQUEST);
                 return;
             }
         }
@@ -151,7 +151,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
 
         if (page * perPage > total) {
-            next(ApiError.BAD_REQUEST);
+            next(OldApiError.BAD_REQUEST);
             return;
         }
 
@@ -171,7 +171,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 
         res.status(200).send(new EmbeddedItem([ type ], items));
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -195,7 +195,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
 
         const errors: any = checkType(type, fields.slice(), values);
         if (errors !== null) {
-            next(new ApiError('Bad Request', 'The request contains invalid values', 400, errors));
+            next(new OldApiError('Bad Request', 'The request contains invalid values', 400, errors));
             return;
         }
 
@@ -204,7 +204,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -225,7 +225,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
 
         const items = await database.ITEM_GET_ID.execute(type, id);
         if (items.length === 0) {
-            next(ApiError.NOT_FOUND);
+            next(OldApiError.NOT_FOUND);
             return;
         }
         const item = items.pop();
@@ -242,7 +242,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
 
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -267,7 +267,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
 
         const errors: any = checkType(type, fields.slice(), values);
         if (errors !== null) {
-            next(new ApiError('Bad Request', 'The request contains invalid values', 400, errors));
+            next(new OldApiError('Bad Request', 'The request contains invalid values', 400, errors));
             return;
         }
 
@@ -278,10 +278,10 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         if (affectedRows > 0) {
             res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
         } else {
-            next(ApiError.NOT_FOUND);
+            next(OldApiError.NOT_FOUND);
         }
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -304,10 +304,10 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         if (affectedRows > 0) {
             res.status(204).send();
         } else {
-            next(ApiError.NOT_FOUND);
+            next(OldApiError.NOT_FOUND);
         }
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }

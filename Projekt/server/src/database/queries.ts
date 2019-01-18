@@ -27,6 +27,8 @@ export interface Queries {
     TYPE_GET: StaticQuery<ArrayResultsets>;
     /** Gets a type by id */
     TYPE_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Checks by id if a type exists */
+    TYPE_EXISTS_ID: StaticQuery<ArrayResultsets>;
     /** Deletes a type by id */
     TYPE_DELTE: StaticQuery<ObjectResultsets>;
 
@@ -189,6 +191,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `name`) VALUES (NULL,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
         TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
+        TYPE_EXISTS_ID: queryFactory('SELECT 1 FROM `%_types` WHERE `id` = ?'),
         TYPE_DELTE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),

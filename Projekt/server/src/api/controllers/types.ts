@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 import { ObjectResultsets } from 'mariadb';
 
 import { DatabaseController } from '../../database/controller';
-import { ApiError } from '../../types';
+import { OldApiError } from '../../types';
 import { Type, TypeField, TypeFieldType } from '../models/type';
 
 /**
@@ -21,7 +21,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
         for (const field of type.fields) {
             if (field.type === TypeFieldType.reference &&
                 (await database.TYPE_GET_ID.execute(field.referenceId)).length === 0) {
-                next(new ApiError('Invalid reference', 'The referenced type couldn\'t be found', 404, field));
+                next(new OldApiError('Invalid reference', 'The referenced type couldn\'t be found', 404, field));
                 return;
             }
         }
@@ -50,9 +50,9 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
         res.status(200).send(query);
     } catch (error) {
         if (error.errno === 1062) {
-            next(new ApiError('Conflict', 'The requeste could not be processed because of conflict in the current state of the resource', 409, error.message));
+            next(new OldApiError('Conflict', 'The requeste could not be processed because of conflict in the current state of the resource', 409, error.message));
         } else {
-            next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+            next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         }
         // console.error(error);
     }
@@ -71,7 +71,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
 
         const types = await database.TYPE_GET_ID.execute(id);
         if (types.length === 0) {
-            next(ApiError.NOT_FOUND);
+            next(OldApiError.NOT_FOUND);
             return;
         }
 
@@ -85,7 +85,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
 
         res.status(200).send(type);
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -112,7 +112,23 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
 
         res.status(200).send(types);
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        // console.error(error);
+    }
+}
+
+/**
+ * Route endpoint `PATCH /api/types/:id`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
+export async function typeUpdate(req: Request, res: Response, next: NextFunction) {
+    try {
+        const typeId: number = req.params.id;
+        const database: DatabaseController = req.app.get('database');
+    } catch (error) {
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
@@ -142,7 +158,7 @@ export async function typeDelete(req: Request, res: Response, next: NextFunction
 
         res.status(204).send();
     } catch (error) {
-        next(new ApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
         // console.error(error);
     }
 }
