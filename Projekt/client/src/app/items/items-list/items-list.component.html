@@ -1,6 +1,7 @@
 <table
     fxFill
     mat-table
+    [style.display]="paginator.length ? null : 'none'"
     [ngClass.lt-md]="'mobile'"
     class="table"
     [dataSource]="dataSource"
@@ -21,10 +22,7 @@
 
     <!-- fields column -->
     <ng-container *ngFor="let dynCol of displayedColumns">
-        <ng-container
-            [matColumnDef]="dynCol"
-            *ngIf="dynCol !== 'id' && dynCol !== 'typeId'"
-        >
+        <ng-container [matColumnDef]="dynCol">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                 {{ dynCol }}
             </th>
@@ -43,7 +41,7 @@
 </table>
 
 <mat-paginator
-    [hidden]="!paginator.length"
+    [style.display]="paginator.length ? 'inherit' : 'none'"
     #paginator
     [pageIndex]="0"
     [pageSize]="50"

@@ -17,7 +17,7 @@
         [routerLink]="[
             '/items',
             'view',
-            { outlets: { detail: ['details', field.value] } }
+            { outlets: { detail: ['details', field.referenceId , field.value] } }
         ]"
         matTooltip="Gehe zu -"
     >

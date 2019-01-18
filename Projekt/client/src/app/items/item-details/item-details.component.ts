@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
-import { ItemTransformationService } from '../item-transformation.service';
-import { ItemService } from '../item.service';
-import { Item } from '../types/item.interface';
+import { ItemPipe } from '../../stores/item-store/item-pipe.service';
+import { ItemService } from '../../stores/item-store/item.service';
+import { Item } from '../../stores/item-store/types/item.interface';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -15,24 +16,45 @@ import { Item } from '../types/item.interface';
     templateUrl: './item-details.component.html',
     styleUrls: ['./item-details.component.scss']
 })
-export class ItemDetailsComponent implements OnInit {
+export class ItemDetailsComponent implements OnInit, OnDestroy {
     /** Item to display */
     item: Item;
     /** If the item should be editable right now (should be changed via editFields()) */
     edit: boolean;
+    itemSub: Subscription;
     constructor(
         private acitvatedRoute: ActivatedRoute,
         private confirmService: ConfirmDialogService,
-        private itemTransform: ItemTransformationService,
         private itemService: ItemService,
-        private location: Location,
-        private router: Router
+        private location: Location
     ) {}
 
     ngOnInit() {
-        this.acitvatedRoute.data.subscribe(data => {
-            this.item = data.item;
+        // Look out for route parameter change
+        this.acitvatedRoute.params.subscribe(params => {
+            this.changeItem(params['typeId'], params['id']);
         });
+    }
+
+    ngOnDestroy(): void {
+        if (this.itemSub) {
+            this.itemSub.unsubscribe();
+        }
+    }
+
+    /** Stop watching old item if there is one and get the specified one */
+    private changeItem(typeId, itemId) {
+        if (this.itemSub) {
+            this.itemSub.unsubscribe();
+        }
+        // TODO check if the old item is dirty
+        this.itemSub = this.itemService
+            .getItem(typeId, itemId)
+            .subscribe(item => {
+                if (!this.edit) {
+                    this.item = item;
+                }
+            });
     }
 
     /** Send a request to the backend to delete the displayed item. Navigates back on success. */
@@ -50,15 +72,13 @@ export class ItemDetailsComponent implements OnInit {
     editFields(edit = true) {
         this.edit = edit;
         if (!edit) {
-            this.router.navigate(['.'], { relativeTo: this.acitvatedRoute });
+            this.changeItem(this.item.typeId, this.item.id);
         }
     }
 
     /** Sends a request to update the item */
     submit() {
-        const apiItem = this.itemTransform.retransformItem(this.item);
-        this.itemService.updateItem(apiItem).subscribe(res => {
-            this.router.navigate(['.'], { relativeTo: this.acitvatedRoute });
+        this.itemService.updateItem(this.item).subscribe(res => {
             this.edit = false;
         });
     }

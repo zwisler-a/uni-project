@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-
-import { ApiTypeField } from '../types/api-type-field.interface';
+import { TypeField } from 'src/app/stores/type-store/types/type-field.interface';
+import { Type } from 'src/app/stores/type-store/types/type.interface';
+import { FieldType } from 'src/app/stores/item-store/types/field-type.enum';
 
 @Component({
     selector: 'app-type-field',
@@ -10,7 +11,7 @@ import { ApiTypeField } from '../types/api-type-field.interface';
 export class TypeFieldComponent implements OnInit {
     /** field data */
     @Input()
-    field: ApiTypeField;
+    field: TypeField;
 
     /** if the field should be editable */
     @Input()
@@ -26,11 +27,19 @@ export class TypeFieldComponent implements OnInit {
 
     /** possible field types */
     get fieldTypes() {
-        return ['string', 'number', 'boolean', 'color', 'date'];
+        // return Object.keys(FieldType).map(type => FieldType[type]);
+        return Object.keys(FieldType)
+            .map(type => FieldType[type])
+            .filter(type => type !== 'reference' && type !== 'file');
     }
 
     /** set the type of the field */
     selectType(type) {
         this.field.type = type;
+        this.field.referenceId = 0;
+    }
+
+    setReference(type: Type) {
+        this.field.referenceId = type.id;
     }
 }

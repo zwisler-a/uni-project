@@ -12,7 +12,7 @@
     flex: 1 1 auto;
     flex-direction: row;
     align-items: center;
-    justify-content: start;
+    justify-content: flex-start;
 
     input {
         cursor: not-allowed;
@@ -22,6 +22,7 @@
         flex: 1 1 auto;
         padding: 12px;
     }
+
     input:focus {
         outline: none;
     }

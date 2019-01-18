@@ -1,13 +1,10 @@
 import { DataSource } from '@angular/cdk/collections';
-import { HttpResponse } from '@angular/common/http';
 import { MatPaginator, MatSort } from '@angular/material';
-import { merge, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-
-import { ItemService } from '../item.service';
-import { Item } from '../types/item.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ItemListData } from '../types/item-list.interface';
+import { merge, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { ItemService } from '../../stores/item-store/item.service';
 
 /**
  * Data source for the ItemList view. This class should
@@ -15,8 +12,6 @@ import { ItemListData } from '../types/item-list.interface';
  * (including sorting, pagination, and filtering).
  */
 export class ItemListDataSource extends DataSource<any> {
-    possibleColumnNames: string[] = [];
-    readonly listItemsUrl = 'item/list';
     private typeId: any;
 
     constructor(
@@ -62,30 +57,14 @@ export class ItemListDataSource extends DataSource<any> {
                 }
             ]);
         });
-
-        return merge(this.itemService.storeUpdated, this.route.data).pipe(
-            map(data => {
-                const listData: ItemListData = data['list'];
-                this.paginator.pageIndex =
-                    listData.page || this.paginator.pageIndex;
-                this.paginator.pageSize =
-                    listData.perPage || this.paginator.pageSize;
-                this.paginator.length = listData.length
-                    ? listData.length
-                    : listData.updateLength
-                    ? this.paginator.length + listData.updateLength
-                    : this.paginator.length;
-                return listData.list;
+        return this.itemService.items.pipe(
+            map(items => {
+                this.paginator.pageIndex = this.itemService.page;
+                this.paginator.pageSize = this.itemService.perPage;
+                this.paginator.length = this.itemService.total;
+                return items;
             })
         );
-    }
-
-    getPossibleColumnNames(data: Item[]): string[] {
-        const fieldNames = new Set<string>();
-        data.forEach(item => {
-            Object.keys(item.fields).forEach(field => fieldNames.add(field));
-        });
-        return Array.from(fieldNames);
     }
 
     /**

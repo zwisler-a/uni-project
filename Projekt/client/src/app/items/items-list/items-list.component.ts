@@ -1,12 +1,13 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { ItemService } from 'src/app/stores/item-store/item.service';
+import { Field } from 'src/app/stores/item-store/types/field.interface';
+import { Item } from 'src/app/stores/item-store/types/item.interface';
 
-import { ItemService } from '../item.service';
-import { ApiItemType } from '../types/api/api-item-type.interface';
-import { Field } from '../types/field.interface';
-import { Item } from '../types/item.interface';
+import { FieldsService } from '../../stores/fields-store/fields.service';
 import { ItemListDataSource } from './items-list.datasource';
 
 /**
@@ -17,7 +18,7 @@ import { ItemListDataSource } from './items-list.datasource';
     templateUrl: './items-list.component.html',
     styleUrls: ['./items-list.component.scss']
 })
-export class ItemsListComponent implements OnInit {
+export class ItemsListComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSidenav) sidenav: MatSidenav;
     @ViewChild(MatSort) sort: MatSort;
@@ -25,10 +26,12 @@ export class ItemsListComponent implements OnInit {
     selection = new SelectionModel<any>(true, []);
 
     displayedColumns = [];
+    displayColsSub: Subscription;
 
     constructor(
         private router: Router,
         private itemService: ItemService,
+        private fieldsService: FieldsService,
         private activatedRoute: ActivatedRoute
     ) {}
 
@@ -40,15 +43,17 @@ export class ItemsListComponent implements OnInit {
             this.activatedRoute,
             this.router
         );
-        this.activatedRoute.data.subscribe(data => {
-            this.displayedColumns = [];
-            data.list.types.forEach((type: ApiItemType) => {
-                type.fields.forEach(field => {
-                    this.displayedColumns.push(field.name);
-                });
-            });
-        });
-        // this.displayedColumns = [];
+        this.displayColsSub = this.fieldsService.displayableColumns.subscribe(
+            cols => {
+                this.displayedColumns = cols;
+            }
+        );
+    }
+
+    ngOnDestroy() {
+        if (this.displayColsSub) {
+            this.displayColsSub.unsubscribe();
+        }
     }
 
     /** Open item detail page (sidenav) */

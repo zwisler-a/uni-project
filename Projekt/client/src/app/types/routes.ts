@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { AddTypeComponent } from './add-type/add-type.component';
 import { SelectTypeComponent } from './select-type/select-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
-import { TypeResolver } from './type-detail/type.resolver';
 import { TypesResolver } from './types-list/types.resolver';
 import { TypesPageComponent } from './types-page/types-page.component';
 
@@ -20,9 +19,7 @@ export const typeRoutes: Routes = [
             },
             {
                 path: ':id',
-                component: TypeDetailComponent,
-                resolve: { type: TypeResolver },
-                runGuardsAndResolvers: 'always'
+                component: TypeDetailComponent
             },
             {
                 path: '',

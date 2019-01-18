@@ -1,20 +1,26 @@
-import { Injectable, SecurityContext } from '@angular/core';
+import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Observable, of, zip } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 
-import { ApiItemType } from './types/api/api-item-type.interface';
+import { TypesService } from '../type-store/types.service';
 import { ApiItem } from './types/api/api-item.interface';
 import { FieldType } from './types/field-type.enum';
 import { Item } from './types/item.interface';
-import { TypesService } from './types.service';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Type } from '../type-store/types/type.interface';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class ItemTransformationService {
+@Pipe({ name: 'toItem' })
+export class ItemPipe implements PipeTransform {
     constructor(
         private typesService: TypesService,
         private sanatizer: DomSanitizer
     ) {}
+
+    toItem() {
+        return switchMap((items: Item[]) => {
+            return this.transform(items);
+        });
+    }
 
     /**
      * Transforms the items recieved from the backend in a form for easy use in the frontend
@@ -22,17 +28,25 @@ export class ItemTransformationService {
      * @param items Items recieved from the API
      * @param types Types Recieved from the API
      */
-    async transformItems(items: ApiItem[]): Promise<Item[]> {
-        const promises = items.map(async item => {
-            const itemType = await this.typesService.getType(item.typeId);
-            if (!itemType) {
-                throw new Error(
-                    `Type ID ${item.typeId} of item ${item.id} not found!`
-                );
-            }
-            return this.transformItem(item, itemType);
+    transform(items: ApiItem[]): Observable<Item[]> {
+        const observableItems = items.map(item => {
+            return this.typesService.getType(item.typeId).pipe(
+                map(type => {
+                    if (!type) {
+                        throw new Error(
+                            `Type ID ${item.typeId} of item ${
+                                item.id
+                            } not found!`
+                        );
+                    }
+                    return this.transformItem(item, type);
+                })
+            );
         });
-        return await Promise.all(promises);
+        if (!observableItems.length) {
+            return of([]);
+        }
+        return zip(...observableItems);
     }
 
     /**
@@ -40,7 +54,7 @@ export class ItemTransformationService {
      * @param item Item recieved from the API
      * @param itemType ItemType recieved from the API
      */
-    transformItem(item: ApiItem, itemType: ApiItemType) {
+    private transformItem(item: ApiItem, itemType: Type): Item {
         const uiItem: Item = {
             id: item.id,
             typeId: item.typeId,
@@ -65,9 +79,10 @@ export class ItemTransformationService {
                 required: fieldType.required,
                 unique: fieldType.unique,
                 type: fieldType.type,
+                referenceId: fieldType.referenceId,
                 displayValue: this.getFieldDisplayValue(
                     apiField.value,
-                    fieldType.type as FieldType
+                    fieldType.type
                 )
             };
         });
@@ -75,10 +90,12 @@ export class ItemTransformationService {
     }
 
     /** Determines how a value should be displayed */
-    private getFieldDisplayValue(value: any, type: FieldType) {
+    private getFieldDisplayValue(value: any, type: string) {
         switch (type) {
             case FieldType.boolean:
-                return value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
+                return value
+                    ? '<i class="material-icons">check</i>'
+                    : '<i class="material-icons">close</i>';
             case FieldType.date:
                 return new Date(value).toLocaleDateString('de-De');
             case FieldType.number:

@@ -1,9 +1,8 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { AutoUnsubscribe } from 'src/app/util/autounsubscribe.decorator';
+import { Subscription } from 'rxjs';
 
-import { TypesService } from '../types.service';
+import { TypesService } from '../../stores/type-store/types.service';
 
 /**
  * List of all types available
@@ -12,16 +11,17 @@ import { TypesService } from '../types.service';
     selector: 'app-item-type-list',
     templateUrl: './item-type-list.component.html'
 })
-@AutoUnsubscribe()
-export class ItemTypeListComponent implements OnInit {
-    paramsSub: any;
+export class ItemTypeListComponent implements OnInit, OnDestroy {
+    paramsSub: Subscription;
     page = 0;
     perPage = 0;
-    types: { id: number; name: string }[];
+    typeId = 0;
+    get types() {
+        return this.typesService.types;
+    }
 
     constructor(
         private route: ActivatedRoute,
-        private http: HttpClient,
         private typesService: TypesService
     ) {}
 
@@ -29,9 +29,13 @@ export class ItemTypeListComponent implements OnInit {
         this.paramsSub = this.route.params.subscribe(params => {
             this.page = params['page'];
             this.perPage = params['perPage'];
+            this.typeId = params['itemTypeId'];
         });
-        this.typesService.getTypes().then((res: any) => {
-            this.types = res;
-        });
+    }
+
+    ngOnDestroy(): void {
+        if (this.paramsSub) {
+            this.paramsSub.unsubscribe();
+        }
     }
 }

@@ -1,0 +1,21 @@
+<mat-form-field>
+    <input
+        type="text"
+        [placeholder]="'items.create.itemTyp' | translate"
+        matInput
+        [disabled]="disabled"
+        [value]="value | typeName | async"
+        autocomplete="nope"
+        [matAutocomplete]="auto"
+        #autoCompleteTrigger="matAutocompleteTrigger"
+    />
+    <mat-autocomplete
+        (optionSelected)="selected.emit($event.option.value)"
+        #auto="matAutocomplete"
+        [displayWith]="toItemTypeName"
+    >
+        <mat-option *ngFor="let itemType of (types | async)" [value]="itemType">
+            {{ itemType.id | typeName | async }}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

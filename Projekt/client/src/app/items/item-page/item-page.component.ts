@@ -1,8 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AutoUnsubscribe } from 'src/app/util/autounsubscribe.decorator';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
+import { Subscription } from 'rxjs';
 
 /**
  * Layout of the item display page.
@@ -12,8 +10,7 @@ import { ObservableMedia } from '@angular/flex-layout';
     selector: 'app-item-page',
     templateUrl: './item-page.component.html'
 })
-@AutoUnsubscribe()
-export class ItemPageComponent implements OnInit {
+export class ItemPageComponent implements OnInit, OnDestroy {
     itemTypeSidenavOpen = true;
     itemTypeSidenavMode = 'side';
 
@@ -23,6 +20,12 @@ export class ItemPageComponent implements OnInit {
     ngOnInit() {
         this.mediaSub = this.media.subscribe(this.sidenavState.bind(this));
         this.sidenavState();
+    }
+
+    ngOnDestroy(): void {
+        if (this.mediaSub) {
+            this.mediaSub.unsubscribe();
+        }
     }
 
     /** Determine if the sidenav should be open or close */

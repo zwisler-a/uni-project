@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy(): void {
         if (environment.showLoginDemoInfo) {
-            this.userDemoInfo.closeWithAction();
+            this.userDemoInfo.dismissWithAction();
         }
     }
 

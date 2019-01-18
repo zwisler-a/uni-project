@@ -3,19 +3,21 @@ import { FieldType } from './field-type.enum';
 export interface Field {
     name: string;
     id: number;
-    type: FieldType;
+    type: string;
     value: string | number | LinkField | FileField;
     displayValue: string;
     required: boolean;
     unique: boolean;
+    referenceId?: number;
 }
 /** A property of an item in a better usable state for ts */
 export interface DeterminedField<T> {
     name: string;
-    type: FieldType;
+    type: string;
     value: T;
     required?: boolean;
     unique?: boolean;
+    referenceId?: string;
 }
 /** @deprecated */
 export interface LinkField {

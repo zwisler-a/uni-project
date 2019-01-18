@@ -65,9 +65,20 @@
             >
                 {{ "types.edit.unique" | translate }}
             </mat-checkbox>
-            <button mat-icon-button [disabled]="!edit" (click)="deleteMe.emit()">
+            <button
+                mat-icon-button
+                [disabled]="!edit"
+                (click)="deleteMe.emit()"
+            >
                 <mat-icon>delete</mat-icon>
             </button>
         </div>
     </ng-template>
+
+    <app-type-selector
+        [value]="field.referenceId"
+        [disabled]="!edit"
+        (selected)="setReference($event)"
+        *ngIf="field.type === 'reference'"
+    ></app-type-selector>
 </ng-container>

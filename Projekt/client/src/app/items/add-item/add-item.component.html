@@ -9,25 +9,7 @@
     autocomplete="off"
 >
     <span *ngIf="item.typeId === -1" translate>items.create.selectType</span>
-    <mat-form-field class="example-full-width">
-        <input
-            type="text"
-            [placeholder]="'items.create.itemTyp' | translate"
-            matInput
-            (input)="selectTypeByName($event)"
-            [matAutocomplete]="auto"
-            #autoCompleteTrigger="matAutocompleteTrigger"
-        />
-        <mat-autocomplete
-            (optionSelected)="typeChange($event.option.value.id)"
-            #auto="matAutocomplete"
-            [displayWith]="toItemTypeName"
-        >
-            <mat-option *ngFor="let itemType of itemTypes" [value]="itemType">
-                {{ itemType.name }}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
+    <app-type-selector (selected)="typeChange($event)"></app-type-selector>
     <app-item-field
         *ngFor="let field of item.fields"
         [field]="field"
@@ -35,7 +17,12 @@
     ></app-item-field>
 
     <div *ngIf="item.typeId !== -1" fxLayoutAlign="end center" class="actions">
-        <button color="primary" [disabled]="isSubmitting" mat-raised-button (click)="submit()">
+        <button
+            color="primary"
+            [disabled]="isSubmitting"
+            mat-raised-button
+            (click)="submit()"
+        >
             {{ "items.edit.save" | translate }}
         </button>
     </div>

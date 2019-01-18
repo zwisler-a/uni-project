@@ -1,13 +1,12 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { DeterminedField } from '../../types/field.interface';
 import {
     FormGroup,
     FormControl,
     Validators,
     AbstractControl
 } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material';
-import { FieldType } from '../../types/field-type.enum';
+import { DeterminedField } from '../../../stores/item-store/types/field.interface';
+import { FieldType } from '../../../stores/item-store/types/field-type.enum';
 
 @Component({
     selector: 'app-item-field-color',
