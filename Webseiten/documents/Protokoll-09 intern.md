@@ -1,3 +1,8 @@
+---
+layout: page
+permalink: /documents/protocol/9-i/
+---
+
 # Protokoll 9. Gruppentreffen am 11.01.2019
 
 ##Lagebesprechung

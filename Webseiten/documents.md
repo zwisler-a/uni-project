@@ -13,7 +13,7 @@ permalink: /documents/
 | Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
 | QS-Konzept       | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
 | Projektplan      | [Projektplan.pdf](Projektplan.pdf)                               | 18.12.2018 |
-| Releaseplan      | [Releaseplan.pdf](Releaseplan.pdf)                               | 14.01.2019 |
+| Releaseplan      | [Releaseplan.pdf](Releaseplan.pdf)                               | 18.01.2019 |
 
 ### Protokolle
 
@@ -29,6 +29,8 @@ permalink: /documents/
 | [Protokoll 7](protocol/7/)            | 07.12.2018 |
 | [Protokoll 7 - intern](protocol/7-i/) | 07.12.2018 |
 | [Protokoll 8](protocol/8/)            | 14.12.2018 |
+| [Protokoll 9](protocol/9/)            | 14.01.2019 |
+| [Protokoll 9 - intern](protocol/9-i/) | 14.01.2019 |
 
 ### Aufwandsberichte
 
