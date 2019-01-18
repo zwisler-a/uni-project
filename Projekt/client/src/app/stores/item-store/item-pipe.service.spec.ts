@@ -1,10 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ItemTransformationService } from './item-transformation.service';
-import { ApiItem } from '../items/types/api/api-item.interface';
-import { ApiItemType } from '../items/types/api/api-item-type.interface';
-import { Item } from '../items/types/item.interface';
-import { FieldType } from '../items/types/field-type.enum';
 /*
 describe('ItemTransformationService', () => {
     beforeEach(() =>

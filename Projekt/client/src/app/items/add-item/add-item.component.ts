@@ -8,7 +8,6 @@ import { Type } from 'src/app/stores/type-store/types/type.interface';
 import { ItemService } from '../../stores/item-store/item.service';
 import { ApiItemsResponse } from '../../stores/item-store/types/api/api-items-response.interface';
 import { Item } from '../../stores/item-store/types/item.interface';
-import { TypesService } from '../../stores/type-store/types.service';
 
 /**
  * UI to create an new Item
@@ -31,7 +30,6 @@ export class AddItemComponent implements OnInit, OnDestroy {
         private itemService: ItemService,
         private location: Location,
         private router: Router,
-        private typesService: TypesService,
         private activatedRoute: ActivatedRoute
     ) {}
 

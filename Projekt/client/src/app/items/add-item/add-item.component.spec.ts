@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Location } from '@angular/common';
 
 import { AddItemComponent } from './add-item.component';
 import { ItemsModule } from '../items.module';
@@ -8,6 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 import { CommonModule } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ItemStoreModule } from 'src/app/stores/item-store/item-store.module';
 
 describe('AddItemComponent', () => {
     let component: AddItemComponent;
@@ -22,9 +22,9 @@ describe('AddItemComponent', () => {
                 NoopAnimationsModule,
                 RouterTestingModule,
                 HttpClientTestingModule,
+                ItemStoreModule,
                 TranslateTestingModule.withTranslations({})
-            ],
-            providers: [{ provide: Location, useValue: {} }]
+            ]
         }).compileComponents();
     }));
 
