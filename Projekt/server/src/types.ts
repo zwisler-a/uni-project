@@ -22,7 +22,8 @@ export interface Config {
 }
 
 export enum ErrorNumber {
-    TYPE_NOT_FOUND
+    TYPE_NOT_FOUND,
+    TYPE_REFERENCE_NOT_FOUND
 }
 
 export class ApiError extends Error {

@@ -1,10 +1,10 @@
 import { Cache } from './cache';
 import { DatabaseController } from '../controller';
-import { Type, TypeField } from '../../api/models/type';
+import { Type, TypeField, TypeFieldType } from '../../api/models/type';
 import { ApiError, ErrorNumber } from '../../types';
 
 export class TypeModel {
-    private static cache = new Cache<Type>({
+    private static readonly cache = new Cache<Type>({
         stdTTL: 3600,
         checkperiod: 600
     });
@@ -63,7 +63,44 @@ export class TypeModel {
         return type;
     }
 
-    static async create(database: DatabaseController, fields: TypeField[]): Promise<void> {
+    /**
+     * Creates a new type and an associated dynamic item table
+     * @param database current DatabaseContoller instance
+     * @param type Type to be created
+     */
+    static async create(database: DatabaseController, type: Type): Promise<void> {
+        // Check if all referenced types exist
+        for (const field of type.fields) {
+            if (field.type === TypeFieldType.reference && !TypeModel.exists(database, field.referenceId)) {
+                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
+            }
+        }
+
+        await database.beginTransaction(async function(connection) {
+            const id = (await database.TYPE_CREATE.executeConnection(connection, [1, type.name])).insertId;
+
+            // Insert all fields
+            const fieldIds = await Promise.all(type.fields.map(function(field: TypeField) {
+                const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
+                return database.TYPE_FIELD_CREATE.executeConnection(connection, [ id, field.name, field.type, field.required, field.unique, reference ]);
+            }));
+
+            // Set representative with newly generated fields
+            await database.TYPE_REPRESENTATIVE.executeConnection(connection, fieldIds[type.representative].insertId);
+
+            // Create new dynamic item table
+            await database.ITEM_TABLE_CREATE.execute({
+                id,
+                fields: type.fields.map((field, index) => {
+                    field.id = fieldIds[index].insertId;
+                })
+            });
+        });
+    }
+
+    static async update(database: DatabaseController, id: number, type: Type): Promise<void> {
+        const old = TypeModel.get(database, id);
+
 
     }
 
