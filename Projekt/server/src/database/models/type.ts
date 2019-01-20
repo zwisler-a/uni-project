@@ -99,12 +99,6 @@ export class TypeModel {
     }
 
     static async update(database: DatabaseController, id: number, type: Type): Promise<void> {
-        const old = TypeModel.get(database, id);
-
-
-    }
-
-    static async update(database: DatabaseController, id: number, type: Type) {
         const fields = type.fields;
         const old: Type = await TypeModel.get(database, id);
 
