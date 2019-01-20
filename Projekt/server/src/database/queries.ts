@@ -1,5 +1,6 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
+import { createDeflate } from 'zlib';
 
 export interface Queries {
     /** Creates the company table */
@@ -40,11 +41,19 @@ export interface Queries {
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
     /** Gets a type field by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
+    /** Edit a type field by id */
+    TYPE_FIELD_EDIT: StaticQuery<ObjectResultsets>;
+    /** Delete a type field by id */
+    TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets>;
     /** Deletes an item table */
     ITEM_TABLE_DROP: DynamicQuery<ObjectResultsets>;
+    /** Creates a new field in an item table */
+    ITEM_TABLE_FIELD_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Edites a specific field in an item table */
+    ITEM_TABLE_FIELD_EDIT: DynamicQuery<ObjectResultsets>;
     /** Deletes a specific field in an item table */
     ITEM_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets>;
     /** Creates a new foreign key constraint in an item table */
@@ -126,8 +135,24 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `DROP TABLE \`%_item_${structure}\``.replace('%_', prefix);
     }
 
+    function addTableField(structure: any) {
+        let sql = `ALTER TABLE \`%_item_${structure.typeId}\` ADD COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+        return sql.replace('%_', prefix);
+    }
+
+    function editTableField(structure: any) {
+        let sql = `ALTER TABLE \`%_item_${structure.typeId}\` MODIFY COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+        return sql.replace('%_', prefix);
+    }
+
     function dropTableField(structure: any) {
-        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP \`field_${structure.id}\``.replace('%_', prefix);
+        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP COLUMN \`field_${structure.id}\``.replace('%_', prefix);
     }
 
     function generateForeignKey(structure: any) {
@@ -137,6 +162,15 @@ export function factory(pool: Pool, prefix: string): Queries {
 
     function dropForeignKey(structure: any) {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP FOREIGN KEY \`field_${structure.id}\``.replace('%_', prefix);
+    }
+
+    function generateUniqueIndex(structure: any) {
+        const field = `\`field_${structure.id}\``;
+        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} UNIQUE INDEX (${field})`.replace('%_', prefix);
+    }
+
+    function dropUniqueIndex(structure: any) {
+        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP INDEX \`field_${structure.id}\``.replace('%_', prefix);
     }
 
     function generateItem(structure: any) {
@@ -198,14 +232,18 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
+        TYPE_FIELD_EDIT: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
+        TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),
+        ITEM_TABLE_FIELD_CREATE: new DynamicQuery(pool, addTableField),
+        ITEM_TABLE_FIELD_EDIT: new DynamicQuery(pool, editTableField),
         ITEM_TABLE_FIELD_DROP: new DynamicQuery(pool, dropTableField),
         ITEM_TABLE_FK_CREATE: new DynamicQuery(pool, generateForeignKey),
         ITEM_TABLE_FK_DROP: new DynamicQuery(pool, dropForeignKey),
-        ITEM_TABLE_UI_CREATE: null,
-        ITEM_TABLE_UI_DROP: null,
+        ITEM_TABLE_UI_CREATE: new DynamicQuery(pool, generateUniqueIndex),
+        ITEM_TABLE_UI_DROP: new DynamicQuery(pool, dropUniqueIndex),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
         ITEM_GET: new DynamicQuery(pool, getItemList),
