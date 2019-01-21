@@ -23,6 +23,8 @@ export interface Config {
 
 export enum ErrorNumber {
     REQUEST_NUMBER_FORMAT,
+    REQUEST_FIELD_TYPE,
+    REQUEST_VALUE,
     TYPE_NOT_FOUND,
     TYPE_REFERENCE_NOT_FOUND
 }

@@ -30,8 +30,10 @@ export interface Queries {
     TYPE_GET_ID: StaticQuery<ArrayResultsets>;
     /** Checks by id if a type exists */
     TYPE_EXISTS_ID: StaticQuery<ArrayResultsets>;
+    /** Edit a type by id */
+    TYPE_UPDATE: StaticQuery<ObjectResultsets>;
     /** Deletes a type by id */
-    TYPE_DELTE: StaticQuery<ObjectResultsets>;
+    TYPE_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new type field */
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
@@ -157,7 +159,7 @@ export function factory(pool: Pool, prefix: string): Queries {
 
     function generateForeignKey(structure: any) {
         const field = `\`field_${structure.id}\``;
-        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.replace('%_', prefix);
+        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.split('%_').join(prefix);
     }
 
     function dropForeignKey(structure: any) {
@@ -226,14 +228,15 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
         TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
         TYPE_EXISTS_ID: queryFactory('SELECT 1 FROM `%_types` WHERE `id` = ?'),
-        TYPE_DELTE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
+        TYPE_UPDATE: queryFactory('UPDATE `%_types` SET `companyId` = ?, `name` = ? WHERE `id` = ?'),
+        TYPE_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
         TYPE_FIELD_EDIT: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
-        TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
+        TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),

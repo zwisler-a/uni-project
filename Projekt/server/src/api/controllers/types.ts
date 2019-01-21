@@ -40,7 +40,7 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
  */
 export async function typeGet(req: Request, res: Response, next: NextFunction) {
     try {
-        const id = req.params.id;
+        const id: number = req.params.id;
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(database, id);
         res.status(200).send(type);
@@ -61,6 +61,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
  * @param next indicating the next middleware function
  */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
+    // TODO impl into TypeModel
     try {
         const database: DatabaseController = req.app.get('database');
         const types: Type[] = await database.TYPE_GET.execute();
@@ -89,11 +90,19 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
  */
 export async function typeUpdate(req: Request, res: Response, next: NextFunction) {
     try {
-        const typeId: number = req.params.id;
+        const id: number = req.params.id;
+        let type: Type = req.body;
         const database: DatabaseController = req.app.get('database');
+        type = await TypeModel.update(database, id, type);
+
+        res.status(200).send(type);
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        if (error instanceof ApiError) {
+            next(error);
+        } else {
+            next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
+        }
+        console.error(error);
     }
 }
 

@@ -11,7 +11,6 @@ export class TypeModel {
 
     private static async fetchFields(database: DatabaseController, id: number): Promise<TypeField[]> {
         return (await database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
-            delete row.typeId;
             row.required = row.required.readUInt8() === 1;
             row.unique = row.unique.readUInt8() === 1;
             return row as TypeField;
@@ -80,6 +79,7 @@ export class TypeModel {
         await database.beginTransaction(async function(connection) {
             const id = (await database.TYPE_CREATE.executeConnection(connection, [1, type.name])).insertId;
 
+            // TODO Maybe use batch instead of query
             // Insert all fields
             const fieldIds = await Promise.all(type.fields.map(function(field: TypeField) {
                 const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
@@ -103,48 +103,55 @@ export class TypeModel {
         return result;
     }
 
-    static async update(database: DatabaseController, id: number, type: Type): Promise<void> {
-        const fields = type.fields;
+    static async update(database: DatabaseController, id: number, type: Type): Promise<Type> {
+        const fields = type.fields.slice();
         const old: Type = await TypeModel.get(database, id);
 
-        // Check if all referenced types exist
-        // TODO do other integrity checks
+        // Check if all fields are mostly valid
         for (const field of fields) {
-            if (field.type === TypeFieldType.reference && !TypeModel.exists(database, field.referenceId)) {
-                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field.referenceId);
+            if (field.type === TypeFieldType.reference) {
+                // Check if referenceId is number
+                if (typeof field.referenceId !== 'number') {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, { referenceId: 'number' });
+                }
+                // Check if referenceId exists
+                if (!TypeModel.exists(database, field.referenceId)) {
+                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field.referenceId);
+                }
+            }
+            // Check if type is valid
+            else if (!Object.keys(TypeFieldType).some((type: string) => type === field.type)) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_VALUE, { type: Object.keys(TypeFieldType) });
             }
         }
 
-        // TODO Update type table
+        await database.beginTransaction(async function(connection) {
+            // Update type table
+            await database.TYPE_UPDATE.executeConnection(connection, [1, type.name, id]);
 
-        database.beginTransaction(async function(connection) {
             let update = false;
             oldLoop:
             for (const oldField of old.fields) {
                 for (let i = 0; i < fields.length; i++) {
                     const field = fields[i];
                     if (oldField.id === field.id) {
+                        // TODO rethink queries so the fields don't need the typeId
+                        field.typeId = id;
+
+                        // Remove field for faster loop
                         fields.splice(i, 1);
+
+                        // Reset update flag
                         update = false;
 
-                        // TODO bring in this order
-                        // 1. DROP FK
-                        // 2. UPDATE FK
-                        // 3. UPDATE TYPE
-                        // 4. CREATE FK
-                        // 5. UPDATE UI
-
-                        // Delete/Create/Edit foreign key
+                        // If type changed from reference to another -> delete the foreign key to change the type
                         if (oldField.type === TypeFieldType.reference && field.type !== TypeFieldType.reference) {
                             await database.ITEM_TABLE_FK_DROP.executeConnection(connection, oldField);
                             update = true;
-                        } else if (oldField.type !== TypeFieldType.reference && field.type === TypeFieldType.reference) {
-                            // TODO do user input check + does type exist
-                            await database.ITEM_TABLE_FK_CREATE.executeConnection(connection, field);
-                            update = true;
-                        } else if (oldField.type === TypeFieldType.reference && field.type === TypeFieldType.reference
+                        }
+                        // If type is still reference but the referenced type changed -> update (delete, create) foreign key
+                        else if (oldField.type === TypeFieldType.reference && field.type === TypeFieldType.reference
                             && oldField.referenceId !== field.referenceId) {
-                            // TODO do user input check with field.referenceId + does type exist
                             await database.ITEM_TABLE_FK_DROP.executeConnection(connection, oldField);
                             await database.ITEM_TABLE_FK_CREATE.executeConnection(connection, field);
                             update = true;
@@ -156,7 +163,15 @@ export class TypeModel {
                             update = true;
                         }
 
+                        // If type changed to reference create new foreign key
+                        if (oldField.type !== TypeFieldType.reference && field.type === TypeFieldType.reference) {
+                            await database.ITEM_TABLE_FK_CREATE.executeConnection(connection, field);
+                            update = true;
+                        }
+
                         // Delete/Create unique index
+                        // TODO fix (also happens when creating new column): everything could have the same value
+                        // when the type changed but unique enfources unique values this is a problem think about solutions
                         if (oldField.unique && !field.unique) {
                             await database.ITEM_TABLE_UI_DROP.executeConnection(connection, oldField);
                             update = true;
@@ -167,7 +182,9 @@ export class TypeModel {
 
                         // If anything changed update type field
                         if (update) {
-                            await database.TYPE_FIELD_EDIT.executeConnection(connection, field);
+                            const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
+                            await database.TYPE_FIELD_EDIT.executeConnection(connection,
+                                [ field.name, field.type, field.required, field.unique, reference, field.id ]);
                         }
                         continue oldLoop;
                     }
@@ -185,7 +202,10 @@ export class TypeModel {
 
             for (const field of fields) {
                 // Create type field for field id
-                field.id = (await database.TYPE_FIELD_CREATE.executeConnection(connection, field)).insertId;
+                const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
+                field.id = (await database.TYPE_FIELD_CREATE.executeConnection(connection,
+                    [ id, field.name, field.type, field.required, field.unique, reference ])).insertId;
+                field.typeId = id;
                 // Create new column in item table + constraints
                 await database.ITEM_TABLE_FIELD_CREATE.executeConnection(connection, field);
                 if (field.unique) {
@@ -196,6 +216,11 @@ export class TypeModel {
                 }
             }
         });
+
+        // TODO later generate a valid Type object instead of fetching
+        type = await TypeModel.fetchType(database, id);
+        await TypeModel.cache.set(id.toString(), type);
+        return type;
     }
 
     /**
@@ -222,7 +247,7 @@ export class TypeModel {
 
             // Drop the table and delete the type
             await database.ITEM_TABLE_DROP.executeConnection(connection, id);
-            await database.TYPE_DELTE.executeConnection(connection, id);
+            await database.TYPE_DELETE.executeConnection(connection, id);
         });
 
         // Remove the type from the cache if it even is in there
