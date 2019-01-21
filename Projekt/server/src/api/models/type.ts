@@ -9,8 +9,6 @@ export interface Type {
     companyId: number;
     /** Type's unique name */
     name: string;
-    /** Type's representative field */
-    representative: number;
     /** List of all the field's an item of this type (should) have */
     fields: TypeField[];
 }

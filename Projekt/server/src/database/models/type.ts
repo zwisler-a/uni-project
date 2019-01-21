@@ -21,11 +21,11 @@ export class TypeModel {
     private static async fetchType(database: DatabaseController, id: number): Promise<Type> {
         const types = await database.TYPE_GET_ID.execute(id);
         if (types.length === 0) {
-            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
+            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND, id);
         }
 
         const type: Type = types.pop();
-        type.fields = await TypeModel.fetchFields(database, id);
+        type.fields = await TypeModel.fetchFields(database, type.id);
 
         return type;
     }
@@ -36,7 +36,7 @@ export class TypeModel {
      * @param id id of the type
      * @returns Promise that resolves whether the type exists
      */
-    private static async exists(database: DatabaseController, id: number): Promise<boolean> {
+    static async exists(database: DatabaseController, id: number): Promise<boolean> {
         // Use a faster query (smaller answer) for exists since we don't care about data
         return (await database.TYPE_EXISTS_ID.execute(id)).length > 0;
     }
@@ -52,7 +52,7 @@ export class TypeModel {
 
         // Check cache
         let type: Type = await TypeModel.cache.get(key);
-        if (type !== undefined) {
+        if (type === undefined) {
             // Fetch type
             type = await TypeModel.fetchType(database, id);
             await TypeModel.cache.set(key, type);
@@ -68,7 +68,7 @@ export class TypeModel {
      * @param database current DatabaseContoller instance
      * @param type Type to be created
      */
-    static async create(database: DatabaseController, type: Type): Promise<void> {
+    static async create(database: DatabaseController, type: Type): Promise<Type> {
         // Check if all referenced types exist
         for (const field of type.fields) {
             if (field.type === TypeFieldType.reference && !TypeModel.exists(database, field.referenceId)) {
@@ -76,6 +76,7 @@ export class TypeModel {
             }
         }
 
+        let result: Type;
         await database.beginTransaction(async function(connection) {
             const id = (await database.TYPE_CREATE.executeConnection(connection, [1, type.name])).insertId;
 
@@ -85,17 +86,21 @@ export class TypeModel {
                 return database.TYPE_FIELD_CREATE.executeConnection(connection, [ id, field.name, field.type, field.required, field.unique, reference ]);
             }));
 
-            // Set representative with newly generated fields
-            await database.TYPE_REPRESENTATIVE.executeConnection(connection, fieldIds[type.representative].insertId);
-
-            // Create new dynamic item table
-            await database.ITEM_TABLE_CREATE.execute({
+            result = {
                 id,
+                companyId: 1,
+                name: type.name,
                 fields: type.fields.map((field, index) => {
                     field.id = fieldIds[index].insertId;
+                    return field;
                 })
-            });
+            };
+
+            // Create new dynamic item table
+            await database.ITEM_TABLE_CREATE.execute(result);
         });
+
+        return result;
     }
 
     static async update(database: DatabaseController, id: number, type: Type): Promise<void> {

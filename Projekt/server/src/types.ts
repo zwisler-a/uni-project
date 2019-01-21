@@ -22,6 +22,7 @@ export interface Config {
 }
 
 export enum ErrorNumber {
+    REQUEST_NUMBER_FORMAT,
     TYPE_NOT_FOUND,
     TYPE_REFERENCE_NOT_FOUND
 }
@@ -30,6 +31,10 @@ export class ApiError extends Error {
     status: number;
     errorNumber: ErrorNumber;
     cause: any;
+
+    static BAD_REQUEST(errorNumber: ErrorNumber, cause?: any) {
+        return new ApiError('Bad Request', 'The server cannot or will not process the request due to a client error', 400, errorNumber, cause);
+    }
 
     static NOT_FOUND(errorNumber: ErrorNumber, cause?: any) {
         return new ApiError('Not found', 'The requested resource could not be found but may be available in the future', 404, errorNumber, cause);

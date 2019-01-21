@@ -24,8 +24,6 @@ export interface Queries {
 
     /** Creates a new type */
     TYPE_CREATE: StaticQuery<ObjectResultsets>;
-    /** Sets a types representative field */
-    TYPE_REPRESENTATIVE: StaticQuery<ObjectResultsets>;
     /** Gets all types */
     TYPE_GET: StaticQuery<ArrayResultsets>;
     /** Gets a type by id */
@@ -215,7 +213,7 @@ export function factory(pool: Pool, prefix: string): Queries {
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
-        CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `representative` INT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE, FOREIGN KEY (`representative`) REFERENCES `%_types_field` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
+        CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
@@ -224,8 +222,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`) VALUES (NULL,?,?,?)'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
 
-        TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`, `representative`) VALUES (NULL,?,?,NULL)'),
-        TYPE_REPRESENTATIVE: queryFactory('UPDATE `%_types` SET `representative` = ? WHERE `id` = ?'),
+        TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`) VALUES (NULL,?,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
         TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
         TYPE_EXISTS_ID: queryFactory('SELECT 1 FROM `%_types` WHERE `id` = ?'),
