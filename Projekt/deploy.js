@@ -10,7 +10,7 @@ const { scp } = require("scp2");
 const { 
 	buildPath, docsPath,
 	deployAppPath, deployDocPath
-} = require('./config');
+} = require(process.argv[2] || './config');
 
 /**
  * Little helper class to combine ssh2 and scp2

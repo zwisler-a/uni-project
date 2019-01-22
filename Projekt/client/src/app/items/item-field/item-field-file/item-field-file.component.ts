@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FileField, DeterminedField } from '../../types/field.interface';
+import { FileField, DeterminedField } from '../../../stores/item-store/types/field.interface';
 
 @Component({
     selector: 'app-item-field-file',

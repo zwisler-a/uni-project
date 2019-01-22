@@ -1,22 +1,17 @@
 import { Injectable } from '@angular/core';
-import {
-    ActivatedRouteSnapshot,
-    Resolve,
-    RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { TypesService } from '../types.service';
-import { ApiItemType } from '../types/api-item-type.interface';
+import { TypesService } from '../../stores/type-store/types.service';
 
 @Injectable({ providedIn: 'root' })
-export class TypesResolver implements Resolve<ApiItemType[]> {
+export class TypesResolver implements Resolve<any> {
     constructor(private typesService: TypesService) {}
 
     resolve(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
-    ): Observable<ApiItemType[]> {
-        return this.typesService.getTypes();
+    ): Observable<any> {
+        return this.typesService.loadTypes();
     }
 }

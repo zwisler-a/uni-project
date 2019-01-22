@@ -13,6 +13,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
+import { TypeStoreModule } from './stores/type-store/type-store.module';
+import { StoreModule } from './stores/store.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -26,13 +28,14 @@ export function HttpLoaderFactory(http: HttpClient) {
         ShellModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        StoreModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
                 useFactory: HttpLoaderFactory,
                 deps: [HttpClient]
             }
-        }),
+        })
     ],
     providers: [],
     bootstrap: [AppComponent]
@@ -44,7 +47,9 @@ export class AppModule {
     ) {
         this.translate.addLangs(['de', 'en']);
         this.translate.onLangChange.subscribe(async () => {
-            const translations = await this.translate.get(['nav.inventory', 'nav.types']).toPromise();
+            const translations = await this.translate
+                .get(['nav.inventory', 'nav.types'])
+                .toPromise();
 
             this.navigationService.navigationModel = [
                 {

@@ -2,29 +2,38 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { NavigationComponent } from './shell/navigation/navigation.component';
+import { AuthGuard } from './shell/auth/auth.guard';
 
 const routes: Routes = [
     {
         path: '',
         component: NavigationComponent,
+        canActivate: [AuthGuard],
         children: [
             {
                 path: 'items',
-                loadChildren: './items/items.module#ItemsModule'
+                loadChildren: './items/items.module#ItemsModule',
+                canLoad: [AuthGuard]
             },
             {
                 path: 'types',
-                loadChildren: './types/types.module#TypesModule'
+                loadChildren: './types/types.module#TypesModule',
+                canLoad: [AuthGuard]
             }
         ]
-    },
+    }
 
     // Redirect all unidentifiable routes to login
     // { path: '**', redirectTo: '/auth/login', pathMatch: 'full' }
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload', enableTracing: false })],
+    imports: [
+        RouterModule.forRoot(routes, {
+            onSameUrlNavigation: 'reload',
+            enableTracing: false
+        })
+    ],
     exports: [RouterModule]
 })
 export class AppRoutingModule {}

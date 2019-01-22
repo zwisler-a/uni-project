@@ -51,6 +51,16 @@ test_server:
       junit:
         - Projekt/server/test-report.xml
 
+staging:
+  stage: production
+  script:
+    - cd Projekt/
+    - npm install
+    - npm run build:all
+    - npm run deploy:staging
+  only:
+    - master
+
 deploy:
   stage: production
   script:

@@ -19,16 +19,18 @@ import {
     MatSortModule,
     MatTableModule,
     MatToolbarModule,
-    MatTooltipModule
+    MatTooltipModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
+import { SearchModule } from '../shared/search/search.module';
+import { TypeNameModule } from '../shared/type-name-pipe/type-name.module';
+import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
-import { ItemDetailResolver } from './item-details/item-details.resolver';
 import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
 import { ItemFieldColorComponent } from './item-field/item-field-color/item-field-color.component';
 import { ItemFieldDateComponent } from './item-field/item-field-date/item-field-date.component';
@@ -38,15 +40,11 @@ import { ItemFieldReferenceComponent } from './item-field/item-field-reference/i
 import { ItemFieldStringComponent } from './item-field/item-field-string/item-field-string.component';
 import { ItemFieldComponent } from './item-field/item-field.component';
 import { ItemPageComponent } from './item-page/item-page.component';
-import { ItemTransformationService } from './item-transformation.service';
 import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
-import { ItemService } from './item.service';
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
 import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
-import { SearchModule } from '../shared/search/search.module';
-import { TypesService } from './types.service';
 
 @NgModule({
     declarations: [
@@ -90,16 +88,12 @@ import { TypesService } from './types.service';
         FlexLayoutModule,
         MatSortModule,
         SearchModule,
+        TypeSelectorModule,
+        TypeNameModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)
     ],
-    providers: [
-        ItemService,
-        ItemDetailResolver,
-        ItemsListResolver,
-        ItemTransformationService,
-        TypesService
-    ]
+    providers: [ItemsListResolver]
 })
 export class ItemsModule {}

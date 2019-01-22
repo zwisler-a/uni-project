@@ -22,12 +22,11 @@ import { AddTypeComponent } from './add-type/add-type.component';
 import { typeRoutes } from './routes';
 import { SelectTypeComponent } from './select-type/select-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
-import { TypeResolver } from './type-detail/type.resolver';
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
 import { TypesResolver } from './types-list/types.resolver';
 import { TypesPageComponent } from './types-page/types-page.component';
-import { TypesService } from './types.service';
+import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
 
 @NgModule({
     declarations: [
@@ -53,9 +52,10 @@ import { TypesService } from './types.service';
         FormsModule,
         ConfirmDialogModule,
         SearchModule,
+        TypeSelectorModule,
         MatToolbarModule,
         TranslateModule
     ],
-    providers: [TypesService, TypesResolver, TypeResolver]
+    providers: [TypesResolver]
 })
 export class TypesModule {}

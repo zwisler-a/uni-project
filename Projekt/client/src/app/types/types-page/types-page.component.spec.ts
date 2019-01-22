@@ -5,6 +5,8 @@ import { TypesModule } from '../types.module';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ItemStoreModule } from 'src/app/stores/item-store/item-store.module';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('TypesPageComponent', () => {
     let component: TypesPageComponent;
@@ -17,7 +19,8 @@ describe('TypesPageComponent', () => {
                 TypesModule,
                 TranslateTestingModule.withTranslations({}),
                 RouterTestingModule,
-                NoopAnimationsModule
+                NoopAnimationsModule,
+                HttpClientTestingModule
             ]
         }).compileComponents();
     }));

@@ -2,7 +2,7 @@
     <a
         mat-list-item
         class="navigation-item"
-        *ngFor="let type of types"
+        *ngFor="let type of (types | async)"
         [routerLink]="['/types', type.id]"
         [routerLinkActive]="'active'"
     >

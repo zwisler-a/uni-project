@@ -8,25 +8,26 @@
             <mat-icon>delete</mat-icon>
         </button>
     </div>
+    <form autocomplete="off">
+        <div fxLayout="column" fxLayoutAlign="start center">
+            <app-type-field
+                *ngFor="let field of type.fields"
+                [field]="field"
+                [edit]="edit"
+            ></app-type-field>
 
-    <div fxLayout="column" fxLayoutAlign="start center">
-        <app-type-field
-            *ngFor="let field of type.fields"
-            [field]="field"
-            [edit]="edit"
-        ></app-type-field>
-
-        <button mat-button (click)="addField()" *ngIf="edit">
-            {{ "types.edit.addField" | translate }}
-        </button>
-        <span fxFlex></span>
-    </div>
-    <div fxLayoutAlign="end center" *ngIf="edit">
-        <button mat-button (click)="edit = false">
-            {{ "types.edit.cancel" | translate }}
-        </button>
-        <button mat-raised-button color="primary" (click)="save()">
-            {{ "types.edit.save" | translate }}
-        </button>
-    </div>
+            <button mat-button (click)="addField()" *ngIf="edit">
+                {{ "types.edit.addField" | translate }}
+            </button>
+            <span fxFlex></span>
+        </div>
+        <div fxLayoutAlign="end center" *ngIf="edit">
+            <button mat-button (click)="edit = false">
+                {{ "types.edit.cancel" | translate }}
+            </button>
+            <button mat-raised-button color="primary" (click)="save()">
+                {{ "types.edit.save" | translate }}
+            </button>
+        </div>
+    </form>
 </ng-container>

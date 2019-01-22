@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { DeterminedField } from '../../types/field.interface';
-import { FieldType } from '../../types/field-type.enum';
+import { DeterminedField } from '../../../stores/item-store/types/field.interface';
+import { FieldType } from '../../../stores/item-store/types/field-type.enum';
 
 @Component({
     selector: 'app-item-field-date',
@@ -22,7 +22,4 @@ export class ItemFieldDateComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {}
-    test(input){
-        return true;
-    }
 }

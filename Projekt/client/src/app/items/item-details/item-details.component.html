@@ -1,6 +1,7 @@
 <mat-toolbar fxFlex="0 0 auto" color="form">
     <button mat-icon-button (click)="back()"><mat-icon>close</mat-icon></button>
-    <span>{{ item ? item.typeId : "" }}</span> <span fxFlex></span>
+    <span>{{ (item ? item.typeId : "") | typeName | async }}</span>
+    <span fxFlex></span>
     <button [hidden]="edit" (click)="editFields()" mat-icon-button>
         <mat-icon>edit</mat-icon>
     </button>
@@ -16,6 +17,7 @@
     autocomplete="off"
     *ngIf="item"
 >
+    <span *ngIf="outOfSync">Item is has been edited already!</span>
     <app-item-field
         *ngFor="let field of item.fields"
         [field]="field"

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
-import { ApiItemType } from '../types/api-item-type.interface';
+import { TypesService } from '../../stores/type-store/types.service';
+
 /** Lists all types */
 @Component({
     selector: 'app-types-list',
@@ -9,12 +9,10 @@ import { ApiItemType } from '../types/api-item-type.interface';
     styleUrls: ['./types-list.component.scss']
 })
 export class TypesListComponent implements OnInit {
-    types: ApiItemType[];
-    constructor(private activatedRoute: ActivatedRoute) {}
-
-    ngOnInit() {
-        this.activatedRoute.data.subscribe(data => {
-            this.types = data.types;
-        });
+    get types() {
+        return this.typeService.types;
     }
+    constructor(private typeService: TypesService) {}
+
+    ngOnInit() {}
 }

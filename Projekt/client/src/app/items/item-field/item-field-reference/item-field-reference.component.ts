@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { LinkField, DeterminedField } from '../../types/field.interface';
-import { FieldType } from '../../types/field-type.enum';
-
+import { DeterminedField, LinkField } from '../../../stores/item-store/types/field.interface';
+import { FieldType } from '../../../stores/item-store/types/field-type.enum';
 @Component({
     selector: 'app-item-field-reference',
     templateUrl: './item-field-reference.component.html',
@@ -11,7 +10,7 @@ export class ItemFieldReferenceComponent implements OnInit {
     @Input()
     field: DeterminedField<LinkField> = {
         name: '',
-        type: FieldType.reference,
+        type: 'reference',
         value: { name: '', ref: '' }
     };
     @Input()

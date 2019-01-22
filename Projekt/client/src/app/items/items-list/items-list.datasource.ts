@@ -1,13 +1,10 @@
 import { DataSource } from '@angular/cdk/collections';
-import { HttpResponse } from '@angular/common/http';
 import { MatPaginator, MatSort } from '@angular/material';
-import { merge, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-
-import { ItemService } from '../item.service';
-import { Item } from '../types/item.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ItemListData } from '../types/item-list.interface';
+import { merge, Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { ItemService } from '../../stores/item-store/item.service';
 
 /**
  * Data source for the ItemList view. This class should
@@ -15,9 +12,8 @@ import { ItemListData } from '../types/item-list.interface';
  * (including sorting, pagination, and filtering).
  */
 export class ItemListDataSource extends DataSource<any> {
-    possibleColumnNames: string[] = [];
-    readonly listItemsUrl = 'item/list';
     private typeId: any;
+    private mutationSub: Subscription;
 
     constructor(
         private paginator: MatPaginator,
@@ -42,55 +38,44 @@ export class ItemListDataSource extends DataSource<any> {
             this.typeId = params.itemTypeId;
         });
 
-        merge(...dataMutations).subscribe((ev: any) => {
+        this.mutationSub = merge(...dataMutations).subscribe((ev: any) => {
+            const contentRoute: any[] = [
+                this.paginator.pageIndex,
+                this.paginator.pageSize
+            ];
+            if (this.typeId) {
+                contentRoute.push(this.typeId);
+            }
+            if (this.sort.direction && this.sort.active) {
+                contentRoute.push(this.sort.active, this.sort.direction);
+            }
             this.router.navigate([
                 '/items',
                 'view',
                 {
                     outlets: {
-                        content: this.typeId
-                            ? [
-                                  this.paginator.pageIndex,
-                                  this.paginator.pageSize,
-                                  this.typeId
-                              ]
-                            : [
-                                  this.paginator.pageIndex,
-                                  this.paginator.pageSize
-                              ]
+                        content: contentRoute
                     }
                 }
             ]);
         });
-
-        return merge(this.itemService.storeUpdated, this.route.data).pipe(
-            map(data => {
-                const listData: ItemListData = data['list'];
-                this.paginator.pageIndex =
-                    listData.page || this.paginator.pageIndex;
-                this.paginator.pageSize =
-                    listData.perPage || this.paginator.pageSize;
-                this.paginator.length = listData.length
-                    ? listData.length
-                    : listData.updateLength
-                    ? this.paginator.length + listData.updateLength
-                    : this.paginator.length;
-                return listData.list;
+        return this.itemService.items.pipe(
+            map(items => {
+                this.paginator.pageIndex = this.itemService.page;
+                this.paginator.pageSize = this.itemService.perPage;
+                this.sort.active = this.itemService.orderBy;
+                this.sort.direction = this.itemService.order;
+                this.paginator.length = this.itemService.total;
+                return items;
             })
         );
-    }
-
-    getPossibleColumnNames(data: Item[]): string[] {
-        const fieldNames = new Set<string>();
-        data.forEach(item => {
-            Object.keys(item.fields).forEach(field => fieldNames.add(field));
-        });
-        return Array.from(fieldNames);
     }
 
     /**
      *  Called when the table is being destroyed. Use this function, to clean up
      * any open connections or free any held resources that were set up during connect.
      */
-    disconnect() {}
+    disconnect() {
+        this.mutationSub.unsubscribe();
+    }
 }

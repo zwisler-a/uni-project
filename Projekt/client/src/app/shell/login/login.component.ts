@@ -4,6 +4,7 @@ import { AuthService } from '../auth/auth.service';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 /** Contains a login form for user authentication */
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private fromBuilder: FormBuilder,
         private authService: AuthService,
         private translate: TranslateService,
+        private router: Router,
         private snackbar: MatSnackBar
     ) {
         this.loginForm = this.fromBuilder.group({
@@ -30,17 +32,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        if (environment.showLoginDemoInfo) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (environment.showLoginDemoInfo) {
                 this.userDemoInfo = this.snackbar.open(
                     'Demo Username: "username", password: "password"'
                 );
-            });
-        }
+            }
+            if (this.authService.jwt) {
+                this.router.navigate(['/']);
+            }
+        });
     }
     ngOnDestroy(): void {
         if (environment.showLoginDemoInfo) {
-            this.userDemoInfo.closeWithAction();
+            this.userDemoInfo.dismissWithAction();
         }
     }
 
