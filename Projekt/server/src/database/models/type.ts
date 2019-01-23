@@ -121,7 +121,7 @@ export class TypeModel {
             }
             // Check if type is valid
             else if (!Object.keys(TypeFieldType).some((type: string) => type === field.type)) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_VALUE, { type: Object.keys(TypeFieldType) });
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_ENUM, { type: Object.keys(TypeFieldType) });
             }
         }
 

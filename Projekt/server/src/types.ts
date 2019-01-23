@@ -22,9 +22,19 @@ export interface Config {
 }
 
 export enum ErrorNumber {
-    REQUEST_NUMBER_FORMAT,
+    REQUEST_URL_NUMBER_FORMAT,
+
+    REQUEST_ENTITY_TYPE,
+
+    REQUEST_FIELD_MISSING,
     REQUEST_FIELD_TYPE,
-    REQUEST_VALUE,
+    REQUEST_FIELD_ENUM,
+    REQUEST_FIELD_LENGTH,
+    REQUEST_FIELD_MIN,
+    REQUEST_FIELD_MAX,
+    REQUEST_FIELD_NUMBER_FORMAT,
+    REQUEST_FIELD_DATE_FORMAT,
+
     TYPE_NOT_FOUND,
     TYPE_REFERENCE_NOT_FOUND
 }
@@ -32,6 +42,7 @@ export enum ErrorNumber {
 export class ApiError extends Error {
     status: number;
     errorNumber: ErrorNumber;
+    errorName: string;
     cause: any;
 
     static BAD_REQUEST(errorNumber: ErrorNumber, cause?: any) {
@@ -49,6 +60,7 @@ export class ApiError extends Error {
         this.message = message;
         this.status = status;
         this.errorNumber = errorNumber;
+        this.errorName = ErrorNumber[errorNumber];
 
         if (cause instanceof Error) {
             this.cause = {

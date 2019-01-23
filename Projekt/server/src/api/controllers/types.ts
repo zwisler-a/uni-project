@@ -1,10 +1,49 @@
 import { Response, Request, NextFunction } from 'express';
-import { ObjectResultsets } from 'mariadb';
 
 import { DatabaseController } from '../../database/controller';
 import { OldApiError, ApiError } from '../../types';
-import { Type, TypeField, TypeFieldType } from '../models/type';
+import { Type, TypeField } from '../models/type';
 import { TypeModel } from '../../database/models/type';
+import { ObjectValidator } from '../models/object-validator';
+
+const model = new ObjectValidator<Type>({
+    companyId: {
+        type: Number
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    fields: {
+        type: Array,
+        require: true,
+        elements: {
+            id: {
+                type: Number
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+                required: true,
+                enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
+            },
+            required: {
+                type: Boolean,
+                required: true
+            },
+            unique: {
+                type: Boolean,
+                required: true
+            },
+            referenceId: {
+                type: Number
+            }
+        }
+    }
+});
 
 /**
  * Route endpoint `POST /api/types`
@@ -15,6 +54,8 @@ import { TypeModel } from '../../database/models/type';
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = req.body;
+        model.validate(type);
+
         const database: DatabaseController = req.app.get('database');
         const result: Type = await TypeModel.create(database, type);
         res.status(200).send(result);
