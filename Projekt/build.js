@@ -82,7 +82,7 @@ const prepareServer = () => {
 	const package = fs.readJsonSync(buildPackage);
 	delete package.devDependencies;
 	package.scripts = {
-		'start': `forever start --uid ${processUid} -o info.log -e error.log index.js config.json`,
+		'start': `rm /home/ak18b/.forever/${processUid}.log | forever start --uid ${processUid} -o info.log -e error.log index.js config.json`,
 		'stop': `forever stop ${processUid}`
 	};
 	fs.writeJsonSync(buildPackage, package, { spaces: '\t' });
