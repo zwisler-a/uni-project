@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import compression from 'compression';
 import mariadb from 'mariadb';
 
-import { Config } from './types';
+import { Config, ApiError } from './types';
 import { apiRouter } from './api/routes/api';
 import { DatabaseController, initializeDatabaseController } from './database/controller';
 
@@ -73,11 +73,17 @@ export class App {
 
         // Add default error handler
         this.express.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-            res.status('status' in err ? err.status : 500).send({
-                error: err.name,
-                message: err.message,
-                cause: err.cause
-            });
+            if (err instanceof ApiError) {
+                res.status(err.status);
+                delete err.status;
+                res.send(err);
+            } else {
+                res.status('status' in err ? err.status : 500).send({
+                    error: err.name,
+                    message: err.message,
+                    cause: err.cause
+                });
+            }
         });
     }
 

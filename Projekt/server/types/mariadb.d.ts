@@ -3,9 +3,8 @@ import { EventEmitter } from "events";
 declare module 'mariadb';
 
 declare namespace mariadb {
-    export function createPool(options: PoolOptions): Pool;
 
-    export interface PoolOptions {
+    export interface ConnectionOptions {
         user?: string;
         password?: string;
         host?: string;
@@ -18,7 +17,21 @@ declare namespace mariadb {
         rowsAsArray?: boolean;
     }
 
-    export interface ConnectionOptions {
+    export interface PoolOptions extends ConnectionOptions {
+        acquireTimeout?: number;
+        connectionLimit?: number;
+        minDelayValidation?: number;
+        noControlAfterUse?: number;
+    }
+
+    export interface PoolClusterOptions {
+        canRetry?: boolean;
+        removeNodeErrorCount?: number;
+        restoreNodeTimeout?: number;
+        defaultSelector?: string;
+    }
+
+    export interface UserOptions {
         database?: string;
         charset?: string;
         password?: string;
@@ -37,25 +50,25 @@ declare namespace mariadb {
     }
 
     export interface Collation {
-        encoding: string;
         index: number;
-        maxlen: number;
         name: string;
+        encoding: string;
+        maxlen: number;
     }
 
     export interface ColumnMetadata {
         collation: Collation;
         columnLength: number;
-        columnType: number;
-        flags: number;
+        type: number;
+        columnType: string;
         scale: number;
-        type: string;
+        flags: number;
         db: () => string;
+        table: () => string;
+        orgTable: () => string;
         name: () => string;
         orgName: () => string;
-        orgTable: () => string;
         schema: () => string;
-        table: () => string;
     }
 
     export interface Resultsets {
@@ -71,28 +84,23 @@ declare namespace mariadb {
         meta: Array<ColumnMetadata>;
     }
 
-    export interface Pool {
-        getConnection(): Promise<Connection>;
-        query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
-        //batch(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
-        end(): Promise<void>;
-        activeConnections(): number;
-        totalConnections(): number;
-        idleConnections(): number;
-        taskQueueSize(): number;
+    export interface SQLError extends Error {
+        fatal: boolean;
+        errno: number;
+        sqlState: string;
+        code: string;
     }
 
-    export interface Connection {
-        //connect(): Promise<any>;
-        changeUser(options: ConnectionOptions): Promise<void>;
+    export interface Connection extends EventEmitter {
+        changeUser(options: UserOptions): Promise<void>;
         beginTransaction(): Promise<void>;
         commit(): Promise<void>;
         rollback(): Promise<void>;
         query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
-        //batch(sql: string | QueryOptions, values: any[] | any): Promise<Resultsets>;
+        batch(sql: string | QueryOptions, values: any[][] | any[]): Promise<Resultsets>;
         queryStream(sql: string | QueryOptions, values?: any[] | any): EventEmitter;
         ping(): Promise<void>;
-        //reset(): Promise<void>;
+        reset(): Promise<void>;
         isValid(): boolean;
         end(): Promise<void>;
         destroy(): void;
@@ -101,12 +109,34 @@ declare namespace mariadb {
         serverVersion(): string;
     }
 
-    export interface SQLError extends Error {
-        fatal: boolean;
-        errno: number;
-        sqlState: string;
-        code: string;
+    export interface Pool {
+        getConnection(): Promise<Connection>;
+        query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
+        batch(sql: string | QueryOptions, values: any[][] | any[]): Promise<Resultsets>;
+        end(): Promise<void>;
+        activeConnections(): number;
+        totalConnections(): number;
+        idleConnections(): number;
+        taskQueueSize(): number;
     }
+
+    export interface PoolCluster {
+        add(id: string, options: PoolOptions): void;
+        remove(pattern: string): void;
+        end(): Promise<void>;
+        getConnection(pattern: string, selector: string): Promise<Connection>;
+        of(pattern: string, selector: string): FilteredPoolCluster;
+    }
+
+    export interface FilteredPoolCluster {
+        getConnection(): Promise<Connection>;
+        query(sql: string | QueryOptions, values?: any[] | any): Promise<Resultsets>;
+        batch(sql: string | QueryOptions, values: any[][] | any[]): Promise<Resultsets>;
+    }
+
+    export function createConnection(options: ConnectionOptions): Promise<Connection>;
+    export function createPool(options: PoolOptions): Pool;
+    export function createPoolCluster(options: PoolClusterOptions): PoolCluster;
 }
 
 export = mariadb;

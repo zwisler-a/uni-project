@@ -1,3 +1,5 @@
+import { ObjectValidator } from './object-validator';
+
 /**
  * Represents the type (metadata) of an item
  * @author Maurice
@@ -5,6 +7,8 @@
 export interface Type {
     /** Type's unique id */
     id: number;
+    /** Id of company that owns this type */
+    companyId: number;
     /** Type's unique name */
     name: string;
     /** List of all the field's an item of this type (should) have */
@@ -45,3 +49,43 @@ export enum TypeFieldType {
     date = 'date',
     reference = 'reference'
 }
+
+export const TYPE = new ObjectValidator<Type>({
+    companyId: {
+        type: Number
+        // TODO maybe required?
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    fields: {
+        type: Array,
+        require: true,
+        elements: {
+            id: {
+                type: Number
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            type: {
+                type: String,
+                required: true,
+                enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
+            },
+            required: {
+                type: Boolean,
+                required: true
+            },
+            unique: {
+                type: Boolean,
+                required: true
+            },
+            referenceId: {
+                type: Number
+            }
+        }
+    }
+});

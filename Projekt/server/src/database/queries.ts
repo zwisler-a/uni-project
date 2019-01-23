@@ -1,5 +1,6 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
+import { createDeflate } from 'zlib';
 
 export interface Queries {
     /** Creates the company table */
@@ -27,8 +28,12 @@ export interface Queries {
     TYPE_GET: StaticQuery<ArrayResultsets>;
     /** Gets a type by id */
     TYPE_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Checks by id if a type exists */
+    TYPE_EXISTS_ID: StaticQuery<ArrayResultsets>;
+    /** Edit a type by id */
+    TYPE_UPDATE: StaticQuery<ObjectResultsets>;
     /** Deletes a type by id */
-    TYPE_DELTE: StaticQuery<ObjectResultsets>;
+    TYPE_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new type field */
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
@@ -38,11 +43,19 @@ export interface Queries {
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
     /** Gets a type field by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
+    /** Edit a type field by id */
+    TYPE_FIELD_EDIT: StaticQuery<ObjectResultsets>;
+    /** Delete a type field by id */
+    TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets>;
     /** Deletes an item table */
     ITEM_TABLE_DROP: DynamicQuery<ObjectResultsets>;
+    /** Creates a new field in an item table */
+    ITEM_TABLE_FIELD_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Edites a specific field in an item table */
+    ITEM_TABLE_FIELD_EDIT: DynamicQuery<ObjectResultsets>;
     /** Deletes a specific field in an item table */
     ITEM_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets>;
     /** Creates a new foreign key constraint in an item table */
@@ -124,17 +137,42 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `DROP TABLE \`%_item_${structure}\``.replace('%_', prefix);
     }
 
+    function addTableField(structure: any) {
+        let sql = `ALTER TABLE \`%_item_${structure.typeId}\` ADD COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+        return sql.replace('%_', prefix);
+    }
+
+    function editTableField(structure: any) {
+        let sql = `ALTER TABLE \`%_item_${structure.typeId}\` MODIFY COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+        return sql.replace('%_', prefix);
+    }
+
     function dropTableField(structure: any) {
-        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP \`field_${structure.id}\``.replace('%_', prefix);
+        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP COLUMN \`field_${structure.id}\``.replace('%_', prefix);
     }
 
     function generateForeignKey(structure: any) {
         const field = `\`field_${structure.id}\``;
-        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.replace('%_', prefix);
+        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.split('%_').join(prefix);
     }
 
     function dropForeignKey(structure: any) {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP FOREIGN KEY \`field_${structure.id}\``.replace('%_', prefix);
+    }
+
+    function generateUniqueIndex(structure: any) {
+        const field = `\`field_${structure.id}\``;
+        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} UNIQUE INDEX (${field})`.replace('%_', prefix);
+    }
+
+    function dropUniqueIndex(structure: any) {
+        return `ALTER TABLE \`%_item_${structure.typeId}\` DROP INDEX \`field_${structure.id}\``.replace('%_', prefix);
     }
 
     function generateItem(structure: any) {
@@ -177,7 +215,7 @@ export function factory(pool: Pool, prefix: string): Queries {
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
-        CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
+        CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
@@ -186,23 +224,29 @@ export function factory(pool: Pool, prefix: string): Queries {
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`) VALUES (NULL,?,?,?)'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
 
-        TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `name`) VALUES (NULL,?)'),
+        TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`) VALUES (NULL,?,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
         TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
-        TYPE_DELTE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
+        TYPE_EXISTS_ID: queryFactory('SELECT 1 FROM `%_types` WHERE `id` = ?'),
+        TYPE_UPDATE: queryFactory('UPDATE `%_types` SET `companyId` = ?, `name` = ? WHERE `id` = ?'),
+        TYPE_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
         TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
+        TYPE_FIELD_EDIT: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
+        TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),
+        ITEM_TABLE_FIELD_CREATE: new DynamicQuery(pool, addTableField),
+        ITEM_TABLE_FIELD_EDIT: new DynamicQuery(pool, editTableField),
         ITEM_TABLE_FIELD_DROP: new DynamicQuery(pool, dropTableField),
         ITEM_TABLE_FK_CREATE: new DynamicQuery(pool, generateForeignKey),
         ITEM_TABLE_FK_DROP: new DynamicQuery(pool, dropForeignKey),
-        ITEM_TABLE_UI_CREATE: null,
-        ITEM_TABLE_UI_DROP: null,
+        ITEM_TABLE_UI_CREATE: new DynamicQuery(pool, generateUniqueIndex),
+        ITEM_TABLE_UI_DROP: new DynamicQuery(pool, dropUniqueIndex),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
         ITEM_GET: new DynamicQuery(pool, getItemList),
