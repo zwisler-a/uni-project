@@ -13,9 +13,6 @@ export interface Company {
 
 /** Object validator for {@link Company} */
 export const COMPANY = new ObjectValidator<Company>({
-    id: {
-        type: Number
-    },
     name: {
         type: String,
         required: true,
