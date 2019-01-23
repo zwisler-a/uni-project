@@ -7,6 +7,8 @@ module.exports = {
 	docsPath: path.resolve(__dirname, 'documentation'),
 	buildPath: path.resolve(__dirname, 'dist'),
 
+	processUid: 'demo',
+
 	deployAppPath: 'demo/',
 	deployDocPath: 'public_html/doc',
 

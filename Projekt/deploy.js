@@ -119,6 +119,9 @@ const deploy = async () => {
 		console.log("Connecting ...");
 		await deployer.connect(config);
 
+		console.log("Trying to stop old server ...");
+		await deployer.run(deployAppPath, "npm run stop");
+
 		console.log("Uploading build ...");
 		await deployer.uploadBuild(buildPath, deployAppPath);
 		
@@ -127,9 +130,6 @@ const deploy = async () => {
 
 		console.log("Installing dependencies ...");
 		await deployer.run(deployAppPath, "npm i");
-
-		console.log("Trying to stop old server ...");
-		await deployer.run(deployAppPath, "npm run stop");
 
 		console.log("Starting new Server ...");
 		await deployer.run(deployAppPath, "npm run start");

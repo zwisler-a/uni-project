@@ -16,7 +16,8 @@
     "build:client": "cd client && npm run build",
     "build-prod:client": "cd client && npm run build-prod",
     "build-demo:client": "cd client && npm run build-demo",
-    "build:all": "node build.js",
+    "build:staging": "node build.js ./config.staging",
+    "build": "node build.js",
     "deploy:staging": "node deploy.js ./config.staging",
     "deploy": "node deploy.js"
   },
