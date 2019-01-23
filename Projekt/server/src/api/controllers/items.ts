@@ -108,6 +108,10 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             }
         }
 
+        // TODO parse searchBy
+
+        // TODO parse order is string ['asc', 'desc']
+
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(database, typeId);
         const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
@@ -124,6 +128,8 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             next(OldApiError.BAD_REQUEST);
             return;
         }
+
+        // TODO is field in type
 
         const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
             .map((item: any) => {
