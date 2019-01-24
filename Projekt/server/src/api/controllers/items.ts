@@ -109,8 +109,24 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         // TODO parse searchBy
+        let search = 0;
+        if ('searchBy' in query) {
+            search = parseInt(query.searchBy);
+            if (isNaN(search)) {
+                next(OldApiError.BAD_REQUEST);
+                return;
+            }
+        }
 
         // TODO parse order is string ['asc', 'desc']
+        let order = '';
+        if ('orderBy' in query) {
+            order = query.orderBy;
+            if ( order !== 'asc' && order !== 'desc') {
+                next(OldApiError.BAD_REQUEST);
+                return;
+            }
+        }
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(database, typeId);
