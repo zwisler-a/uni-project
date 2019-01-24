@@ -1,6 +1,5 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
-import { createDeflate } from 'zlib';
 
 export interface Queries {
     /** Creates the company table */
@@ -17,10 +16,14 @@ export interface Queries {
     /** Gets a company by id */
     COMPANY_GET_ID: StaticQuery<ArrayResultsets>;
 
-    /** Create a new user */
+    /** Create an new user */
     USER_CREATE: StaticQuery<ObjectResultsets>;
-    /** Gets a user by id */
+    /** Gets an user by id */
     USER_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Update an user by id */
+    USER_UPDATE: StaticQuery<ObjectResultsets>;
+    /** Deletes an user by id */
+    USER_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new type */
     TYPE_CREATE: StaticQuery<ObjectResultsets>;
@@ -214,15 +217,17 @@ export function factory(pool: Pool, prefix: string): Queries {
 
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
-        CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, `email` VARCHAR(128), PRIMARY KEY (`id`), UNIQUE INDEX (`name`), UNIQUE INDEX (`email`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
         COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
 
-        USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`) VALUES (NULL,?,?,?)'),
+        USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`, `email`) VALUES (NULL,?,?,?,?)'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
+        USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `name` = ?'),
+        USER_DELETE: queryFactory('DELETE FROM `%_users` WHERE `id` = ?'),
 
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`) VALUES (NULL,?,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),

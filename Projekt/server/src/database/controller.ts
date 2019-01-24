@@ -1,5 +1,6 @@
 import { Pool, Connection } from '../../types/mariadb';
 import { factory, Queries } from './queries';
+import { UserModel } from './models/user';
 
 /**
  * Function that gets invoked inside a transaction
@@ -53,6 +54,9 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.CREATE_TABLE_USER.execute();
     await controller.CREATE_TABLE_TYPE.execute();
     await controller.CREATE_TABLE_TYPE_FIELD.execute();
+
+    // Initilize all models
+    UserModel.initialize(controller);
 
     // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
     let companyId;

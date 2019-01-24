@@ -18,6 +18,7 @@ describe('object-validator', () => {
             },
             hidden: {
                 type: Boolean,
+                nullable: true
             },
             pets: {
                 type: Array,
@@ -41,7 +42,12 @@ describe('object-validator', () => {
                     },
                     city: {
                         type: String,
-                        required: true
+                        required: true,
+                        validator: (value: string) => {
+                            if (value.match(/[0-9]/g)) {
+                                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, 'city');
+                            }
+                        }
                     },
                     zip: {
                         type: Number,
@@ -81,6 +87,7 @@ describe('object-validator', () => {
         it('incomplete object', done => {
             validator.validate({
                 username: 'Username',
+                hidden: null,
                 address: {
                     street: 'Street',
                     city: 'City',
@@ -107,6 +114,26 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_MISSING);
+            expect(error.cause).to.equal('username');
+            done();
+        });
+
+        it('null field', done => {
+            let error;
+            try {
+                validator.validate({
+                    username: null,
+                    address: {
+                        street: 'Street',
+                        city: 'City',
+                        zip: 10000,
+                    }
+                });
+            } catch (err) {
+                error = err;
+            }
+            expect(error).to.be.instanceOf(ApiError);
+            expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_NULL);
             expect(error.cause).to.equal('username');
             done();
         });
@@ -283,6 +310,26 @@ describe('object-validator', () => {
                 expect(error.cause.expected).to.be.an('array');
                 done();
             });
+        });
+
+        it('custom validator error', done => {
+            let error;
+            try {
+                validator.validate({
+                    username: 'Username',
+                    address: {
+                        street: 'Street',
+                        city: 'City1',
+                        zip: 10000,
+                    }
+                });
+            } catch (err) {
+                error = err;
+            }
+            expect(error).to.be.instanceOf(ApiError);
+            expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_STRING_FORMAT);
+            expect(error.cause).to.equal('city');
+            done();
         });
 
         it('wrong type array', done => {
