@@ -38,11 +38,19 @@ export class UserModel {
 
     /**
      * Get an user object
-     * @param id id of the user object to get
+     * @param id id/name of the user object to get
      * @returns retrived user object on success
      */
-    static async get(id: number): Promise<User> {
-        const users = await this.database.USER_GET_ID.execute(id);
+    static async get(id: number | string): Promise<User> {
+        let users;
+        if (typeof id === 'number') {
+            users = await this.database.USER_GET_ID.execute(id);
+        } else if (typeof id === 'string') {
+            users = await this.database.USER_GET_NAME.execute(id);
+        } else {
+            throw new TypeError('Invalid argument, has to be either string(name) or number(id)');
+        }
+
         if (users.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, id);
         }
@@ -69,7 +77,7 @@ export class UserModel {
             result.email = user.email;
         }
 
-        await this.database.USER_UPDATE.execute([ id, user.name, user.password, user.email ]);
+        await this.database.USER_UPDATE.execute([ id, result.name, result.password, result.email ]);
 
         return result;
     }

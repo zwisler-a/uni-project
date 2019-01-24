@@ -51,6 +51,17 @@ function userSchema(required: boolean): any {
     };
 }
 
+export const USER_AUTH = new ObjectValidator<User>({
+    name: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+});
+
 /** Object validator for creating {@link User} */
 export const USER_CREATE = new ObjectValidator<User>(userSchema(true));
 

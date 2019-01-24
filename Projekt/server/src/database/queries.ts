@@ -20,6 +20,8 @@ export interface Queries {
     USER_CREATE: StaticQuery<ObjectResultsets>;
     /** Gets an user by id */
     USER_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Gets an user by name */
+    USER_GET_NAME: StaticQuery<ArrayResultsets>;
     /** Update an user by id */
     USER_UPDATE: StaticQuery<ObjectResultsets>;
     /** Deletes an user by id */
@@ -225,7 +227,8 @@ export function factory(pool: Pool, prefix: string): Queries {
         COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
 
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`, `email`) VALUES (NULL,?,?,?,?)'),
-        USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
+        USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `id` = ?'),
+        USER_GET_NAME: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
         USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `name` = ?'),
         USER_DELETE: queryFactory('DELETE FROM `%_users` WHERE `id` = ?'),
 

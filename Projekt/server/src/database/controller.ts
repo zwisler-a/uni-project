@@ -68,8 +68,12 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     }
 
     // TODO REMOVE Add a mock user as long as there is no other way to add users ('username', 'password')
-    if (!(await controller.USER_GET_ID.execute('username')).pop()) {
-        await controller.USER_CREATE.execute([ companyId, 'username', '$2b$10$sFut8f1wXaMisJ750uiGbOD8UefoIZLLad5a66M7f/YMV5okNUgEC' ]);
+    if (!(await controller.USER_GET_NAME.execute('username')).pop()) {
+        await UserModel.create({
+            companyId,
+            name: 'username',
+            password: '$2b$10$sFut8f1wXaMisJ750uiGbOD8UefoIZLLad5a66M7f/YMV5okNUgEC',
+        });
     }
 
     return controller;

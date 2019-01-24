@@ -36,6 +36,10 @@ export enum ErrorNumber {
     REQUEST_FIELD_NUMBER_FORMAT,
     REQUEST_FIELD_DATE_FORMAT,
 
+    AUTHENTICATION_INVALID_CREDENTIALS,
+    AUTHENTICATION_MISSING_JSONWEBTOKEN,
+    AUTHENTICATION_INVALID_JSONWEBTOKEN,
+
     USER_NOT_FOUND,
 
     TYPE_NOT_FOUND,
@@ -50,6 +54,10 @@ export class ApiError extends Error {
 
     static BAD_REQUEST(errorNumber: ErrorNumber, cause?: any) {
         return new ApiError('Bad Request', 'The server cannot or will not process the request due to a client error', 400, errorNumber, cause);
+    }
+
+    static UNAUTHORIZED(errorNumber: ErrorNumber, cause?: any) {
+        return new ApiError('Unauthorized', 'The request has not been applied because it lacks valid authentication credentials for the target resource.', 401, errorNumber, cause);
     }
 
     static NOT_FOUND(errorNumber: ErrorNumber, cause?: any) {

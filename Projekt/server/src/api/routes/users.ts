@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { validateJsonWebToken } from '../controllers/authentication';
+import { verifyJsonWebToken } from '../controllers/authentication';
 import { userCreate, userGet, userUpdate, userDelete } from '../controllers/users';
 import { param } from './util';
 
@@ -7,7 +7,7 @@ import { param } from './util';
 export const usersRoute: Router = Router();
 usersRoute.param('id', param);
 
-usersRoute.post('/', validateJsonWebToken, userCreate);
-usersRoute.get('/:id', validateJsonWebToken, userGet);
-usersRoute.patch('/:id', validateJsonWebToken, userUpdate);
-usersRoute.delete('/:id', validateJsonWebToken, userDelete);
+usersRoute.post('/', verifyJsonWebToken, userCreate);
+usersRoute.get('/:id', verifyJsonWebToken, userGet);
+usersRoute.patch('/:id', verifyJsonWebToken, userUpdate);
+usersRoute.delete('/:id', verifyJsonWebToken, userDelete);
