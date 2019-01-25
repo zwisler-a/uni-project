@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { Type } from '../models/type';
+import { Type, TypeField } from '../models/type';
 import { Item, Field } from '../models/item';
 import { TypeModel } from '../../database/models/type';
 
@@ -108,23 +108,16 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             }
         }
 
-        // TODO parse searchBy
-        let search = 0;
-        if ('searchBy' in query) {
-            search = parseInt(query.searchBy);
-            if (isNaN(search)) {
-                next(OldApiError.BAD_REQUEST);
-                return;
-            }
+        let orderBy: string = null;
+        if ('orderBy' in query) {
+            orderBy = query.orderBy;
         }
 
-        // TODO parse order is string ['asc', 'desc']
         let order = '';
-        if ('orderBy' in query) {
+        if ('order' in query) {
             order = query.orderBy;
             if ( order !== 'asc' && order !== 'desc') {
-                next(OldApiError.BAD_REQUEST);
-                return;
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
             }
         }
 
@@ -144,8 +137,15 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
-        // TODO is field in type
+        let index = -1;
+        if (orderBy !== null) {
+            index = type.fields.findIndex((field: TypeField) => field.name === orderBy);
+            if (index === -1) {
+                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, orderBy);
+            }
+        }
 
+        // TODO add orderBy/order to search query
         const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
             .map((item: any) => {
                 const fields: Field[] = [];
