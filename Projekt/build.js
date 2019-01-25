@@ -16,8 +16,8 @@ const childProcess = require('child_process');
 const { 
 	clientPath, serverPath,
 	buildPath, docsPath,
-	production
-} = require('./config');
+	production, processUid
+} = require(process.argv[2] || './config');
 
 const buildPackage = path.join(buildPath, 'package.json');
 
@@ -82,8 +82,8 @@ const prepareServer = () => {
 	const package = fs.readJsonSync(buildPackage);
 	delete package.devDependencies;
 	package.scripts = {
-		'start': `forever start index.js config.json`,
-		'stop': 'forever stopall'
+		'start': `rm /home/ak18b/.forever/${processUid}.log | forever start --uid ${processUid} -o info.log -e error.log index.js config.json`,
+		'stop': `forever stop ${processUid}`
 	};
 	fs.writeJsonSync(buildPackage, package, { spaces: '\t' });
 };

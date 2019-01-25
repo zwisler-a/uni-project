@@ -49,11 +49,12 @@ describe('AuthService', () => {
             const service: AuthService = TestBed.get(AuthService);
             service.authenticate('test', 'pw').subscribe();
             const req = controller.expectOne(service.authenticateUrl);
-            expect(req.request.body.username).toBe('test');
+            expect(req.request.body.name).toBe('test');
             expect(req.request.body.password).toBe('pw');
         }
     ));
 
+    // TODO add test for short & long lived jwt
     it('should store jwt', fakeAsync(
         inject([HttpTestingController], (controller: HttpTestingController) => {
             const service: AuthService = TestBed.get(AuthService);
@@ -61,7 +62,7 @@ describe('AuthService', () => {
                 expect(service.jwt).toBe(test_jwt);
             });
             const req = controller.expectOne(service.authenticateUrl);
-            const res: AuthenticateResponse = {token: test_jwt};
+            const res: AuthenticateResponse = {short: test_jwt, long: test_jwt};
             req.flush(res);
             tick(2000);
         })
@@ -76,7 +77,7 @@ describe('AuthService', () => {
                 localStorage.removeItem(AuthService.LOCALSTROAGE_KEY);
             });
             const req = controller.expectOne(service.authenticateUrl);
-            const res: AuthenticateResponse = {token: test_jwt};
+            const res: AuthenticateResponse = {short: test_jwt, long: test_jwt};
             req.flush(res);
             tick(2000);
         })

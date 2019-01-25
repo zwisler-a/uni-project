@@ -20,6 +20,7 @@ export class ObjectValidator<T> {
      * Validates if an object corresponds to the defined schema
      * @param object object to validate
      * @returns the validated object as T
+     * @throws {@link ApiError} when validation failed
      */
     validate(object: any): T {
         this.verify(object, this.schema);
@@ -55,6 +56,14 @@ export class ObjectValidator<T> {
                     throw this.error(ErrorNumber.REQUEST_FIELD_MISSING, key);
                 } else {
                     continue;
+                }
+            }
+
+            if (value === null) {
+                if (field.nullable) {
+                    continue;
+                } else {
+                    throw this.error(ErrorNumber.REQUEST_FIELD_NULL, key);
                 }
             }
 
@@ -115,6 +124,10 @@ export class ObjectValidator<T> {
                 if ('properties' in field) {
                     this.verify(value, field.properties);
                 }
+            }
+
+            if ('validator' in field) {
+                field.validator(value);
             }
         }
     }

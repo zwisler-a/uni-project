@@ -1,5 +1,7 @@
 /** Response of the '/api/authenticate' request */
 export interface AuthenticateResponse {
-    /** JWT */
-    token: string;
+    /** short lived JWT */
+    short: string;
+    /** Long lived JWT */
+    long: string;
 }

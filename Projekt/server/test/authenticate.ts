@@ -22,13 +22,14 @@ describe('authentication', () => {
         request(server)
             .post('/api/authenticate')
             .send({
-                username: 'username',
+                name: 'username',
                 password: 'password'
             })
             .end((error, res) => {
                 expect(res.status).to.equal(200);
                 expect(res.body).to.be.an('object');
-                expect(res.body).to.include.keys('token');
+                expect(res.body).to.include.keys('short');
+                expect(res.body).to.include.keys('long');
                 done();
             });
     });
@@ -36,7 +37,7 @@ describe('authentication', () => {
         request(server)
             .post('/api/authenticate')
             .send({
-                username: 'usernames',
+                name: 'usernames',
                 password: 'password'
             })
             .expect(401, done);
@@ -45,7 +46,7 @@ describe('authentication', () => {
         request(server)
             .post('/api/authenticate')
             .send({
-                username: 'username',
+                name: 'username',
                 password: 'passwors'
             })
             .expect(401, done);
