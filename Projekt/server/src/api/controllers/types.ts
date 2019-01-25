@@ -14,20 +14,10 @@ import { TypeModel } from '../../database/models/type';
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = TYPE.validate(req.body);
-        const database: DatabaseController = req.app.get('database');
-        const result: Type = await TypeModel.create(database, type);
+        const result: Type = await TypeModel.create(type);
         res.status(200).send(result);
     } catch (error) {
-        if (error instanceof ApiError) {
-            next(error);
-        } else {
-            if (error.errno === 1062) {
-                next(new OldApiError('Conflict', 'The requeste could not be processed because of conflict in the current state of the resource', 409, error.message));
-            } else {
-                next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-            }
-        }
-        console.error(error);
+        next(error);
     }
 }
 
@@ -40,16 +30,10 @@ export async function typeCreate(req: Request, res: Response, next: NextFunction
 export async function typeGet(req: Request, res: Response, next: NextFunction) {
     try {
         const id: number = req.params.id;
-        const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, id);
+        const type: Type = await TypeModel.get(id);
         res.status(200).send(type);
     } catch (error) {
-        if (error instanceof ApiError) {
-            next(error);
-        } else {
-            next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        }
-        console.error(error);
+        next(error);
     }
 }
 
@@ -76,8 +60,7 @@ export async function typeGetAll(req: Request, res: Response, next: NextFunction
 
         res.status(200).send(types);
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 
@@ -92,17 +75,10 @@ export async function typeUpdate(req: Request, res: Response, next: NextFunction
         const id: number = req.params.id;
         let type: Type = TYPE.validate(req.body);
 
-        const database: DatabaseController = req.app.get('database');
-        type = await TypeModel.update(database, id, type);
-
+        type = await TypeModel.update(id, type);
         res.status(200).send(type);
     } catch (error) {
-        if (error instanceof ApiError) {
-            next(error);
-        } else {
-            next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        }
-        console.error(error);
+        next(error);
     }
 }
 
@@ -115,15 +91,9 @@ export async function typeUpdate(req: Request, res: Response, next: NextFunction
 export async function typeDelete(req: Request, res: Response, next: NextFunction) {
     try {
         const id: number = req.params.id;
-        const database: DatabaseController = req.app.get('database');
-        await TypeModel.delete(database, id);
+        await TypeModel.delete(id);
         res.status(204).send();
     } catch (error) {
-        if (error instanceof ApiError) {
-            next(error);
-        } else {
-            next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        }
-        console.error(error);
+        next(error);
     }
 }

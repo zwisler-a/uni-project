@@ -109,7 +109,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
         const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
 
         const totalPages = Math.ceil(total / perPage);
@@ -158,7 +158,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         const fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         // TODO Remove 1. arg, this should later be the company currently there is only one
         const values: any[] = [ 1 ];
@@ -191,7 +191,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         const items = await database.ITEM_GET_ID.execute(type, id);
         if (items.length === 0) {
@@ -230,7 +230,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         const fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         // TODO Remove 1. arg, this should later be the company currently there is only one
         const values: any[] = [ 1 ];
@@ -269,7 +269,7 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
 
         const database: DatabaseController = req.app.get('database');
         // TODO use exist instead but do number check
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
         if (affectedRows > 0) {
