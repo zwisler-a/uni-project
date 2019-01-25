@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
-import { OldApiError } from '../../types';
+import { ApiError, ErrorNumber } from '../../types';
 import { Type } from '../models/type';
 import { Item, Field } from '../models/item';
 import { TypeModel } from '../../database/models/type';
@@ -11,9 +11,11 @@ import { TypeModel } from '../../database/models/type';
  * @param type Type to check against
  * @param values List of values to check
  * @param mapping Remapped version of values based on the field order of a type
- * @returns The type field whose value doesn't meet the conditions
+ * @throws {@link ApiError} if item's values don't match type
  */
-function checkType(type: Type, values: Field[], mapping: any[]) {
+function verifyValues(type: Type, values: Field[]): any[] {
+    const mapping: any[] = [];
+
     typeLoop:
     for (const field of type.fields) {
 
@@ -39,44 +41,44 @@ function checkType(type: Type, values: Field[], mapping: any[]) {
                     case 'color':
                         if (typeof value.value === 'string' && value.value.length > 0)
                             continue typeLoop;
-                        return field;
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                     case 'number':
                         if (typeof value.value === 'number')
                             continue typeLoop;
-                        return field;
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                     case 'boolean':
                         if (typeof value.value === 'boolean')
                             continue typeLoop;
-                        return field;
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                     case 'date':
                         if (typeof value.value === 'string') {
                             try {
                                 const date = new Date(value.value);
                                 mapping[mapping.length - 1] = date;
                             } catch {
-                                return field;
+                                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_DATE_FORMAT, field.id);
                             }
                             continue typeLoop;
                         }
-                        return field;
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                     case 'reference':
                         // A reference should be unsigned
                         if (typeof value.value === 'number' && value.value > 0)
                             continue typeLoop;
-                        return field;
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                 }
             }
         }
 
         // A required field is null
         if (field.required) {
-            return field;
+            throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_MISSING, field.id);
         } else {
             // If field isn't required and cannot be found default to null
             mapping.push(null);
         }
     }
-    return null;
+    return mapping;
 }
 
 /**
@@ -94,8 +96,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         if ('page' in query) {
             page = parseInt(query.page);
             if (isNaN(page) || page < 0) {
-                next(OldApiError.BAD_REQUEST);
-                return;
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'page');
             }
         }
 
@@ -103,13 +104,12 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         if ('per_page' in query) {
             perPage = parseInt(query.per_page);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                next(OldApiError.BAD_REQUEST);
-                return;
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'per_page');
             }
         }
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
         const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
 
         const totalPages = Math.ceil(total / perPage);
@@ -121,8 +121,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
 
         if (page * perPage > total) {
-            next(OldApiError.BAD_REQUEST);
-            return;
+            throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
         const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
@@ -141,8 +140,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 
         res.status(200).send(new EmbeddedItem([ type ], items));
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 
@@ -158,24 +156,18 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         const fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         // TODO Remove 1. arg, this should later be the company currently there is only one
-        const values: any[] = [ 1 ];
-
-        const errors: any = checkType(type, fields.slice(), values);
-        if (errors !== null) {
-            next(new OldApiError('Bad Request', 'The request contains invalid values', 400, errors));
-            return;
-        }
+        const values = verifyValues(type, fields.slice());
+        values.unshift(1);
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
         // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 
@@ -191,12 +183,11 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         const items = await database.ITEM_GET_ID.execute(type, id);
         if (items.length === 0) {
-            next(OldApiError.NOT_FOUND);
-            return;
+            throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
         const item = items.pop();
 
@@ -212,8 +203,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
 
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 
@@ -230,16 +220,11 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         const fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         // TODO Remove 1. arg, this should later be the company currently there is only one
-        const values: any[] = [ 1 ];
-
-        const errors: any = checkType(type, fields.slice(), values);
-        if (errors !== null) {
-            next(new OldApiError('Bad Request', 'The request contains invalid values', 400, errors));
-            return;
-        }
+        const values = verifyValues(type, fields.slice());
+        values.unshift(1);
 
         // Need to push the where for sql to know what to update
         values.push(id);
@@ -248,11 +233,10 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         if (affectedRows > 0) {
             res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
         } else {
-            next(OldApiError.NOT_FOUND);
+            next(ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND));
         }
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 
@@ -269,17 +253,16 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
 
         const database: DatabaseController = req.app.get('database');
         // TODO use exist instead but do number check
-        const type: Type = await TypeModel.get(database, typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {
-            next(OldApiError.NOT_FOUND);
+            next(ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND));
         }
     } catch (error) {
-        next(new OldApiError('Internal Server Error', 'Request failed due to unexpected error', 500, error));
-        // console.error(error);
+        next(error);
     }
 }
 

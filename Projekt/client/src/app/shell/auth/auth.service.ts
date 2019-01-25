@@ -45,23 +45,23 @@ export class AuthService {
     /**
      * Tries to authenticate the user with the backend.
      * Redirects on success
-     * @param username Username of the user
+     * @param name Username of the user
      * @param password Password of the user
      * @param rememberMe if the jwt should be stored in case of successfull login
      * @param redirectRoute In case after successfull login the user should be routed somwhere special set this
      */
     authenticate(
-        username: string,
+        name: string,
         password: string,
         rememberMe = false,
         redirectRoute: string[] = ['/']
     ) {
         return (
             this.http
-                .post(this.authenticateUrl, { username, password })
+                .post(this.authenticateUrl, { name, password })
                 .pipe(
                     map((res: AuthenticateResponse) => {
-                        this.jwt = res.token;
+                        this.jwt = res.short;
                         if (rememberMe) {
                             localStorage.setItem(
                                 AuthService.LOCALSTROAGE_KEY,
