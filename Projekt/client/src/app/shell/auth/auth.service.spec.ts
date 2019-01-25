@@ -49,7 +49,7 @@ describe('AuthService', () => {
             const service: AuthService = TestBed.get(AuthService);
             service.authenticate('test', 'pw').subscribe();
             const req = controller.expectOne(service.authenticateUrl);
-            expect(req.request.body.username).toBe('test');
+            expect(req.request.body.name).toBe('test');
             expect(req.request.body.password).toBe('pw');
         }
     ));
