@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     login() {
         const { username, password, rememberMe } = this.loginForm.getRawValue();
         this.laoding = true;
-        this.authService.authenticate(username, password, rememberMe).subscribe(
+        this.authService.login(username, password, rememberMe).subscribe(
             () => {
                 this.laoding = false;
             },
