@@ -90,7 +90,7 @@ export function renew(req: Request, res: Response, next: NextFunction) {
         if (error) {
             next(ApiError.UNAUTHORIZED(ErrorNumber.AUTHENTICATION_INVALID_JSONWEBTOKEN, error));
         } else if (decoded.type !== TokenType.LONG) {
-            next(ApiError.UNAUTHORIZED(ErrorNumber.AUTHENTICATION_INVALID_JSONWEBTOKEN, 'type !== SHORT'));
+            next(ApiError.UNAUTHORIZED(ErrorNumber.AUTHENTICATION_INVALID_JSONWEBTOKEN, 'type !== LONG'));
         } else {
             try {
                 const user: User = await UserModel.get(decoded.id);

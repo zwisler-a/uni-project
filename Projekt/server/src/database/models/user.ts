@@ -15,10 +15,10 @@ export class UserModel {
      * @param database current instance of DatabaseController
      */
     static initialize(database: DatabaseController) {
-        if (this.database) {
+        if (UserModel.database) {
             throw new Error('Already initialized UserModel');
         }
-        this.database = database;
+        UserModel.database = database;
     }
 
     /**
@@ -30,7 +30,7 @@ export class UserModel {
         // TODO maybe check if company exists
         const params = [ user.companyId, user.name, user.password, 'email' in user ? user.email : null ];
 
-        const id = (await this.database.USER_CREATE.execute(params)).insertId;
+        const id = (await UserModel.database.USER_CREATE.execute(params)).insertId;
         user.id = id;
 
         return user;
@@ -44,9 +44,9 @@ export class UserModel {
     static async get(id: number | string): Promise<User> {
         let users;
         if (typeof id === 'number') {
-            users = await this.database.USER_GET_ID.execute(id);
+            users = await UserModel.database.USER_GET_ID.execute(id);
         } else if (typeof id === 'string') {
-            users = await this.database.USER_GET_NAME.execute(id);
+            users = await UserModel.database.USER_GET_NAME.execute(id);
         } else {
             throw new TypeError('Invalid argument, has to be either string(name) or number(id)');
         }
@@ -77,7 +77,7 @@ export class UserModel {
             result.email = user.email;
         }
 
-        await this.database.USER_UPDATE.execute([ id, result.name, result.password, result.email ]);
+        await UserModel.database.USER_UPDATE.execute([ id, result.name, result.password, result.email ]);
 
         return result;
     }
@@ -88,7 +88,7 @@ export class UserModel {
      * @returns nothing on success
      */
     static async delete(id: number): Promise<void> {
-        const affectedRows = (await this.database.USER_DELETE.execute(id)).affectedRows;
+        const affectedRows = (await UserModel.database.USER_DELETE.execute(id)).affectedRows;
         if (affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, id);
         }

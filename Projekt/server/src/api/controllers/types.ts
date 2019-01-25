@@ -1,7 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
-import { OldApiError, ApiError } from '../../types';
 import { Type, TypeField, TYPE } from '../models/type';
 import { TypeModel } from '../../database/models/type';
 

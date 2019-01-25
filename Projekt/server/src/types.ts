@@ -36,6 +36,8 @@ export enum ErrorNumber {
     REQUEST_FIELD_NUMBER_FORMAT,
     REQUEST_FIELD_DATE_FORMAT,
 
+    PAGINATION_OUT_OF_BOUNDS,
+
     AUTHENTICATION_INVALID_CREDENTIALS,
     AUTHENTICATION_MISSING_JSONWEBTOKEN,
     AUTHENTICATION_INVALID_JSONWEBTOKEN,
@@ -43,7 +45,9 @@ export enum ErrorNumber {
     USER_NOT_FOUND,
 
     TYPE_NOT_FOUND,
-    TYPE_REFERENCE_NOT_FOUND
+    TYPE_REFERENCE_NOT_FOUND,
+
+    ITEM_NOT_FOUND,
 }
 
 export class ApiError extends Error {
@@ -72,31 +76,6 @@ export class ApiError extends Error {
         this.status = status;
         this.errorNumber = errorNumber;
         this.errorName = ErrorNumber[errorNumber];
-
-        if (cause instanceof Error) {
-            this.cause = {
-                name: cause.name,
-                message: cause.message
-            };
-        } else {
-            this.cause = cause;
-        }
-    }
-}
-
-export class OldApiError extends Error {
-    status: number;
-    cause: any;
-
-    public static readonly BAD_REQUEST = new OldApiError('Bad Request', 'The request is invalid', 400);
-    public static readonly NOT_FOUND = new OldApiError('Not found', 'The requested resource could not be found but may be available in the future', 500);
-
-    constructor(name: string, message: string, status: number, cause?: any) {
-        super();
-
-        this.name = name;
-        this.message = message;
-        this.status = status;
 
         if (cause instanceof Error) {
             this.cause = {
