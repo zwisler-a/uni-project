@@ -7,11 +7,11 @@
 
     <!-- USER INFORMATION -->
     <mat-card-content fxFlex="1 1 auto" fxLayout="column">
-        <mat-form-field><input disabled matInput placeholder="Username" [(ngModel)]="username" /></mat-form-field>
+        <mat-form-field><input disabled matInput placeholder="Username" [ngModel]="username" /></mat-form-field>
         <mat-form-field>
             <input disabled matInput placeholder="Company" [ngModel]="companyId | company | async" />
         </mat-form-field>
-        <mat-form-field><input disabled matInput placeholder="EMail" [(ngModel)]="email" /></mat-form-field>
+        <mat-form-field><input disabled matInput placeholder="EMail" [ngModel]="email" /></mat-form-field>
     </mat-card-content>
 
     <!-- SAVE / CANCEL -->
