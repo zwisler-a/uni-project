@@ -1,7 +1,15 @@
 {
     "nav": {
         "inventory": "Inventory",
-        "types": "Object types"
+        "types": "Object types",
+        "admin": "Admin area",
+        "roles": "User roles",
+        "companies": "Companies"
+    },
+    "user": {
+        "title": "User",
+        "deleteMe": "Are you really sure you want to delete your account?",
+        "delete": "Are you sure you want to delete this account?"
     },
     "items": {
         "noData": "No Items available",

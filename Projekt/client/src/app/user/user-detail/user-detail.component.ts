@@ -30,7 +30,7 @@ export class UserDetailComponent implements OnInit {
     }
 
     deleteUser() {
-        this.confirm.open('user.delete').subscribe(() => {
+        this.confirm.open('user.delete', true).subscribe(() => {
             this.userService.deleteUser(this.user.id).subscribe(res => {
                 this.router.navigate(['/users/view']);
             });

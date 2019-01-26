@@ -24,6 +24,16 @@ const routes: Routes = [
                 path: 'user',
                 loadChildren: './user/user.module#UserModule',
                 canLoad: [AuthGuard]
+            },
+            {
+                path: 'roles',
+                loadChildren: './roles/roles.module#RolesModule',
+                canLoad: [AuthGuard]
+            },
+            {
+                path: 'companies',
+                loadChildren: './company/company.module#CompanyModule',
+                canLoad: [AuthGuard]
             }
         ]
     }
