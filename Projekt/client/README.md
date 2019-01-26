@@ -1,6 +1,14 @@
-# Client
+# AK18b WebApp (Angular)
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.6.
+Best to start the development enviroment via `npm start` in the Project folder inside the Repo. It starts starts the server and the client if run there. Also `npm install` there downloads both dependencies for the server and the client.
+
+---
+
+Tests are run by the gitlab-ci (unit/e2e). Linting should be done localy for now.
+
+---
+
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.1.
 
 ## Development server
 
