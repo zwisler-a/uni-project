@@ -5,11 +5,12 @@
     },
     "items": {
         "noData": "No Items available",
+        "new": "New item",
         "error": {
             "delete": "Something went wrong while deleting the item!",
             "create": "Something went wrong while createing the item!",
             "get": "Could not get Item!",
-            "update": "Could not update Item!"
+            "update": "Could not update the item!"
         },
         "boolean": {
             "false": "Yes",
@@ -20,7 +21,8 @@
         },
         "create": {
             "selectType": "Please select an item type",
-            "itemTyp": "Item type"
+            "itemTyp": "Item type",
+            "displayField": "Displayfield"
         },
         "edit": {
             "cancel": "Cancel",
@@ -43,12 +45,20 @@
     "types": {
         "title": "Objecttypes",
         "select": "Please select a type",
+        "error": {
+            "delete": "Something went wrong while deleting the type!",
+            "create": "Something went wrong while createing the type!",
+            "get": "Could not get the type(s)!",
+            "update": "Could not update the type!"
+        },
         "edit": {
             "addField": "Add new property",
             "cancel": "Cancel",
             "required": "required",
+            "new": "Add new item type",
             "save": "Save",
             "confirmDelete": "Are you sure you want to delete the type and all its items?",
+            "confirmUpdate": "Are you sure you want to update the type and all its items? This might couse data loss!",
             "typeName": "Name of the type",
             "unique": "unique",
             "field": {

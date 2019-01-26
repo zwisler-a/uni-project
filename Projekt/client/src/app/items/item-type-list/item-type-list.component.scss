@@ -8,23 +8,11 @@
         $key: background
     );
     app-item-type-list {
-        .mat-list-item.navigation-item {
-            width: 159px;
-        }
         .mat-list-item.navigation-item:hover {
             background: map-get($map: $background, $key: card);
-            width: 158px;
-        }
-        .mat-list-item.navigation-item:focus {
-            background: map-get($map: $background, $key: card);
-        }
-        .mat-list-item.navigation-item.active:hover {
-            width: 159px;
         }
         .navigation-item.active {
             background: map-get($map: $background, $key: card);
-            border-top: solid 1px rgba($color: #000000, $alpha: 0.14);
-            border-bottom: solid 1px rgba($color: #000000, $alpha: 0.14);
         }
     }
 }

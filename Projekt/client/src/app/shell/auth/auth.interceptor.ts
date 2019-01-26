@@ -20,7 +20,6 @@ export class AuthInterceptor implements HttpInterceptor {
                     if (error.status === 401) {
                         return this.authService.reauthenticate().pipe(
                             flatMap(res => {
-                                console.log(this.authService.jwt);
                                 headers = req.headers.set('Authorization', 'Bearer ' + this.authService.jwt);
                                 return next.handle(req.clone({ headers }));
                             }),

@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import {
-    ActivatedRouteSnapshot,
-    Resolve,
-    Router,
-    RouterStateSnapshot
-} from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
 import { empty, Observable } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
-import { ItemService } from '../../stores/item-store/item.service';
-import { Item } from '../../stores/item-store/types/item.interface';
-import { TypesService } from '../../stores/type-store/types.service';
+import { Item } from '../../models/item.interface';
+import { ItemService } from '../_item-store/item.service';
+import { TypesService } from 'src/app/types/_type-store/types.service';
+import { ListState } from '../_item-store/list-state.interface';
 
+/**
+ * TODO: Loading types is no priority here anymore. Should be changed at some point
+ */
 @Injectable({ providedIn: 'root' })
 export class ItemsListResolver implements Resolve<Item> {
     constructor(
@@ -22,12 +21,10 @@ export class ItemsListResolver implements Resolve<Item> {
         private types: TypesService
     ) {}
 
-    resolve(
-        route: ActivatedRouteSnapshot,
-        state: RouterStateSnapshot
-    ): Observable<any> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.types.loadTypes().pipe(
             flatMap(types => {
+                // check if there are at least oany times
                 if (!types.getValue().length) {
                     this.router.navigate(['/types']);
                     this.snackbar.open('No types to display', '', {
@@ -36,38 +33,29 @@ export class ItemsListResolver implements Resolve<Item> {
                     });
                     return empty();
                 }
-                const {
-                    page,
-                    perPage,
-                    itemTypeId,
-                    order,
-                    orderBy
-                } = route.params;
+                const { page, perPage, itemTypeId, order, orderBy } = route.params;
                 // check if route has all important info
-                if (
-                    page === undefined ||
-                    perPage === undefined ||
-                    itemTypeId === undefined
-                ) {
+                if (page === undefined || perPage === undefined) {
                     const defaultRoute = [
                         '/items',
                         'view',
                         {
                             outlets: {
-                                content: [0, 50, types.getValue()[0].id]
+                                content: [0, 50]
                             }
                         }
                     ];
                     this.router.navigate(defaultRoute);
                     return empty();
                 }
-                return this.itemService.loadItems(
-                    page,
-                    perPage,
-                    itemTypeId,
+                const listState: ListState = {
+                    page: page,
+                    perPage: perPage,
+                    order,
                     orderBy,
-                    order
-                );
+                    type: itemTypeId
+                };
+                return this.itemService.loadItems(listState);
             })
         );
     }

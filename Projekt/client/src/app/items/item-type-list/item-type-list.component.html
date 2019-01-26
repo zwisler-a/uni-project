@@ -1,22 +1,17 @@
 <div fxLayout="column">
-    <div
-        fxFlex="100px"
-        fxLayoutAlign="start center"
-        class="item-type-header"
-        translate
-    >
-        items.list.types
-    </div>
     <mat-nav-list>
-        <!--<a
-            style="pointer-events:none;cursor: not-allowed;"
+        <!-- ALL ITEMS -->
+        <a
             mat-list-item
             class="navigation-item"
             [routerLink]="['/items', 'view', { outlets: { content: [page, perPage] } }]"
             [routerLinkActiveOptions]="{ exact: true }"
             [routerLinkActive]="'active'"
-            >{{ 'items.list.allTypes' | translate }}</a
-        > -->
+        >
+            {{ 'items.list.allTypes' | translate }}
+        </a>
+
+        <!-- ITERATE THROUGH TYPES -->
         <a
             mat-list-item
             class="navigation-item"
@@ -26,11 +21,7 @@
                 'view',
                 {
                     outlets: {
-                        content: [
-                            typeId === type.id + '' ? page : 0,
-                            perPage,
-                            type.id
-                        ]
+                        content: [typeId === type.id + '' ? page : 0, perPage, type.id]
                     }
                 }
             ]"

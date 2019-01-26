@@ -24,6 +24,8 @@ export interface Queries {
     USER_CREATE: StaticQuery<ObjectResultsets>;
     /** Gets an user by id */
     USER_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Gets users */
+    USER_GET: StaticQuery<ArrayResultsets>;
     /** Gets an user by name */
     USER_GET_NAME: StaticQuery<ArrayResultsets>;
     /** Update an user by id */
@@ -78,6 +80,8 @@ export interface Queries {
 
     /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets>;
+    /** Gets all items of one type */
+    ITEM_GET_ALL: DynamicQuery<ArrayResultsets>;
     /** Gets all items of one type in range(offset, length) */
     ITEM_GET: DynamicQuery<ArrayResultsets>;
     /** Gets an item by id on one type */
@@ -204,6 +208,10 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `SELECT * FROM \`%_item_${structure.id}\` LIMIT ?, ?`.replace('%_', prefix);
     }
 
+    function getItemListAll(structure: any) {
+        return `SELECT * FROM \`%_item_${structure.id}\``.replace('%_', prefix);
+    }
+
     function getItemTotal(structure: any) {
         return `SELECT COUNT(*) FROM \`%_item_${structure.id}\``.replace('%_', prefix);
     }
@@ -233,6 +241,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
 
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`, `email`) VALUES (NULL,?,?,?,?)'),
+        USER_GET: queryFactory('SELECT * FROM `%_users`'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `id` = ?'),
         USER_GET_NAME: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
         USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `name` = ?'),
@@ -263,6 +272,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         ITEM_TABLE_UI_DROP: new DynamicQuery(pool, dropUniqueIndex),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
+        ITEM_GET_ALL: new DynamicQuery(pool, getItemListAll),
         ITEM_GET: new DynamicQuery(pool, getItemList),
         ITEM_GET_ID: new DynamicQuery(pool, getItem),
         ITEM_GET_COUNT: new DynamicQuery(pool, getItemTotal),

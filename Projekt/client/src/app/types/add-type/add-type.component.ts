@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { TypesService } from '../../stores/type-store/types.service';
-import { Type } from 'src/app/stores/type-store/types/type.interface';
-
+import { Type } from 'src/app/models/type.interface';
+import { TypesService } from '../_type-store/types.service';
 
 /**
  * UI to create a new Type
@@ -40,7 +39,7 @@ export class AddTypeComponent implements OnInit {
     /** Create the new type */
     save() {
         this.typesService.createType(this.type).subscribe(res => {
-            this.router.navigate(['/types', res.id]);
+            this.router.navigate(['/types', 'view', { outlets: { detail: [res.id] } }]);
         });
     }
 }

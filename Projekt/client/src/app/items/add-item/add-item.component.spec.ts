@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 import { CommonModule } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ItemStoreModule } from 'src/app/stores/item-store/item-store.module';
+import { ItemStoreModule } from '../_item-store/item-store.module';
 
 describe('AddItemComponent', () => {
     let component: AddItemComponent;

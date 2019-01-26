@@ -1,11 +1,12 @@
-<mat-nav-list>
+<mat-nav-list class="seperated">
     <a
         mat-list-item
         class="navigation-item"
         *ngFor="let type of (types | async)"
-        [routerLink]="['/types', type.id]"
+        [routerLink]="['/types', 'view', { outlets: { detail: [type.id] } }]"
         [routerLinkActive]="'active'"
     >
-        {{ type.name }}
+        <span class="name">{{ type.name }}</span>
+        <span fxHide.lt-md class="type-field" *ngFor="let field of type.fields">{{ field.name }}</span>
     </a>
 </mat-nav-list>
