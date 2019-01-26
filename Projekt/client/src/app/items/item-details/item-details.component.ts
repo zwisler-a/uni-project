@@ -1,12 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { Item } from '../../models/item.interface';
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
-import { ItemPipe } from '../../stores/item-store/item-pipe.service';
-import { ItemService } from '../../stores/item-store/item.service';
-import { Item } from '../../stores/item-store/types/item.interface';
+import { ItemService } from '../_item-store/item.service';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -51,6 +50,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         this.itemSub = this.itemService
             .getItem(typeId, itemId)
             .subscribe(item => {
+                console.log(item);
                 if (!this.edit) {
                     this.item = item;
                 }

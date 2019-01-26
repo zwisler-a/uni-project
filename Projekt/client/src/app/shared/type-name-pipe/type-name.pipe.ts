@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { TypesService } from 'src/app/stores/type-store/types.service';
 import { map } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { TypesService } from 'src/app/types/_type-store/types.service';
 
 @Pipe({
     name: 'typeName'

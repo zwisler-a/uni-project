@@ -1,0 +1,28 @@
+@import "~@angular/material/theming";
+:host {
+    display: flex;
+    flex: 1 1 auto;
+}
+.search-box {
+    @include mat-elevation(2);
+    background: white;
+    border-radius: 8px;
+    padding: 4px;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+
+    input {
+        background: none;
+        border: none;
+        display: flex;
+        flex: 1 1 auto;
+        padding: 12px;
+    }
+
+    input:focus {
+        outline: none;
+    }
+}

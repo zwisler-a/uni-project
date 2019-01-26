@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TypeField } from 'src/app/stores/type-store/types/type-field.interface';
-import { Type } from 'src/app/stores/type-store/types/type.interface';
-import { FieldType } from 'src/app/stores/item-store/types/field-type.enum';
+import { TypeField } from 'src/app/models/type-field.interface';
+import { Type } from 'src/app/models/type.interface';
+import { FieldType } from 'src/app/models/field-type.enum';
 
 @Component({
     selector: 'app-type-field',

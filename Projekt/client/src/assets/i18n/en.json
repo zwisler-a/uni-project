@@ -49,6 +49,7 @@
             "required": "required",
             "save": "Save",
             "confirmDelete": "Are you sure you want to delete the type and all its items?",
+            "confirmUpdate": "Are you sure you want to update the type and all its items? This might couse data loss!",
             "typeName": "Name of the type",
             "unique": "unique",
             "field": {

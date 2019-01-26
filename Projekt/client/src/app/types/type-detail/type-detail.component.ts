@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Type } from 'src/app/stores/type-store/types/type.interface';
+import { Type } from 'src/app/models/type.interface';
 
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
-import { TypesService } from '../../stores/type-store/types.service';
+import { TypesService } from '../_type-store/types.service';
 
 /** Display the detail of a type. Also allows editing/deleting. */
 @Component({
@@ -19,6 +20,7 @@ export class TypeDetailComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private typesService: TypesService,
+        private location: Location,
         private confirm: ConfirmDialogService,
         private router: Router
     ) {}
@@ -34,7 +36,8 @@ export class TypeDetailComponent implements OnInit {
             this.typeSub.unsubscribe();
         }
         this.typeSub = this.typesService.getType(id).subscribe(type => {
-            this.type = type;
+            // Make sure it is not the original object
+            this.type = JSON.parse(JSON.stringify(type));
         });
     }
 
@@ -68,8 +71,13 @@ export class TypeDetailComponent implements OnInit {
 
     /** Save changes to the item */
     save() {
-        this.typesService.updateType(this.type).subscribe(res => {
-            this.router.navigate(['/types', res.id]);
+        console.log(this.type);
+        this.confirm.open('types.edit.confirmUpdate', true).subscribe(() => {
+            this.typesService.updateType(this.type).subscribe(res => {
+                this.router.navigate(['/types', 'view', { outlets: { detail: [res.id] } }]);
+            });
         });
     }
+
+
 }

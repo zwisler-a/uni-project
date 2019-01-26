@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { DeterminedField } from '../../../stores/item-store/types/field.interface';
-import { FieldType } from '../../../stores/item-store/types/field-type.enum';
+import { DeterminedField } from '../../../models/field.interface';
+import { FieldType } from '../../../models/field-type.enum';
 
 @Component({
     selector: 'app-item-field-number',

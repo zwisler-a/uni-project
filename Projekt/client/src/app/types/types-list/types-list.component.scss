@@ -4,3 +4,13 @@
 .navigation-item:hover {
     background: white;
 }
+
+.name {
+    width: 250px;
+}
+.type-field {
+    width: 80px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.7rem;
+}

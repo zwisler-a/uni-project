@@ -1,9 +1,11 @@
 {
     "nav": {
         "inventory": "Inventar",
-        "types": "Objekttypen"
+        "types": "Objekttypen",
+        "user": "Benutzer"
     },
     "items": {
+        "title": "Inventar",
         "noData": "Keine Items vorhanden",
         "error": {
             "delete": "Item konnte nicht gelöscht werden!",
@@ -46,9 +48,11 @@
         "edit": {
             "addField": "Neues Feld hinzufügen",
             "cancel": "Abbrechen",
+            "new": "Neuen Typen hinzufügen",
             "required": "Benötigt",
             "save": "Speichern",
             "confirmDelete": "Wollen Sie den Typen und all Items des Typs wirklich löschen?",
+            "confirmUpdate": "Wollen Sie den Typen bearbeiten? Die Aktion könnte unter umständen zu Datenverlust führen!",
             "typeName": "Name des Typs",
             "unique": "Einzigartig",
             "field": {

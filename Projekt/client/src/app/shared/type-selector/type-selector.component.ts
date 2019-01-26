@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 
-import { TypesService } from '../../stores/type-store/types.service';
-import { Type } from '../../stores/type-store/types/type.interface';
+import { Type } from '../../models/type.interface';
+import { TypesService } from 'src/app/types/_type-store/types.service';
 
 @Component({
     selector: 'app-type-selector',

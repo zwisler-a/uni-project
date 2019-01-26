@@ -3,8 +3,8 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { merge, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { ItemService } from '../_item-store/item.service';
 
-import { ItemService } from '../../stores/item-store/item.service';
 
 /**
  * Data source for the ItemList view. This class should
