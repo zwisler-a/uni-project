@@ -20,6 +20,7 @@ export class UserListComponent implements OnInit {
         if (!this.defaultPage) {
             return;
         }
+        this.defaultPage.title = 'user.title';
         this.users = combineLatest(this.userService.users, this.defaultPage.search, (users, query) => {
             return users.filter(user => user.name.includes(query));
         });

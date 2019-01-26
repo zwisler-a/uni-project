@@ -37,7 +37,9 @@ export class AppModule {
     constructor(private navigationService: NavigationService, private translate: TranslateService) {
         this.translate.addLangs(['de', 'en']);
         this.translate.onLangChange.subscribe(async () => {
-            const translations = await this.translate.get(['nav.inventory', 'nav.types', 'nav.user']).toPromise();
+            const translations = await this.translate
+                .get(['nav.inventory', 'nav.types', 'nav.user', 'nav.roles', 'nav.admin', 'nav.companies'])
+                .toPromise();
 
             this.navigationService.navigationModel = [
                 {
@@ -52,11 +54,26 @@ export class AppModule {
                             label: translations['nav.types'],
                             icon: 'view_compact',
                             route: ['/types/view']
+                        }
+                    ]
+                },
+                {
+                    title: translations['nav.admin'],
+                    items: [
+                        {
+                            label: translations['nav.roles'],
+                            icon: 'view_compact',
+                            route: ['/roles/view']
                         },
                         {
                             label: translations['nav.user'],
                             icon: 'account_circle',
                             route: ['/user', 'view']
+                        },
+                        {
+                            label: translations['nav.companies'],
+                            icon: 'work',
+                            route: ['/companies', 'view']
                         }
                     ]
                 }

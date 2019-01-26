@@ -2,7 +2,15 @@
     "nav": {
         "inventory": "Inventar",
         "types": "Objekttypen",
-        "user": "Benutzer"
+        "user": "Benutzer",
+        "admin": "Administratives",
+        "roles": "Benutzerrollen",
+        "companies": "Firmen"
+    },
+    "user": {
+        "title": "Benutzer",
+        "deleteMe": "Sind Sie sicher dass Sie Ihren Account löschen wollen?",
+        "delete": "Wollen Sie diesen Account wirklich löschen?"
     },
     "items": {
         "title": "Inventar",

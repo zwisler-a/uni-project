@@ -18,6 +18,7 @@ import { SidenavControlButtonComponent } from './navigation/sidenav-control-butt
 import { RouterLoadingIndicatorComponent } from './router-loading-indicator/router-loading-indicator.component';
 import { AuthModule } from './auth/auth.module';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
+import { CompanyStoreModule } from '../company/_company-store/company-store.module';
 
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
@@ -33,6 +34,7 @@ import { LanguageSelectorComponent } from './language-selector/language-selector
     imports: [
         CommonModule,
         AuthModule,
+        CompanyStoreModule, // Needed for company name display
         RouterModule.forChild([
             { path: 'auth', loadChildren: './login/login.module#LoginModule' }
         ]),
