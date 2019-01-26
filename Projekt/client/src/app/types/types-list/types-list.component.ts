@@ -1,4 +1,4 @@
-import { Component, Host, OnInit } from '@angular/core';
+import { Component, Host, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 
@@ -14,7 +14,11 @@ import { Type } from 'src/app/models/type.interface';
 })
 export class TypesListComponent implements OnInit {
     types;
-    constructor(private typeService: TypesService, @Host() private defaultPage: DefaultPageComponent, private router: Router) {}
+    constructor(
+        private typeService: TypesService,
+        @Optional() @Host() private defaultPage: DefaultPageComponent,
+        private router: Router
+    ) {}
 
     ngOnInit() {
         this.defaultPage.title = 'types.title';

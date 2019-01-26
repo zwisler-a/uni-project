@@ -2,9 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { FieldsService } from './fields.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { TypeStoreModule } from '../type-store/type-store.module';
-import { ItemStoreModule } from '../item-store/item-store.module';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
+import { ItemStoreModule } from '../_item-store/item-store.module';
 
 describe('FieldsService', () => {
     beforeEach(() =>

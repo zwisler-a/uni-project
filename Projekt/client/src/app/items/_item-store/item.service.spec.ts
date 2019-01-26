@@ -1,14 +1,3 @@
-import { TestBed, inject } from '@angular/core/testing';
-import {
-    HttpClientTestingModule,
-    HttpTestingController
-} from '@angular/common/http/testing';
-
-import { ItemService } from './item.service';
-import { MatSnackBarModule } from '@angular/material';
-import { TranslateService } from '@ngx-translate/core';
-import { ItemStoreModule } from './item-store.module';
-import { TypeStoreModule } from '../type-store/type-store.module';
 /*
 describe('ItemsService', () => {
     beforeEach(() =>
