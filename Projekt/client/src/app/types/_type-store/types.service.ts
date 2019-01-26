@@ -5,6 +5,7 @@ import { flatMap, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { Type } from '../../models/type.interface';
+import { TypeErrorService } from './type-error.service';
 
 @Injectable({
     providedIn: 'root'
@@ -16,10 +17,10 @@ export class TypesService {
     /** Stores all types */
     readonly types = this._types.asObservable();
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private errorService: TypeErrorService) {}
 
     /** load all item types from the api. Only loads types once */
-    loadTypes() {
+    loadTypes(): Observable<BehaviorSubject<Type[]>> {
         if (this._types.getValue().length) {
             return of(this._types);
         }
@@ -27,7 +28,8 @@ export class TypesService {
             map(res => {
                 this._types.next(res);
                 return this._types;
-            })
+            }),
+            this.errorService.getError()
         );
     }
 
@@ -44,7 +46,8 @@ export class TypesService {
                     return this.http.get([this.baseUrl, id].join('/')).pipe(this.rxjsStoreAddUpdate());
                 }
                 return of(storedType);
-            })
+            }),
+            this.errorService.getError()
         );
     }
 
@@ -52,8 +55,11 @@ export class TypesService {
      * Sends a request to the api to create a new type and adds it to the store if it succeeds.
      * @param type Type to create
      */
-    createType(type: Type) {
-        return this.http.post<Type>(this.baseUrl, this.transformType(type)).pipe(this.rxjsStoreAddUpdate());
+    createType(type: Type): Observable<Type> {
+        return this.http.post<Type>(this.baseUrl, this.transformType(type)).pipe(
+            this.rxjsStoreAddUpdate(),
+            this.errorService.createError()
+        );
     }
     /** Ads a new type to the store */
     private rxjsStoreAddUpdate() {
@@ -67,8 +73,11 @@ export class TypesService {
      * Sends a delete request to the api and updates the store if it succeeds
      * @param id TypeId of the type to delete
      */
-    deleteType(id: number) {
-        return this.http.delete([this.baseUrl, id].join('/')).pipe(this.rxjsStoreDeleteUpdate(id));
+    deleteType(id: number): Observable<void> {
+        return this.http.delete([this.baseUrl, id].join('/')).pipe(
+            this.rxjsStoreDeleteUpdate(id),
+            this.errorService.deleteError()
+        );
     }
     /** removed a type from the store */
     private rxjsStoreDeleteUpdate(id) {
@@ -81,10 +90,11 @@ export class TypesService {
      * Sends a patch request to the api and updated the type in the store in success
      * @param type Modified Type
      */
-    updateType(type: Type) {
-        return this.http
-            .patch<Type>([this.baseUrl, type.id].join('/'), this.transformType(type))
-            .pipe(this.rxjsStoreUpdate(type.id));
+    updateType(type: Type): Observable<Type> {
+        return this.http.patch<Type>([this.baseUrl, type.id].join('/'), this.transformType(type)).pipe(
+            this.rxjsStoreUpdate(type.id),
+            this.errorService.updateError()
+        );
     }
     /** update the store */
     private rxjsStoreUpdate(id) {

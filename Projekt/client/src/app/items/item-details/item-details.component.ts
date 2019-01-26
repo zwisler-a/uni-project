@@ -50,7 +50,6 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         this.itemSub = this.itemService
             .getItem(typeId, itemId)
             .subscribe(item => {
-                console.log(item);
                 if (!this.edit) {
                     this.item = item;
                 }

@@ -1,84 +1,47 @@
-<ng-container *ngIf="field">
+<div *ngIf="field" [ngClass]="{ reference: field.type === 'reference' }" [ngClass.lt-md]="'small'">
     <mat-form-field>
         <div matPrefix>
-            <span
-                *ngIf="edit"
-                class="field-type"
-                matTooltip="Feld Typ"
-                matPrefix
-                [matMenuTriggerFor]="menu"
-            >
-                <span>{{ "types.edit.field." + field.type | translate }}</span>
+            <span *ngIf="edit" class="field-type" matTooltip="Feld Typ" matPrefix [matMenuTriggerFor]="menu">
+                <span>{{ 'types.edit.field.' + field.type | translate }}</span>
                 <span style="flex:1 1 auto"></span>
                 <mat-icon>arrow_drop_down</mat-icon>
             </span>
-            <span
-                *ngIf="!edit"
-                class="field-type"
-                matTooltip="Feld Typ"
-                matPrefix
-            >
-                <span>{{ "types.edit.field." + field.type | translate }}</span>
+            <span *ngIf="!edit" class="field-type" matTooltip="Feld Typ" matPrefix>
+                <span>{{ 'types.edit.field.' + field.type | translate }}</span>
                 <span style="flex:1 1 auto"></span>
             </span>
 
             <mat-menu #menu="matMenu">
-                <button
-                    mat-menu-item
-                    *ngFor="let type of fieldTypes"
-                    (click)="selectType(type)"
-                >
-                    {{ "types.edit.field." + type | translate }}
+                <button mat-menu-item *ngFor="let type of fieldTypes" (click)="selectType(type)">
+                    {{ 'types.edit.field.' + type | translate }}
                 </button>
             </mat-menu>
         </div>
 
-        <input
-            matInput
-            [disabled]="!edit"
-            [placeholder]="'types.edit.typeName' | translate"
-            [(ngModel)]="field.name"
-        />
+        <input required matInput [disabled]="!edit" [placeholder]="'types.edit.typeName' | translate" [(ngModel)]="field.name" />
 
-        <div matSuffix fxHide.lt-md>
-            <ng-container *ngTemplateOutlet="fieldProperies"></ng-container>
-        </div>
+        <div matSuffix fxHide.lt-md><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
     </mat-form-field>
 
-    <div fxHide.gt-sm>
-        <ng-container *ngTemplateOutlet="fieldProperies"></ng-container>
-    </div>
+    <div fxHide.gt-sm><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
 
     <ng-template #fieldProperies>
         <div class="field-suffix">
-            <mat-checkbox
-                color="warn"
-                [disabled]="!edit"
-                [(ngModel)]="field.required"
-            >
-                {{ "types.edit.required" | translate }}
+            <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.required">
+                {{ 'types.edit.required' | translate }}
             </mat-checkbox>
-            <mat-checkbox
-                color="warn"
-                [disabled]="!edit"
-                [(ngModel)]="field.unique"
-            >
-                {{ "types.edit.unique" | translate }}
+            <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.unique">
+                {{ 'types.edit.unique' | translate }}
             </mat-checkbox>
-            <button
-                mat-icon-button
-                [disabled]="!edit"
-                (click)="deleteMe.emit()"
-            >
-                <mat-icon>delete</mat-icon>
-            </button>
+            <button mat-icon-button [disabled]="!edit" (click)="deleteMe.emit()"><mat-icon>delete</mat-icon></button>
         </div>
     </ng-template>
 
     <app-type-selector
         [value]="field.referenceId"
         [disabled]="!edit"
+        [withField]="true"
         (selected)="setReference($event)"
         *ngIf="field.type === 'reference'"
     ></app-type-selector>
-</ng-container>
+</div>

@@ -41,6 +41,15 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /**
+     * Removes the given field from the type
+     * @param field Field to remove
+     */
+    removeField(field) {
+        const fields = this.type.fields;
+        fields.splice(fields.indexOf(field), 1);
+    }
+
     /** Add a field to the type */
     addField() {
         this.type.fields.push({
@@ -52,6 +61,12 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /** Cancel the editing */
+    cancel() {
+        this.edit = false;
+        this.changeType(this.type.id);
+    }
+
     /** Delete the type */
     delete() {
         // Open confirm first
@@ -59,7 +74,7 @@ export class TypeDetailComponent implements OnInit {
             this.typeSub.unsubscribe();
             this.typesService.deleteType(this.type.id).subscribe(
                 () => {
-                    this.router.navigate(['/types']);
+                    this.router.navigate(['/types', 'view']);
                 },
                 () => {
                     // resubscribe if deleting fails for some reason
@@ -71,13 +86,10 @@ export class TypeDetailComponent implements OnInit {
 
     /** Save changes to the item */
     save() {
-        console.log(this.type);
         this.confirm.open('types.edit.confirmUpdate', true).subscribe(() => {
             this.typesService.updateType(this.type).subscribe(res => {
                 this.router.navigate(['/types', 'view', { outlets: { detail: [res.id] } }]);
             });
         });
     }
-
-
 }

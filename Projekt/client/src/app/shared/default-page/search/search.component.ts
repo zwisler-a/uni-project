@@ -13,4 +13,9 @@ export class SearchComponent implements OnInit {
     constructor() {}
 
     ngOnInit() {}
+
+    clearSearch(input) {
+        input.value = '';
+        this.search.emit('');
+    }
 }

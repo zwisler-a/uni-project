@@ -75,8 +75,8 @@ export class AddItemComponent implements OnInit, OnDestroy {
     }
 
     /** Changes the type of the item and creates apropriate fields */
-    typeChange(type: Type) {
-        this.item.fields = type.fields.map(field => {
+    typeChange(ev) {
+        this.item.fields = ev.type.fields.map(field => {
             return {
                 name: field.name,
                 type: field.type,
@@ -87,6 +87,6 @@ export class AddItemComponent implements OnInit, OnDestroy {
                 id: field.id
             };
         });
-        this.item.typeId = type.id;
+        this.item.typeId = ev.type.id;
     }
 }

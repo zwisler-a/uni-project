@@ -88,7 +88,6 @@ export class ItemService {
     /** adds a new item into the store */
     private rxjsStoreCreateUpdate(entity: ApiItem) {
         return this.storeUpdate(entity.typeId, (store, res) => {
-            console.log(store, res);
             store.items.push(...res.items);
             this.listState.total++;
             return store;

@@ -22,7 +22,8 @@
         },
         "create": {
             "selectType": "Bitte wählen Sie einen Typen aus.",
-            "itemTyp": "Item Typ"
+            "itemTyp": "Item Typ",
+            "displayField": "Anzeigefeld"
         },
         "edit": {
             "cancel": "Abbrechen",
@@ -45,6 +46,12 @@
     "types": {
         "title": "Objekttypen",
         "select": "Bitte wählen Sie ein Typen aus",
+        "error": {
+            "delete": "Typ konnte nicht gelöscht werden!",
+            "create": "Typ konnte nicht erstellt werden!",
+            "get": "Typ konnte nicht geladen werden!",
+            "update": "Typ konnte nicht verändert werden!"
+        },
         "edit": {
             "addField": "Neues Feld hinzufügen",
             "cancel": "Abbrechen",

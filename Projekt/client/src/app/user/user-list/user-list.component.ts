@@ -1,4 +1,4 @@
-import { Component, Host, OnInit } from '@angular/core';
+import { Component, Host, OnInit, Optional } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 
@@ -13,10 +13,13 @@ import { User } from 'src/app/models/user.interface';
 export class UserListComponent implements OnInit {
     users: Observable<User[]>;
 
-    constructor(private userService: UserService, @Host() private defaultPage: DefaultPageComponent) {}
+    constructor(private userService: UserService, @Optional() @Host() private defaultPage: DefaultPageComponent) {}
 
     ngOnInit() {
         this.userService.loadUsers().subscribe();
+        if (!this.defaultPage) {
+            return;
+        }
         this.users = combineLatest(this.userService.users, this.defaultPage.search, (users, query) => {
             return users.filter(user => user.name.includes(query));
         });

@@ -28,7 +28,6 @@ export class ItemPipe implements PipeTransform {
         const transformedItems = items.map(item => {
             const type = types.find(searchType => searchType.id + '' === item.typeId + '');
             if (!type) {
-                console.log(items, types);
                 throw new Error(`Type ID ${item.typeId} of item ${item.id} not found!`);
             }
             return this.transformItem(item, type);

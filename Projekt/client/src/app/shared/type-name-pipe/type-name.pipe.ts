@@ -10,7 +10,7 @@ export class TypeNamePipe implements PipeTransform {
     constructor(private typeService: TypesService) {}
 
     transform(id: any, args?: any): any {
-        if (id === undefined || id === '') {
+        if (id === undefined || id === '' || id === 0) {
             return of('');
         }
         return this.typeService.getType(id).pipe(map(type => type.name));

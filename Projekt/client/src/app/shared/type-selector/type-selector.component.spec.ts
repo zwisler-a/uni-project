@@ -1,11 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { TypeSelectorComponent } from './type-selector.component';
-import { MatAutocompleteModule, MatInputModule } from '@angular/material';
-import { TypeNameModule } from '../type-name-pipe/type-name.module';
-import { TranslateTestingModule } from 'ngx-translate-testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatAutocompleteModule, MatIconModule, MatInputModule, MatSnackBarModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+
+import { TypeNameModule } from '../type-name-pipe/type-name.module';
+import { TypeSelectorComponent } from './type-selector.component';
 
 describe('TypeSelectorComponent', () => {
     let component: TypeSelectorComponent;
@@ -19,6 +20,9 @@ describe('TypeSelectorComponent', () => {
                 MatInputModule,
                 NoopAnimationsModule,
                 TypeNameModule,
+                FlexLayoutModule,
+                MatSnackBarModule,
+                MatIconModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({})
             ]
