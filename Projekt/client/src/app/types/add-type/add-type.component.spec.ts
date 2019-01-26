@@ -6,6 +6,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TypeStoreModule } from '../_type-store/type-store.module';
 
 describe('AddTypeComponent', () => {
     let component: AddTypeComponent;
@@ -16,6 +17,7 @@ describe('AddTypeComponent', () => {
             imports: [
                 TypesModule,
                 NoopAnimationsModule,
+                TypeStoreModule,
                 TranslateTestingModule.withTranslations({}),
                 HttpClientTestingModule,
                 RouterTestingModule

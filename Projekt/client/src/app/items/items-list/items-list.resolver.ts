@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRouteSnapshot, Resolve, Router, RouterStateSnapshot } from '@angular/router';
-import { empty, Observable } from 'rxjs';
+import { empty, Observable, EMPTY } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 
 import { Item } from '../../models/item.interface';
@@ -31,7 +31,7 @@ export class ItemsListResolver implements Resolve<Item> {
                         duration: 2000,
                         horizontalPosition: 'end'
                     });
-                    return empty();
+                    return EMPTY;
                 }
                 const { page, perPage, itemTypeId, order, orderBy } = route.params;
                 // check if route has all important info
@@ -46,7 +46,7 @@ export class ItemsListResolver implements Resolve<Item> {
                         }
                     ];
                     this.router.navigate(defaultRoute);
-                    return empty();
+                    return EMPTY;
                 }
                 const listState: ListState = {
                     page: page,

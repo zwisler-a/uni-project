@@ -8,7 +8,7 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldReferenceComponent implements OnInit {
     @Input()
-    field: DeterminedField<LinkField> = {
+    field: DeterminedField<any> = {
         name: '',
         type: 'reference',
         value: { name: '', ref: '' }

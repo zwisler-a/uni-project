@@ -8,6 +8,7 @@ import { DefaultPageModule } from 'src/app/shared/default-page/default-page.modu
 import { TypesModule } from '../types.module';
 import { TypesListComponent } from './types-list.component';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { TypeStoreModule } from '../_type-store/type-store.module';
 
 describe('TypesListComponent', () => {
     let component: TypesListComponent;
@@ -21,6 +22,7 @@ describe('TypesListComponent', () => {
                 HttpClientTestingModule,
                 DefaultPageModule,
                 ConfirmDialogModule,
+                TypeStoreModule,
                 TranslateTestingModule.withTranslations({})
             ],
             providers: [{ provide: DefaultPageComponent, useValue: { actions: { next: _ => {} } } }]

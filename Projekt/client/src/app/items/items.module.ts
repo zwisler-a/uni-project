@@ -28,7 +28,6 @@ import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.mod
 import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { TypeNameModule } from '../shared/type-name-pipe/type-name.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
-import { TypeStoreModule } from '../types/_type-store/type-store.module';
 import { FieldsStoreModule } from './_fields-store/fields-store.module';
 import { ItemStoreModule } from './_item-store/item-store.module';
 import { AddItemComponent } from './add-item/add-item.component';
@@ -89,7 +88,6 @@ import { itemsRoutes } from './items.routes';
         DefaultPageModule,
         TypeSelectorModule,
         TypeNameModule,
-        TypeStoreModule,
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)

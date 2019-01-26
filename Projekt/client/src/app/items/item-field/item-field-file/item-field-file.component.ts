@@ -8,7 +8,7 @@ import { FileField, DeterminedField } from '../../../models/field.interface';
 })
 export class ItemFieldFileComponent implements OnInit {
     @Input()
-    field: DeterminedField<FileField>;
+    field: DeterminedField<any>;
 
     @Input()
     edit: boolean;
