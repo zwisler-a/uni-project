@@ -50,7 +50,7 @@ export class AppModule {
                         },
                         {
                             label: translations['nav.types'],
-                            icon: 'dashboard',
+                            icon: 'view_compact',
                             route: ['/types/view']
                         },
                         {

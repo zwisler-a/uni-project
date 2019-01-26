@@ -3,8 +3,8 @@ import { MatPaginator, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { merge, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ItemService } from '../_item-store/item.service';
 
+import { ItemService } from '../_item-store/item.service';
 
 /**
  * Data source for the ItemList view. This class should
@@ -39,10 +39,7 @@ export class ItemListDataSource extends DataSource<any> {
         });
 
         this.mutationSub = merge(...dataMutations).subscribe((ev: any) => {
-            const contentRoute: any[] = [
-                this.paginator.pageIndex,
-                this.paginator.pageSize
-            ];
+            const contentRoute: any[] = [this.paginator.pageIndex, this.paginator.pageSize];
             if (this.typeId) {
                 contentRoute.push(this.typeId);
             }
@@ -61,11 +58,11 @@ export class ItemListDataSource extends DataSource<any> {
         });
         return this.itemService.items.pipe(
             map(items => {
-                this.paginator.pageIndex = this.itemService.page;
-                this.paginator.pageSize = this.itemService.perPage;
-                this.sort.active = this.itemService.orderBy;
-                this.sort.direction = this.itemService.order;
-                this.paginator.length = this.itemService.total;
+                this.paginator.pageIndex = this.itemService.listState.page;
+                this.paginator.pageSize = this.itemService.listState.perPage;
+                this.sort.active = this.itemService.listState.orderBy;
+                this.sort.direction = this.itemService.listState.order;
+                this.paginator.length = this.itemService.listState.total;
                 return items;
             })
         );

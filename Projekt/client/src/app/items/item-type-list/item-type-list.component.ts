@@ -20,15 +20,15 @@ export class ItemTypeListComponent implements OnInit, OnDestroy {
     }
 
     get page() {
-        return this.itemService.page;
+        return this.itemService.listState.page;
     }
 
     get perPage() {
-        return this.itemService.perPage;
+        return this.itemService.listState.perPage;
     }
 
     get typeId() {
-        return this.itemService.type;
+        return this.itemService.listState.type;
     }
 
     constructor(private route: ActivatedRoute, private itemService: ItemService, private typesService: TypesService) {}

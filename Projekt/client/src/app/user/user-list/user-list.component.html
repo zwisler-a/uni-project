@@ -4,6 +4,7 @@
         class="navigation-item"
         *ngFor="let user of (users | async)"
         [routerLink]="['/user', 'view', { outlets: { detail: [user.id] } }]"
+        [routerLinkActive]="'active'"
     >
         <span class="name">{{ user.name }}</span>
         <span>{{ user.email }}</span>

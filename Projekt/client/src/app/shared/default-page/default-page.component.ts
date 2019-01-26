@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ObservableMedia } from '@angular/flex-layout';
 import { MatDrawer } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { Subscription, BehaviorSubject } from 'rxjs';
 import { DefaultPageAction } from './default-page-action.interface';
 import { delay } from 'rxjs/operators';
@@ -16,10 +16,15 @@ export class DefaultPageComponent implements OnInit, OnDestroy {
     actions = new BehaviorSubject<DefaultPageAction[]>([]);
     _actions = this.actions.pipe(delay(0));
     search = new BehaviorSubject('');
-    sidenavOpen = true;
-    sidenavMode = 'side';
-    @ViewChild('overlaySidenav') private drawer: MatDrawer;
-    private outletActive = false;
+
+    @ViewChild('overlaySidenav') private overlaySidenav: MatDrawer;
+    @ViewChild('leftSidenav') private leftSidenav: MatDrawer;
+    private outletActive = {
+        detail: false,
+        sidenav: false
+    };
+
+    showSidenavMenuButton = false;
 
     private mediaSub: Subscription;
     constructor(private media: ObservableMedia, private router: Router, private activatedRoute: ActivatedRoute) {}
@@ -37,18 +42,20 @@ export class DefaultPageComponent implements OnInit, OnDestroy {
 
     /** Determine if the sidenav should be open or close */
     private sidenavState() {
-        if (this.media.isActive('lt-md')) {
-            this.sidenavOpen = false;
-            this.sidenavMode = 'over';
-        } else {
-            this.sidenavOpen = true;
-            this.sidenavMode = 'side';
+        if (!this.outletActive.sidenav) {
+            this.leftSidenav.close();
+            this.showSidenavMenuButton = false;
+            return;
         }
-    }
-
-    /** Toggle item type */
-    openSidenav() {
-        this.sidenavOpen = !this.sidenavOpen;
+        if (this.media.isActive('lt-md')) {
+            this.leftSidenav.close();
+            this.showSidenavMenuButton = true;
+            this.leftSidenav.mode = 'over';
+        } else {
+            this.leftSidenav.open();
+            this.showSidenavMenuButton = false;
+            this.leftSidenav.mode = 'side';
+        }
     }
 
     /** Deavtivate outlet if an outlet is active */
@@ -61,14 +68,22 @@ export class DefaultPageComponent implements OnInit, OnDestroy {
     }
 
     /** Closes the sidenav */
-    outletDeactivate() {
-        this.drawer.close();
-        this.outletActive = false;
+    outletDeactivate(outlet: string) {
+        if (outlet === 'detail') {
+            this.overlaySidenav.close();
+        } else if (outlet === 'sidenav') {
+            this.leftSidenav.close();
+        }
+        this.outletActive[outlet] = false;
     }
 
     /** Open the sidenav */
-    outletActivate() {
-        this.drawer.open();
-        this.outletActive = true;
+    outletActivate(outlet: string) {
+        if (outlet === 'detail') {
+            this.overlaySidenav.open();
+        } else if (outlet === 'sidenav') {
+            this.leftSidenav.open();
+        }
+        this.outletActive[outlet] = true;
     }
 }

@@ -101,10 +101,10 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         let perPage = 25;
-        if ('per_page' in query) {
-            perPage = parseInt(query.per_page);
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'per_page');
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
             }
         }
 
@@ -117,11 +117,12 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         let total: number;
         let items: Item[];
         if (!searchQuery) {
-          total = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
-          items = (await database.ITEM_GET.execute(type, [page * perPage, perPage])).map(convertItem(type));
+            total = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
+            items = (await database.ITEM_GET.execute(type, [page * perPage, perPage])).map(convertItem(type));
         } else {
-          items = await getFilteredItems(type, searchQuery, database);
-          total = items.length;
+            items = (await getFilteredItems(type, searchQuery, database));
+            total = items.length;
+            items = items.slice(page * perPage, page * perPage + perPage);
         }
 
         const totalPages = Math.ceil(total / perPage);
@@ -162,10 +163,10 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         }
 
         let perPage = 25;
-        if ('per_page' in query) {
-            perPage = parseInt(query.per_page);
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'per_page');
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
             }
         }
 
@@ -187,9 +188,9 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
             return items;
         });
         // wait until all queries have finished and than flatten and filter the result
-        const items = [].concat(...(await Promise.all(itemQueries)).filter(query => query));
-
+        let items = [].concat(...(await Promise.all(itemQueries)).filter(query => query));
         const total = items.length;
+        items = items.slice(page * perPage, page * perPage + perPage);
         const totalPages = Math.ceil(items.length / perPage);
         res.set('X-Total', total.toString());
         res.set('X-Total-Pages', totalPages.toString());

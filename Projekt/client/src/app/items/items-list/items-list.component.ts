@@ -10,7 +10,7 @@ import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.c
 import { FieldsService } from '../_fields-store/fields.service';
 import { ItemService } from '../_item-store/item.service';
 import { ItemListDataSource } from './items-list.datasource';
-import { debounceTime, throttleTime } from 'rxjs/operators';
+import { debounceTime, throttleTime, skip } from 'rxjs/operators';
 
 /**
  * Display of items given in the resolve data
@@ -54,9 +54,14 @@ export class ItemsListComponent implements OnInit, OnDestroy {
                 }
             }
         ]);
-        this.searchSub = this.pageComponent.search.pipe(throttleTime(100)).subscribe(query => {
-            this.itemService.loadItems(undefined, undefined, undefined, query, undefined, undefined).subscribe();
-        });
+        this.searchSub = this.pageComponent.search
+            .pipe(
+                throttleTime(100),
+                skip(1)
+            )
+            .subscribe(query => {
+                this.itemService.loadItems({ searchQuery: query }).subscribe();
+            });
     }
 
     ngOnDestroy() {

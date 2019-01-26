@@ -9,6 +9,7 @@ import { EmbeddedItems } from '../../models/api/embedded-items.interface';
 import { Item } from '../../models/item.interface';
 import { ItemErrorService } from './item-error.service';
 import { ItemPipe } from './item-pipe.service';
+import { ListState } from './list-state.interface';
 
 /**
  * The Item store is used to create, delete, update and retrieve items.
@@ -25,42 +26,11 @@ import { ItemPipe } from './item-pipe.service';
 export class ItemService {
     baseUrl = `${environment.baseUrl}/items`;
 
-    private _page = 0;
-    private _perPage = 50;
-    private _total = 0;
-    private _type;
-    private _orderBy = '';
-    private _order: 'asc' | 'desc' = 'asc';
-    private _searchQuery = null;
-
-    /** current page index of the store */
-    get page() {
-        return this._page;
-    }
-    /** current item type of the store */
-    get type() {
-        return this._type;
-    }
-    /** amount of items in the store per page */
-    get perPage() {
-        return this._perPage;
-    }
-    /** amount of items in the store per page */
-    get orderBy() {
-        return this._orderBy;
-    }
-    /** amount of items in the store per page */
-    get order() {
-        return this._order;
-    }
-    /** amount of items of this type available in the backend */
-    get total() {
-        return this._total;
-    }
-    /** query to filter the items by */
-    get searchQuery() {
-        return this._searchQuery;
-    }
+    listState: ListState = {
+        page: 0,
+        perPage: 50,
+        total: 0
+    };
 
     private _items = new BehaviorSubject<EmbeddedItems>({ items: [], types: [] });
     /** Stores all currently loaded items in the form the backend sends them */
@@ -76,38 +46,18 @@ export class ItemService {
      * @param perPage items per page
      * @param type the type of items which should be loaded
      */
-    loadItems(
-        page = this.page,
-        perPage = this.perPage,
-        type = this.type,
-        searchQuery = this.searchQuery,
-        orderBy = this._orderBy,
-        order = this._order,
-        resetType = false
-    ): Observable<Observable<Item[]>> {
-        this._page = page;
-        this._perPage = perPage;
-        this._type = resetType ? null : type;
-        this._order = order;
-        this._orderBy = orderBy;
-        this._searchQuery = searchQuery;
-        const params = {
-            page: page.toString(),
-            per_page: perPage.toString(),
-            order: order.toString(),
-            orderBy: orderBy.toString()
-        };
-        if (this.searchQuery) {
-            params['searchQuery'] = this.searchQuery;
-        }
+    loadItems(state: ListState): Observable<Observable<Item[]>> {
+        const newState = Object.assign(this.listState, state);
+        Object.keys(newState).forEach(key => newState[key] == null && delete newState[key]);
+        this.listState = newState;
         return this.http
-            .get<EmbeddedItems>([this.baseUrl, this.type].join('/'), {
+            .get<EmbeddedItems>([this.baseUrl, this.listState.type].join('/'), {
                 observe: 'response',
-                params
+                params: newState as {}
             })
             .pipe(
                 map(res => {
-                    this._total = Number.parseInt(res.headers.get('X-Total'), 10);
+                    this.listState.total = Number.parseInt(res.headers.get('X-Total'), 10);
                     this._items.next(res.body);
                     return this.items;
                 })
@@ -117,7 +67,7 @@ export class ItemService {
     /** Helper class to generate a rxjs operator for a update in the store  */
     private storeUpdate(type, update: (store: EmbeddedItems, res: EmbeddedItems) => EmbeddedItems) {
         return map((res: EmbeddedItems) => {
-            if (this.type + '' === type + '' || !this.type) {
+            if (this.listState.type + '' === type + '' || !this.listState.type) {
                 this._items.next(update(this._items.getValue(), res));
             }
             return res;
@@ -140,7 +90,7 @@ export class ItemService {
         return this.storeUpdate(entity.typeId, (store, res) => {
             console.log(store, res);
             store.items.push(...res.items);
-            this._total++;
+            this.listState.total++;
             return store;
         });
     }
@@ -211,7 +161,7 @@ export class ItemService {
     private rxjsStoreDeleteUpdate(typeId: number, itemId: number) {
         return this.storeUpdate(typeId, store => {
             const newStore = store;
-            this._total--;
+            this.listState.total--;
             newStore.items = store.items.filter(item => item.id + '' !== itemId + '' || item.typeId + '' !== typeId + '');
             return newStore;
         });

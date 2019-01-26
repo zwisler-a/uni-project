@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
-import { flatMap, map, tap } from 'rxjs/operators';
-import { User } from 'src/app/shell/auth/user.interface';
+import { BehaviorSubject } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { User } from 'src/app/models/user.interface';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({

@@ -7,6 +7,7 @@ import { flatMap } from 'rxjs/operators';
 import { Item } from '../../models/item.interface';
 import { ItemService } from '../_item-store/item.service';
 import { TypesService } from 'src/app/types/_type-store/types.service';
+import { ListState } from '../_item-store/list-state.interface';
 
 @Injectable({ providedIn: 'root' })
 export class ItemsListResolver implements Resolve<Item> {
@@ -43,7 +44,14 @@ export class ItemsListResolver implements Resolve<Item> {
                     this.router.navigate(defaultRoute);
                     return empty();
                 }
-                return this.itemService.loadItems(page, perPage, itemTypeId, '', orderBy, order, !itemTypeId);
+                const listState: ListState = {
+                    page: page,
+                    perPage: perPage,
+                    order,
+                    orderBy,
+                    type: itemTypeId
+                };
+                return this.itemService.loadItems(listState);
             })
         );
     }

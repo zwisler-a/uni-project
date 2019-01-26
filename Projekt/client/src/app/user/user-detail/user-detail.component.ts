@@ -25,7 +25,6 @@ export class UserDetailComponent implements OnInit {
     }
     selectUser(id: string): any {
         this.userService.getUser(id).subscribe(user => {
-            console.log(user);
             this.user = user;
         });
     }
