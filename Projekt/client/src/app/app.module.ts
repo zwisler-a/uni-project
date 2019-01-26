@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
+import { TypeStoreModule } from './types/_type-store/type-store.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -20,6 +21,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         ShellModule,
+        TypeStoreModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         TranslateModule.forRoot({
