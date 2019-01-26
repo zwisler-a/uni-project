@@ -1,13 +1,18 @@
+<!-- make sure there is something to display -->
 <ng-container *ngIf="type">
     <mat-toolbar color="form">
         <button mat-icon-button appNavigateBack><mat-icon>close</mat-icon></button>
         <span translate>types.edit.new</span>
     </mat-toolbar>
+
     <form class="types-form">
+        <!-- TYPE NAME -->
         <mat-form-field>
-            <input name="name" matInput [placeholder]="'types.edit.typeName' | translate" [(ngModel)]="type.name" />
+            <input name="name" required matInput [placeholder]="'types.edit.typeName' | translate" [(ngModel)]="type.name" />
         </mat-form-field>
+
         <div fxLayout="column" fxLayoutAlign="start center">
+            <!-- EDITABLE FIELDS -->
             <app-type-field
                 *ngFor="let field of type.fields"
                 [field]="field"
@@ -16,8 +21,8 @@
             ></app-type-field>
 
             <button mat-button (click)="addField()">{{ 'types.edit.addField' | translate }}</button>
-            <span fxFlex></span>
         </div>
+        <!-- SAVE/CANCEL ACTIONS -->
         <div fxLayoutAlign="end center">
             <button mat-button [routerLink]="['/types']">{{ 'types.edit.cancel' | translate }}</button>
             <button mat-raised-button color="primary" (click)="save()">{{ 'types.edit.save' | translate }}</button>

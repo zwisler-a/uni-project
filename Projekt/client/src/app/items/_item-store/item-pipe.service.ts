@@ -8,6 +8,9 @@ import { FieldType } from '../../models/field-type.enum';
 import { Item } from '../../models/item.interface';
 import { Type } from '../../models/type.interface';
 
+/**
+ * Pipe to translate items from ApiItem to UIItems and via versa.
+ */
 @Pipe({ name: 'toItem' })
 export class ItemPipe implements PipeTransform {
     constructor(private sanatizer: DomSanitizer) {}

@@ -9,6 +9,9 @@ import { ItemService } from '../_item-store/item.service';
 import { TypesService } from 'src/app/types/_type-store/types.service';
 import { ListState } from '../_item-store/list-state.interface';
 
+/**
+ * TODO: Loading types is no priority here anymore. Should be changed at some point
+ */
 @Injectable({ providedIn: 'root' })
 export class ItemsListResolver implements Resolve<Item> {
     constructor(
@@ -21,6 +24,7 @@ export class ItemsListResolver implements Resolve<Item> {
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         return this.types.loadTypes().pipe(
             flatMap(types => {
+                // check if there are at least oany times
                 if (!types.getValue().length) {
                     this.router.navigate(['/types']);
                     this.snackbar.open('No types to display', '', {

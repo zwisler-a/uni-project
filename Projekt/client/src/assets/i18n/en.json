@@ -5,6 +5,7 @@
     },
     "items": {
         "noData": "No Items available",
+        "new": "New item",
         "error": {
             "delete": "Something went wrong while deleting the item!",
             "create": "Something went wrong while createing the item!",
@@ -54,7 +55,7 @@
             "addField": "Add new property",
             "cancel": "Cancel",
             "required": "required",
-            "new":"Add new item type",
+            "new": "Add new item type",
             "save": "Save",
             "confirmDelete": "Are you sure you want to delete the type and all its items?",
             "confirmUpdate": "Are you sure you want to update the type and all its items? This might couse data loss!",

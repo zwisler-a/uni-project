@@ -69,7 +69,7 @@ export class ItemListDataSource extends DataSource<any> {
     }
 
     /**
-     *  Called when the table is being destroyed. Use this function, to clean up
+     * Called when the table is being destroyed. Use this function, to clean up
      * any open connections or free any held resources that were set up during connect.
      */
     disconnect() {

@@ -1,6 +1,8 @@
+<!-- IF REFERENCE MAKE IT A BIT MORE GROUPED BY ADDING SPECIAL STYLE -->
 <div *ngIf="field" [ngClass]="{ reference: field.type === 'reference' }" [ngClass.lt-md]="'small'">
     <mat-form-field>
         <div matPrefix>
+            <!-- TYPE OF FIELD SELECT -->
             <span *ngIf="edit" class="field-type" matTooltip="Feld Typ" matPrefix [matMenuTriggerFor]="menu">
                 <span>{{ 'types.edit.field.' + field.type | translate }}</span>
                 <span style="flex:1 1 auto"></span>
@@ -16,15 +18,26 @@
                     {{ 'types.edit.field.' + type | translate }}
                 </button>
             </mat-menu>
+            <!-- ---------------- -->
         </div>
 
-        <input required matInput [disabled]="!edit" [placeholder]="'types.edit.typeName' | translate" [(ngModel)]="field.name" />
+        <!-- VALUE DISPLAY/INPUT -->
+        <input
+            required
+            matInput
+            [disabled]="!edit"
+            [placeholder]="'types.edit.typeName' | translate"
+            [(ngModel)]="field.name"
+        />
 
+        <!-- REQUIRED/UNIQUE/REMOVE FIELD - INLINE -->
         <div matSuffix fxHide.lt-md><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
     </mat-form-field>
 
+    <!-- REQUIRED/UNIQUE/REMOVE FIELD - BELOW -->
     <div fxHide.gt-sm><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
 
+    <!--REQUIRED/UNIQUE/REMOVE FIELD - TEMPLATE -->
     <ng-template #fieldProperies>
         <div class="field-suffix">
             <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.required">
@@ -37,6 +50,7 @@
         </div>
     </ng-template>
 
+    <!-- FOR REFERENCES: SELECT A TYPE -->
     <app-type-selector
         [value]="field.referenceId"
         [disabled]="!edit"

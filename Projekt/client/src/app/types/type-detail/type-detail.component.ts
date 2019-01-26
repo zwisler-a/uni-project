@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Type } from 'src/app/models/type.interface';
@@ -20,7 +19,6 @@ export class TypeDetailComponent implements OnInit {
     constructor(
         private activatedRoute: ActivatedRoute,
         private typesService: TypesService,
-        private location: Location,
         private confirm: ConfirmDialogService,
         private router: Router
     ) {}
@@ -31,6 +29,10 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    /**
+     * Change the type displayed
+     * @param id Id of the type
+     */
     private changeType(id) {
         if (this.typeSub) {
             this.typeSub.unsubscribe();

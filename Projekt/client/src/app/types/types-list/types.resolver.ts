@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { TypesService } from '../_type-store/types.service';
 
+/** Makes sure the types are loaded before resolving */
 @Injectable({ providedIn: 'root' })
 export class TypesResolver implements Resolve<any> {
     constructor(private typesService: TypesService) {}

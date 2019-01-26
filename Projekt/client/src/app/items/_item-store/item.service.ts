@@ -16,8 +16,7 @@ import { ListState } from './list-state.interface';
  * It takes care of storing items to minimize the requests to the backend.
  * Currently loaded items are {@link ItemService#items} observable which emits all loaded items when anything in the loaded values changes.
  * To change pagination and load the desired items use {@link ItemService#loadItems}
- * Information about pagination can be retrieved via
- * {@link ItemService#page} {@link ItemService#type} {@link ItemService#perPage} {@link ItemService#total}.
+ * Information about pagination, search and sort are in {@link ItemService#listState}.
  * Errors occuring in any request are handled inside the {@link ItemErrorService}.
  */
 @Injectable({
@@ -26,6 +25,7 @@ import { ListState } from './list-state.interface';
 export class ItemService {
     baseUrl = `${environment.baseUrl}/items`;
 
+    /** information about the loaded items */
     listState: ListState = {
         page: 0,
         perPage: 50,

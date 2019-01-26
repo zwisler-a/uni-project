@@ -1,10 +1,10 @@
 import { Component, Host, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
+import { Type } from 'src/app/models/type.interface';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 
 import { TypesService } from '../_type-store/types.service';
-import { combineLatest } from 'rxjs';
-import { Type } from 'src/app/models/type.interface';
 
 /** Lists all types */
 @Component({
@@ -21,6 +21,7 @@ export class TypesListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
+        // set title and action of the page
         this.defaultPage.title = 'types.title';
         this.defaultPage.actions.next([
             {
@@ -32,6 +33,7 @@ export class TypesListComponent implements OnInit {
             }
         ]);
 
+        // filter types by searchQuery from defaultPage
         this.types = combineLatest(this.typeService.types, this.defaultPage.search, (types: Type[], query: string) => {
             return types.filter(type => type.name.includes(query));
         });

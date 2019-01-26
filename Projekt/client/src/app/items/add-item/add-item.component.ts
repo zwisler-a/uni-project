@@ -4,7 +4,6 @@ import { MatAutocompleteTrigger } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EmbeddedItems } from 'src/app/models/api/embedded-items.interface';
-import { Type } from 'src/app/models/type.interface';
 
 import { Item } from '../../models/item.interface';
 import { ItemService } from '../_item-store/item.service';

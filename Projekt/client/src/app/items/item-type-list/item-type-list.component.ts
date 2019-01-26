@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TypesService } from 'src/app/types/_type-store/types.service';
 
@@ -31,7 +30,7 @@ export class ItemTypeListComponent implements OnInit, OnDestroy {
         return this.itemService.listState.type;
     }
 
-    constructor(private route: ActivatedRoute, private itemService: ItemService, private typesService: TypesService) {}
+    constructor(private itemService: ItemService, private typesService: TypesService) {}
 
     ngOnInit() {}
 

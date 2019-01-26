@@ -1,18 +1,26 @@
 <ng-container *ngIf="type">
     <mat-toolbar color="form">
+        <!-- CLOSE/TITLE -->
         <button mat-icon-button appNavigateBack><mat-icon>close</mat-icon></button>
         <span>{{ type.name }}</span>
         <span fxFlex></span>
+        <!-- EDIT/DELETE ACTIONS -->
         <button mat-icon-button [hidden]="edit" (click)="edit = true"><mat-icon>edit</mat-icon></button>
         <button mat-icon-button (click)="delete()"><mat-icon>delete</mat-icon></button>
     </mat-toolbar>
     <form class="type-form" autocomplete="off">
         <div fxLayout="column" fxLayoutAlign="start center">
-            <app-type-field (deleteMe)="removeField(field)" *ngFor="let field of type.fields" [field]="field" [edit]="edit"></app-type-field>
+            <!-- EDITABLE FIELDS -->
+            <app-type-field
+                (deleteMe)="removeField(field)"
+                *ngFor="let field of type.fields"
+                [field]="field"
+                [edit]="edit"
+            ></app-type-field>
 
             <button mat-button (click)="addField()" *ngIf="edit">{{ 'types.edit.addField' | translate }}</button>
-            <span fxFlex></span>
         </div>
+        <!--EDIT: SAVE/CANCEL ACTIONS-->
         <div fxLayoutAlign="end center" *ngIf="edit">
             <button mat-button (click)="cancel()">{{ 'types.edit.cancel' | translate }}</button>
             <button mat-raised-button color="primary" (click)="save()">{{ 'types.edit.save' | translate }}</button>

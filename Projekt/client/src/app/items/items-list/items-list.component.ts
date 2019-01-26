@@ -3,6 +3,7 @@ import { Component, Host, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skip, throttleTime } from 'rxjs/operators';
 import { Field } from 'src/app/models/field.interface';
 import { Item } from 'src/app/models/item.interface';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
@@ -10,10 +11,9 @@ import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.c
 import { FieldsService } from '../_fields-store/fields.service';
 import { ItemService } from '../_item-store/item.service';
 import { ItemListDataSource } from './items-list.datasource';
-import { debounceTime, throttleTime, skip } from 'rxjs/operators';
 
 /**
- * Display of items given in the resolve data
+ * Display a list of currently loaded items
  */
 @Component({
     selector: 'app-items-list',
@@ -21,12 +21,14 @@ import { debounceTime, throttleTime, skip } from 'rxjs/operators';
     styleUrls: ['./items-list.component.scss']
 })
 export class ItemsListComponent implements OnInit, OnDestroy {
+    // Material tabel
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSidenav) sidenav: MatSidenav;
     @ViewChild(MatSort) sort: MatSort;
     dataSource: ItemListDataSource;
-    selection = new SelectionModel<any>(true, []);
+    // --------------
 
+    /** Columns which should be in the table */
     displayedColumns = [];
     displayColsSub: Subscription;
     searchSub: Subscription;
@@ -41,9 +43,11 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.dataSource = new ItemListDataSource(this.paginator, this.sort, this.itemService, this.activatedRoute, this.router);
+        // Subscribe to which columns should be displayed
         this.displayColsSub = this.fieldsService.displayableColumns.subscribe(cols => {
             this.displayedColumns = cols;
         });
+        // set page setting (action / title)
         this.pageComponent.title = 'items.title';
         this.pageComponent.actions.next([
             {
@@ -54,6 +58,8 @@ export class ItemsListComponent implements OnInit, OnDestroy {
                 }
             }
         ]);
+        // subscribe to search changes. Skip the first one since search is a BehaviourSubject and emits an empty string
+        // and throttle so we wont send way to many request to the backend
         this.searchSub = this.pageComponent.search
             .pipe(
                 throttleTime(100),

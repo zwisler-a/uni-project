@@ -21,7 +21,6 @@ import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
 import { AddTypeComponent } from './add-type/add-type.component';
 import { typeRoutes } from './routes';
-import { SelectTypeComponent } from './select-type/select-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
@@ -34,8 +33,7 @@ import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module
         TypesListComponent,
         TypeDetailComponent,
         TypeFieldComponent,
-        AddTypeComponent,
-        SelectTypeComponent
+        AddTypeComponent
     ],
     imports: [
         CommonModule,

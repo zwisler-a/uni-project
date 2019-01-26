@@ -1,13 +1,19 @@
 <mat-toolbar fxFlex="0 0 auto" color="form">
+    <!-- BACK / TITLE -->
     <button mat-icon-button (click)="back()"><mat-icon>close</mat-icon></button>
     <span>{{ (item ? item.typeId : '') | typeName | async }}</span>
     <span fxFlex></span>
+
+    <!-- EDIT / DELETE -->
     <button [hidden]="edit" (click)="editFields()" mat-icon-button><mat-icon>edit</mat-icon></button>
     <button (click)="delete()" mat-icon-button><mat-icon>delete</mat-icon></button>
 </mat-toolbar>
+
 <form #form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off" *ngIf="item">
+    <!-- EDITABLE FIELDS -->
     <app-item-field *ngFor="let field of item.fields" [field]="field" [edit]="edit"></app-item-field>
 
+    <!-- SAVE/CANCEL ACTIONS -->
     <div *ngIf="edit" fxLayoutAlign="end center" class="actions">
         <button mat-button (click)="editFields(false)">{{ 'items.edit.cancel' | translate }}</button>
         <button color="primary" mat-raised-button (click)="submit()">{{ 'items.edit.save' | translate }}</button>
