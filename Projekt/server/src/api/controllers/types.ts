@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
 
-import { DatabaseController } from '../../database/controller';
 import { Type, TypeField, TYPE } from '../models/type';
 import { TypeModel } from '../../database/models/type';
 
@@ -45,19 +44,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     // TODO impl into TypeModel
     try {
-        const database: DatabaseController = req.app.get('database');
-        const types: Type[] = await database.TYPE_GET.execute();
-
-        for (const type of types) {
-            type.fields = (await database.TYPE_FIELD_GET_TYPEID.execute(type.id)).map((row: any) => {
-                delete row.typeId;
-                row.required = row.required.readUInt8() === 1;
-                row.unique = row.unique.readUInt8() === 1;
-                return row as TypeField;
-            });
-        }
-
-        res.status(200).send(types);
+        res.status(200).send(await TypeModel.getAll());
     } catch (error) {
         next(error);
     }

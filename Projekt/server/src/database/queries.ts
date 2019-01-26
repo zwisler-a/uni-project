@@ -17,6 +17,8 @@ export interface Queries {
 
     /** Creates a new company */
     COMPANY_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets a list of all companies */
+    COMPANY_GET: StaticQuery<ArrayResultsets>;
     /** Gets a company by id */
     COMPANY_GET_ID: StaticQuery<ArrayResultsets>;
     /** Updates a company by id */
@@ -41,6 +43,8 @@ export interface Queries {
     TYPE_GET: StaticQuery<ArrayResultsets>;
     /** Gets a type by id */
     TYPE_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Gets a type by company's id */
+    TYPE_GET_COMPANY: StaticQuery<ArrayResultsets>;
     /** Checks by id if a type exists */
     TYPE_EXISTS_ID: StaticQuery<ArrayResultsets>;
     /** Edit a type by id */
@@ -234,6 +238,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TABLE_ROLE_PERMISSION: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles_permissions` (`roleId` INT UNSIGNED NOT NULL, `typeId` MEDIUMINT UNSIGNED NOT NULL, `permissions` BIT(3) NOT NULL, PRIMARY KEY (`roleId`, `typeId`), FOREIGN KEY (`roleId`) REFERENCES `%_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
+        COMPANY_GET: queryFactory('SELECT * FROM `%_company`'),
         COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `id` = ?'),
         COMPANY_UPDATE: queryFactory('UPDATE `%_company` SET `name` = ? WHERE `id` = ?'),
         COMPANY_DELETE: queryFactory('DELETE FROM `%_company` WHERE `id` = ?'),
@@ -247,6 +252,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`) VALUES (NULL,?,?)'),
         TYPE_GET: queryFactory('SELECT * FROM `%_types`'),
         TYPE_GET_ID: queryFactory('SELECT * FROM `%_types` WHERE `id` = ?'),
+        TYPE_GET_COMPANY: queryFactory('SELECT * FROM `%_types` WHERE `companyId` = ?'),
         TYPE_EXISTS_ID: queryFactory('SELECT 1 FROM `%_types` WHERE `id` = ?'),
         TYPE_UPDATE: queryFactory('UPDATE `%_types` SET `companyId` = ?, `name` = ? WHERE `id` = ?'),
         TYPE_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),

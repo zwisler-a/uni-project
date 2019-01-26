@@ -1,6 +1,7 @@
 import { Cache } from './cache';
+import { TypeModel } from './type';
 import { DatabaseController } from '../controller';
-import { User } from '../../api/models/user';
+import { Type } from '../../api/models/type';
 import { Company } from '../../api/models/company';
 import { ApiError, ErrorNumber } from '../../types';
 
@@ -59,6 +60,14 @@ export class CompanyModel {
         return company;
     }
 
+    static async getAll(): Promise<Company[]> {
+        const companies: Company[] = await CompanyModel.database.COMPANY_GET.execute();
+        for (const company of companies) {
+            await CompanyModel.cache.set(company.id.toString(), company);
+        }
+        return companies;
+    }
+
     static async update(id: number, company: Company): Promise<Company> {
         const params = [ company.name, id ];
         if ((await CompanyModel.database.COMPANY_UPDATE.execute(params)).affectedRows === 0) {
@@ -72,7 +81,13 @@ export class CompanyModel {
     }
 
     static async delete(id: number): Promise<void> {
-        if ((await CompanyModel.database.COMPANY_DELETE.execute(id)).affectedRows === 0) {
+        const types: Type[] = await CompanyModel.database.TYPE_GET_COMPANY.execute([ id ]);
+
+        for (const type of types) {
+            await TypeModel.delete(type.id);
+        }
+
+        if ((await CompanyModel.database.COMPANY_DELETE.execute([ id ])).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
         }
 

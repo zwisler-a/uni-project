@@ -75,6 +75,25 @@ export class TypeModel {
         return type;
     }
 
+    static async getAll(): Promise<Type[]> {
+        const types: Type[] = await TypeModel.database.TYPE_GET.execute();
+
+        for (const type of types) {
+            const id = type.id.toString();
+            const cached: Type = await TypeModel.cache.get(id);
+
+            if (cached === undefined) {
+                type.fields = await TypeModel.fetchFields(type.id);
+                await TypeModel.cache.set(id, type);
+            } else {
+                type.fields = cached.fields;
+                await TypeModel.cache.ttl(id);
+            }
+        }
+
+        return types;
+    }
+
     /**
      * Creates a new type and an associated dynamic item table
      * @param type Type to be created
