@@ -156,6 +156,11 @@ export class TypeModel {
                         // Reset update flag
                         update = false;
 
+                        // Update if the name has changed
+                        if (oldField.name !== field.name) {
+                            update = true;
+                        }
+
                         // If type changed from reference to another -> delete the foreign key to change the type
                         if (oldField.type === TypeFieldType.reference && field.type !== TypeFieldType.reference) {
                             await TypeModel.database.ITEM_TABLE_FK_DROP.executeConnection(connection, oldField);
