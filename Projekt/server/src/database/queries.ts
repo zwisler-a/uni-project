@@ -19,6 +19,10 @@ export interface Queries {
     COMPANY_CREATE: StaticQuery<ObjectResultsets>;
     /** Gets a company by id */
     COMPANY_GET_ID: StaticQuery<ArrayResultsets>;
+    /** Updates a company by id */
+    COMPANY_UPDATE: StaticQuery<ObjectResultsets>;
+    /** Deletes a company by id */
+    COMPANY_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Create an new user */
     USER_CREATE: StaticQuery<ObjectResultsets>;
@@ -26,7 +30,7 @@ export interface Queries {
     USER_GET_ID: StaticQuery<ArrayResultsets>;
     /** Gets an user by name */
     USER_GET_NAME: StaticQuery<ArrayResultsets>;
-    /** Update an user by id */
+    /** Updates an user by id */
     USER_UPDATE: StaticQuery<ObjectResultsets>;
     /** Deletes an user by id */
     USER_DELETE: StaticQuery<ObjectResultsets>;
@@ -114,8 +118,8 @@ export function factory(pool: Pool, prefix: string): Queries {
     };
 
     function generateTabel(structure: any) {
-        let constraints = 'PRIMARY KEY (\`id\`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE';
-        let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, \`companyId\` SMALLINT UNSIGNED NOT NULL, `;
+        let constraints = 'PRIMARY KEY (\`id\`)';
+        let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
         structure.fields.forEach(function(field: any) {
             if (!Object.keys(types).some((type: string) => type === field.type)) {
                 throw new Error(`Invalid type '${field.type}'`);
@@ -226,16 +230,18 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, `email` VARCHAR(128), PRIMARY KEY (`id`), UNIQUE INDEX (`name`), UNIQUE INDEX (`email`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
-        CREATE_TABLE_ROLE: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_ROLE: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `permissions` BIT(4) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_ROLE_PERMISSION: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles_permissions` (`roleId` INT UNSIGNED NOT NULL, `typeId` MEDIUMINT UNSIGNED NOT NULL, `permissions` BIT(3) NOT NULL, PRIMARY KEY (`roleId`, `typeId`), FOREIGN KEY (`roleId`) REFERENCES `%_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
         COMPANY_CREATE: queryFactory('INSERT INTO `%_company` (`id`, `name`) VALUES (NULL,?)'),
-        COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `name` = ?'),
+        COMPANY_GET_ID: queryFactory('SELECT * FROM `%_company` WHERE `id` = ?'),
+        COMPANY_UPDATE: queryFactory('UPDATE `%_company` SET `name` = ? WHERE `id` = ?'),
+        COMPANY_DELETE: queryFactory('DELETE FROM `%_company` WHERE `id` = ?'),
 
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`, `email`) VALUES (NULL,?,?,?,?)'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `id` = ?'),
         USER_GET_NAME: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
-        USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `name` = ?'),
+        USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `id` = ?'),
         USER_DELETE: queryFactory('DELETE FROM `%_users` WHERE `id` = ?'),
 
         TYPE_CREATE: queryFactory('INSERT INTO `%_types` (`id`, `companyId`, `name`) VALUES (NULL,?,?)'),

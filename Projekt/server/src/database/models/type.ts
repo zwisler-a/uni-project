@@ -19,7 +19,7 @@ export class TypeModel {
      */
     static initialize(database: DatabaseController) {
         if (TypeModel.database) {
-            throw new Error('Already initialized UserModel');
+            throw new Error('Already initialized TypeModel');
         }
         TypeModel.database = database;
     }
