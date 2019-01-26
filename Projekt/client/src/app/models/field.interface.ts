@@ -4,7 +4,7 @@ export interface Field {
     name: string;
     id: number;
     type: string;
-    value: string | number | LinkField | FileField;
+    value: string | number;
     displayValue: string;
     required: boolean;
     unique: boolean;
