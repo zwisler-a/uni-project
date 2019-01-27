@@ -44,3 +44,10 @@ permalink: /documents/
 | [Report 3](report/3/) | 26.11.2018 |
 | [Report 4](report/4/) | 17.12.2018 |
 | [Report 5](report/5/) | 14.01.2019 |
+
+### Testberichte
+
+| Testbericht                     | Datum      |
+|---------------------------------|------------|
+| [Test-Client 1](test-client/1/) | 25.01.2019 |
+| [Test-Server 1](test-server/1/) | 25.01.2019 |
