@@ -1,13 +1,9 @@
 <ng-container *ngIf="(companies | async) as _companies; else loading">
     <mat-nav-list class="seperated">
-        <a
-            mat-list-item
-            class="navigation-item"
-            *ngFor="let company of _companies"
-            [routerLink]="['/companies', 'view', { outlets: { detail: [company.id] } }]"
-            [routerLinkActive]="'active'"
-        >
+        <a mat-list-item class="navigation-item" *ngFor="let company of _companies">
             <span class="name">{{ company.name }}</span>
+            <span fxFlex="1 1 auto"></span>
+            <button (click)="deleteCompany(company.id)" mat-icon-button><mat-icon>delete</mat-icon></button>
         </a>
     </mat-nav-list>
 </ng-container>

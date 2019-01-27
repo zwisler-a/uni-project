@@ -72,11 +72,11 @@ export class AppModule {
                             icon: 'account_circle',
                             route: ['/user', 'view']
                         },
-                       /* {
+                        {
                             label: translations['nav.companies'],
                             icon: 'work',
                             route: ['/companies', 'view']
-                        } */
+                        }
                     ]
                 }
             ];

@@ -24,6 +24,6 @@ export class FieldsService {
             });
         });
 
-        return Array.from(fields);
+        return Array.from(fields).sort();
     }
 }
