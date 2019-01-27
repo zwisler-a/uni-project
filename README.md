@@ -43,8 +43,9 @@ sent with every request.
 | 12.11.18   |                                          Abgabe A2: Recherchebericht erstellen                                          |        **Ja** |
 | 26.11.18   |                                             Abgabe A3: Lastenheft erstellt                                              |        **Ja** |
 | 06.12.18   |             Review 1: Präsentation des Lastenhefts durch das Team für Betreuer und Tutor                                |        **Ja** |
-| 17.12.18   |                                     Abgabe A4: Projektplan, Releaseplan, QS-Konzept                                     |      **Nein** |
-| Termin\*\* |                                                 Abgabe Releasebündel 1                                                  |      **Nein** |
-| Termin\*\* |                        Review 2: Präsentation des Entwurfs durch das Team für Betreuer und Tutor                        |      **Nein** |
-| Termin\*\* |                                                Abgabe Releasebündel 2-5                                                 |      **Nein** |
+| 17.12.18   |                                     Abgabe A4: Projektplan, Releaseplan, QS-Konzept                                     |        **Ja** |
+| 14.01.19   |                                                 Abgabe Releasebündel 1                                                  |        **JA** |
+| 28.01.19   |                        Review 2: Präsentation des Entwurfs durch das Team für Betreuer und Tutor                        |      **Nein** |
+| 28.01.19   |                                                Abgabe Releasebündel 2                                                   |      **Nein** |
+| Termin\*\* |                                                Abgabe Releasebündel 3-5                                                 |      **Nein** |
 | Termin\*\* |       Endabnahme: Präsentation des Projektergebnisses durch das Team für Betreuer und Tutor (spätestens 03/2019)        |      **Nein** |
