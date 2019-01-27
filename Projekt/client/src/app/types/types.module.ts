@@ -11,7 +11,7 @@ import {
     MatListModule,
     MatMenuModule,
     MatSidenavModule,
-    MatToolbarModule,
+    MatToolbarModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -26,14 +26,11 @@ import { TypeDetailComponent } from './type-detail/type-detail.component';
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
 import { TypesResolver } from './types-list/types.resolver';
+import { GlobalFieldsComponent } from './global-fields/global-fields.component';
+import { GlobalFieldStoreModule } from './_global-field-store/global-field-store.module';
 
 @NgModule({
-    declarations: [
-        TypesListComponent,
-        TypeDetailComponent,
-        TypeFieldComponent,
-        AddTypeComponent
-    ],
+    declarations: [TypesListComponent, TypeDetailComponent, TypeFieldComponent, AddTypeComponent, GlobalFieldsComponent],
     imports: [
         CommonModule,
         RouterModule.forChild(typeRoutes),
@@ -50,6 +47,7 @@ import { TypesResolver } from './types-list/types.resolver';
         NavigateBackModule,
         ConfirmDialogModule,
         DefaultPageModule,
+        GlobalFieldStoreModule,
         TypeSelectorModule,
         MatToolbarModule,
         TranslateModule
