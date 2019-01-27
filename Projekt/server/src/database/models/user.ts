@@ -59,6 +59,15 @@ export class UserModel {
     }
 
     /**
+     * Get an array of all Users
+     * @param id id/name of the user object to get
+     * @returns retrived user object on success
+     */
+    static async getAll(): Promise<User[]> {
+        return UserModel.database.USER_GET.execute();
+    }
+
+    /**
      * Update an user object
      * @param id id of the user object to update
      * @param user new user object to update to

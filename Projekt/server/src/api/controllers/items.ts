@@ -101,16 +101,28 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         let perPage = 25;
-        if ('per_page' in query) {
-            perPage = parseInt(query.per_page);
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'per_page');
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
             }
         }
 
+        const searchQuery = query['searchQuery'];
+
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
-        const total: number = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
+
+        let total: number;
+        let items: Item[];
+        if (!searchQuery) {
+            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
+            items = (await database.ITEM_GET.execute(type.id, [page * perPage, perPage])).map(convertItem(type));
+        } else {
+            items = (await getFilteredItems(type, searchQuery, database));
+            total = items.length;
+            items = items.slice(page * perPage, page * perPage + perPage);
+        }
 
         const totalPages = Math.ceil(total / perPage);
         res.set('X-Total', total.toString());
@@ -124,25 +136,122 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
-        const items: Item[] = (await database.ITEM_GET.execute(type.id, [page * perPage, perPage]))
-            .map((item: any) => {
-                const fields: Field[] = [];
-                for (let i = 0; i < type.fields.length; i++) {
-                    const field = type.fields[i];
-                    let value = item[`field_${field.id}`];
-                    if (field.type === 'boolean') {
-                        value = value.readUInt8() === 1;
-                    }
-                    fields.push({ id: field.id, value });
-                }
-                return { typeId, id: item.id, fields };
-            });
-
-        res.status(200).send(new EmbeddedItem([ type ], items));
+        res.status(200).send(new EmbeddedItem([type], items));
     } catch (error) {
         next(error);
     }
 }
+
+/**
+ * Route endpoint `GET /api/items`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
+export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
+    try {
+        const query: any = req.query;
+
+        let page = 0;
+        if ('page' in query) {
+            page = parseInt(query.page);
+            if (isNaN(page) || page < 0) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'page');
+            }
+        }
+
+        let perPage = 25;
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
+            if (isNaN(perPage) || perPage < 1 || perPage > 100) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
+            }
+        }
+
+        const searchQuery = query['searchQuery'];
+
+
+        const database: DatabaseController = req.app.get('database');
+
+        const types: Type[] = await database.TYPE_GET.execute();
+        // List of types that are in the response object
+        const foundTypes: Type[] = [];
+        // go through each type and process the items inside
+        const itemQueries = types.map(async typeInfo => {
+            const type = await TypeModel.get(typeInfo.id);
+            const items = await getFilteredItems(type, searchQuery, database);
+            if (items.length) {
+                foundTypes.push(type);
+            }
+            return items;
+        });
+        // wait until all queries have finished and than flatten and filter the result
+        let items = [].concat(...(await Promise.all(itemQueries)).filter(query => query));
+        const total = items.length;
+        items = items.slice(page * perPage, page * perPage + perPage);
+        const totalPages = Math.ceil(items.length / perPage);
+        res.set('X-Total', total.toString());
+        res.set('X-Total-Pages', totalPages.toString());
+        res.set('X-Per-Page', perPage.toString());
+        res.set('X-Page', page.toString());
+        res.set('X-Prev-Page', Math.max(0, page - 1).toString());
+        res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
+
+        if (page * perPage > 50) {
+            throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
+        }
+
+        res.status(200).send(new EmbeddedItem(foundTypes, items));
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// -----------------------------------------------------------
+// ----------- Helper functions for Item lists ---------------
+// -----------------------------------------------------------
+
+/**
+ * Fetches Items of a specific type and goes through all properties and filters those out
+ * which do not satisfy the searchQuery given
+ * @param type Type of the items to fetch
+ * @param searchQuery String the Items should be filtered by
+ * @param database DatabaseController to get the data from
+ */
+async function getFilteredItems(type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
+    let items: Item[] = (await database.ITEM_GET.execute(type.id));
+    // Filter items if a searchQuery is set
+    if (searchQuery) {
+        items = items.filter((item: any) => {
+            return Object.keys(item).some(function (key) {
+                return item[key].toString().includes(searchQuery);
+            });
+        });
+    }
+    return items.map(convertItem(type));
+}
+
+/**
+ * Converts an Item from the Database to the form it is send
+ * @param type Type of the Item
+ */
+function convertItem(type: Type) {
+    return (item: any) => {
+        const fields: Field[] = [];
+        for (let i = 0; i < type.fields.length; i++) {
+            const field = type.fields[i];
+            let value = item[`field_${field.id}`];
+            if (field.type === 'boolean') {
+                value = value.readUInt8() === 1;
+            }
+            fields.push({ id: field.id, value });
+        }
+        return { typeId: type.id, id: item.id, fields };
+    };
+}
+
+// -----------------------------------------------------------
 
 /**
  * Route endpoint `POST /api/items/:type`

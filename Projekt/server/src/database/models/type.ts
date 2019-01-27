@@ -173,7 +173,8 @@ export class TypeModel {
                         fields.splice(i, 1);
 
                         // Reset update flag
-                        update = false;
+                        // Update if the name has changed
+                        update = oldField.name !== field.name;
 
                         // If type changed from reference to another -> delete the foreign key to change the type
                         if (oldField.type === TypeFieldType.reference && field.type !== TypeFieldType.reference) {

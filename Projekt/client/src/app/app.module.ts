@@ -2,19 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {
-    TranslateLoader,
-    TranslateModule,
-    TranslateService
-} from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
-import { TypeStoreModule } from './stores/type-store/type-store.module';
-import { StoreModule } from './stores/store.module';
+import { TypeStoreModule } from './types/_type-store/type-store.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -26,9 +21,9 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         ShellModule,
+        TypeStoreModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        StoreModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -41,14 +36,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     bootstrap: [AppComponent]
 })
 export class AppModule {
-    constructor(
-        private navigationService: NavigationService,
-        private translate: TranslateService
-    ) {
+    constructor(private navigationService: NavigationService, private translate: TranslateService) {
         this.translate.addLangs(['de', 'en']);
         this.translate.onLangChange.subscribe(async () => {
             const translations = await this.translate
-                .get(['nav.inventory', 'nav.types'])
+                .get(['nav.inventory', 'nav.types', 'nav.user', 'nav.roles', 'nav.admin', 'nav.companies'])
                 .toPromise();
 
             this.navigationService.navigationModel = [
@@ -62,8 +54,28 @@ export class AppModule {
                         },
                         {
                             label: translations['nav.types'],
-                            icon: 'dashboard',
-                            route: ['/types']
+                            icon: 'view_compact',
+                            route: ['/types/view']
+                        }
+                    ]
+                },
+                {
+                    title: translations['nav.admin'],
+                    items: [
+                        {
+                            label: translations['nav.roles'],
+                            icon: 'view_compact',
+                            route: ['/roles/view']
+                        },
+                        {
+                            label: translations['nav.user'],
+                            icon: 'account_circle',
+                            route: ['/user', 'view']
+                        },
+                        {
+                            label: translations['nav.companies'],
+                            icon: 'work',
+                            route: ['/companies', 'view']
                         }
                     ]
                 }

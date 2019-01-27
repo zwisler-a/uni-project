@@ -1,4 +1,4 @@
-@import "~@angular/material/theming";
+@import '~@angular/material/theming';
 
 @mixin app-navigation-theme($colors) {
     .main-navigation-container {
@@ -52,6 +52,7 @@
         }
         .main-navigation-content {
             display: flex;
+            max-width: 100%;
             flex: 1 1 auto;
             flex-direction: column;
         }
@@ -64,6 +65,11 @@
             font-weight: 400;
             span {
                 margin-left: 8px;
+            }
+            cursor: pointer;
+            user-select: none;
+            &:focus {
+                outline: none;
             }
         }
     }

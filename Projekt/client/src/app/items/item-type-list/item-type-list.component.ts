@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { TypesService } from 'src/app/types/_type-store/types.service';
 
-import { TypesService } from '../../stores/type-store/types.service';
+import { ItemService } from '../_item-store/item.service';
 
 /**
  * List of all types available
@@ -13,25 +13,26 @@ import { TypesService } from '../../stores/type-store/types.service';
 })
 export class ItemTypeListComponent implements OnInit, OnDestroy {
     paramsSub: Subscription;
-    page = 0;
-    perPage = 0;
-    typeId = 0;
+
     get types() {
         return this.typesService.types;
     }
 
-    constructor(
-        private route: ActivatedRoute,
-        private typesService: TypesService
-    ) {}
-
-    ngOnInit() {
-        this.paramsSub = this.route.params.subscribe(params => {
-            this.page = params['page'];
-            this.perPage = params['perPage'];
-            this.typeId = params['itemTypeId'];
-        });
+    get page() {
+        return this.itemService.listState.page;
     }
+
+    get perPage() {
+        return this.itemService.listState.perPage;
+    }
+
+    get typeId() {
+        return this.itemService.listState.type;
+    }
+
+    constructor(private itemService: ItemService, private typesService: TypesService) {}
+
+    ngOnInit() {}
 
     ngOnDestroy(): void {
         if (this.paramsSub) {

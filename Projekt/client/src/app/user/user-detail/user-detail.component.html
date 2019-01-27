@@ -1,0 +1,10 @@
+<ng-container *ngIf="user">
+    <mat-toolbar color="form">
+        <span>{{ user.name }}</span>
+        <span fxFlex="1 1 auto"></span>
+        <button mat-icon-button (click)="deleteUser()"><mat-icon>delete</mat-icon></button>
+    </mat-toolbar>
+    <form>
+        <div>{{ user.email }}</div>
+    </form>
+</ng-container>

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { NavigationComponent } from './shell/navigation/navigation.component';
 import { AuthGuard } from './shell/auth/auth.guard';
+import { NavigationComponent } from './shell/navigation/navigation.component';
 
 const routes: Routes = [
     {
@@ -18,6 +18,21 @@ const routes: Routes = [
             {
                 path: 'types',
                 loadChildren: './types/types.module#TypesModule',
+                canLoad: [AuthGuard]
+            },
+            {
+                path: 'user',
+                loadChildren: './user/user.module#UserModule',
+                canLoad: [AuthGuard]
+            },
+            {
+                path: 'roles',
+                loadChildren: './roles/roles.module#RolesModule',
+                canLoad: [AuthGuard]
+            },
+            {
+                path: 'companies',
+                loadChildren: './company/company.module#CompanyModule',
                 canLoad: [AuthGuard]
             }
         ]

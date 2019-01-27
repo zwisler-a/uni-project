@@ -39,6 +39,25 @@ export async function userGet(req: Request, res: Response, next: NextFunction) {
 }
 
 /**
+ * Route endpoint `GET /api/users/`
+ * Fetches all users
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
+export async function userGetList(req: Request, res: Response, next: NextFunction) {
+    try {
+        const users: User[] = await UserModel.getAll();
+        users.forEach(user => {
+            delete user.password;
+        });
+        res.status(200).send(users);
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
  * Route endpoint `PATCH /api/users/:id`
  * @param req the request object
  * @param res the response object

@@ -1,0 +1,37 @@
+<mat-drawer-container fxFlex>
+    <mat-drawer #overlaySidenav mode="over" position="end" class="overlay-sidenav" (closedStart)="overlayClose()">
+        <router-outlet
+            name="detail"
+            #detailOutlet
+            (activate)="outletActivate('detail')"
+            (deactivate)="outletDeactivate('detail')"
+        ></router-outlet>
+    </mat-drawer>
+    <mat-drawer-content fxFlex fxLayout="column">
+        <div fxFlex="1 1 100px" fxLayoutAlign="start center" class="header">
+            <h3 fxHide.lt-md class="mat-title title">{{ title | translate }}</h3>
+            <button mat-icon-button (click)="leftSidenav.toggle()" *ngIf="showSidenavMenuButton">
+                <mat-icon>list</mat-icon>
+            </button>
+            <app-search (search)="search.next($event)"></app-search>
+            <button mat-icon-button *ngFor="let action of (_actions | async)" (click)="action.click()">
+                <mat-icon>{{ action.icon }}</mat-icon>
+            </button>
+        </div>
+        <mat-drawer-container fxFlex>
+            <mat-drawer #leftSidenav mode="side" fxFlex="0 0 150px">
+                <router-outlet
+                    name="sidenav"
+                    #sidenavOutlet
+                    (activate)="outletActivate('sidenav')"
+                    (deactivate)="outletDeactivate('sidenav')"
+                ></router-outlet>
+            </mat-drawer>
+            <mat-drawer-content fxLayout="column" fxFlex="1 1 auto">
+                <mat-card [ngClass.lt-md]="'content-card-handset'" class="content-card" fxFlex="1 1 auto">
+                    <router-outlet name="content"></router-outlet>
+                </mat-card>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </mat-drawer-content>
+</mat-drawer-container>

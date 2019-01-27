@@ -29,6 +29,8 @@ export interface Queries {
 
     /** Create an new user */
     USER_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets a list of all users */
+    USER_GET: StaticQuery<ArrayResultsets>;
     /** Gets an user by id */
     USER_GET_ID: StaticQuery<ArrayResultsets>;
     /** Gets an user by name */
@@ -87,8 +89,10 @@ export interface Queries {
 
     /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets, Type>;
-    /** Gets all items of one type in range(offset, length) */
+    /** Gets all items of one type */
     ITEM_GET: DynamicQuery<ArrayResultsets, number>;
+    /** Gets all items of one type in range(offset, length) */
+    ITEM_GET_RANGE: DynamicQuery<ArrayResultsets, number>;
     /** Gets an item by id on one type */
     ITEM_GET_ID: DynamicQuery<ArrayResultsets, number>;
     /** Gets the number of items of one type */
@@ -217,6 +221,10 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `SELECT COUNT(*) FROM \`%_item_${id}\``.replace('%_', prefix);
     }
 
+    function getItemListAll(id: number) {
+        return `SELECT * FROM \`%_item_${id}\``.replace('%_', prefix);
+    }
+
     function updateItem(structure: Type) {
         let sql = `UPDATE \`%_item_${structure.id}\` SET \`companyId\` = ?`;
         structure.fields.forEach(function(field: TypeField) {
@@ -245,6 +253,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         COMPANY_DELETE: queryFactory('DELETE FROM `%_company` WHERE `id` = ?'),
 
         USER_CREATE: queryFactory('INSERT INTO `%_users` (`id`, `companyId`, `name`, `password`, `email`) VALUES (NULL,?,?,?,?)'),
+        USER_GET: queryFactory('SELECT * FROM `%_users`'),
         USER_GET_ID: queryFactory('SELECT * FROM `%_users` WHERE `id` = ?'),
         USER_GET_NAME: queryFactory('SELECT * FROM `%_users` WHERE `name` = ?'),
         USER_UPDATE: queryFactory('UPDATE `%_users` SET `name` = ?, `password` = ?, `email` = ? WHERE `id` = ?'),
@@ -276,7 +285,8 @@ export function factory(pool: Pool, prefix: string): Queries {
         ITEM_TABLE_UI_DROP: new DynamicQuery(pool, dropUniqueIndex),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
-        ITEM_GET: new DynamicQuery(pool, getItemList),
+        ITEM_GET: new DynamicQuery(pool, getItemListAll),
+        ITEM_GET_RANGE: new DynamicQuery(pool, getItemList),
         ITEM_GET_ID: new DynamicQuery(pool, getItem),
         ITEM_GET_COUNT: new DynamicQuery(pool, getItemTotal),
         ITEM_UPDATE: new DynamicQuery(pool, updateItem),

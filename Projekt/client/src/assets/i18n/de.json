@@ -1,9 +1,20 @@
 {
     "nav": {
         "inventory": "Inventar",
-        "types": "Objekttypen"
+        "types": "Objekttypen",
+        "user": "Benutzer",
+        "admin": "Administratives",
+        "roles": "Benutzerrollen",
+        "companies": "Firmen"
+    },
+    "user": {
+        "title": "Benutzer",
+        "deleteMe": "Sind Sie sicher dass Sie Ihren Account löschen wollen?",
+        "delete": "Wollen Sie diesen Account wirklich löschen?"
     },
     "items": {
+        "title": "Inventar",
+        "new": "Neues Item",
         "noData": "Keine Items vorhanden",
         "error": {
             "delete": "Item konnte nicht gelöscht werden!",
@@ -20,7 +31,8 @@
         },
         "create": {
             "selectType": "Bitte wählen Sie einen Typen aus.",
-            "itemTyp": "Item Typ"
+            "itemTyp": "Item Typ",
+            "displayField": "Anzeigefeld"
         },
         "edit": {
             "cancel": "Abbrechen",
@@ -43,12 +55,20 @@
     "types": {
         "title": "Objekttypen",
         "select": "Bitte wählen Sie ein Typen aus",
+        "error": {
+            "delete": "Typ konnte nicht gelöscht werden!",
+            "create": "Typ konnte nicht erstellt werden!",
+            "get": "Typ konnte nicht geladen werden!",
+            "update": "Typ konnte nicht verändert werden!"
+        },
         "edit": {
             "addField": "Neues Feld hinzufügen",
             "cancel": "Abbrechen",
+            "new": "Neuen Typen hinzufügen",
             "required": "Benötigt",
             "save": "Speichern",
             "confirmDelete": "Wollen Sie den Typen und all Items des Typs wirklich löschen?",
+            "confirmUpdate": "Wollen Sie den Typen bearbeiten? Die Aktion könnte unter umständen zu Datenverlust führen!",
             "typeName": "Name des Typs",
             "unique": "Einzigartig",
             "field": {

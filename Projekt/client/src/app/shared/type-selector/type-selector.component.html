@@ -9,13 +9,23 @@
         [matAutocomplete]="auto"
         #autoCompleteTrigger="matAutocompleteTrigger"
     />
-    <mat-autocomplete
-        (optionSelected)="selected.emit($event.option.value)"
-        #auto="matAutocomplete"
-        [displayWith]="toItemTypeName"
-    >
-        <mat-option *ngFor="let itemType of (types | async)" [value]="itemType">
-            {{ itemType.id | typeName | async }}
-        </mat-option>
+    <mat-autocomplete (optionSelected)="selectType($event.option.value)" #auto="matAutocomplete" [displayWith]="toItemTypeName">
+        <mat-option *ngFor="let itemType of (types | async)" [value]="itemType">{{ toItemTypeName(itemType) }}</mat-option>
+    </mat-autocomplete>
+
+    <mat-icon matSuffix *ngIf="withField && fieldSelectable">keyboard_arrow_right</mat-icon>
+</mat-form-field>
+<mat-form-field *ngIf="withField">
+    <input
+        type="text"
+        [placeholder]="'items.create.displayField' | translate"
+        matInput
+        [disabled]="!fieldSelectable || edit"
+        autocomplete="nope"
+        [matAutocomplete]="fieldAuto"
+        #autoCompleteTrigger="matAutocompleteTrigger"
+    />
+    <mat-autocomplete (optionSelected)="selectField($event.option.value)" #fieldAuto="matAutocomplete" [displayWith]="toItemTypeName">
+        <mat-option *ngFor="let field of type.fields" [value]="field">{{ field.name }}</mat-option>
     </mat-autocomplete>
 </mat-form-field>
