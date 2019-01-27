@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+    MAT_SNACK_BAR_DEFAULT_OPTIONS,
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,
@@ -92,6 +93,9 @@ import { itemsRoutes } from './items.routes';
         ReactiveFormsModule,
         RouterModule.forChild(itemsRoutes)
     ],
-    providers: [ItemsListResolver]
+    providers: [
+        ItemsListResolver,
+        { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }
+    ]
 })
 export class ItemsModule {}

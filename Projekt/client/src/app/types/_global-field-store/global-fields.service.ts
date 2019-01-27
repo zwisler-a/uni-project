@@ -12,10 +12,7 @@ import { environment } from 'src/environments/environment.prod';
 export class GlobalFieldsService {
     readonly baseUrl = environment.baseUrl + `/fields`;
 
-    private _fields = new BehaviorSubject<TypeField[]>([
-        { name: 'Test', id: 0, required: false, type: '', unique: false },
-        { name: 'Test2', id: 2, required: false, type: '', unique: false }
-    ]);
+    private _fields = new BehaviorSubject<TypeField[]>([]);
     readonly fields = this._fields.asObservable();
 
     constructor(private http: HttpClient, private snackbar: MatSnackBar) {}

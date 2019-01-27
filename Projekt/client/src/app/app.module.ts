@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
 import { TypeStoreModule } from './types/_type-store/type-store.module';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig } from '@angular/material';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -32,7 +33,7 @@ export function HttpLoaderFactory(http: HttpClient) {
             }
         })
     ],
-    providers: [],
+    providers: [{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }],
     bootstrap: [AppComponent]
 })
 export class AppModule {

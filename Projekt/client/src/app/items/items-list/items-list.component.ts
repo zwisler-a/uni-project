@@ -11,6 +11,7 @@ import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.c
 import { FieldsService } from '../_fields-store/fields.service';
 import { ItemService } from '../_item-store/item.service';
 import { ItemListDataSource } from './items-list.datasource';
+import { fadeInOut, fadeIn } from 'src/app/shared/animations';
 
 /**
  * Display a list of currently loaded items
@@ -18,7 +19,8 @@ import { ItemListDataSource } from './items-list.datasource';
 @Component({
     selector: 'app-items-list',
     templateUrl: './items-list.component.html',
-    styleUrls: ['./items-list.component.scss']
+    styleUrls: ['./items-list.component.scss'],
+    animations: [fadeInOut, fadeIn]
 })
 export class ItemsListComponent implements OnInit, OnDestroy {
     // Material tabel

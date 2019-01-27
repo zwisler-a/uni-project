@@ -5,11 +5,13 @@ import { Company } from 'src/app/models/company.interface';
 import { CompanyService } from '../_company-store/company.service';
 import { Router } from '@angular/router';
 import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
+import { fadeInOut } from 'src/app/shared/animations';
 
 @Component({
     selector: 'app-company-list',
     templateUrl: './company-list.component.html',
-    styleUrls: ['./company-list.component.scss']
+    styleUrls: ['./company-list.component.scss'],
+    animations: [fadeInOut]
 })
 export class CompanyListComponent implements OnInit {
     companies: Observable<Company[]>;
@@ -22,7 +24,6 @@ export class CompanyListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.companyService.loadCompanies().subscribe();
         if (!this.defaultPage) {
             return;
         }

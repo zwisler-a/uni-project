@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
     providedIn: 'root'
 })
 export class RoleService {
-    baseUrl = `${environment.baseUrl}/types`;
+    baseUrl = `${environment.baseUrl}/roles`;
     private _roles = new BehaviorSubject<Role[]>([]);
     readonly roles = this._roles.asObservable();
 
@@ -19,7 +19,6 @@ export class RoleService {
         return this.http.get<Role[]>(this.baseUrl).pipe(
             map(res => {
                 this._roles.next(res);
-                this._roles.next([{ id: 0, name: 'Test' }]);
                 return this.roles;
             })
         );

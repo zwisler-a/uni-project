@@ -12,6 +12,7 @@ import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.mod
 import { TranslateModule } from '@ngx-translate/core';
 import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 import { FormsModule } from '@angular/forms';
+import { CompanyResolver } from './company-list/company.resolver';
 
 @NgModule({
     declarations: [CompanyListComponent, AddCompanyComponent],
@@ -30,6 +31,7 @@ import { FormsModule } from '@angular/forms';
         TranslateModule,
         MatInputModule
     ],
-    exports: []
+    exports: [],
+    providers: [CompanyResolver]
 })
 export class CompanyModule {}

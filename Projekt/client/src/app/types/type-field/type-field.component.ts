@@ -2,11 +2,16 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FieldType } from 'src/app/models/field-type.enum';
 import { TypeField } from 'src/app/models/type-field.interface';
 import { Type } from 'src/app/models/type.interface';
+import { fadeInOut } from 'src/app/shared/animations';
 
+/**
+ * TODO needs refac
+ */
 @Component({
     selector: 'app-type-field',
     templateUrl: './type-field.component.html',
-    styleUrls: ['./type-field.component.scss']
+    styleUrls: ['./type-field.component.scss'],
+    animations: [fadeInOut]
 })
 export class TypeFieldComponent implements OnInit {
     /** field data */

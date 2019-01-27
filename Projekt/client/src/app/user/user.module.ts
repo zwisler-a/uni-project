@@ -12,6 +12,7 @@ import {
     MatListModule,
     MatSnackBarModule,
     MatToolbarModule,
+    MatTooltipModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -23,6 +24,7 @@ import { userRoutes } from './routes';
 import { UserDataPageComponent } from './user-data-page/user-data-page.component';
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserListComponent } from './user-list/user-list.component';
+import { UserResolver } from './user-list/user.resolver';
 
 @NgModule({
     declarations: [UserListComponent, UserDetailComponent, UserDataPageComponent],
@@ -42,6 +44,7 @@ import { UserListComponent } from './user-list/user-list.component';
         TranslateModule,
         MatSnackBarModule,
         FormsModule,
+        MatTooltipModule,
         ReactiveFormsModule,
         ConfirmDialogModule,
         FlexLayoutModule,
@@ -50,6 +53,7 @@ import { UserListComponent } from './user-list/user-list.component';
         ConfirmDialogModule,
         MatToolbarModule,
         CompanyStoreModule
-    ]
+    ],
+    providers: [UserResolver]
 })
 export class UserModule {}
