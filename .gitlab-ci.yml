@@ -60,7 +60,8 @@ staging:
     - npm install
     - npm run build:staging
     - npm run deploy:staging
-  when: manual
+  only: 
+    - master
 
 deploy:
   stage: production
