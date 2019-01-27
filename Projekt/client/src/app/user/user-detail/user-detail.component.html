@@ -4,7 +4,38 @@
         <span fxFlex="1 1 auto"></span>
         <button mat-icon-button (click)="deleteUser()"><mat-icon>delete</mat-icon></button>
     </mat-toolbar>
-    <form>
-        <div>{{ user.email }}</div>
+    <form class="user-info-form" fxLayout="column">
+        <mat-form-field>
+            <input disabled matInput disabled [placeholder]="'user.email' | translate" [value]="user.email" />
+        </mat-form-field>
     </form>
+
+    <mat-form-field class="permissions">
+        <mat-chip-list #chipList>
+            <mat-chip
+                *ngFor="let permission of permissions"
+                [selectable]="selectable"
+                [removable]="removable"
+                (removed)="remove(permission)"
+            >
+                {{ permission }}
+                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+                [placeholder]="'user.permissions' | translate"
+                #permissionInput
+                [formControl]="permissionCtrl"
+                [matAutocomplete]="auto"
+                [matChipInputFor]="chipList"
+                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                [matChipInputAddOnBlur]="addOnBlur"
+                (matChipInputTokenEnd)="add($event)"
+            />
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let permission of (filteredPermissions | async)" [value]="permission">
+                {{ permission }}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
 </ng-container>

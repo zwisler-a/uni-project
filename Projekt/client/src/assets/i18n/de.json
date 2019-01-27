@@ -9,9 +9,29 @@
     },
     "user": {
         "title": "Benutzer",
+        "me": "Meine Daten",
+        "pwTitle": "Passwort ändern",
+        "name": "Benutzername",
+        "email": "Email Adresse",
+        "company": "Firma",
+        "password": "Altes Passwort",
+        "newPassword": "Neues Passwort",
+        "repeadPassword": "Passwort wiederholen",
+        "cancel":"Cancel",
+        "save": "Save",
         "deleteMe": "Sind Sie sicher dass Sie Ihren Account löschen wollen?",
-        "delete": "Wollen Sie diesen Account wirklich löschen?"
+        "delete": "Wollen Sie diesen Account wirklich löschen?",
+        "passwordUpdated":"Passwort wurde geändert"
     },
+
+    "role": {
+        "edit": {
+            "filter": "Suchen",
+            "cancel": "Abbrechen",
+            "save": "Speichern"
+        }
+    },
+
     "items": {
         "title": "Inventar",
         "new": "Neues Item",
@@ -39,7 +59,7 @@
             "save": "Speichern"
         },
         "list": {
-            "allTypes": "Alle",
+            "allTypes": "Alle Typen",
             "search": "Suche",
             "types": "Item Typen"
         },

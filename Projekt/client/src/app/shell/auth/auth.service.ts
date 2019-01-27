@@ -25,6 +25,9 @@ export class AuthService {
     private _jwt: string;
     private _longLivedJwt: string;
 
+    private _authChange = new Subject();
+    readonly authChange = this._authChange.asObservable();
+
     /** Will throw if invalid */
     set jwt(val) {
         this._user = jwt_decode(val);
@@ -49,6 +52,7 @@ export class AuthService {
                 if (rememberMe) {
                     localStorage.setItem(AuthService.LOCALSTROAGE_KEY, this._longLivedJwt);
                 }
+                this._authChange.next();
                 this.router.navigate(redirectRoute);
             })
         );
@@ -68,6 +72,7 @@ export class AuthService {
         return this.http.patch(this.authenticateUrl, { token: longLivedToken }).pipe(
             map((res: AuthenticateResponse) => {
                 this.jwt = res.short;
+                this._authChange.next();
                 return true;
             })
         );
@@ -81,6 +86,7 @@ export class AuthService {
         this.http.get(this.authenticateUrl).subscribe(
             () => {
                 result.next();
+                this._authChange.next();
                 result.complete();
             },
             () => {
@@ -95,6 +101,7 @@ export class AuthService {
         localStorage.removeItem(AuthService.LOCALSTROAGE_KEY);
         this._jwt = null;
         this._user = null;
+        this._authChange.next();
         this.router.navigate(this.LOGIN_URL);
     }
 

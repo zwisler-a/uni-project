@@ -1,5 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Host, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Host, OnDestroy, OnInit, ViewChild, Optional } from '@angular/core';
 import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -38,7 +38,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
         private itemService: ItemService,
         private fieldsService: FieldsService,
         private activatedRoute: ActivatedRoute,
-        @Host() private pageComponent: DefaultPageComponent
+        @Optional() @Host() private pageComponent: DefaultPageComponent
     ) {}
 
     ngOnInit() {
@@ -47,6 +47,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
         this.displayColsSub = this.fieldsService.displayableColumns.subscribe(cols => {
             this.displayedColumns = cols;
         });
+
         // set page setting (action / title)
         this.pageComponent.title = 'items.title';
         this.pageComponent.actions.next([

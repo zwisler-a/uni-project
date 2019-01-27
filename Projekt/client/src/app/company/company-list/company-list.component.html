@@ -1,3 +1,14 @@
-<p>
-  company-list works!
-</p>
+<ng-container *ngIf="(companies | async) as _companies; else loading">
+    <mat-nav-list class="seperated">
+        <a
+            mat-list-item
+            class="navigation-item"
+            *ngFor="let company of _companies"
+            [routerLink]="['/companies', 'view', { outlets: { detail: [company.id] } }]"
+            [routerLinkActive]="'active'"
+        >
+            <span class="name">{{ company.name }}</span>
+        </a>
+    </mat-nav-list>
+</ng-container>
+<ng-template #loading><div class="no-data-hint" translate>company.noData</div></ng-template>

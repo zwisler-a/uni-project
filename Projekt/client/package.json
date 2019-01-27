@@ -7,12 +7,12 @@
     "build": "ng build",
     "build-demo": "ng build --prod --configuration=demo",
     "build-prod": "ng build --prod",
-    "test": "ng test --watch=false",
+    "test": "ng test --watch=false --code-coverage",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "bundle-report": "webpack-bundle-analyzer dist/client/stats.json",
     "i18n:extract": "ngx-translate-extract --input ./src --output ./src/assets/i18n/ --clean --sort --format namespaced-json",
-    "compodoc": "./node_modules/.bin/compodoc -p tsconfig.json -s --includes docs -a docs"
+    "compodoc": "./node_modules/.bin/compodoc -p tsconfig.json -s"
   },
   "private": true,
   "dependencies": {

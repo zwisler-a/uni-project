@@ -42,4 +42,15 @@ export class UserService {
             })
         );
     }
+
+    updateUser(user: User) {
+        return this.http.patch(this.baseUrl + '/' + user.id, user).pipe(
+            tap((changed: User) => {
+                const users = this._users.getValue();
+                const newUsers = users.filter(filterUser => filterUser.id + '' === user.id + '');
+                newUsers.push(changed);
+                this._users.next(newUsers);
+            })
+        );
+    }
 }

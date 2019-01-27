@@ -1,0 +1,22 @@
+.role-form {
+    padding: 0 16px;
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+    overflow: auto;
+}
+.filter {
+    margin: 16px 16px 0 16px;
+}
+.actions {
+    background: white;
+    padding: 16px;
+    border-top: rgba($color: #000000, $alpha: 0.08);
+}
+.table {
+    width: 100%;
+}
+:host {
+    flex-direction: column;
+    height: 100%;
+}
