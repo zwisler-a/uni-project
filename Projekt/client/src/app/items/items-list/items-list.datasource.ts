@@ -5,6 +5,7 @@ import { merge, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ItemService } from '../_item-store/item.service';
+import { ConsoleReporter } from 'jasmine';
 
 /**
  * Data source for the ItemList view. This class should
@@ -39,6 +40,7 @@ export class ItemListDataSource extends DataSource<any> {
         });
 
         this.mutationSub = merge(...dataMutations).subscribe((ev: any) => {
+            console.log(ev);
             const contentRoute: any[] = [this.paginator.pageIndex, this.paginator.pageSize];
             if (this.typeId) {
                 contentRoute.push(this.typeId);
@@ -46,6 +48,7 @@ export class ItemListDataSource extends DataSource<any> {
             if (this.sort.direction && this.sort.active) {
                 contentRoute.push(this.sort.active, this.sort.direction);
             }
+            console.log(contentRoute);
             this.router.navigate([
                 '/items',
                 'view',
