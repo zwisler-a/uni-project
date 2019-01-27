@@ -30,8 +30,8 @@ test_client:
   artifacts:
     expire_in: 3 day
     paths:
+      - Projekt/client/coverage
       - Projekt/client/reports
-      - Project/client/coverage
     reports:
       junit:
         - Projekt/client/reports/TESTS-*.xml
