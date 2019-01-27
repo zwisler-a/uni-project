@@ -1,6 +1,6 @@
 <!-- IF REFERENCE MAKE IT A BIT MORE GROUPED BY ADDING SPECIAL STYLE -->
 <div *ngIf="field" [ngClass]="{ reference: field.type === 'reference' }" [ngClass.lt-md]="'small'">
-    <mat-form-field>
+    <mat-form-field fxFlex>
         <div matPrefix>
             <!-- TYPE OF FIELD SELECT -->
             <span *ngIf="edit" class="field-type" matTooltip="Feld Typ" matPrefix [matMenuTriggerFor]="menu">
@@ -31,11 +31,11 @@
         />
 
         <!-- REQUIRED/UNIQUE/REMOVE FIELD - INLINE -->
-        <div matSuffix fxHide.lt-md><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
+        <div matSuffix *ngIf="!isGlobal" fxHide.lt-md><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
     </mat-form-field>
 
     <!-- REQUIRED/UNIQUE/REMOVE FIELD - BELOW -->
-    <div fxHide.gt-sm><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
+    <div *ngIf="!isGlobal" fxHide.gt-sm><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
 
     <!--REQUIRED/UNIQUE/REMOVE FIELD - TEMPLATE -->
     <ng-template #fieldProperies>

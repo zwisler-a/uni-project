@@ -17,11 +17,11 @@
         "password": "Altes Passwort",
         "newPassword": "Neues Passwort",
         "repeadPassword": "Passwort wiederholen",
-        "cancel":"Cancel",
+        "cancel": "Cancel",
         "save": "Save",
         "deleteMe": "Sind Sie sicher dass Sie Ihren Account löschen wollen?",
         "delete": "Wollen Sie diesen Account wirklich löschen?",
-        "passwordUpdated":"Passwort wurde geändert"
+        "passwordUpdated": "Passwort wurde geändert"
     },
 
     "role": {
@@ -80,6 +80,12 @@
             "create": "Typ konnte nicht erstellt werden!",
             "get": "Typ konnte nicht geladen werden!",
             "update": "Typ konnte nicht verändert werden!"
+        },
+        "global": {
+            "title": "Globale Felder",
+            "add": "Hinzufügen",
+            "new": "Neues Feld",
+            "confirmDelete":"Wollen Sie dieses Feld wirklich löschen?"
         },
         "edit": {
             "addField": "Neues Feld hinzufügen",

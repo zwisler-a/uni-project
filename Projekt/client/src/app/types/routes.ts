@@ -5,6 +5,7 @@ import { AddTypeComponent } from './add-type/add-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
 import { TypesListComponent } from './types-list/types-list.component';
 import { TypesResolver } from './types-list/types.resolver';
+import { GlobalFieldsComponent } from './global-fields/global-fields.component';
 
 export const typeRoutes: Routes = [
     {
@@ -16,6 +17,11 @@ export const typeRoutes: Routes = [
             {
                 path: 'add',
                 component: AddTypeComponent,
+                outlet: 'detail'
+            },
+            {
+                path: 'fields',
+                component: GlobalFieldsComponent,
                 outlet: 'detail'
             },
             {

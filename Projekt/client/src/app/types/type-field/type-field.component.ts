@@ -17,6 +17,9 @@ export class TypeFieldComponent implements OnInit {
     @Input()
     edit = false;
 
+    @Input()
+    isGlobal = false;
+
     /** Emit when the delete button is clicked */
     @Output()
     deleteMe = new EventEmitter<void>();

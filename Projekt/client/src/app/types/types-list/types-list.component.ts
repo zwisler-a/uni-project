@@ -30,6 +30,13 @@ export class TypesListComponent implements OnInit {
                     this.router.navigate(['/types', 'view', { outlets: { detail: ['add'] } }]);
                 },
                 tooltip: ''
+            },
+            {
+                icon: 'public',
+                click: () => {
+                    this.router.navigate(['/types', 'view', { outlets: { detail: ['fields'] } }]);
+                },
+                tooltip: ''
             }
         ]);
 
