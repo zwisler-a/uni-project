@@ -1,5 +1,6 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
+import { Type, TypeField } from '../api/models/type';
 
 export interface Queries {
     /** Creates the company table */
@@ -66,36 +67,36 @@ export interface Queries {
     TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new item table */
-    ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets, Type>;
     /** Deletes an item table */
-    ITEM_TABLE_DROP: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_DROP: DynamicQuery<ObjectResultsets, number>;
     /** Creates a new field in an item table */
-    ITEM_TABLE_FIELD_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_FIELD_CREATE: DynamicQuery<ObjectResultsets, TypeField>;
     /** Edites a specific field in an item table */
-    ITEM_TABLE_FIELD_EDIT: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_FIELD_EDIT: DynamicQuery<ObjectResultsets, TypeField>;
     /** Deletes a specific field in an item table */
-    ITEM_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets, TypeField>;
     /** Creates a new foreign key constraint in an item table */
-    ITEM_TABLE_FK_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_FK_CREATE: DynamicQuery<ObjectResultsets, TypeField>;
     /** Deltes a foreign key constraint in an item table */
-    ITEM_TABLE_FK_DROP: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_FK_DROP: DynamicQuery<ObjectResultsets, TypeField>;
     /** Creates a new unique index constraint in an item table */
-    ITEM_TABLE_UI_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_UI_CREATE: DynamicQuery<ObjectResultsets, TypeField>;
     /** Deltes a unique index constraint in an item table */
-    ITEM_TABLE_UI_DROP: DynamicQuery<ObjectResultsets>;
+    ITEM_TABLE_UI_DROP: DynamicQuery<ObjectResultsets, TypeField>;
 
     /** Creates a new item of one type */
-    ITEM_CREATE: DynamicQuery<ObjectResultsets>;
+    ITEM_CREATE: DynamicQuery<ObjectResultsets, Type>;
     /** Gets all items of one type in range(offset, length) */
-    ITEM_GET: DynamicQuery<ArrayResultsets>;
+    ITEM_GET: DynamicQuery<ArrayResultsets, number>;
     /** Gets an item by id on one type */
-    ITEM_GET_ID: DynamicQuery<ArrayResultsets>;
+    ITEM_GET_ID: DynamicQuery<ArrayResultsets, number>;
     /** Gets the number of items of one type */
-    ITEM_GET_COUNT: DynamicQuery<ArrayResultsets>;
+    ITEM_GET_COUNT: DynamicQuery<ArrayResultsets, number>;
     /** Updates (overwrites) an item by id of one type */
-    ITEM_UPDATE: DynamicQuery<ObjectResultsets>;
+    ITEM_UPDATE: DynamicQuery<ObjectResultsets, Type>;
     /** Deletes an item by id of one type */
-    ITEM_DELETE: DynamicQuery<ObjectResultsets>;
+    ITEM_DELETE: DynamicQuery<ObjectResultsets, number>;
 }
 
 /**
@@ -121,10 +122,10 @@ export function factory(pool: Pool, prefix: string): Queries {
         reference: 'INT UNSIGNED'
     };
 
-    function generateTabel(structure: any) {
+    function generateTabel(structure: Type) {
         let constraints = 'PRIMARY KEY (\`id\`)';
         let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
-        structure.fields.forEach(function(field: any) {
+        structure.fields.forEach(function(field: TypeField) {
             if (!Object.keys(types).some((type: string) => type === field.type)) {
                 throw new Error(`Invalid type '${field.type}'`);
             }
@@ -150,11 +151,11 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
-    function dropTable(structure: any) {
+    function dropTable(structure: number) {
         return `DROP TABLE \`%_item_${structure}\``.replace('%_', prefix);
     }
 
-    function addTableField(structure: any) {
+    function addTableField(structure: TypeField) {
         let sql = `ALTER TABLE \`%_item_${structure.typeId}\` ADD COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
         if (structure.required) {
             sql += ' NOT NULL';
@@ -162,7 +163,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.replace('%_', prefix);
     }
 
-    function editTableField(structure: any) {
+    function editTableField(structure: TypeField) {
         let sql = `ALTER TABLE \`%_item_${structure.typeId}\` MODIFY COLUMN \`field_${structure.id}\` ${types[structure.type]}`;
         if (structure.required) {
             sql += ' NOT NULL';
@@ -170,32 +171,32 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.replace('%_', prefix);
     }
 
-    function dropTableField(structure: any) {
+    function dropTableField(structure: TypeField) {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP COLUMN \`field_${structure.id}\``.replace('%_', prefix);
     }
 
-    function generateForeignKey(structure: any) {
+    function generateForeignKey(structure: TypeField) {
         const field = `\`field_${structure.id}\``;
         return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.split('%_').join(prefix);
     }
 
-    function dropForeignKey(structure: any) {
+    function dropForeignKey(structure: TypeField) {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP FOREIGN KEY \`field_${structure.id}\``.replace('%_', prefix);
     }
 
-    function generateUniqueIndex(structure: any) {
+    function generateUniqueIndex(structure: TypeField) {
         const field = `\`field_${structure.id}\``;
         return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} UNIQUE INDEX (${field})`.replace('%_', prefix);
     }
 
-    function dropUniqueIndex(structure: any) {
+    function dropUniqueIndex(structure: TypeField) {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP INDEX \`field_${structure.id}\``.replace('%_', prefix);
     }
 
-    function generateItem(structure: any) {
+    function generateItem(structure: Type) {
         let values = 'NULL, ?';
         let sql = `INSERT INTO \`%_item_${structure.id}\` (\`id\`, \`companyId\``;
-        structure.fields.forEach(function(field: any) {
+        structure.fields.forEach(function(field: TypeField) {
             sql += `, \`field_${field.id}\``;
             values += ', ?';
         });
@@ -204,29 +205,29 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
-    function getItem(structure: any) {
-        return `SELECT * FROM \`%_item_${structure.id}\` WHERE \`id\` = ?`.replace('%_', prefix);
+    function getItem(id: number) {
+        return `SELECT * FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
     }
 
-    function getItemList(structure: any) {
-        return `SELECT * FROM \`%_item_${structure.id}\` LIMIT ?, ?`.replace('%_', prefix);
+    function getItemList(id: number) {
+        return `SELECT * FROM \`%_item_${id}\` LIMIT ?, ?`.replace('%_', prefix);
     }
 
-    function getItemTotal(structure: any) {
-        return `SELECT COUNT(*) FROM \`%_item_${structure.id}\``.replace('%_', prefix);
+    function getItemTotal(id: number) {
+        return `SELECT COUNT(*) FROM \`%_item_${id}\``.replace('%_', prefix);
     }
 
-    function updateItem(structure: any) {
+    function updateItem(structure: Type) {
         let sql = `UPDATE \`%_item_${structure.id}\` SET \`companyId\` = ?`;
-        structure.fields.forEach(function(field: any) {
+        structure.fields.forEach(function(field: TypeField) {
             sql += `, \`field_${field.id}\` = ?`;
         });
         sql += ' WHERE `id` = ?;';
         return sql.split('%_').join(prefix);
     }
 
-    function deleteItem(structure: any) {
-        return `DELETE FROM \`%_item_${structure.id}\` WHERE \`id\` = ?`.replace('%_', prefix);
+    function deleteItem(id: number) {
+        return `DELETE FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
     }
 
     return {

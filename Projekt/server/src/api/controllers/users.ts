@@ -18,7 +18,6 @@ export async function userCreate(req: Request, res: Response, next: NextFunction
 
         res.status(200).send(await UserModel.create(user));
     } catch (error) {
-        // TODO handle duplicate + hash error
         next(error);
     }
 }

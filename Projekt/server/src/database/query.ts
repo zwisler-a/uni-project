@@ -80,30 +80,30 @@ export class StaticQuery<T extends Resultsets> extends Query {
  * Function that generates a valid sql query at runtime
  * @author Maurice
  */
-export interface DynamicQueryBuilder {
+export interface DynamicQueryBuilder<T> {
     /**
      * Generates a sql query string at runtime
      * @param structure parameters to be used to generate the query
      * @returns a valid sql query
      */
-    (structure: any): string;
+    (structure: T): string;
 }
 
 /**
  * A helper class for dynamic (at runtime generated) sql queries
  * @author Maurice
  */
-export class DynamicQuery<T extends Resultsets> extends Query {
+export class DynamicQuery<T extends Resultsets, U> extends Query {
 
     /** Sql query build */
-    builder: DynamicQueryBuilder;
+    builder: DynamicQueryBuilder<U>;
 
     /**
      * Creates a new dynamic query
      * @param pool current database pool instance
      * @param sql this query's sql builder
      */
-    constructor(pool: Pool, builder: DynamicQueryBuilder) {
+    constructor(pool: Pool, builder: DynamicQueryBuilder<U>) {
         super(pool);
         this.builder = builder;
     }
@@ -128,7 +128,7 @@ export class DynamicQuery<T extends Resultsets> extends Query {
      * @param values values to be used for the query (prepared statement)
      * @returns the query's resultset
      */
-    async execute(structure: any, values?: any[] | any): Promise<T> {
+    async execute(structure: U, values?: any[] | any): Promise<T> {
         const sql = this.builder(structure);
         return this.pool.query(sql, values).catch(error => this.errorDynamic(error, sql)) as Promise<T>;
     }
@@ -140,7 +140,7 @@ export class DynamicQuery<T extends Resultsets> extends Query {
      * @param values values to be used for the query (prepared statement)
      * @returns the query's resultset
      */
-    async executeConnection(connection: Connection, structure: any, values?: any[] | any): Promise<T> {
+    async executeConnection(connection: Connection, structure: U, values?: any[] | any): Promise<T> {
         const sql = this.builder(structure);
         return connection.query(sql, values).catch(error => this.errorDynamic(error, sql)) as Promise<T>;
     }

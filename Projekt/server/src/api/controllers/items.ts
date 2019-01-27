@@ -110,7 +110,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
-        const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
+        const total: number = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
 
         const totalPages = Math.ceil(total / perPage);
         res.set('X-Total', total.toString());
@@ -124,7 +124,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
-        const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
+        const items: Item[] = (await database.ITEM_GET.execute(type.id, [page * perPage, perPage]))
             .map((item: any) => {
                 const fields: Field[] = [];
                 for (let i = 0; i < type.fields.length; i++) {
@@ -153,18 +153,24 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
+
+        // TODO Remove 1. arg, this should later be the company currently there is only one
         values.unshift(1);
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
-        // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(error);
@@ -185,7 +191,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const items = await database.ITEM_GET_ID.execute(type, id);
+        const items = await database.ITEM_GET_ID.execute(type.id, [ id ]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
@@ -217,13 +223,20 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
+
+        // TODO Remove 1. arg, this should later be the company currently there is only one
         values.unshift(1);
 
         // Need to push the where for sql to know what to update
@@ -252,10 +265,11 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        // TODO use exist instead but do number check
-        const type: Type = await TypeModel.get(typeId);
+        if (!await TypeModel.exists(typeId)) {
+            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
+        }
 
-        const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
+        const affectedRows = (await database.ITEM_DELETE.execute(typeId, [ id ])).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {

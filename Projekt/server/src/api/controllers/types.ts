@@ -1,6 +1,6 @@
 import { Response, Request, NextFunction } from 'express';
 
-import { Type, TypeField, TYPE } from '../models/type';
+import { Type, TYPE } from '../models/type';
 import { TypeModel } from '../../database/models/type';
 
 /**
@@ -42,7 +42,6 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
  * @param next indicating the next middleware function
  */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
-    // TODO impl into TypeModel
     try {
         res.status(200).send(await TypeModel.getAll());
     } catch (error) {

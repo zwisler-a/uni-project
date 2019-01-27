@@ -1,6 +1,5 @@
 import { Response, Request, NextFunction } from 'express';
 
-import { ApiError, ErrorNumber } from '../../types';
 import { COMPANY, Company } from '../models/company';
 import { CompanyModel } from '../../database/models/company';
 
