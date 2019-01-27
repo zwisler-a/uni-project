@@ -42,19 +42,20 @@ export class DefaultPageComponent implements OnInit, OnDestroy {
 
     /** Determine if the sidenav should be open or close */
     private sidenavState() {
-        if (!this.outletActive.sidenav) {
-            this.leftSidenav.close();
-            this.showSidenavMenuButton = false;
-            return;
-        }
         if (this.media.isActive('lt-md')) {
             this.leftSidenav.close();
             this.showSidenavMenuButton = true;
-            this.leftSidenav.mode = 'over';
+            setTimeout(() => {
+                this.leftSidenav.mode = 'over';
+            });
         } else {
             this.leftSidenav.open();
             this.showSidenavMenuButton = false;
             this.leftSidenav.mode = 'side';
+        }
+        if (!this.outletActive.sidenav) {
+            this.leftSidenav.close();
+            this.showSidenavMenuButton = false;
         }
     }
 

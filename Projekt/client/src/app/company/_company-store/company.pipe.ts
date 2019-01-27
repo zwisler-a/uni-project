@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { CompanyService } from './company.service';
@@ -9,7 +10,10 @@ import { CompanyService } from './company.service';
 export class CompanyPipe implements PipeTransform {
     constructor(private companyService: CompanyService) {}
 
-    transform(companyId: any, args?: any): any {
+    transform(companyId: any, args?: any): Observable<string> {
+        if (companyId === '' || companyId === 0 || !companyId) {
+            return of('');
+        }
         return this.companyService.getCompany(companyId).pipe(map(company => company.name));
     }
 }

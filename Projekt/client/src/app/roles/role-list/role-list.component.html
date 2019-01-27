@@ -1,3 +1,14 @@
-<p>
-  role-list works!
-</p>
+<ng-container *ngIf="(roles | async) as _roles; else loading">
+    <mat-nav-list class="seperated">
+        <a
+            mat-list-item
+            class="navigation-item"
+            *ngFor="let role of _roles"
+            [routerLink]="['/roles', 'view', { outlets: { detail: [role.id] } }]"
+            [routerLinkActive]="'active'"
+        >
+            <span class="name">{{ role.name }}</span>
+        </a>
+    </mat-nav-list>
+</ng-container>
+<ng-template #loading><div class="no-data-hint" translate>role.noData</div></ng-template>

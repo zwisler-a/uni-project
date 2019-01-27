@@ -50,6 +50,7 @@
         ></app-navigation-group>
         <span fxFlex="1 1 auto"></span>
         <mat-toolbar class="account-action-toolbar" *ngIf="sidenavIsExpanded" color="accent">
+            <button mat-icon-button [routerLink]="['/user', 'me']"><mat-icon>edit</mat-icon></button>
             <span fxFlex="1 1 auto"></span>
             <button mat-icon-button (click)="logout()"><mat-icon>power_settings_new</mat-icon></button>
         </mat-toolbar>

@@ -1,5 +1,10 @@
 # AK18b WebApp (Angular)
 
+
+<a href="https://git.informatik.uni-leipzig.de/swp18/ak18b/commits/master"><img alt="pipeline status" src="https://git.informatik.uni-leipzig.de/swp18/ak18b/badges/master/pipeline.svg" /></a>
+
+<a href="https://git.informatik.uni-leipzig.de/swp18/ak18b/commits/master"><img alt="coverage report" src="https://git.informatik.uni-leipzig.de/swp18/ak18b/badges/master/coverage.svg" /></a>
+
 Best to start the development enviroment via `npm start` in the Project folder inside the Repo. It starts starts the server and the client if run there. Also `npm install` there downloads both dependencies for the server and the client.
 
 ---

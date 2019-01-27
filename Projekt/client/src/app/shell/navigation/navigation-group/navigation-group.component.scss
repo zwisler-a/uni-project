@@ -3,6 +3,16 @@
         .mat-list-item-content {
             color: map-get($map: $colors, $key: navigation-text);
         }
+
+        // Navigation group specific nav styles
+        .navigation-item {
+            &.mat-list-item:hover {
+                background: map-get($map: $colors, $key: navigation-item-hover);
+            }
+            &.active {
+                background: map-get($map: $colors, $key: navigation-item-active);
+            }
+        }
     }
 
     // Navigation item
@@ -19,13 +29,9 @@
             margin-left: 18px;
         }
 
-        &.mat-list-item:hover {
-            background: map-get($map: $colors, $key: navigation-item-hover);
-        }
-
         // display of which route is active
         &::before {
-            content: "";
+            content: '';
             display: block;
             position: absolute;
             height: 100%;
@@ -36,7 +42,6 @@
             left: 0;
         }
         &.active {
-            background: map-get($map: $colors, $key: navigation-item-active);
             &::before {
                 width: 4px;
             }
