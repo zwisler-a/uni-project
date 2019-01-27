@@ -1,15 +1,35 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CompanyPipe } from './_company-store/company.pipe';
-import { CompanyListComponent } from './company-list/company-list.component';
+import { NgModule } from '@angular/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule, MatIconModule, MatInputModule, MatListModule, MatToolbarModule } from '@angular/material';
 import { RouterModule } from '@angular/router';
-import { companyRoutes } from './routes';
+
 import { DefaultPageModule } from '../shared/default-page/default-page.module';
-import { MatListModule } from '@angular/material';
+import { AddCompanyComponent } from './add-company/add-company.component';
+import { CompanyListComponent } from './company-list/company-list.component';
+import { companyRoutes } from './routes';
+import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
+import { TranslateModule } from '@ngx-translate/core';
+import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
-    declarations: [CompanyListComponent],
-    imports: [CommonModule, RouterModule.forChild(companyRoutes), DefaultPageModule, MatListModule],
+    declarations: [CompanyListComponent, AddCompanyComponent],
+    imports: [
+        CommonModule,
+        RouterModule.forChild(companyRoutes),
+        DefaultPageModule,
+        MatListModule,
+        MatToolbarModule,
+        FlexLayoutModule,
+        MatButtonModule,
+        MatIconModule,
+        NavigateBackModule,
+        FormsModule,
+        ConfirmDialogModule,
+        TranslateModule,
+        MatInputModule
+    ],
     exports: []
 })
 export class CompanyModule {}

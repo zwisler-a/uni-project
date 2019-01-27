@@ -5,7 +5,6 @@ import { merge, Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { ItemService } from '../_item-store/item.service';
-import { ConsoleReporter } from 'jasmine';
 
 /**
  * Data source for the ItemList view. This class should
