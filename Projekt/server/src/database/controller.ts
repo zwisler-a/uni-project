@@ -2,6 +2,7 @@ import { Pool, Connection } from '../../types/mariadb';
 import { factory, Queries } from './queries';
 import { UserModel } from './models/user';
 import { TypeModel } from './models/type';
+import { CompanyModel } from './models/company';
 
 /**
  * Function that gets invoked inside a transaction
@@ -61,10 +62,11 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     // Initilize all models
     UserModel.initialize(controller);
     TypeModel.initialize(controller);
+    CompanyModel.initialize(controller);
 
     // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
     let companyId;
-    const company = (await controller.COMPANY_GET_ID.execute('company')).pop();
+    const company = (await controller.COMPANY_GET_ID.execute(1)).pop();
     if (!company) {
         companyId = (await controller.COMPANY_CREATE.execute([ 'company' ])).insertId;
     } else {

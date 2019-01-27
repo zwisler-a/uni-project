@@ -18,7 +18,6 @@ export async function userCreate(req: Request, res: Response, next: NextFunction
 
         res.status(200).send(await UserModel.create(user));
     } catch (error) {
-        // TODO handle duplicate + hash error
         next(error);
     }
 }
@@ -48,7 +47,7 @@ export async function userGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function userGetList(req: Request, res: Response, next: NextFunction) {
     try {
-        const users: User[] = await UserModel.getList();
+        const users: User[] = await UserModel.getAll();
         users.forEach(user => {
             delete user.password;
         });

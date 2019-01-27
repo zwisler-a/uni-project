@@ -63,7 +63,7 @@ export class UserModel {
      * @param id id/name of the user object to get
      * @returns retrived user object on success
      */
-    static async getList(): Promise<User[]> {
+    static async getAll(): Promise<User[]> {
         return UserModel.database.USER_GET.execute();
     }
 
@@ -86,7 +86,10 @@ export class UserModel {
             result.email = user.email;
         }
 
-        await UserModel.database.USER_UPDATE.execute([ id, result.name, result.password, result.email ]);
+        const params = [ result.name, result.password, result.email, id ];
+        if ((await UserModel.database.USER_UPDATE.execute(params)).affectedRows === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
+        }
 
         return result;
     }
@@ -97,8 +100,7 @@ export class UserModel {
      * @returns nothing on success
      */
     static async delete(id: number): Promise<void> {
-        const affectedRows = (await UserModel.database.USER_DELETE.execute(id)).affectedRows;
-        if (affectedRows === 0) {
+        if ((await UserModel.database.USER_DELETE.execute(id)).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, id);
         }
     }

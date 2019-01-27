@@ -19,7 +19,7 @@ export class TypeModel {
      */
     static initialize(database: DatabaseController) {
         if (TypeModel.database) {
-            throw new Error('Already initialized UserModel');
+            throw new Error('Already initialized TypeModel');
         }
         TypeModel.database = database;
     }
@@ -73,6 +73,25 @@ export class TypeModel {
             TypeModel.cache.ttl(key);
         }
         return type;
+    }
+
+    static async getAll(): Promise<Type[]> {
+        const types: Type[] = await TypeModel.database.TYPE_GET.execute();
+
+        for (const type of types) {
+            const id = type.id.toString();
+            const cached: Type = await TypeModel.cache.get(id);
+
+            if (cached === undefined) {
+                type.fields = await TypeModel.fetchFields(type.id);
+                await TypeModel.cache.set(id, type);
+            } else {
+                type.fields = cached.fields;
+                await TypeModel.cache.ttl(id);
+            }
+        }
+
+        return types;
     }
 
     /**
@@ -154,12 +173,8 @@ export class TypeModel {
                         fields.splice(i, 1);
 
                         // Reset update flag
-                        update = false;
-
                         // Update if the name has changed
-                        if (oldField.name !== field.name) {
-                            update = true;
-                        }
+                        update = oldField.name !== field.name;
 
                         // If type changed from reference to another -> delete the foreign key to change the type
                         if (oldField.type === TypeFieldType.reference && field.type !== TypeFieldType.reference) {

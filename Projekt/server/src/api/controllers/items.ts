@@ -113,12 +113,11 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-
         let total: number;
         let items: Item[];
         if (!searchQuery) {
-            total = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
-            items = (await database.ITEM_GET.execute(type, [page * perPage, perPage])).map(convertItem(type));
+            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
+            items = (await database.ITEM_GET.execute(type.id, [page * perPage, perPage])).map(convertItem(type));
         } else {
             items = (await getFilteredItems(type, searchQuery, database));
             total = items.length;
@@ -138,7 +137,6 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         res.status(200).send(new EmbeddedItem([type], items));
-
     } catch (error) {
         next(error);
     }
@@ -222,7 +220,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  * @param database DatabaseController to get the data from
  */
 async function getFilteredItems(type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
-    let items: Item[] = (await database.ITEM_GET_ALL.execute(type));
+    let items: Item[] = (await database.ITEM_GET.execute(type.id));
     // Filter items if a searchQuery is set
     if (searchQuery) {
         items = items.filter((item: any) => {
@@ -264,18 +262,24 @@ function convertItem(type: Type) {
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
+
+        // TODO Remove 1. arg, this should later be the company currently there is only one
         values.unshift(1);
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
-        // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(error);
@@ -296,7 +300,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const items = await database.ITEM_GET_ID.execute(type, id);
+        const items = await database.ITEM_GET_ID.execute(type.id, [ id ]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
@@ -328,13 +332,20 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
+
+        // TODO Remove 1. arg, this should later be the company currently there is only one
         values.unshift(1);
 
         // Need to push the where for sql to know what to update
@@ -363,10 +374,11 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        // TODO use exist instead but do number check
-        const type: Type = await TypeModel.get(typeId);
+        if (!await TypeModel.exists(typeId)) {
+            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
+        }
 
-        const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
+        const affectedRows = (await database.ITEM_DELETE.execute(typeId, [ id ])).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {
