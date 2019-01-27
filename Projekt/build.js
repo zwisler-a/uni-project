@@ -73,7 +73,7 @@ const prepareBuild = () => {
 
 const prepareDocs = () => {
 	fs.removeSync(docsPath);
-
+	fs.copySync('./index.html', path.join(docsPath, './index.html'))
 	fs.copySync(path.join(clientPath, 'coverage'), path.join(docsPath, 'client-coverage'));
 	fs.copySync(path.join(clientPath, 'documentation'), path.join(docsPath, 'client'));
 	fs.copySync(path.join(serverPath, 'documentation'), path.join(docsPath, 'server'));
