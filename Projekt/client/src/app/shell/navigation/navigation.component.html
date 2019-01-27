@@ -24,21 +24,20 @@
             </mat-toolbar-row>
             <!-- Display user information -->
             <mat-toolbar-row
+                [routerLink]="['/user', 'me']"
                 *ngIf="sidenavIsExpanded"
                 fxLayout="column"
                 fxLayoutAlign="center start"
                 class="user-info"
             >
                 <div>
-                    <div
-                        fxLayoutAlign="start center"
-                    >
+                    <div fxLayoutAlign="start center">
                         <mat-icon>account_circle</mat-icon>
-                        <span>{{ user ? user.name : " - " }}</span>
+                        <span>{{ user ? user.name : ' - ' }}</span>
                     </div>
                     <div fxLayoutAlign="start center">
                         <mat-icon>work</mat-icon>
-                        <span>{{ user ? user.companyId : "" }}</span>
+                        <span>{{ user ? (user.companyId | company | async) : '' }}</span>
                     </div>
                 </div>
             </mat-toolbar-row>
@@ -52,9 +51,7 @@
         <span fxFlex="1 1 auto"></span>
         <mat-toolbar class="account-action-toolbar" *ngIf="sidenavIsExpanded" color="accent">
             <span fxFlex="1 1 auto"></span>
-            <button mat-icon-button (click)="logout()">
-                <mat-icon>power_settings_new</mat-icon>
-            </button>
+            <button mat-icon-button (click)="logout()"><mat-icon>power_settings_new</mat-icon></button>
         </mat-toolbar>
     </nav>
 
@@ -62,9 +59,7 @@
     <div class="main-navigation-content">
         <mat-toolbar>
             <!-- Button to open the sidenav on over (small) mode -->
-            <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()">
-                <mat-icon>menu</mat-icon>
-            </button>
+            <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()"><mat-icon>menu</mat-icon></button>
             <span fxFlex="1 1 auto"></span>
             <app-language-selector></app-language-selector>
         </mat-toolbar>

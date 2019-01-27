@@ -1,0 +1,22 @@
+<mat-card class="content-card" fxLayout="column">
+    <mat-card-header>
+        <mat-card-title><span translate>user.me</span></mat-card-title>
+        <span fxFlex="1 1 auto"></span>
+        <button mat-icon-button (click)="deleteMe()"><mat-icon>delete</mat-icon></button>
+    </mat-card-header>
+
+    <!-- USER INFORMATION -->
+    <mat-card-content fxFlex="1 1 auto" fxLayout="column">
+        <mat-form-field><input disabled matInput placeholder="Username" [ngModel]="username" /></mat-form-field>
+        <mat-form-field>
+            <input disabled matInput placeholder="Company" [ngModel]="companyId | company | async" />
+        </mat-form-field>
+        <mat-form-field><input disabled matInput placeholder="EMail" [ngModel]="email" /></mat-form-field>
+    </mat-card-content>
+
+    <!-- SAVE / CANCEL -->
+    <mat-card-actions fxLayoutAlign="end center">
+        <button mat-button disabled>Cancel</button>
+        <button color="primary" mat-raised-button disabled>Save</button>
+    </mat-card-actions>
+</mat-card>

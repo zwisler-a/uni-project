@@ -1,0 +1,5 @@
+@import './default-page/default-page.component.scss';
+
+@mixin app-shared-theme($theme, $colors) {
+    @include app-default-page-theme($theme, $colors);
+}

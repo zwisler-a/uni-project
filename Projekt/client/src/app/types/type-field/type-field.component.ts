@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TypeField } from 'src/app/stores/type-store/types/type-field.interface';
-import { Type } from 'src/app/stores/type-store/types/type.interface';
-import { FieldType } from 'src/app/stores/item-store/types/field-type.enum';
+import { FieldType } from 'src/app/models/field-type.enum';
+import { TypeField } from 'src/app/models/type-field.interface';
+import { Type } from 'src/app/models/type.interface';
 
 @Component({
     selector: 'app-type-field',
@@ -27,10 +27,9 @@ export class TypeFieldComponent implements OnInit {
 
     /** possible field types */
     get fieldTypes() {
-        // return Object.keys(FieldType).map(type => FieldType[type]);
         return Object.keys(FieldType)
             .map(type => FieldType[type])
-            .filter(type => type !== 'reference' && type !== 'file');
+            .filter(type => type !== 'file');
     }
 
     /** set the type of the field */
@@ -39,7 +38,9 @@ export class TypeFieldComponent implements OnInit {
         this.field.referenceId = 0;
     }
 
-    setReference(type: Type) {
-        this.field.referenceId = type.id;
+    /** If the field is a reference set the reference ids */
+    setReference(ev: { type: Type; field: TypeField }) {
+        this.field.referenceId = ev.type.id;
+        // this.field.referenceId = ev.field.id;
     }
 }

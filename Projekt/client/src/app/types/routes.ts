@@ -1,29 +1,32 @@
 import { Routes } from '@angular/router';
 
+import { DefaultPageComponent } from '../shared/default-page/default-page.component';
 import { AddTypeComponent } from './add-type/add-type.component';
-import { SelectTypeComponent } from './select-type/select-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
+import { TypesListComponent } from './types-list/types-list.component';
 import { TypesResolver } from './types-list/types.resolver';
-import { TypesPageComponent } from './types-page/types-page.component';
 
 export const typeRoutes: Routes = [
     {
-        path: '',
-        component: TypesPageComponent,
+        path: 'view',
+        component: DefaultPageComponent,
         resolve: { types: TypesResolver },
         runGuardsAndResolvers: 'always',
         children: [
             {
                 path: 'add',
-                component: AddTypeComponent
+                component: AddTypeComponent,
+                outlet: 'detail'
             },
             {
                 path: ':id',
-                component: TypeDetailComponent
+                component: TypeDetailComponent,
+                outlet: 'detail'
             },
             {
                 path: '',
-                component: SelectTypeComponent
+                component: TypesListComponent,
+                outlet: 'content'
             }
         ]
     }

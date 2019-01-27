@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { Field } from '../../stores/item-store/types/field.interface';
-import { FieldType } from '../../stores/item-store/types/field-type.enum';
+import { Field } from '../../models/field.interface';
+import { FieldType } from '../../models/field-type.enum';
 
 /**
  * Wrapper to decide which kind of input should be shown for the item field.

@@ -5,6 +5,7 @@ import { TypesModule } from '../types.module';
 import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { TypeStoreModule } from '../_type-store/type-store.module';
 
 describe('TypeDetailComponent', () => {
     let component: TypeDetailComponent;
@@ -15,6 +16,7 @@ describe('TypeDetailComponent', () => {
             imports: [
                 TypesModule,
                 RouterTestingModule,
+                TypeStoreModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({})
             ]

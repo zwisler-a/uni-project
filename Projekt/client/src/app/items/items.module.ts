@@ -13,7 +13,6 @@ import {
     MatListModule,
     MatNativeDateModule,
     MatPaginatorModule,
-    MatProgressBarModule,
     MatSidenavModule,
     MatSnackBarModule,
     MatSortModule,
@@ -26,9 +25,11 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ColorPickerModule } from 'ngx-color-picker';
 
 import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
-import { SearchModule } from '../shared/search/search.module';
+import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { TypeNameModule } from '../shared/type-name-pipe/type-name.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
+import { FieldsStoreModule } from './_fields-store/fields-store.module';
+import { ItemStoreModule } from './_item-store/item-store.module';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemFieldBoolComponent } from './item-field/item-field-bool/item-field-bool.component';
@@ -39,12 +40,10 @@ import { ItemFieldNumberComponent } from './item-field/item-field-number/item-fi
 import { ItemFieldReferenceComponent } from './item-field/item-field-reference/item-field-reference.component';
 import { ItemFieldStringComponent } from './item-field/item-field-string/item-field-string.component';
 import { ItemFieldComponent } from './item-field/item-field.component';
-import { ItemPageComponent } from './item-page/item-page.component';
 import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
-import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
 
 @NgModule({
     declarations: [
@@ -58,18 +57,14 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         ItemFieldFileComponent,
         ItemFieldBoolComponent,
         ItemFieldReferenceComponent,
-        ItemPageComponent,
         AddItemComponent,
-        ItemTypeListComponent,
-        SidenavOverlayComponent
+        ItemTypeListComponent
     ],
     imports: [
         CommonModule,
         MatPaginatorModule,
         MatTableModule,
-        MatProgressBarModule,
         MatInputModule,
-        MatSidenavModule,
         MatListModule,
         MatIconModule,
         MatCheckboxModule,
@@ -87,7 +82,10 @@ import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.compo
         ConfirmDialogModule,
         FlexLayoutModule,
         MatSortModule,
-        SearchModule,
+        ItemStoreModule,
+        FieldsStoreModule,
+        MatSidenavModule,
+        DefaultPageModule,
         TypeSelectorModule,
         TypeNameModule,
         FormsModule,

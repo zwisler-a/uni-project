@@ -19,6 +19,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { AuthService } from '../auth/auth.service';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TranslateService } from '@ngx-translate/core';
+import { CompanyStoreModule } from 'src/app/company/_company-store/company-store.module';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -38,6 +39,7 @@ describe('NavigationComponent', () => {
                 MatProgressBarModule,
                 MatToolbarModule,
                 MatIconModule,
+                CompanyStoreModule,
                 MatButtonModule,
                 MatMenuModule,
                 HttpClientTestingModule,

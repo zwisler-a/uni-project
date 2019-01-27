@@ -18,7 +18,6 @@ export async function userCreate(req: Request, res: Response, next: NextFunction
 
         res.status(200).send(await UserModel.create(user));
     } catch (error) {
-        // TODO handle duplicate + hash error
         next(error);
     }
 }
@@ -34,6 +33,25 @@ export async function userGet(req: Request, res: Response, next: NextFunction) {
         const user: User = await UserModel.get(req.params.id);
         delete user.password;
         res.status(200).send(user);
+    } catch (error) {
+        next(error);
+    }
+}
+
+/**
+ * Route endpoint `GET /api/users/`
+ * Fetches all users
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
+export async function userGetList(req: Request, res: Response, next: NextFunction) {
+    try {
+        const users: User[] = await UserModel.getAll();
+        users.forEach(user => {
+            delete user.password;
+        });
+        res.status(200).send(users);
     } catch (error) {
         next(error);
     }

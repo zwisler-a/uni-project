@@ -1,11 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { environment } from '../../../environments/environment';
-import { map } from 'rxjs/operators';
-import { User } from './user.interface';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
+import { Observable, Subject, throwError } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { environment } from '../../../environments/environment';
 import { AuthenticateResponse } from './authenticate.response';
+import { User } from './user.interface';
 
 /**
  * A service which handles user authentication.
@@ -21,6 +23,7 @@ export class AuthService {
 
     private _user: User;
     private _jwt: string;
+    private _longLivedJwt: string;
 
     /** Will throw if invalid */
     set jwt(val) {
@@ -28,19 +31,7 @@ export class AuthService {
         this._jwt = val;
     }
 
-    constructor(private http: HttpClient, private router: Router) {
-        // if there is already a jwt use that, if not show login
-        const stroageJWT = localStorage.getItem(AuthService.LOCALSTROAGE_KEY);
-        if (stroageJWT) {
-            try {
-                this.jwt = stroageJWT;
-            } catch (e) {
-                console.log('Error while retireving stored jwt');
-            }
-        } else {
-            this.router.navigate(this.LOGIN_URL);
-        }
-    }
+    constructor(private http: HttpClient, private router: Router) {}
 
     /**
      * Tries to authenticate the user with the backend.
@@ -50,28 +41,53 @@ export class AuthService {
      * @param rememberMe if the jwt should be stored in case of successfull login
      * @param redirectRoute In case after successfull login the user should be routed somwhere special set this
      */
-    authenticate(
-        name: string,
-        password: string,
-        rememberMe = false,
-        redirectRoute: string[] = ['/']
-    ) {
-        return (
-            this.http
-                .post(this.authenticateUrl, { name, password })
-                .pipe(
-                    map((res: AuthenticateResponse) => {
-                        this.jwt = res.short;
-                        if (rememberMe) {
-                            localStorage.setItem(
-                                AuthService.LOCALSTROAGE_KEY,
-                                this.jwt
-                            );
-                        }
-                        this.router.navigate(redirectRoute);
-                    })
-                )
+    login(name: string, password: string, rememberMe = false, redirectRoute: string[] = ['/']) {
+        return this.http.post(this.authenticateUrl, { name, password }).pipe(
+            map((res: AuthenticateResponse) => {
+                this.jwt = res.short;
+                this._longLivedJwt = res.long;
+                if (rememberMe) {
+                    localStorage.setItem(AuthService.LOCALSTROAGE_KEY, this._longLivedJwt);
+                }
+                this.router.navigate(redirectRoute);
+            })
         );
+    }
+
+    /**
+     *Tries to fetch a new short lived token from the backend.
+     * @param longLivedToken Long lived token to authentivate with on the server. Use the one in localStorage if not given
+     */
+    reauthenticate(longLivedToken?: string): Observable<boolean> {
+        if (!longLivedToken) {
+            longLivedToken = localStorage.getItem(AuthService.LOCALSTROAGE_KEY);
+            if (!longLivedToken) {
+                return throwError('no stored token');
+            }
+        }
+        return this.http.patch(this.authenticateUrl, { token: longLivedToken }).pipe(
+            map((res: AuthenticateResponse) => {
+                this.jwt = res.short;
+                return true;
+            })
+        );
+    }
+
+    /**
+     * Checks if the jwt is still valid
+     */
+    authenticate() {
+        const result = new Subject();
+        this.http.get(this.authenticateUrl).subscribe(
+            () => {
+                result.next();
+                result.complete();
+            },
+            () => {
+                result.error(null);
+            }
+        );
+        return result;
     }
 
     /** Removes JWT and logs out the user */

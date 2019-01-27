@@ -3,11 +3,10 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatAutocompleteTrigger } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { Type } from 'src/app/stores/type-store/types/type.interface';
+import { EmbeddedItems } from 'src/app/models/api/embedded-items.interface';
 
-import { ItemService } from '../../stores/item-store/item.service';
-import { ApiItemsResponse } from '../../stores/item-store/types/api/api-items-response.interface';
-import { Item } from '../../stores/item-store/types/item.interface';
+import { Item } from '../../models/item.interface';
+import { ItemService } from '../_item-store/item.service';
 
 /**
  * UI to create an new Item
@@ -45,7 +44,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
     submit() {
         this.isSubmitting = true;
         this.itemService.createItem(this.item).subscribe(
-            (res: ApiItemsResponse) => {
+            (res: EmbeddedItems) => {
                 // redirect to details of the newly created item
                 this.router.navigate(
                     [
@@ -53,11 +52,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
                         'view',
                         {
                             outlets: {
-                                detail: [
-                                    'details',
-                                    res.items[0].typeId,
-                                    res.items[0].id
-                                ]
+                                detail: ['details', res.items[0].typeId, res.items[0].id]
                             }
                         }
                     ],
@@ -79,8 +74,8 @@ export class AddItemComponent implements OnInit, OnDestroy {
     }
 
     /** Changes the type of the item and creates apropriate fields */
-    typeChange(type: Type) {
-        this.item.fields = type.fields.map(field => {
+    typeChange(ev) {
+        this.item.fields = ev.type.fields.map(field => {
             return {
                 name: field.name,
                 type: field.type,
@@ -91,6 +86,6 @@ export class AddItemComponent implements OnInit, OnDestroy {
                 id: field.id
             };
         });
-        this.item.typeId = type.id;
+        this.item.typeId = ev.type.id;
     }
 }

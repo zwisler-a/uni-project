@@ -5,6 +5,7 @@ import { usersRoute } from './users';
 import { typesRoute } from './types';
 import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
+import { companiesRoute } from './companies';
 import { ApiError, ErrorNumber } from '../../types';
 
 /** express.Router for path `/api` */
@@ -16,6 +17,7 @@ apiRouter.use('/users', usersRoute);
 apiRouter.use('/types', typesRoute);
 apiRouter.use('/items', itemsRoute);
 apiRouter.use('/roles', rolesRoute);
+apiRouter.use('/companies', companiesRoute);
 
 // If route is unknown throw a new NOT_FOUND error
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {

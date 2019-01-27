@@ -1,16 +1,22 @@
 import { Routes } from '@angular/router';
 
+import { DefaultPageComponent } from '../shared/default-page/default-page.component';
 import { AddItemComponent } from './add-item/add-item.component';
 import { ItemDetailsComponent } from './item-details/item-details.component';
-import { ItemPageComponent } from './item-page/item-page.component';
+import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
-import { SidenavOverlayComponent } from './sidenav-overlay/sidenav-overlay.component';
+import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
 
 export const itemsRoutes: Routes = [
     {
         path: 'view',
-        component: SidenavOverlayComponent,
+        component: DefaultPageComponent,
         children: [
+            {
+                path: '',
+                component: ItemTypeListComponent,
+                outlet: 'sidenav'
+            },
             {
                 path: 'add',
                 component: AddItemComponent,
@@ -23,25 +29,25 @@ export const itemsRoutes: Routes = [
             },
             {
                 path: ':page/:perPage',
-                component: ItemPageComponent,
+                component: ItemsListComponent,
                 resolve: { list: ItemsListResolver },
                 outlet: 'content'
             },
             {
                 path: ':page/:perPage/:itemTypeId',
-                component: ItemPageComponent,
+                component: ItemsListComponent,
                 resolve: { list: ItemsListResolver },
                 outlet: 'content'
             },
             {
                 path: ':page/:perPage/:itemTypeId/:orderBy/:order',
-                component: ItemPageComponent,
+                component: ItemsListComponent,
                 resolve: { list: ItemsListResolver },
                 outlet: 'content'
             },
             {
                 path: '',
-                component: ItemPageComponent,
+                component: ItemsListComponent,
                 resolve: { list: ItemsListResolver },
                 outlet: 'content'
             }

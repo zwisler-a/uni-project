@@ -5,6 +5,7 @@ import { ApiError, ErrorNumber } from '../../types';
 import { Type, TypeField } from '../models/type';
 import { Item, Field } from '../models/item';
 import { TypeModel } from '../../database/models/type';
+import { Sortable, SortOrder } from '../../database/queries';
 
 /**
  * Checks the integrity of all values based on a type and maps them for SQL calls
@@ -101,29 +102,50 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         let perPage = 25;
-        if ('per_page' in query) {
-            perPage = parseInt(query.per_page);
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
             if (isNaN(perPage) || perPage < 1 || perPage > 100) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'per_page');
-            }
-        }
-
-        let orderBy: string = null;
-        if ('orderBy' in query) {
-            orderBy = query.orderBy;
-        }
-
-        let order = '';
-        if ('order' in query) {
-            order = query.orderBy;
-            if ( order !== 'asc' && order !== 'desc') {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
             }
         }
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
-        const total: number = (await database.ITEM_GET_COUNT.execute(type)).pop()['COUNT(*)'];
+
+        let orderBy: TypeField = null;
+        if ('orderBy' in query) {
+            orderBy = type.fields.find((field: TypeField) => field.name === query.orderBy);
+            if (!orderBy) {
+                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, orderBy);
+            }
+        }
+
+        let order: SortOrder = SortOrder.DESC;
+        if ('order' in query) {
+            order = query.order.toUpperCase();
+            if (!(order in SortOrder)) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
+            }
+            order = SortOrder[order];
+        }
+
+        let sorter: Sortable<number, TypeField>;
+        if (orderBy !== null) {
+            sorter = { value: type.id, sorter: orderBy, order };
+        } else {
+            sorter = { value: type.id };
+        }
+
+        let total: number;
+        let items: Item[];
+        if ('searchQuery' in query) {
+            items = (await getFilteredItems(sorter, type, query.searchQuery, database));
+            total = items.length;
+            items = items.slice(page * perPage, page * perPage + perPage);
+        } else {
+            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
+            items = (await database.ITEM_GET_RANGE.execute(sorter, [page * perPage, perPage])).map(convertItem(type));
+        }
 
         const totalPages = Math.ceil(total / perPage);
         res.set('X-Total', total.toString());
@@ -137,34 +159,190 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
-        let index = -1;
-        if (orderBy !== null) {
-            index = type.fields.findIndex((field: TypeField) => field.name === orderBy);
-            if (index === -1) {
-                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, orderBy);
-            }
-        }
-
-        // TODO add orderBy/order to search query
-        const items: Item[] = (await database.ITEM_GET.execute(type, [page * perPage, perPage]))
-            .map((item: any) => {
-                const fields: Field[] = [];
-                for (let i = 0; i < type.fields.length; i++) {
-                    const field = type.fields[i];
-                    let value = item[`field_${field.id}`];
-                    if (field.type === 'boolean') {
-                        value = value.readUInt8() === 1;
-                    }
-                    fields.push({ id: field.id, value });
-                }
-                return { typeId, id: item.id, fields };
-            });
-
-        res.status(200).send(new EmbeddedItem([ type ], items));
+        res.status(200).send(new EmbeddedItem([type], items));
     } catch (error) {
         next(error);
     }
 }
+
+/**
+ * Route endpoint `GET /api/items`
+ * @param req the request object
+ * @param res the response object
+ * @param next indicating the next middleware function
+ */
+export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
+    try {
+        const query: any = req.query;
+
+        let page = 0;
+        if ('page' in query) {
+            page = parseInt(query.page);
+            if (isNaN(page) || page < 0) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'page');
+            }
+        }
+
+        let perPage = 25;
+        if ('perPage' in query) {
+            perPage = parseInt(query.perPage);
+            if (isNaN(perPage) || perPage < 1 || perPage > 100) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_NUMBER_FORMAT, 'perPage');
+            }
+        }
+
+        const searchQuery = query['searchQuery'];
+
+
+        const database: DatabaseController = req.app.get('database');
+        const types: Type[] = await TypeModel.getAll();
+
+        const orderBy: string[] = [];
+        if ('orderBy' in query) {
+            for (const type of types) {
+                const field = type.fields.find((field: TypeField) => field.name === query.orderBy);
+                if (field !== undefined) {
+                    orderBy.push(field.id.toString());
+                }
+            }
+        }
+
+        let order: SortOrder = SortOrder.DESC;
+        if ('order' in query) {
+            order = query.order.toUpperCase();
+            if (!(order in SortOrder)) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
+            }
+            order = SortOrder[order];
+        }
+
+        // List of types that are in the response object
+        const foundTypes: Type[] = [];
+        // go through each type and process the items inside
+        const itemQueries = types.map(async function(type: Type) {
+            const items = await getFilteredItems({ value: type.id }, type, searchQuery, database);
+            if (items.length) {
+                foundTypes.push(type);
+            }
+            return items;
+        });
+        // wait until all queries have finished and than flatten and filter the result
+        let items = [].concat(...(await Promise.all(itemQueries)).filter(query => query));
+
+        if (orderBy.length !== 0) {
+            const mul = order === SortOrder.ASC ? 1 : -1;
+
+            items = items.map((item: any) => {
+                item.sort = item.fields.reduce((object: any, { id, value }: any) => {
+                    if (typeof value === 'boolean') {
+                        value = value ? '1' : '2';
+                    } else if (value !== null) {
+                        value = value.toString().toUpperCase();
+                    } else {
+                        value = '0';
+                    }
+                    object[id] = value;
+                    return object;
+                }, {});
+                return item;
+            })
+            .sort(({ sort: a }: any, { sort: b }: any) => {
+                for (const id of orderBy) {
+                    if (id in a) {
+
+                        if (id in b) {
+                            const valueA = a[id];
+                            const valueB = b[id];
+                            if (valueA < valueB) {
+                                return -1 * mul;
+                            }
+                            if (valueA > valueB) {
+                                return 1 * mul;
+                            }
+                            return 0;
+                        }
+
+                        return -1;
+                    } else if (id in b) {
+                        return 1;
+                    }
+                }
+                return 0;
+            })
+            .map((item: any) => {
+                delete item.sort;
+                return item;
+            });
+        }
+
+        const total = items.length;
+        items = items.slice(page * perPage, page * perPage + perPage);
+        const totalPages = Math.ceil(items.length / perPage);
+        res.set('X-Total', total.toString());
+        res.set('X-Total-Pages', totalPages.toString());
+        res.set('X-Per-Page', perPage.toString());
+        res.set('X-Page', page.toString());
+        res.set('X-Prev-Page', Math.max(0, page - 1).toString());
+        res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
+
+        if (page * perPage > 50) {
+            throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
+        }
+
+        res.status(200).send(new EmbeddedItem(foundTypes, items));
+    } catch (error) {
+        next(error);
+    }
+}
+
+
+// -----------------------------------------------------------
+// ----------- Helper functions for Item lists ---------------
+// -----------------------------------------------------------
+
+/**
+ * Fetches Items of a specific type and goes through all properties and filters those out
+ * which do not satisfy the searchQuery given
+ * @param type Type of the items to fetch
+ * @param searchQuery String the Items should be filtered by
+ * @param database DatabaseController to get the data from
+ */
+async function getFilteredItems(sorter: Sortable<number, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
+    let items: Item[] = (await database.ITEM_GET.execute(sorter));
+    // Filter items if a searchQuery is set
+    if (searchQuery) {
+        items = items.filter((item: any) => {
+            return Object.keys(item).some(function (key) {
+                if (item[key] === null) {
+                    return;
+                }
+                return item[key].toString().includes(searchQuery);
+            });
+        });
+    }
+    return items.map(convertItem(type));
+}
+
+/**
+ * Converts an Item from the Database to the form it is send
+ * @param type Type of the Item
+ */
+function convertItem(type: Type) {
+    return (item: any) => {
+        const fields: Field[] = [];
+        for (let i = 0; i < type.fields.length; i++) {
+            const field = type.fields[i];
+            let value = item[`field_${field.id}`];
+            if (field.type === 'boolean') {
+                value = value.readUInt8() === 1;
+            }
+            fields.push({ id: field.id, value });
+        }
+        return { typeId: type.id, id: item.id, fields };
+    };
+}
+
+// -----------------------------------------------------------
 
 /**
  * Route endpoint `POST /api/items/:type`
@@ -175,18 +353,21 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
-        values.unshift(1);
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
-        // TODO Remap mapping to field for output even when field is missing
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
         next(error);
@@ -207,7 +388,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const items = await database.ITEM_GET_ID.execute(type, id);
+        const items = await database.ITEM_GET_ID.execute(type.id, [ id ]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
@@ -239,14 +420,18 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
-        const fields: Field[] = req.body;
+        let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        // TODO Remove 1. arg, this should later be the company currently there is only one
         const values = verifyValues(type, fields.slice());
-        values.unshift(1);
+        fields = values.map((value: any, index: number) => {
+            return {
+                id: type.fields[index].id,
+                value
+            };
+        });
 
         // Need to push the where for sql to know what to update
         values.push(id);
@@ -274,10 +459,11 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        // TODO use exist instead but do number check
-        const type: Type = await TypeModel.get(typeId);
+        if (!await TypeModel.exists(typeId)) {
+            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
+        }
 
-        const affectedRows = (await database.ITEM_DELETE.execute(type, id)).affectedRows;
+        const affectedRows = (await database.ITEM_DELETE.execute(typeId, [ id ])).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {

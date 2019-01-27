@@ -1,0 +1,13 @@
+<mat-nav-list class="seperated">
+    <a
+        mat-list-item
+        class="navigation-item"
+        *ngFor="let user of (users | async)"
+        [routerLink]="['/user', 'view', { outlets: { detail: [user.id] } }]"
+        [routerLinkActive]="'active'"
+    >
+        <span class="name">{{ user.name }}</span>
+        <span>{{ user.email }}</span>
+        <span fxFlex="1 1 auto"></span>
+    </a>
+</mat-nav-list>
