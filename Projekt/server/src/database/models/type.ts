@@ -76,6 +76,7 @@ export class TypeModel {
     }
 
     static async getAll(): Promise<Type[]> {
+        // TODO use select * for type fields
         const types: Type[] = await TypeModel.database.TYPE_GET.execute();
 
         for (const type of types) {
@@ -136,7 +137,7 @@ export class TypeModel {
 
     static async update(id: number, type: Type): Promise<Type> {
         const fields = type.fields.slice();
-        const old: Type = await this.get(id);
+        const old: Type = await TypeModel.get(id);
 
         // Check if all fields are mostly valid
         for (const field of fields) {
@@ -146,7 +147,7 @@ export class TypeModel {
                     throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, { referenceId: 'number' });
                 }
                 // Check if referenceId exists
-                if (!this.exists(field.referenceId)) {
+                if (!TypeModel.exists(field.referenceId)) {
                     throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field.referenceId);
                 }
             }
@@ -250,7 +251,7 @@ export class TypeModel {
         });
 
         // TODO later generate a valid Type object instead of fetching
-        type = await this.fetchType(id);
+        type = await TypeModel.fetchType(id);
         await TypeModel.cache.set(id.toString(), type);
         return type;
     }
@@ -262,7 +263,7 @@ export class TypeModel {
      */
     static async delete(id: number): Promise<void> {
         // Check if the type event exists
-        if (!this.exists(id)) {
+        if (!TypeModel.exists(id)) {
             throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
         }
 

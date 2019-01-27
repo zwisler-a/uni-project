@@ -90,9 +90,9 @@ export interface Queries {
     /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets, Type>;
     /** Gets all items of one type */
-    ITEM_GET: DynamicQuery<ArrayResultsets, number>;
+    ITEM_GET: DynamicQuery<ArrayResultsets, Sortable<number, TypeField>>;
     /** Gets all items of one type in range(offset, length) */
-    ITEM_GET_RANGE: DynamicQuery<ArrayResultsets, number>;
+    ITEM_GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<number, TypeField>>;
     /** Gets an item by id on one type */
     ITEM_GET_ID: DynamicQuery<ArrayResultsets, number>;
     /** Gets the number of items of one type */
@@ -101,6 +101,17 @@ export interface Queries {
     ITEM_UPDATE: DynamicQuery<ObjectResultsets, Type>;
     /** Deletes an item by id of one type */
     ITEM_DELETE: DynamicQuery<ObjectResultsets, number>;
+}
+
+export enum SortOrder {
+    DESC = 'DESC',
+    ASC = 'ASC'
+}
+
+export interface Sortable<U, V> {
+    value: U;
+    sorter?: V;
+    order?: SortOrder;
 }
 
 /**
@@ -198,8 +209,8 @@ export function factory(pool: Pool, prefix: string): Queries {
     }
 
     function generateItem(structure: Type) {
-        let values = 'NULL, ?';
-        let sql = `INSERT INTO \`%_item_${structure.id}\` (\`id\`, \`companyId\``;
+        let values = 'NULL';
+        let sql = `INSERT INTO \`%_item_${structure.id}\` (\`id\``;
         structure.fields.forEach(function(field: TypeField) {
             sql += `, \`field_${field.id}\``;
             values += ', ?';
@@ -213,22 +224,34 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `SELECT * FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
     }
 
-    function getItemList(id: number) {
-        return `SELECT * FROM \`%_item_${id}\` LIMIT ?, ?`.replace('%_', prefix);
+    function getItemList({ value, sorter, order }: Sortable<number, TypeField>) {
+        let sql = `SELECT * FROM \`%_item_${value}\``;
+        if (typeof sorter !== 'undefined') {
+            sql += `ORDER BY \`field_${sorter.id}\` ${order}`;
+        }
+        return sql.replace('%_', prefix);
+    }
+
+    function getItemListRange({ value, sorter, order }: Sortable<number, TypeField>) {
+        let sql = `SELECT * FROM \`%_item_${value}\``.replace('%_', prefix);
+        if (typeof sorter !== 'undefined') {
+            sql += ` ORDER BY \`field_${sorter.id}\` ${order}`;
+        }
+        sql += ' LIMIT ?, ?';
+        return sql.replace('%_', prefix);
     }
 
     function getItemTotal(id: number) {
         return `SELECT COUNT(*) FROM \`%_item_${id}\``.replace('%_', prefix);
     }
 
-    function getItemListAll(id: number) {
-        return `SELECT * FROM \`%_item_${id}\``.replace('%_', prefix);
-    }
-
     function updateItem(structure: Type) {
-        let sql = `UPDATE \`%_item_${structure.id}\` SET \`companyId\` = ?`;
-        structure.fields.forEach(function(field: TypeField) {
-            sql += `, \`field_${field.id}\` = ?`;
+        let sql = `UPDATE \`%_item_${structure.id}\` SET`;
+        structure.fields.forEach(function(field: TypeField, index: number) {
+            if (index !== 0) {
+                sql += ', ';
+            }
+            sql += `\`field_${field.id}\` = ?`;
         });
         sql += ' WHERE `id` = ?;';
         return sql.split('%_').join(prefix);
@@ -285,8 +308,8 @@ export function factory(pool: Pool, prefix: string): Queries {
         ITEM_TABLE_UI_DROP: new DynamicQuery(pool, dropUniqueIndex),
 
         ITEM_CREATE: new DynamicQuery(pool, generateItem),
-        ITEM_GET: new DynamicQuery(pool, getItemListAll),
-        ITEM_GET_RANGE: new DynamicQuery(pool, getItemList),
+        ITEM_GET: new DynamicQuery(pool, getItemList),
+        ITEM_GET_RANGE: new DynamicQuery(pool, getItemListRange),
         ITEM_GET_ID: new DynamicQuery(pool, getItem),
         ITEM_GET_COUNT: new DynamicQuery(pool, getItemTotal),
         ITEM_UPDATE: new DynamicQuery(pool, updateItem),

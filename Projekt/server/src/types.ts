@@ -24,6 +24,7 @@ export interface Config {
 export enum ErrorNumber {
     REQUEST_URL_UNDEFINED,
     REQUEST_URL_NUMBER_FORMAT,
+    REQUEST_URL_ENUM,
 
     REQUEST_FIELD_MISSING,
     REQUEST_FIELD_NULL,
@@ -48,6 +49,7 @@ export enum ErrorNumber {
 
     TYPE_NOT_FOUND,
     TYPE_REFERENCE_NOT_FOUND,
+    TYPE_FIELD_NOT_FOUND,
 
     ITEM_NOT_FOUND,
 }

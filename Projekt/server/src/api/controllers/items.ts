@@ -2,9 +2,10 @@ import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { Type } from '../models/type';
+import { Type, TypeField } from '../models/type';
 import { Item, Field } from '../models/item';
 import { TypeModel } from '../../database/models/type';
+import { Sortable, SortOrder } from '../../database/queries';
 
 /**
  * Checks the integrity of all values based on a type and maps them for SQL calls
@@ -108,20 +109,42 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             }
         }
 
-        const searchQuery = query['searchQuery'];
-
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
+        let orderBy: TypeField = null;
+        if ('orderBy' in query) {
+            orderBy = type.fields.find((field: TypeField) => field.name === query.orderBy);
+            if (!orderBy) {
+                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, orderBy);
+            }
+        }
+
+        let order: SortOrder = SortOrder.DESC;
+        if ('order' in query) {
+            order = query.order.toUpperCase();
+            if (!(order in SortOrder)) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
+            }
+            order = SortOrder[order];
+        }
+
+        let sorter: Sortable<number, TypeField>;
+        if (orderBy !== null) {
+            sorter = { value: type.id, sorter: orderBy, order };
+        } else {
+            sorter = { value: type.id };
+        }
+
         let total: number;
         let items: Item[];
-        if (!searchQuery) {
-            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
-            items = (await database.ITEM_GET.execute(type.id, [page * perPage, perPage])).map(convertItem(type));
-        } else {
-            items = (await getFilteredItems(type, searchQuery, database));
+        if ('searchQuery' in query) {
+            items = (await getFilteredItems(sorter, type, query.searchQuery, database));
             total = items.length;
             items = items.slice(page * perPage, page * perPage + perPage);
+        } else {
+            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
+            items = (await database.ITEM_GET_RANGE.execute(sorter, [page * perPage, perPage])).map(convertItem(type));
         }
 
         const totalPages = Math.ceil(total / perPage);
@@ -172,14 +195,32 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
 
 
         const database: DatabaseController = req.app.get('database');
+        const types: Type[] = await TypeModel.getAll();
 
-        const types: Type[] = await database.TYPE_GET.execute();
+        const orderBy: string[] = [];
+        if ('orderBy' in query) {
+            for (const type of types) {
+                const field = type.fields.find((field: TypeField) => field.name === query.orderBy);
+                if (field !== undefined) {
+                    orderBy.push(field.id.toString());
+                }
+            }
+        }
+
+        let order: SortOrder = SortOrder.DESC;
+        if ('order' in query) {
+            order = query.order.toUpperCase();
+            if (!(order in SortOrder)) {
+                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_URL_ENUM, 'order');
+            }
+            order = SortOrder[order];
+        }
+
         // List of types that are in the response object
         const foundTypes: Type[] = [];
         // go through each type and process the items inside
-        const itemQueries = types.map(async typeInfo => {
-            const type = await TypeModel.get(typeInfo.id);
-            const items = await getFilteredItems(type, searchQuery, database);
+        const itemQueries = types.map(async function(type: Type) {
+            const items = await getFilteredItems({ value: type.id }, type, searchQuery, database);
             if (items.length) {
                 foundTypes.push(type);
             }
@@ -187,6 +228,53 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         });
         // wait until all queries have finished and than flatten and filter the result
         let items = [].concat(...(await Promise.all(itemQueries)).filter(query => query));
+
+        if (orderBy.length !== 0) {
+            const mul = order === SortOrder.ASC ? 1 : -1;
+
+            items = items.map((item: any) => {
+                item.sort = item.fields.reduce((object: any, { id, value }: any) => {
+                    if (typeof value === 'boolean') {
+                        value = value ? '1' : '2';
+                    } else if (value !== null) {
+                        value = value.toString().toUpperCase();
+                    } else {
+                        value = '0';
+                    }
+                    object[id] = value;
+                    return object;
+                }, {});
+                return item;
+            })
+            .sort(({ sort: a }: any, { sort: b }: any) => {
+                for (const id of orderBy) {
+                    if (id in a) {
+
+                        if (id in b) {
+                            const valueA = a[id];
+                            const valueB = b[id];
+                            if (valueA < valueB) {
+                                return -1 * mul;
+                            }
+                            if (valueA > valueB) {
+                                return 1 * mul;
+                            }
+                            return 0;
+                        }
+
+                        return -1;
+                    } else if (id in b) {
+                        return 1;
+                    }
+                }
+                return 0;
+            })
+            .map((item: any) => {
+                delete item.sort;
+                return item;
+            });
+        }
+
         const total = items.length;
         items = items.slice(page * perPage, page * perPage + perPage);
         const totalPages = Math.ceil(items.length / perPage);
@@ -219,12 +307,15 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  * @param searchQuery String the Items should be filtered by
  * @param database DatabaseController to get the data from
  */
-async function getFilteredItems(type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
-    let items: Item[] = (await database.ITEM_GET.execute(type.id));
+async function getFilteredItems(sorter: Sortable<number, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
+    let items: Item[] = (await database.ITEM_GET.execute(sorter));
     // Filter items if a searchQuery is set
     if (searchQuery) {
         items = items.filter((item: any) => {
             return Object.keys(item).some(function (key) {
+                if (item[key] === null) {
+                    return;
+                }
                 return item[key].toString().includes(searchQuery);
             });
         });
@@ -274,9 +365,6 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
                 value
             };
         });
-
-        // TODO Remove 1. arg, this should later be the company currently there is only one
-        values.unshift(1);
 
         const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
 
@@ -344,9 +432,6 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
                 value
             };
         });
-
-        // TODO Remove 1. arg, this should later be the company currently there is only one
-        values.unshift(1);
 
         // Need to push the where for sql to know what to update
         values.push(id);
