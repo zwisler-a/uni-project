@@ -4,14 +4,19 @@ export interface Role {
     id: number;
     companyId: number;
     name: string;
-    permission: Buffer;
-    permissions: RolePermission[];
+    permission: Buffer | RolePermission[];
+    tablePermission: RoleTablePermission[];
+}
+
+export interface RoleTablePermission {
+    roleId: number;
+    typeId: number;
+    permission: Buffer | RolePermission[];
 }
 
 export interface RolePermission {
-    roleId: number;
-    typeId: number;
-    permission: Buffer;
+    type: PermissionType;
+    allowed: boolean;
 }
 
 export enum PermissionType {
@@ -32,6 +37,19 @@ export const ROLE = new ObjectValidator<Role>({
         type: Array,
         required: true,
         elements: {
+            type: {
+                type: Number,
+                required: true
+            },
+            allowed: {
+                type: Boolean,
+                required: true
+            }
+        }
+    },
+    permissions: {
+        type: Array,
+        elements: {
             typeId: {
                 type: Number,
                 required: true
@@ -40,9 +58,16 @@ export const ROLE = new ObjectValidator<Role>({
                 type: Array,
                 required: true,
                 elements: {
-
+                    type: {
+                        type: Number,
+                        required: true
+                    },
+                    allowed: {
+                        type: Boolean,
+                        required: true
+                    }
                 }
             }
         }
-    },
+    }
 });

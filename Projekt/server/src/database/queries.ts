@@ -64,9 +64,20 @@ export interface Queries {
     /** Gets a type field by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
     /** Edit a type field by id */
-    TYPE_FIELD_EDIT: StaticQuery<ObjectResultsets>;
+    TYPE_FIELD_UPDATE: StaticQuery<ObjectResultsets>;
     /** Delete a type field by id */
     TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
+
+    ROLE_CREATE: StaticQuery<ObjectResultsets>;
+    ROLE_GET: StaticQuery<ArrayResultsets>;
+    ROLE_GET_ID: StaticQuery<ArrayResultsets>;
+    ROLE_UPDATE: StaticQuery<ObjectResultsets>;
+    ROLE_DELETE: StaticQuery<ObjectResultsets>;
+
+    ROLE_PERMISSION_CREATE: StaticQuery<ObjectResultsets>;
+    ROLE_PERMISSION_GET_ID: StaticQuery<ArrayResultsets>;
+    ROLE_PERMISSION_UPDATE: StaticQuery<ObjectResultsets>;
+    ROLE_PERMISSION_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets, Type>;
@@ -290,12 +301,23 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_UPDATE: queryFactory('UPDATE `%_types` SET `companyId` = ?, `name` = ? WHERE `id` = ?'),
         TYPE_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
-        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
+        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field` (`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
-        TYPE_FIELD_EDIT: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
+        TYPE_FIELD_UPDATE: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
         TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
+
+        ROLE_CREATE: queryFactory('INSERT INTO `%_roles` (`id`, `companyId`, `name`, `permissions`) VALUES (NULL,?,?,?)'),
+        ROLE_GET: queryFactory('SELECT * FROM `%_roles`'),
+        ROLE_GET_ID: queryFactory('SELECT * FROM `%_roles` WHERE `id` = ?'),
+        ROLE_UPDATE: queryFactory('UPDATE `%_roles` SET `name` = ?, `permissions` = ? WHERE `id` = ?'),
+        ROLE_DELETE: queryFactory('DELETE FROM `%_roles` WHERE `id` = ?'),
+
+        ROLE_PERMISSION_CREATE: queryFactory('INSERT INTO `%_roles_permissions` (`roleId`, `typeId`, `permissions`) VALUES (?,?,?)'),
+        ROLE_PERMISSION_GET_ID: queryFactory('SELECT * FROM `%_roles_permissions` WHERE `roleId` = ?, `typeId` = ?'),
+        ROLE_PERMISSION_UPDATE: queryFactory('UPDATE `%_roles_permissions` SET `permissions` = ? WHERE `roleId` = ? AND `typeId` = ?'),
+        ROLE_PERMISSION_DELETE: queryFactory('DELETE FROM `%_roles_permissions` WHERE `roleId` = ? AND `typeId` = ?'),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),
