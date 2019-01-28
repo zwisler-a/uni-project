@@ -10,6 +10,7 @@ import { Field } from 'src/app/models/field.interface';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { FieldType } from 'src/app/models/field-type.enum';
 import { CustomValidators } from 'src/app/shared/custom-validators';
+import { ItemFormControl } from '../item-form-control';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -21,13 +22,15 @@ import { CustomValidators } from 'src/app/shared/custom-validators';
 })
 export class ItemDetailsComponent implements OnInit, OnDestroy {
     /** Item to display */
-    item: Item;
+    itemId: number;
+    typeId: number;
+
     /** If the item should be editable right now (should be changed via editFields()) */
     edit: boolean;
     itemSub: Subscription;
 
     form: FormGroup = new FormGroup({});
-    controls: {};
+    controls: { [key: string]: ItemFormControl } = {};
 
     constructor(
         private acitvatedRoute: ActivatedRoute,
@@ -49,21 +52,22 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Create form controls for each field and stores them in {@link ItemDetailsComponent.controls}
+     * @param fields Fields for which controls are needed for
+     */
     createFormConrols(fields: Field[]) {
         this.controls = {};
         fields.forEach(field => {
-            const validators = [];
-            if (field.type === FieldType.color) {
-                validators.push(CustomValidators.isColor);
-            }
-            if (field.required) {
-                validators.push(Validators.required);
-            }
-            this.controls[field.name] = new FormControl(field.value, validators);
+            this.controls[field.name] = ItemFormControl.fromField(field);
             this.controls[field.name].disable();
-            (this.controls[field.name] as any).id = field.id;
         });
         this.form = new FormGroup(this.controls);
+    }
+
+    /** To itearte over all item fields */
+    get formControlKey() {
+        return Object.keys(this.controls);
     }
 
     /** Stop watching old item if there is one and get the specified one */
@@ -74,8 +78,9 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         // TODO check if the old item is dirty
         this.itemSub = this.itemService.getItem(typeId, itemId).subscribe(item => {
             if (!this.edit) {
-                this.item = item;
-                this.createFormConrols(this.item.fields);
+                this.itemId = itemId;
+                this.typeId = typeId;
+                this.createFormConrols(item.fields);
             }
         });
     }
@@ -83,7 +88,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     /** Send a request to the backend to delete the displayed item. Navigates back on success. */
     delete() {
         this.confirmService.open('items.confirm.delete', true).subscribe(() => {
-            this.itemService.deleteItem(this.item.typeId, this.item.id).subscribe(res => {
+            this.itemService.deleteItem(this.typeId, this.itemId).subscribe(res => {
                 this.location.back();
             });
         });
@@ -96,7 +101,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             Object.keys(this.controls).forEach(key => {
                 this.controls[key].disable();
             });
-            this.changeItem(this.item.typeId, this.item.id);
+            this.changeItem(this.typeId, this.itemId);
         } else {
             Object.keys(this.controls).forEach(key => {
                 this.controls[key].enable();
@@ -110,7 +115,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             const ctrl = this.controls[key];
             return { id: (ctrl as any).id as number, value: ctrl.value };
         });
-        this.itemService.updateItem(this.item.typeId, this.item.id, fields).subscribe(res => {
+        this.itemService.updateItem(this.typeId, this.itemId, fields).subscribe(res => {
             this.editFields(false);
         });
     }

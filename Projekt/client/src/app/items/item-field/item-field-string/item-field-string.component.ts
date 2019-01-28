@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { DeterminedField } from '../../../models/field.interface';
 import { FieldType } from '../../../models/field-type.enum';
 import { FormGroup } from '@angular/forms';
+import { ItemFormControl } from '../../item-form-control';
 
 @Component({
     selector: 'app-item-field-string',
@@ -13,7 +14,7 @@ export class ItemFieldStringComponent implements OnInit {
     form: FormGroup;
 
     @Input()
-    name: string;
+    control: ItemFormControl;
 
     constructor() {}
 

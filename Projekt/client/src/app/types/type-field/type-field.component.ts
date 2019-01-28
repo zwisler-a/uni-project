@@ -48,7 +48,7 @@ export class TypeFieldComponent implements OnInit {
 
     /** If the field is a reference set the reference ids */
     setReference(ev: { type: Type; field: TypeField }) {
-        this.field.referenceId = ev.type.id;
+        this.field.referenceId = ev.field.id;
         // this.field.referenceId = ev.field.id;
     }
 }

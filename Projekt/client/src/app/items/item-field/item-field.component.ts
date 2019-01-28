@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { Field } from '../../models/field.interface';
 import { FieldType } from '../../models/field-type.enum';
 import { FormGroup } from '@angular/forms';
+import { ItemFormControl } from '../item-form-control';
 
 /**
  * Wrapper to decide which kind of input should be shown for the item field.
@@ -16,11 +17,7 @@ import { FormGroup } from '@angular/forms';
 export class ItemFieldComponent implements OnInit {
     /** The field which should be displayed */
     @Input()
-    field: Field;
-
-    /** If the field should be edited */
-    @Input()
-    edit: boolean;
+    control: ItemFormControl;
 
     @Input()
     form: FormGroup;
