@@ -58,7 +58,7 @@ export class UserService {
         return this.http.delete(this.baseUrl + '/' + id).pipe(
             tap(_ => {
                 const users = this._users.getValue();
-                const newUsers = users.filter(user => user.id + '' === id + '');
+                const newUsers = users.filter(user => user.id + '' !== id + '');
                 this._users.next(newUsers);
             }),
             catchError(err => {
@@ -76,7 +76,7 @@ export class UserService {
         return this.http.patch(this.baseUrl + '/' + user.id, user).pipe(
             tap((changed: User) => {
                 const users = this._users.getValue();
-                const newUsers = users.filter(filterUser => filterUser.id + '' === user.id + '');
+                const newUsers = users.filter(filterUser => filterUser.id + '' !== user.id + '');
                 newUsers.push(changed);
                 this._users.next(newUsers);
             }),
