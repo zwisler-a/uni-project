@@ -74,7 +74,7 @@ export class UserModel {
      * @returns update user object on success
      */
     static async update(id: number, user: User): Promise<User> {
-        const result: User = await this.get(id);
+        const result: User = await UserModel.get(id);
 
         if ('name' in user) {
             result.name = user.name;

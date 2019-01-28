@@ -39,7 +39,7 @@ export class TypeModel {
         }
 
         const type: Type = types.pop();
-        type.fields = await this.fetchFields(type.id);
+        type.fields = await TypeModel.fetchFields(type.id);
 
         return type;
     }
@@ -66,7 +66,7 @@ export class TypeModel {
         let type: Type = await TypeModel.cache.get(key);
         if (type === undefined) {
             // Fetch type
-            type = await this.fetchType(id);
+            type = await TypeModel.fetchType(id);
             await TypeModel.cache.set(key, type);
         } else {
             // Reset ttl after get
@@ -100,10 +100,19 @@ export class TypeModel {
      * @param type Type to be created
      */
     static async create(type: Type): Promise<Type> {
-        // Check if all referenced types exist
+        // Check if all referenced fields exist
         for (const field of type.fields) {
-            if (field.type === TypeFieldType.reference && !this.exists(field.referenceId)) {
-                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
+            if (field.type === TypeFieldType.reference) {
+                if (field.required) {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_NOT_NULL, field);
+                }
+
+                const references = await TypeModel.database.TYPE_FIELD_GET_ID.execute([ field.referenceId ]);
+                if (references.length === 0) {
+                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
+                }
+
+                field.reference = references.pop();
             }
         }
 
@@ -142,18 +151,18 @@ export class TypeModel {
         // Check if all fields are mostly valid
         for (const field of fields) {
             if (field.type === TypeFieldType.reference) {
-                // Check if referenceId is number
-                if (typeof field.referenceId !== 'number') {
-                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, { referenceId: 'number' });
+                // Check if the reference is nullable
+                if (field.required) {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_NOT_NULL, field);
                 }
+
                 // Check if referenceId exists
-                if (!TypeModel.exists(field.referenceId)) {
-                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field.referenceId);
+                const references = await TypeModel.database.TYPE_FIELD_GET_ID.execute([ field.referenceId ]);
+                if (references.length === 0) {
+                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
                 }
-            }
-            // Check if type is valid
-            else if (!Object.keys(TypeFieldType).some((type: string) => type === field.type)) {
-                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_ENUM, { type: Object.keys(TypeFieldType) });
+
+                field.reference = references.pop();
             }
         }
 
@@ -204,7 +213,7 @@ export class TypeModel {
 
                         // Delete/Create unique index
                         // TODO fix (also happens when creating new column): everything could have the same value
-                        // when the type changed but unique enfources unique values this is a problem think about solutions
+                        // when the type changed but unique enfources unique values TypeModel is a problem think about solutions
                         if (oldField.unique && !field.unique) {
                             await TypeModel.database.ITEM_TABLE_UI_DROP.executeConnection(connection, oldField);
                             update = true;
@@ -216,7 +225,7 @@ export class TypeModel {
                         // If anything changed update type field
                         if (update) {
                             const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
-                            await TypeModel.database.TYPE_FIELD_EDIT.executeConnection(connection,
+                            await TypeModel.database.TYPE_FIELD_UPDATE.executeConnection(connection,
                                 [ field.name, field.type, field.required, field.unique, reference, field.id ]);
                         }
                         continue oldLoop;
@@ -267,11 +276,11 @@ export class TypeModel {
             throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
         }
 
-        // Get a list of all fields that reference this type
+        // Get a list of all fields that reference TypeModel type
         const references: TypeField[] = await TypeModel.database.TYPE_FIELD_GET_REFERENCEID.execute(id);
 
         await TypeModel.database.beginTransaction(async function(connection) {
-            // Delete all foreign-keys and fields that reference this table
+            // Delete all foreign-keys and fields that reference TypeModel table
             for (const reference of references) {
                 await TypeModel.database.ITEM_TABLE_FK_DROP.executeConnection(connection, reference);
                 await TypeModel.database.ITEM_TABLE_FIELD_DROP.executeConnection(connection, reference);

@@ -49,6 +49,8 @@ export enum ErrorNumber {
 
     TYPE_NOT_FOUND,
     TYPE_REFERENCE_NOT_FOUND,
+    TYPE_REFERENCE_NOT_NULL,
+
     TYPE_FIELD_NOT_FOUND,
 
     ITEM_NOT_FOUND,
