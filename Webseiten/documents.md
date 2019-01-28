@@ -35,7 +35,6 @@ permalink: /documents/
 | [Protokoll 10](protocol/10/)            | 18.01.2019 |
 | [Protokoll 10 - intern](protocol/10-i/) | 18.01.2019 |
 | [Protokoll 11](protocol/11/)            | 25.01.2019 |
-| [Review-Protokoll 2](protocol-review/2/)| 28.01.2019 |
 
 ### Review-Protokolle
 
