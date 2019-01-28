@@ -17,7 +17,7 @@ export class ItemErrorService {
     /** operator to handle errors during updating an item */
     updateError(): any {
         return catchError(err => {
-            this.translate.get('items.error.update').subscribe(message => this.showError(message));
+            this.translate.get('items.error.update').subscribe(message => this.snackbar.open(message));
             console.error(err);
             return throwError(err);
         });
@@ -26,7 +26,7 @@ export class ItemErrorService {
     /** operator to handle all errors during creation of an item */
     createError(): any {
         return catchError(err => {
-            this.translate.get('items.error.create').subscribe(message => this.showError(message));
+            this.translate.get('items.error.create').subscribe(message => this.snackbar.open(message));
             console.error(err);
             return throwError(err);
         });
@@ -35,7 +35,7 @@ export class ItemErrorService {
     /** operator to handle errors during deletion */
     deleteError(): any {
         return catchError(err => {
-            this.translate.get('items.error.delete').subscribe(message => this.showError(message));
+            this.translate.get('items.error.delete').subscribe(message => this.snackbar.open(message));
             console.error(err);
             return throwError(err);
         });
@@ -44,16 +44,9 @@ export class ItemErrorService {
     /** operator to handle errors during fetching of items */
     getItemError(): any {
         return catchError(err => {
-            this.translate.get('items.error.get').subscribe(message => this.showError(message));
+            this.translate.get('items.error.get').subscribe(message => this.snackbar.open(message));
             console.error(err);
             return throwError(err);
-        });
-    }
-
-    private showError(message: any): void {
-        this.snackbar.open(message, null, {
-            duration: 2000,
-            horizontalPosition: 'end'
         });
     }
 }

@@ -10,7 +10,7 @@
         </mat-form-field>
     </form>
 
-    <mat-form-field class="permissions">
+    <mat-form-field class="permissions" matTooltip="Not yet implemented!">
         <mat-chip-list #chipList>
             <mat-chip
                 *ngFor="let permission of permissions"
@@ -26,6 +26,7 @@
                 #permissionInput
                 [formControl]="permissionCtrl"
                 [matAutocomplete]="auto"
+                autocompleteDisabled
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="addOnBlur"

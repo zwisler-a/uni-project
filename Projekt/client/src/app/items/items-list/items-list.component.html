@@ -7,6 +7,7 @@
     [dataSource]="dataSource"
     matSort
     aria-label="Items"
+    @fadeInOut
 >
     <!-- fields column -->
     <ng-container *ngFor="let dynCol of displayedColumns">
@@ -19,7 +20,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-    <tr mat-row (click)="open(row)" *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr mat-row @fadeIn (click)="open(row)" *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
 
 <mat-paginator

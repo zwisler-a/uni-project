@@ -1,14 +1,16 @@
 import { Component, Host, OnInit, Optional } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
+import { User } from 'src/app/models/user.interface';
+import { fadeInOut } from 'src/app/shared/animations';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 
 import { UserService } from '../_user-store/user.service';
-import { User } from 'src/app/models/user.interface';
 
 @Component({
     selector: 'app-user-list',
     templateUrl: './user-list.component.html',
-    styleUrls: ['./user-list.component.scss']
+    styleUrls: ['./user-list.component.scss'],
+    animations: [fadeInOut]
 })
 export class UserListComponent implements OnInit {
     users: Observable<User[]>;
@@ -16,7 +18,6 @@ export class UserListComponent implements OnInit {
     constructor(private userService: UserService, @Optional() @Host() private defaultPage: DefaultPageComponent) {}
 
     ngOnInit() {
-        this.userService.loadUsers().subscribe();
         if (!this.defaultPage) {
             return;
         }

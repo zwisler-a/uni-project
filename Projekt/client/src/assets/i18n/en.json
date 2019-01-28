@@ -20,7 +20,23 @@
         "password": "Old password",
         "newPassword": "New password",
         "repeadPassword": "Repeat password",
-        "passwordUpdated": "Password changed!"
+        "passwordUpdated": "Password changed!",
+        "updateInfoUpdated": "Successfully updated user data!",
+        "permissions": "User roles",
+        "error": {
+            "update": "User could not be updated!",
+            "delete": "User could not be deleted!",
+            "get": "User could not be fetched!",
+            "load": "User could not be fetched!"
+        }
+    },
+
+    "company": {
+        "title": "Company",
+        "delete": "Are you sure you want to delete the company?",
+        "add": "New company",
+        "save": "Add",
+        "cancel": "Cancel"
     },
 
     "role": {

@@ -1,20 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/shell/auth/auth.service';
-import { UserService } from '../_user-store/user.service';
-import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
-import { CompanyService } from 'src/app/company/_company-store/company.service';
-import { FormBuilder, Validators, FormControl, ValidatorFn, FormGroup } from '@angular/forms';
-import { MatCheckboxRequiredValidator, MatSnackBar } from '@angular/material';
-import { User } from 'src/app/models/user.interface';
-import { merge } from 'rxjs';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
+import { merge } from 'rxjs';
+import { User } from 'src/app/models/user.interface';
+import { fadeIn } from 'src/app/shared/animations';
+import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
+import { AuthService } from 'src/app/shell/auth/auth.service';
+
+import { UserService } from '../_user-store/user.service';
+
 /**
  * UI for the user to edit and view his personal data
  */
 @Component({
     selector: 'app-user-data-page',
     templateUrl: './user-data-page.component.html',
-    styleUrls: ['./user-data-page.component.scss']
+    styleUrls: ['./user-data-page.component.scss'],
+    animations: [fadeIn]
 })
 export class UserDataPageComponent implements OnInit {
     changePasswordForm: FormGroup;
@@ -91,7 +94,7 @@ export class UserDataPageComponent implements OnInit {
         }
         this.userService.updateUser(user).subscribe(() => {
             this.authService.reauthenticate().subscribe(res => {
-                const text = this.translate.instant('user.passwordUpdated');
+                const text = this.translate.instant(updateUserInfo ? 'user.updateInfoUpdated' : 'user.passwordUpdated');
                 this.snackBar.open(text, null, { duration: 2000, horizontalPosition: 'end', panelClass: 'success' });
             });
         });

@@ -5,6 +5,7 @@
         *ngFor="let user of (users | async)"
         [routerLink]="['/user', 'view', { outlets: { detail: [user.id] } }]"
         [routerLinkActive]="'active'"
+        @fadeInOut
     >
         <span class="name">{{ user.name }}</span>
         <span>{{ user.email }}</span>

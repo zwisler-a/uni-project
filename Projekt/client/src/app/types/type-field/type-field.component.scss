@@ -23,8 +23,11 @@
 
 .small {
     margin: 8px 0;
+    flex-direction: column;
 }
-
+:host {
+    flex-direction: column;
+}
 input:disabled {
     color: black;
 }
