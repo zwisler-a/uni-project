@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+
+import { ItemFormControl } from '../../item-form-control';
 
 @Component({
     selector: 'app-item-field-color',
@@ -8,8 +10,7 @@ import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 })
 export class ItemFieldColorComponent implements OnInit {
     @Input()
-    name: string;
-
+    control: ItemFormControl;
     @Input()
     form: FormGroup;
 

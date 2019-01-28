@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ItemFieldNumberComponent } from './item-field-number.component';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldNumberComponent', () => {
     let component: ItemFieldNumberComponent;
@@ -27,10 +28,18 @@ describe('ItemFieldNumberComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldNumberComponent);
         component = fixture.componentInstance;
-        component.form = new FormGroup({
-            test: new FormControl('')
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
         });
-        component.name = 'test';
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

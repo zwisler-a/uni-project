@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import { ItemFormControl } from '../../item-form-control';
+
 @Component({
     selector: 'app-item-field-reference',
     templateUrl: './item-field-reference.component.html',
@@ -8,8 +10,7 @@ import { FormGroup } from '@angular/forms';
 })
 export class ItemFieldReferenceComponent implements OnInit {
     @Input()
-    name: string;
-
+    control: ItemFormControl;
     @Input()
     form: FormGroup;
     constructor() {}

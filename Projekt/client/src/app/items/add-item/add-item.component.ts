@@ -8,6 +8,7 @@ import { EmbeddedItems } from 'src/app/models/api/embedded-items.interface';
 import { Field } from 'src/app/models/field.interface';
 
 import { ItemService } from '../_item-store/item.service';
+import { ItemFormControl } from '../item-form-control';
 
 /**
  * UI to create an new Item
@@ -91,9 +92,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
     createFormConrols(fields: Field[]) {
         this.controls = {};
         fields.forEach(field => {
-            const validators = [];
-            this.controls[field.name] = new FormControl('', validators);
-            (this.controls[field.name] as any).id = field.id;
+            this.controls[field.name] = ItemFormControl.fromField(field);
         });
         this.form = new FormGroup(this.controls);
     }

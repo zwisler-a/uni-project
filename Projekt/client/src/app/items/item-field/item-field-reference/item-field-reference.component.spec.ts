@@ -11,6 +11,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldLinkComponent', () => {
     let component: ItemFieldReferenceComponent;
@@ -35,10 +36,18 @@ describe('ItemFieldLinkComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldReferenceComponent);
         component = fixture.componentInstance;
-        component.form = new FormGroup({
-            test: new FormControl('')
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
         });
-        component.name = 'test';
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

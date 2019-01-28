@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
-import { DeterminedField } from '../../../models/field.interface';
-import { FieldType } from '../../../models/field-type.enum';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+
+import { ItemFormControl } from '../../item-form-control';
 
 @Component({
     selector: 'app-item-field-date',
@@ -10,9 +10,9 @@ import { FormGroup } from '@angular/forms';
     encapsulation: ViewEncapsulation.None
 })
 export class ItemFieldDateComponent implements OnInit {
-    @Input()
-    name: string;
 
+    @Input()
+    control: ItemFormControl;
     @Input()
     form: FormGroup;
 

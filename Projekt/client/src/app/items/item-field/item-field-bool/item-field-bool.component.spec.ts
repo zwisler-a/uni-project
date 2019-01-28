@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { ItemFieldBoolComponent } from './item-field-bool.component';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldBoolComponent', () => {
     let component: ItemFieldBoolComponent;
@@ -28,10 +29,18 @@ describe('ItemFieldBoolComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldBoolComponent);
         component = fixture.componentInstance;
-        component.form = new FormGroup({
-            test: new FormControl('')
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: true
         });
-        component.name = 'test';
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

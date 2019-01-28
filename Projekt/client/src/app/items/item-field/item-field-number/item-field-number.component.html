@@ -1,8 +1,8 @@
 <mat-form-field fxFlex [formGroup]="form">
     <span matPrefix class="field-type">{{'items.field.number'|translate}}</span>
     <input
-        [placeholder]="name"
-        [formControlName]="name"
+        [placeholder]="control.name"
+        [formControlName]="control.name"
         matInput
         type="number"
     />

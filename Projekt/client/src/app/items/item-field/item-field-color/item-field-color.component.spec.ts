@@ -7,6 +7,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldColorComponent', () => {
     let component: ItemFieldColorComponent;
@@ -30,10 +31,18 @@ describe('ItemFieldColorComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldColorComponent);
         component = fixture.componentInstance;
-        component.form = new FormGroup({
-            test: new FormControl('')
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
         });
-        component.name = 'test';
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 
