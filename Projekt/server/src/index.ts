@@ -6,6 +6,7 @@ import debug from 'debug';
 import fs from 'fs-extra';
 import { App } from './app';
 import { Config } from './types';
+import { WsServer } from './ws';
 
 const configFile = path.resolve(process.argv[process.argv.length - 1] || './config.json');
 if (!fs.existsSync(configFile)) {
@@ -31,6 +32,8 @@ App.factory(config).then(app => {
     } else {
         server = http.createServer(express);
     }
+
+    WsServer.initWs(server, express);
 
     // Bind HTTP server
     let address: string;

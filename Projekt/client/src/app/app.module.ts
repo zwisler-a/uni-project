@@ -11,6 +11,7 @@ import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
 import { TypeStoreModule } from './types/_type-store/type-store.module';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig } from '@angular/material';
+import { WsModule } from './ws/ws.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -24,6 +25,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         ShellModule,
         TypeStoreModule,
         AppRoutingModule,
+        WsModule,
         BrowserAnimationsModule,
         TranslateModule.forRoot({
             loader: {

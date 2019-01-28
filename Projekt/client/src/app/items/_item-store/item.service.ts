@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { flatMap, map, filter } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { ApiItem } from '../../models/api/api-item.interface';
@@ -10,6 +10,7 @@ import { Item } from '../../models/item.interface';
 import { ItemErrorService } from './item-error.service';
 import { ItemPipe } from './item-pipe.service';
 import { ListState } from './list-state.interface';
+import { WsService } from 'src/app/ws/ws.service';
 
 /**
  * The Item store is used to create, delete, update and retrieve items.
@@ -38,7 +39,36 @@ export class ItemService {
     /** Stores all currently loaded items */
     readonly items: Observable<Item[]> = this._items.pipe(this.itemPipe.toItem());
 
-    constructor(private http: HttpClient, private itemErrorService: ItemErrorService, private itemPipe: ItemPipe) {}
+    constructor(
+        private http: HttpClient,
+        private itemErrorService: ItemErrorService,
+        private itemPipe: ItemPipe,
+        private ws: WsService
+    ) {
+        const wsRoute = this.ws.forRoute(this.baseUrl);
+        wsRoute
+            .pipe(
+                filter(res => res.method === 'PATCH'),
+                map(res => res.body),
+                this.rxjsStoreEditUpdate()
+            )
+            .subscribe();
+        wsRoute
+            .pipe(
+                filter(res => res.method === 'POST'),
+                map(res => res.body),
+                this.rxjsStoreCreateUpdate({} as any)
+            )
+            .subscribe();
+        wsRoute.pipe(filter(res => res.method === 'DELETE')).subscribe(res => {
+            const ids = res.url.split('/');
+            console.log(ids);
+            const store = this._items.getValue();
+            this.listState.total--;
+            store.items = store.items.filter(item => item.id + '' !== ids[1] + '' || item.typeId + '' !== ids[0] + '');
+            this._items.next(store);
+        });
+    }
 
     /**
      * Loads a list of items into the store
@@ -65,9 +95,9 @@ export class ItemService {
     }
 
     /** Helper class to generate a rxjs operator for a update in the store  */
-    private storeUpdate(type, update: (store: EmbeddedItems, res: EmbeddedItems) => EmbeddedItems) {
+    private storeUpdate(type: any, update: (store: EmbeddedItems, res: EmbeddedItems) => EmbeddedItems) {
         return map((res: EmbeddedItems) => {
-            if (this.listState.type + '' === type + '' || !this.listState.type) {
+            if (this.listState.type + '' === type + '' || !this.listState.type || !type) {
                 this._items.next(update(this._items.getValue(), res));
             }
             return res;
@@ -130,7 +160,7 @@ export class ItemService {
         );
     }
     /** updates an item in the store */
-    private rxjsStoreEditUpdate(typeId) {
+    private rxjsStoreEditUpdate(typeId?) {
         return this.storeUpdate(typeId, (store, res) => {
             const updatedItem = res.items[0];
             const newStore = store;
