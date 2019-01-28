@@ -19,6 +19,9 @@ export class TypeSelectorComponent implements OnInit {
     @Input()
     value: number;
 
+    @Input()
+    fieldId: number;
+
     type: Type = { fields: [], id: 0, name: '' };
 
     @Input()
@@ -46,6 +49,11 @@ export class TypeSelectorComponent implements OnInit {
         if (this.withField) {
             this.selected.emit({ type: this.type, field: field });
         }
+    }
+
+    get fieldValue() {
+        const foundField = this.type.fields.find(field => field.id + `` === this.fieldId + '');
+        return foundField ? foundField.name : '';
     }
 
     /** Displayable value of an type */

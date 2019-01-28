@@ -1,17 +1,7 @@
-<mat-form-field fxFlex>
-    <span matPrefix class="field-type">{{
-        "items.field.date" | translate
-    }}</span>
-    <input
-        [disabled]="!edit"
-        [placeholder]="field.name"
-        [(ngModel)]="field.value"
-        [matDatepicker]="db"
-        matInput
-        #input
-        [required]="field.required"
-    />
+<mat-form-field fxFlex [formGroup]="form">
+    <span matPrefix class="field-type">{{ 'items.field.date' | translate }}</span>
+    <input [placeholder]="name" [formControlName]="name" [matDatepicker]="db" matInput #input />
     <mat-datepicker-toggle matSuffix [for]="db"></mat-datepicker-toggle>
-    <mat-datepicker #db [disabled]="!edit"></mat-datepicker>
-    <mat-error>items.error.invalidDate</mat-error>
+    <mat-datepicker #db></mat-datepicker>
+    <mat-error><span translate>items.error.invalidDate</span></mat-error>
 </mat-form-field>

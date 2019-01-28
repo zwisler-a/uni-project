@@ -2,9 +2,15 @@ import { TestBed, inject } from '@angular/core/testing';
 
 import { CompanyService } from './company.service';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('CompanyService', () => {
-    beforeEach(() => TestBed.configureTestingModule({ imports: [HttpClientTestingModule] }));
+    beforeEach(() =>
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule, MatSnackBarModule, TranslateTestingModule.withTranslations({})]
+        })
+    );
 
     it('should be created', () => {
         const service: CompanyService = TestBed.get(CompanyService);

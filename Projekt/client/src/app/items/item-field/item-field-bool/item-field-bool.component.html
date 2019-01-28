@@ -1,24 +1,10 @@
-<mat-form-field fxFlex>
-    <span matPrefix class="field-type">{{
-        "items.field.boolean" | translate
-    }}</span>
+<mat-form-field fxFlex [formGroup]="form">
+    <span matPrefix class="field-type">{{ 'items.field.boolean' | translate }}</span>
     <input
-        [placeholder]="field.name"
-        [value]="
-            field.value
-                ? ('items.boolean.false' | translate)
-                : ('items.boolean.true' | translate)
-        "
+        [placeholder]="name"
+        [value]="form.get(name).value ? ('items.boolean.false' | translate) : ('items.boolean.true' | translate)"
         disabled
         matInput
-        [required]="field.required"
     />
-    <mat-checkbox
-        style="margin:16px;"
-        [(ngModel)]="field.value"
-        name="1"
-        [disabled]="!edit"
-        matSuffix
-        color="warn"
-    ></mat-checkbox>
+    <mat-checkbox [formControlName]="name" style="margin:16px;" name="1" matSuffix color="warn"></mat-checkbox>
 </mat-form-field>

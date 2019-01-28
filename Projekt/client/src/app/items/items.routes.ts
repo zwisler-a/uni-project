@@ -6,6 +6,7 @@ import { ItemDetailsComponent } from './item-details/item-details.component';
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemTypeListComponent } from './item-type-list/item-type-list.component';
+import { TypesResolver } from '../types/types-list/types.resolver';
 
 export const itemsRoutes: Routes = [
     {
@@ -15,6 +16,7 @@ export const itemsRoutes: Routes = [
             {
                 path: '',
                 component: ItemTypeListComponent,
+                resolve: { types: TypesResolver },
                 outlet: 'sidenav'
             },
             {

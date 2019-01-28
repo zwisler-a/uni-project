@@ -1,21 +1,19 @@
-<mat-form-field fxFlex>
+<mat-form-field fxFlex [formGroup]="form">
     <span matPrefix class="field-type">{{'items.field.color'|translate}}</span>
     <input
-        [placeholder]="field.name"
-        [value]="field.value"
-        [colorPicker]="control.value"
-        (colorPickerChange)="control.setValue($event)"
+        [placeholder]="name"
+        [colorPicker]="form.get(name).value"
+        (colorPickerChange)="form.get(name).setValue($event)"
         [cpPosition]="'bottom'"
         [cpOutputFormat]="'hex'"
-        [formControl]="control"
+        [formControlName]="name"
         matInput
-        [required]="field.required"
         autocomplete="off"
     />
-    <mat-error *ngIf="control.hasError('not-a-color')">Input is not a color!</mat-error>
+    <mat-error *ngIf="form.get(name).hasError('not-a-color')">Input is not a color!</mat-error>
     <span
         matSuffix
-        [ngStyle]="{ backgroundColor: control.value }"
+        [ngStyle]="{ backgroundColor: form.get(name).value }"
         class="color-indicator"
     ></span>
 </mat-form-field>

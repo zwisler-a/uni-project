@@ -54,7 +54,8 @@
             "delete": "Something went wrong while deleting the item!",
             "create": "Something went wrong while createing the item!",
             "get": "Could not get Item!",
-            "update": "Could not update the item!"
+            "update": "Could not update the item!",
+            "invalidDate": "Dateformat is incorrect!"
         },
         "boolean": {
             "false": "Yes",

@@ -78,10 +78,9 @@ export class ItemService {
      * Creates a new Entity
      * @param entity Entity to create
      */
-    createItem(item: Item) {
-        const entity = this.itemPipe.retransformItem(item);
-        return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity.fields).pipe(
-            this.rxjsStoreCreateUpdate(entity),
+    createItem(typeId: number, item: { id: number; value: any }[]) {
+        return this.http.post(`${this.baseUrl}/${typeId}`, item).pipe(
+            this.rxjsStoreCreateUpdate({ typeId } as ApiItem),
             this.itemErrorService.createError()
         );
     }
@@ -124,10 +123,9 @@ export class ItemService {
      * Updates a an item
      * @param entity item to update
      */
-    updateItem(item: Item) {
-        const entity = this.itemPipe.retransformItem(item);
-        return this.http.patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity.fields).pipe(
-            this.rxjsStoreEditUpdate(entity.typeId),
+    updateItem(typeId: number, itemId: number, fields: { id: number; value: any }[]) {
+        return this.http.patch(`${this.baseUrl}/${typeId}/${itemId}`, fields).pipe(
+            this.rxjsStoreEditUpdate(typeId),
             this.itemErrorService.updateError()
         );
     }

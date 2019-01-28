@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DeterminedField } from '../../../models/field.interface';
 import { FieldType } from '../../../models/field-type.enum';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-item-field-bool',
@@ -8,22 +9,10 @@ import { FieldType } from '../../../models/field-type.enum';
     styleUrls: ['./item-field-bool.component.scss']
 })
 export class ItemFieldBoolComponent implements OnInit {
-    _field: DeterminedField<boolean> = {
-        name: '',
-        type: FieldType.boolean,
-        value: false
-    };
-
     @Input()
-    set field(val: DeterminedField<boolean>) {
-        this._field = val;
-        this._field.value = !!this._field.value;
-    }
-    get field() {
-        return this._field;
-    }
+    name: string;
     @Input()
-    edit: boolean;
+    form: FormGroup;
     constructor() {}
 
     ngOnInit() {}

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { DeterminedField } from '../../../models/field.interface';
 import { FieldType } from '../../../models/field-type.enum';
+import { FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-item-field-string',
@@ -9,14 +10,10 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldStringComponent implements OnInit {
     @Input()
-    field: DeterminedField<string> = {
-        name: '',
-        type: FieldType.string,
-        value: ''
-    };
+    form: FormGroup;
 
     @Input()
-    edit: boolean;
+    name: string;
 
     constructor() {}
 

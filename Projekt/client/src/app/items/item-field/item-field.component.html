@@ -1,43 +1,19 @@
 <ng-container *ngIf="field">
-    <app-item-field-string
-        *ngIf="field.type === FieldType.string"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-string>
+    <app-item-field-string *ngIf="field.type === FieldType.string" [name]="field.name" [form]="form"></app-item-field-string>
 
-    <app-item-field-number
-        *ngIf="field.type === FieldType.number"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-number>
+    <app-item-field-number *ngIf="field.type === FieldType.number" [name]="field.name" [form]="form"></app-item-field-number>
 
-    <app-item-field-color
-        *ngIf="field.type === FieldType.color"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-color>
+    <app-item-field-color *ngIf="field.type === FieldType.color" [name]="field.name" [form]="form"></app-item-field-color>
 
-    <app-item-field-file
-        *ngIf="field.type === FieldType.file"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-file>
+    <!--<app-item-field-file *ngIf="field.type === FieldType.file" [field]="field" [edit]="edit"></app-item-field-file>-->
 
-    <app-item-field-bool
-        *ngIf="field.type === FieldType.boolean"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-bool>
+    <app-item-field-bool *ngIf="field.type === FieldType.boolean" [name]="field.name" [form]="form"></app-item-field-bool>
 
     <app-item-field-reference
         *ngIf="field.type === FieldType.reference"
-        [field]="field"
-        [edit]="edit"
+        [name]="field.name"
+        [form]="form"
     ></app-item-field-reference>
 
-    <app-item-field-date
-        *ngIf="field.type === FieldType.date"
-        [field]="field"
-        [edit]="edit"
-    ></app-item-field-date>
+    <app-item-field-date *ngIf="field.type === FieldType.date" [name]="field.name" [form]="form"></app-item-field-date>
 </ng-container>

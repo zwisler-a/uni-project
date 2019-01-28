@@ -1,11 +1,11 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldBoolComponent } from './item-field-bool.component';
-import { MatInputModule, MatCheckboxModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
+import { ItemFieldBoolComponent } from './item-field-bool.component';
 
 describe('ItemFieldBoolComponent', () => {
     let component: ItemFieldBoolComponent;
@@ -16,7 +16,7 @@ describe('ItemFieldBoolComponent', () => {
             declarations: [ItemFieldBoolComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
                 MatCheckboxModule,
@@ -28,6 +28,10 @@ describe('ItemFieldBoolComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldBoolComponent);
         component = fixture.componentInstance;
+        component.form = new FormGroup({
+            test: new FormControl('')
+        });
+        component.name = 'test';
         fixture.detectChanges();
     });
 
