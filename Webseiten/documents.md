@@ -6,14 +6,15 @@ permalink: /documents/
 
 ### Abgaben
 
-| Abgabe           | Download                                                         | Datum      |
-|------------------|------------------------------------------------------------------|------------|
-| Risikoanalyse    | [Risikoanalyse.pdf](Risikoanalyse.pdf)                           | 04.11.2018 |
-| Recherchebericht | [Recherchebericht.pdf](Recherchebericht.pdf)                     | 12.11.2018 |
-| Lastenheft       | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
-| QS-Konzept       | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
-| Projektplan      | [Projektplan.pdf](Projektplan.pdf)                               | 25.01.2019 |
-| Releaseplan      | [Releaseplan.pdf](Releaseplan.pdf)                               | 25.01.2019 |
+| Abgabe                | Download                                                         | Datum      |
+|-----------------------|------------------------------------------------------------------|------------|
+| Risikoanalyse         | [Risikoanalyse.pdf](Risikoanalyse.pdf)                           | 04.11.2018 |
+| Recherchebericht      | [Recherchebericht.pdf](Recherchebericht.pdf)                     | 12.11.2018 |
+| Lastenheft            | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
+| QS-Konzept            | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
+| Projektplan           | [Projektplan.pdf](Projektplan.pdf)                               | 25.01.2019 |
+| Releaseplan           | [Releaseplan.pdf](Releaseplan.pdf)                               | 25.01.2019 |
+| Entwurfsbeschreibung  | [Entwurfsbeschreibung.pdf](Entwurfsbeschreibung.pdf)             | 28.01.2019 |
 
 ### Protokolle
 
