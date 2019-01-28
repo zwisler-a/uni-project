@@ -6,6 +6,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldDateComponent', () => {
     let component: ItemFieldDateComponent;
@@ -29,10 +30,18 @@ describe('ItemFieldDateComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldDateComponent);
         component = fixture.componentInstance;
-        component.form = new FormGroup({
-            test: new FormControl('')
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
         });
-        component.name = 'test';
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 
