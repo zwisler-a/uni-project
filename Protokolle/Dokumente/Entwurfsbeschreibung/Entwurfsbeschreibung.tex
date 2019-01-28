@@ -20,7 +20,7 @@ linkcolor=black
 
 \lhead{Leon Kamuf}
 \chead{ak18b}
-\rhead{27.01.2019}
+\rhead{28.01.2019}
 
 \lfoot{}
 \cfoot{\thepage}
@@ -85,9 +85,16 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	Die Entwicklung findet zuallererst im Back-End statt, wo die Funktionalitäten implementiert und optimiert werden, bevor dazu ein passendes Front-End entwickelt wird. Anschließend wird beides über die REST-Api miteinander verbunden, getestet und ggf. angepasst. Der Style des Userinterfaces wird dann zum Schluss erstellt.
 	\clearpage
 	
+	\begin{center}
+		\includegraphics[scale=0.5]{architecture.png}\\
+		Software-Architektur
+	\end{center}
+	
 	\subsection{Back-End}
 	Alle Eingaben, die der Nutzer im Front-End tätigt, werden über die REST-Api ins Back-End übergeben, vom Server auf Korrektheit überprüft und anschließend in der Datenbank gespeichert. Des Weiteren existiert eine Serverstruktur, welche Daten (bei Sortier- und Suchanfragen) aus der Datenbank ausliest und an die anfragenden Clients weiterleitet.\\
 	Auch die Datensicherung und die damit verbundene Rechteverwaltung wird im Back-End definiert und somit die Anzeige der Elemente im Front-End gesteuert.
+	
+	\newpage	
 	
 	\subsection{Front-End}
 	Die im Back-End definierte Rechteverwaltung steuert die Anzeige im Front-End. Während Benutzer, die alle Rechte besitzen, Buttons zum Ändern und Löschen angezeigt bekommen, fehlen diese bei anderen Benutzern (noch nicht implementiert). 
@@ -100,38 +107,66 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	\end{center}
 	
 	Allen eingeloggten Benutzern wird eine Übersicht der Objekttypen angezeigt. 
-	Dort können auch neue Objekttypen erstellt und bereits vorhandene bearbeitet werden. 
-	Bei den Einstellungen der Objekttypen werden die Eigenschaften der Items festgehalten. \\
+	Dort können auch neue Objekttypen erstellt und bereits vorhandene bearbeitet werden.\\ 
 	
 	\begin{center}
-		\includegraphics[scale=0.3]{itemtyp.png}
-		\\Übersicht Objekttypen mit Einstellungen
+		\includegraphics[scale=0.3]{Objekttypen.png}
+		\\Übersicht Objekttypen\\
 	\end{center}
 	
-	\newpage
-	
-	Durch einen Button links im Menü gelangt man dann zu der Übersicht der einzelnen Items innerhalb eines Objekttyps.
-	Über einen Tab links kann man zwischen den Objekttypen switchen.\\
+		Bei den Einstellungen der Objekttypen werden die Eigenschaften der Items festgehalten. \\
 		
 	\begin{center}
-		\includegraphics[scale=0.3]{uebersicht.png}\\
-		Übersicht Items eines Typs\\
+		\includegraphics[scale=0.3]{Objekttypen-Eigenschaften.png}
+		\\Übersicht Details der Objekttypen\\
+	\end{center}
+	
+	Durch einen Button links im Menü gelangt man zu einer globalen Übersicht aller Items.\\
+		
+	\begin{center}
+		\includegraphics[scale=0.3]{Globale-Itemansicht.png}\\
+		Übersicht Aller Items\\
+	\end{center}
+	
+	Man kann sich Items auch, nach ihrem Objekttypen sortiert anzeigen lassen.
+	Dafür gibt es Reiter, welche nach den Objekttypen benannt sind, welche eine Liste der entsprechenden Items beinhalten.\\
+
+	\begin{center}
+		\includegraphics[scale=0.3]{Itemansicht.png}\\
+		Übersicht Items eines Objekttypes\\
 	\end{center}
 	
 	Dort können neue Items hinzugefügt, bearbeitet und gelöscht werden.\\
 	
 	\begin{center}
-		\includegraphics[scale=0.3]{eigenschaften.png}\\
+		\includegraphics[scale=0.3]{Item-Details.png}\\
+		Übersicht beispielhafter Eigenschaften eines Items\\
 	\end{center}
 	
-	Außerdem gelangt man über den Button links oben zum Sprachwechsler und zum Logout.
+	Des Weiteren gibt es im Menü einen Button, um zur Benutzerübersicht zu gelangen.\\
+	
+	\begin{center}
+		\includegraphics[scale=0.3]{User.png}\\
+		Übersicht Benutzerliste\\
+	\end{center}
+	
+	Unterhalb des Menüpunkts für Benutzer, befindet sich ein Weiterer für die Liste der Unternehmen.
+	
+	\begin{center}
+		\includegraphics[scale=0.3]{Company.png}\\
+		Übersicht Unternehmensliste\\
+	\end{center}	
+	
+	Rechts oben befindet sich ein Sprachwechsler und unten links (der rechtere beider Buttons) befindet sich der Logout-Button. 
 	Je nach Benutzergruppe werden Buttons und die damit verbundenen Funktionen ausgeblendet.
 	So sehen nicht alle den Button, um Items zu löschen oder Itemtypen zu erstellen.
-	
+
+\newpage
+
 	\section{Struktur- und Entwurfprinzipien einzelner Pakete}
 	Das Projekt besitzt zwei Pakete, den \texttt{client} und den \texttt{server}. 
 	Innerhalb des Projekt-Pakets, befinden sich außerdem alle Packages, die benötigt werden, und die REST-Api als Schnittstelle zwischen dem Client und Server. 
-	In jedem Paket befinden sich die Auflistung der benutzten Frameworks und Tools, ein Text-Paket mit Testdaten und die \texttt{src}-Pakete, wo die Funktionalitäten festgehalten werden.
+	In jedem Paket befinden sich die Auflistung der benutzten Frameworks und Tools, ein Text-Paket mit Testdaten und die \texttt{src}-Pakete, wo die Funktionalitäten festgehalten werden.	
 	
 	\subsection{server}
 	Im \texttt{server}-Paket wird der HTTP-Server initialisiert, die einzelnen Seiten (ggf. mit Sichtbarkeitseinschränkungen) geladen und die Verbindung zur Datenbank hergestellt.
@@ -151,9 +186,6 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	\subsubsection*{\texttt{/src/database}}
 	Hier werden alle Datenbank-Abfragen definiert und implementiert, außerdem gibt es Modellklassen für die Datenbank.
 	
-	\subsubsection*{\texttt{/src/types.ts}}
-	\textbf{War schon beim letzten Release dabei aber nicht aufgelistet. Unwichtig???}
-	
 	
 	\subsection{client}
 	
@@ -172,12 +204,9 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	
 	\subsubsection*{\texttt{/src/app/models}}
 	Hier werden alle benötigten Interfaces erzeugt, welche dann in Komponente importiert werden können, sollten sie gebraucht werden.
-	
-	\subsubsection*{\texttt{/src/app/roles}}
-	\textbf{Unwichtig, da noch nicht implementiert?}
-	
+
 	\subsubsection*{\texttt{/src/app/shared}}
-	\textbf{Unwichtig, da noch nicht implementiert?}
+	Hier befinden sich alle Komponenten, welche mehrfach benutzt werden und somit keinen klaren Kontext haben.
 	
 	\subsubsection*{\texttt{/src/app/types}}
 	Hier werden alle Komponenten der Seite, welche mit Itemtypen zu tun haben, und die dazugehörigen Funktionen definiert und initialisiert.
@@ -191,6 +220,8 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	
 	\subsubsection*{\texttt{/src/environments}}
 	Hier befinden sich die Einstellungen für die verschiedenen Umgebungen, in denen die Applikation laufen soll.
+
+\newpage
 	
 	\section{Datenmodell}
 	Die Datenbank muss sehr dynamisch sein, da die einzelnen Daten, die gespeichert werden sollen, frei konfigurierbar sind.\\
@@ -201,6 +232,11 @@ Damit auch alle Daten sicher bleiben, gibt es ein Account-System mit gesicherter
 	Die Items innerhalb des Typs werden anhand der Einstellungen des Itemtyps festgestellt. 
 	Bei jedem Hinzufügen und Ändern eines Items wird darauf geachtet, dass ein eindeutiger Key gesetzt und alle Pflichtfelder erfüllt wurden. 
 	Erst dann speichert der Server die eingegeben Daten in die Datenbank.\\
+	
+	\begin{center}
+		\includegraphics[scale=0.4]{database.png}\\
+		Datenbankstruktur
+	\end{center}
 	
 	\newpage	
 	
