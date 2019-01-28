@@ -9,7 +9,7 @@
     <app-type-selector (selected)="typeChange($event)"></app-type-selector>
 
     <!-- EDITABLE FIELDS -->
-    <app-item-field *ngFor="let field of fields" [field]="field" [form]="form"></app-item-field>
+    <app-item-field *ngFor="let field of fields" [control]="field" [form]="form"></app-item-field>
 
     <!-- ACTIONS -->
     <div *ngIf="typeId !== -1" fxLayoutAlign="end center" class="actions">
