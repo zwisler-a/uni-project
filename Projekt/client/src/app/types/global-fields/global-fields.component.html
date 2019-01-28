@@ -21,6 +21,6 @@
         <app-type-field #fieldInput fxFlex="1 1 auto" [isGlobal]="true" [edit]="true" [field]="newField"></app-type-field>
     </div>
     <div fxLayoutAlign="end center">
-        <button mat-raised-button (click)="create()">{{ 'types.global.add' | translate }}</button>
+        <button mat-raised-button color="primary" disabled (click)="create()">{{ 'types.global.add' | translate }}</button>
     </div>
 </div>

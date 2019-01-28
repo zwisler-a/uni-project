@@ -1,6 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatListModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { MatListModule, MatIconModule, MatButtonModule, MatSnackBarModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
@@ -23,6 +23,7 @@ describe('CompanyListComponent', () => {
                 MatIconModule,
                 MatButtonModule,
                 ConfirmDialogModule,
+                MatSnackBarModule,
                 TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();

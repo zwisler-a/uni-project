@@ -53,6 +53,7 @@
     <!-- FOR REFERENCES: SELECT A TYPE -->
     <app-type-selector
         [value]="field.referenceId"
+        [fieldId]="0"
         [disabled]="!edit"
         [withField]="true"
         (selected)="setReference($event)"

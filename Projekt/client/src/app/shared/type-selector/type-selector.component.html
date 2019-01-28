@@ -20,8 +20,9 @@
         type="text"
         [placeholder]="'items.create.displayField' | translate"
         matInput
-        [disabled]="!fieldSelectable || edit"
+        [disabled]="!fieldSelectable || disabled"
         autocomplete="nope"
+        [value]="fieldValue"
         [matAutocomplete]="fieldAuto"
         #autoCompleteTrigger="matAutocompleteTrigger"
     />

@@ -27,11 +27,12 @@ export class CompanyListComponent implements OnInit {
         if (!this.defaultPage) {
             return;
         }
+
+        // Setup page
         this.defaultPage.title = 'company.title';
         this.companies = combineLatest(this.defaultPage.search, this.companyService.companies, (query, company) => {
             return company.filter(role => role.name.includes(query));
         });
-
         this.defaultPage.actions.next([
             {
                 click: () => {
@@ -43,6 +44,9 @@ export class CompanyListComponent implements OnInit {
         ]);
     }
 
+    /**
+     * Open confirm dialog, than delete company if confired
+     */
     deleteCompany(id: number) {
         this.confirm.open('company.delete', true).subscribe(() => {
             this.companyService.deleteCompany(id).subscribe();

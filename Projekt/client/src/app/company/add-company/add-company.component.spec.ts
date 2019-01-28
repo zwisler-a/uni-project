@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule, MatInputModule, MatToolbarModule } from '@angular/material';
 
 import { AddCompanyComponent } from './add-company.component';
@@ -18,7 +18,7 @@ describe('AddCompanyComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AddCompanyComponent],
             imports: [
-                FormsModule,
+                ReactiveFormsModule,
                 MatInputModule,
                 NoopAnimationsModule,
                 MatToolbarModule,

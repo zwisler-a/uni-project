@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DeterminedField, LinkField } from '../../../models/field.interface';
-import { FieldType } from '../../../models/field-type.enum';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+
 @Component({
     selector: 'app-item-field-reference',
     templateUrl: './item-field-reference.component.html',
@@ -8,13 +8,10 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldReferenceComponent implements OnInit {
     @Input()
-    field: DeterminedField<any> = {
-        name: '',
-        type: 'reference',
-        value: { name: '', ref: '' }
-    };
+    name: string;
+
     @Input()
-    edit: boolean;
+    form: FormGroup;
     constructor() {}
 
     ngOnInit() {}

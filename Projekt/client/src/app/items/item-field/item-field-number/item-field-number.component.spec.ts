@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -16,7 +16,7 @@ describe('ItemFieldNumberComponent', () => {
             declarations: [ItemFieldNumberComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
@@ -27,6 +27,10 @@ describe('ItemFieldNumberComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldNumberComponent);
         component = fixture.componentInstance;
+        component.form = new FormGroup({
+            test: new FormControl('')
+        });
+        component.name = 'test';
         fixture.detectChanges();
     });
 

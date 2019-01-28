@@ -1,12 +1,5 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import {
-    FormGroup,
-    FormControl,
-    Validators,
-    AbstractControl
-} from '@angular/forms';
-import { DeterminedField } from '../../../models/field.interface';
-import { FieldType } from '../../../models/field-type.enum';
+import { Component, Input, OnInit } from '@angular/core';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 
 @Component({
     selector: 'app-item-field-color',
@@ -15,39 +8,12 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldColorComponent implements OnInit {
     @Input()
-    field: DeterminedField<string> = {
-        name: '',
-        type: FieldType.color,
-        value: ''
-    };
-    _edit: boolean;
+    name: string;
+
     @Input()
-    set edit(val) {
-        val ? this.control.enable() : this.control.disable();
-        this._edit = val;
-    }
+    form: FormGroup;
 
-    get edit() {
-        return this._edit;
-    }
-
-    control = new FormControl('', this.isColor);
     constructor() {}
 
-    ngOnInit() {
-        this.control = new FormControl('', this.isColor);
-        this.edit ? this.control.enable() : this.control.disable();
-        // Hijack the setValue method. There is probably a better way to do it
-        // but i cant think of it right now
-        const org = this.control.setValue;
-        this.control.setValue = (val, opts?) => {
-            this.field.value = val;
-            org.call(this.control, val, opts);
-        };
-    }
-
-    isColor(control: AbstractControl): { [key: string]: any } | null {
-        const isOk = /(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i.test(control.value);
-        return isOk ? null : { 'not-a-color': true };
-    }
+    ngOnInit() {}
 }

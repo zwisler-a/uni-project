@@ -3,17 +3,22 @@
     <span translate>items.new</span>
 </mat-toolbar>
 
-<form #form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off">
+<form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off">
     <!-- SELECT TYPE OF ITEM -->
-    <span *ngIf="item.typeId === -1" translate>items.create.selectType</span>
+    <span *ngIf="typeId === -1" translate>items.create.selectType</span>
     <app-type-selector (selected)="typeChange($event)"></app-type-selector>
 
     <!-- EDITABLE FIELDS -->
-    <app-item-field *ngFor="let field of item.fields" [field]="field" [edit]="true"></app-item-field>
+    <app-item-field *ngFor="let field of fields" [field]="field" [form]="form"></app-item-field>
 
     <!-- ACTIONS -->
-    <div *ngIf="item.typeId !== -1" fxLayoutAlign="end center" class="actions">
-        <button color="primary" [disabled]="isSubmitting" mat-raised-button (click)="submit()">
+    <div *ngIf="typeId !== -1" fxLayoutAlign="end center" class="actions">
+        <button
+            color="primary"
+            [disabled]="isSubmitting || form ? form.invalid : false || typeId === -1"
+            mat-raised-button
+            (click)="submit()"
+        >
             {{ 'items.edit.save' | translate }}
         </button>
     </div>

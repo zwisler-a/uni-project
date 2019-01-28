@@ -91,6 +91,7 @@ export class TypeDetailComponent implements OnInit {
         this.confirm.open('types.edit.confirmUpdate', true).subscribe(() => {
             this.typesService.updateType(this.type).subscribe(res => {
                 this.router.navigate(['/types', 'view', { outlets: { detail: [res.id] } }]);
+                this.edit = false;
             });
         });
     }

@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemFieldColorComponent } from './item-field-color.component';
 import { MatInputModule } from '@angular/material';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from 'ngx-color-picker';
@@ -30,6 +30,10 @@ describe('ItemFieldColorComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldColorComponent);
         component = fixture.componentInstance;
+        component.form = new FormGroup({
+            test: new FormControl('')
+        });
+        component.name = 'test';
         fixture.detectChanges();
     });
 

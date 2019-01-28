@@ -1,10 +1,12 @@
 <mat-toolbar color="form">{{ 'company.add' | translate }}</mat-toolbar>
-<form fxLayout="column">
+<form fxLayout="column" [formGroup]="form">
     <mat-form-field>
-        <input name="company" [(ngModel)]="newCompany" required [placeholder]="'company.name' | translate" matInput />
+        <input name="company" formControlName="newCompany" required [placeholder]="'company.name' | translate" matInput />
     </mat-form-field>
     <div fxLayoutAlign="end center">
         <button mat-button appNavigateBack>{{ 'company.cancel' | translate }}</button>
-        <button mat-raised-button [disabled]="!newCompany" color="primary" (click)="createCompany()">{{ 'company.save' | translate }}</button>
+        <button mat-raised-button [disabled]="this.form.invalid" color="primary" (click)="createCompany()">
+            {{ 'company.save' | translate }}
+        </button>
     </div>
 </form>

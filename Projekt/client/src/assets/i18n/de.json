@@ -57,7 +57,8 @@
             "delete": "Item konnte nicht gelöscht werden!",
             "create": "Item konnte nicht erstellt werden!",
             "get": "Item konnte nicht geladen werden!",
-            "update": "Item konnte nicht verändert werden!"
+            "update": "Item konnte nicht verändert werden!",
+            "invalidDate": "Datumsformat ist nicht korrekt"
         },
         "boolean": {
             "false": "Ja",

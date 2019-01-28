@@ -6,7 +6,7 @@ import {
     MatIconModule,
     MatTooltipModule
 } from '@angular/material';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -21,7 +21,7 @@ describe('ItemFieldLinkComponent', () => {
             declarations: [ItemFieldReferenceComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
                 RouterTestingModule,
@@ -35,6 +35,10 @@ describe('ItemFieldLinkComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldReferenceComponent);
         component = fixture.componentInstance;
+        component.form = new FormGroup({
+            test: new FormControl('')
+        });
+        component.name = 'test';
         fixture.detectChanges();
     });
 
