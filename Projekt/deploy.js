@@ -122,6 +122,9 @@ const deploy = async () => {
 		console.log("Trying to stop old server ...");
 		await deployer.run(deployAppPath, "npm run stop");
 
+		console.log("Clearing client folder ...");
+		await deployer.run(deployAppPath, 'rm -rf public');
+
 		console.log("Uploading build ...");
 		await deployer.uploadBuild(buildPath, deployAppPath);
 		
