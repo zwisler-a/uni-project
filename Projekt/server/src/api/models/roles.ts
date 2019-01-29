@@ -1,4 +1,4 @@
-import { ObjectValidator } from './object-validator';
+import { ObjectValidator } from '../../util/object-validator';
 
 export interface Role {
     id: number;
@@ -21,28 +21,37 @@ export enum PermissionType {
 }
 
 export const ROLE = new ObjectValidator<Role>({
-    companyId: {
-        type: Number,
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    permission: {
-        type: Array,
-        required: true,
-        elements: {
-            typeId: {
-                type: Number,
-                required: true
-            },
-            permission: {
-                type: Array,
+    type: Object,
+    required: true,
+    properties: {
+        companyId: {
+            type: Number,
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        permission: {
+            type: Array,
+            required: true,
+            elements: {
+                type: Object,
                 required: true,
-                elements: {
-
+                properties: {
+                    typeId: {
+                        type: Number,
+                        required: true
+                    },
+                    permission: {
+                        type: Array,
+                        required: true,
+                        elements: {
+                            type: Number,
+                            required: true
+                        }
+                    }
                 }
             }
         }
-    },
+    }
 });

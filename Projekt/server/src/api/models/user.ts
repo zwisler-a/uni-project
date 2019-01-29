@@ -1,4 +1,4 @@
-import { ObjectValidator } from './object-validator';
+import { ObjectValidator, Schema } from '../../util/object-validator';
 import { ApiError, ErrorNumber } from '../../types';
 
 /**
@@ -23,43 +23,57 @@ export interface User {
  * @param required should required be enabled
  * @returns schema for an {@link ObjectValidator}
  */
-function userSchema(required: boolean): any {
+function userSchema(required: boolean): Schema {
     return {
-        companyId: {
-            type: Number,
-            required
-        },
-        name: {
-            type: String,
-            required,
-            length: { min: 2, max: 32 }
-        },
-        password: {
-            type: String,
-            required,
-            length: { min: 8, max: 64 },
-            validator: (value: string) => {
-                if (!value.match(/[a-z]/g) || !value.match(/[A-Z]/g) || !value.match(/[0-9]/g) || !value.match(/[~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/]/g)) {
-                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, 'password');
+        type: Object,
+        required: true,
+        properties: {
+            companyId: {
+                type: Number,
+                required
+            },
+            name: {
+                type: String,
+                required,
+                range: {
+                    min: 2,
+                    max: 32
                 }
+            },
+            password: {
+                type: String,
+                required,
+                range: {
+                    min: 8,
+                    max: 64
+                },
+                validator: (value: string, path: string) => {
+                    if (!value.match(/[a-z]/g) || !value.match(/[A-Z]/g) || !value.match(/[0-9]/g) || !value.match(/[~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/]/g)) {
+                        throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, path);
+                    }
+                }
+            },
+            email: {
+                type: String,
+                nullable: true
             }
-        },
-        email: {
-            type: String,
-            nullable: true
         }
     };
 }
 
 export const USER_AUTH = new ObjectValidator<User>({
-    name: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
+    type: Object,
+    required: true,
+    properties: {
+        name: {
+            type: String,
+            required: true
+        },
+        password: {
+            type: String,
+            required: true
+        }
+    }
 });
 
 /** Object validator for creating {@link User} */

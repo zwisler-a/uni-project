@@ -57,6 +57,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.CREATE_TABLE_TYPE.execute();
     await controller.CREATE_TABLE_TYPE_FIELD.execute();
     await controller.CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY.execute();
+    await controller.CREATE_TABLE_GLOBAL.execute();
     await controller.CREATE_TABLE_ROLE.execute();
     await controller.CREATE_TABLE_ROLE_PERMISSION.execute();
 

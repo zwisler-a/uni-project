@@ -13,6 +13,8 @@ export interface Queries {
     CREATE_TABLE_TYPE_FIELD: StaticQuery<ObjectResultsets>;
     /** Creates the type field table self reference */
     CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY: StaticQuery<ObjectResultsets>;
+    /** Creates the global table */
+    CREATE_TABLE_GLOBAL: StaticQuery<ObjectResultsets>;
     /** Creates the role table */
     CREATE_TABLE_ROLE: StaticQuery<ObjectResultsets>;
     /** Creates the role permission table */
@@ -61,14 +63,25 @@ export interface Queries {
     TYPE_FIELD_CREATE: StaticQuery<ObjectResultsets>;
     /** Gets a type field by id */
     TYPE_FIELD_GET_ID: StaticQuery<ArrayResultsets>;
-    /** Gets a type field by typeId */
+    /** Gets all type fields by typeId */
     TYPE_FIELD_GET_TYPEID: StaticQuery<ArrayResultsets>;
-    /** Gets a type field by referenceId */
+    /** Gets all type fields by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
     /** Edit a type field by id */
     TYPE_FIELD_UPDATE: StaticQuery<ObjectResultsets>;
     /** Delete a type field by id */
     TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
+
+    /** Creates a new global field */
+    GLOBAL_CREATE: StaticQuery<ObjectResultsets>;
+    /** Gets all global fields */
+    GLOBAL_GET: StaticQuery<ObjectResultsets>;
+    /** Gets a global fields by id */
+    GLOBAL_GET_ID: StaticQuery<ObjectResultsets>;
+    /** Update a global field by id */
+    GLOBAL_UPDATE: StaticQuery<ObjectResultsets>;
+    /** Delete a global field by id */
+    GLOBAL_DELETE: StaticQuery<ObjectResultsets>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets, Type>;
@@ -273,8 +286,9 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, `email` VARCHAR(128), PRIMARY KEY (`id`), UNIQUE INDEX (`name`), UNIQUE INDEX (`email`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
-        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` INT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` INT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY: queryFactory('ALTER TABLE `%_types_field` ADD FOREIGN KEY (`referenceId`) REFERENCES `%_types_field` (`id`) ON DELETE CASCADE ON UPDATE CASCADE'),
+        CREATE_TABLE_GLOBAL: queryFactory('CREATE TABLE IF NOT EXISTS `%_global` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`companyId`, `name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_ROLE: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `permissions` BIT(4) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_ROLE_PERMISSION: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles_permissions` (`roleId` INT UNSIGNED NOT NULL, `typeId` MEDIUMINT UNSIGNED NOT NULL, `permissions` BIT(3) NOT NULL, PRIMARY KEY (`roleId`, `typeId`), FOREIGN KEY (`roleId`) REFERENCES `%_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
@@ -305,6 +319,12 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
         TYPE_FIELD_UPDATE: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
         TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
+
+        GLOBAL_CREATE: queryFactory(''),
+        GLOBAL_GET: queryFactory(''),
+        GLOBAL_GET_ID: queryFactory(''),
+        GLOBAL_UPDATE: queryFactory(''),
+        GLOBAL_DELETE: queryFactory(''),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),

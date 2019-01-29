@@ -1,4 +1,4 @@
-import { Cache } from './cache';
+import { Cache } from '../../util/cache';
 import { TypeModel } from './type';
 import { DatabaseController } from '../controller';
 import { Type } from '../../api/models/type';

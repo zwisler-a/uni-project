@@ -1,4 +1,4 @@
-import { ObjectValidator } from './object-validator';
+import { ObjectValidator } from '../../util/object-validator';
 
 /**
  * Represents the type (metadata) of an item
@@ -53,40 +53,48 @@ export enum TypeFieldType {
 }
 
 export const TYPE = new ObjectValidator<Type>({
-    companyId: {
-        type: Number
-        // TODO maybe required?
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    fields: {
-        type: Array,
-        require: true,
-        elements: {
-            id: {
-                type: Number
-            },
-            name: {
-                type: String,
-                required: true
-            },
-            type: {
-                type: String,
+    type: Object,
+    required: true,
+    properties: {
+        companyId: {
+            type: Number
+            // TODO maybe required?
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        fields: {
+            type: Array,
+            required: true,
+            elements: {
+                type: Object,
                 required: true,
-                enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
-            },
-            required: {
-                type: Boolean,
-                required: true
-            },
-            unique: {
-                type: Boolean,
-                required: true
-            },
-            referenceId: {
-                type: Number
+                properties: {
+                    id: {
+                        type: Number
+                    },
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    type: {
+                        type: String,
+                        required: true,
+                        enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
+                    },
+                    required: {
+                        type: Boolean,
+                        required: true
+                    },
+                    unique: {
+                        type: Boolean,
+                        required: true
+                    },
+                    referenceId: {
+                        type: Number
+                    }
+                }
             }
         }
     }

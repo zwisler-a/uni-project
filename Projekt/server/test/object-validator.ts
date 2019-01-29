@@ -1,59 +1,72 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { ObjectValidator } from '../src/api/models/object-validator';
+import { ObjectValidator, NewObjectValidator } from '../src/util/object-validator';
 import { ApiError, ErrorNumber } from '../src/types';
 
 describe('object-validator', () => {
-    let validator: ObjectValidator<any>;
+    let validator: NewObjectValidator<any>;
     before(async () => {
-        validator = new ObjectValidator<any>({
-            nickname: {
-                type: String
-            },
-            username: {
-                type: String,
-                required: true,
-                length: { min: 3, max: 32 }
-            },
-            hidden: {
-                type: Boolean,
-                nullable: true
-            },
-            pets: {
-                type: Array,
-                elements: {
-                    name: {
-                        type: String,
-                        required: true
-                    },
-                    animal: {
-                        type: String,
-                        enum: ['cat', 'dog', 'cow']
+        validator = new NewObjectValidator<any>({
+            type: Object,
+            required: true,
+            properties: {
+                nickname: {
+                    type: String
+                },
+                username: {
+                    type: String,
+                    required: true,
+                    range: {
+                        min: 3,
+                        max: 32
                     }
-                }
-            },
-            address: {
-                type: Object,
-                properties: {
-                    street: {
-                        type: String,
-                        required: true
-                    },
-                    city: {
-                        type: String,
+                },
+                hidden: {
+                    type: Boolean,
+                    nullable: true
+                },
+                pets: {
+                    type: Array,
+                    elements: {
+                        type: Object,
                         required: true,
-                        validator: (value: string) => {
-                            if (value.match(/[0-9]/g)) {
-                                throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, 'city');
+                        properties: {
+                            name: {
+                                type: String,
+                                required: true
+                            },
+                            animal: {
+                                type: String,
+                                enum: ['cat', 'dog', 'cow']
                             }
                         }
-                    },
-                    zip: {
-                        type: Number,
-                        required: true,
-                        min: 10000,
-                        max: 99999
+                    }
+                },
+                address: {
+                    type: Object,
+                    properties: {
+                        street: {
+                            type: String,
+                            required: true
+                        },
+                        city: {
+                            type: String,
+                            required: true,
+                            validator: (value: string, path: string) => {
+                                if (value.match(/[0-9]/g)) {
+                                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, path);
+                                }
+                            }
+                        },
+                        zip: {
+                            type: Number,
+                            required: true,
+                            range: {
+                                min: 10000,
+                                max: 99999
+                            }
+                        }
                     }
                 }
             }
@@ -114,7 +127,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_MISSING);
-            expect(error.cause).to.equal('username');
+            expect(error.cause).to.equal('_root.username');
             done();
         });
 
@@ -134,7 +147,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_NULL);
-            expect(error.cause).to.equal('username');
+            expect(error.cause).to.equal('_root.username');
             done();
         });
 
@@ -155,7 +168,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_TYPE);
-            expect(error.cause.field).to.equal('hidden');
+            expect(error.cause.path).to.equal('_root.hidden');
             expect(error.cause.expected).to.equal('boolean');
             done();
         });
@@ -177,7 +190,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_TYPE);
-                expect(error.cause.field).to.equal('zip');
+                expect(error.cause.path).to.equal('_root.address.zip');
                 expect(error.cause.expected).to.equal('number');
                 done();
             });
@@ -197,7 +210,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_MIN);
-                expect(error.cause.field).to.equal('zip');
+                expect(error.cause.path).to.equal('_root.address.zip');
                 expect(error.cause.expected).to.equal(10000);
                 done();
             });
@@ -217,7 +230,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_MAX);
-                expect(error.cause.field).to.equal('zip');
+                expect(error.cause.path).to.equal('_root.address.zip');
                 expect(error.cause.expected).to.equal(99999);
                 done();
             });
@@ -240,7 +253,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_TYPE);
-                expect(error.cause.field).to.equal('username');
+                expect(error.cause.path).to.equal('_root.username');
                 expect(error.cause.expected).to.equal('string');
                 done();
             });
@@ -260,7 +273,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_LENGTH);
-                expect(error.cause.field).to.equal('username');
+                expect(error.cause.path).to.equal('_root.username');
                 expect(error.cause.expected.min).to.equal(3);
                 done();
             });
@@ -280,7 +293,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_LENGTH);
-                expect(error.cause.field).to.equal('username');
+                expect(error.cause.path).to.equal('_root.username');
                 expect(error.cause.expected.max).to.equal(32);
                 done();
             });
@@ -306,7 +319,7 @@ describe('object-validator', () => {
                 }
                 expect(error).to.be.instanceOf(ApiError);
                 expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_ENUM);
-                expect(error.cause.field).to.equal('animal');
+                expect(error.cause.path).to.equal('_root.pets.[0].animal');
                 expect(error.cause.expected).to.be.an('array');
                 done();
             });
@@ -328,7 +341,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_STRING_FORMAT);
-            expect(error.cause).to.equal('city');
+            expect(error.cause).to.equal('_root.address.city');
             done();
         });
 
@@ -349,7 +362,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_TYPE);
-            expect(error.cause.field).to.equal('pets');
+            expect(error.cause.path).to.equal('_root.pets');
             expect(error.cause.expected).to.equal('array');
             done();
         });
@@ -366,7 +379,7 @@ describe('object-validator', () => {
             }
             expect(error).to.be.instanceOf(ApiError);
             expect(error.errorNumber).to.equal(ErrorNumber.REQUEST_FIELD_TYPE);
-            expect(error.cause.field).to.equal('address');
+            expect(error.cause.path).to.equal('_root.address');
             expect(error.cause.expected).to.equal('object');
             done();
         });

@@ -1,3 +1,5 @@
+import { ObjectValidator } from '../../util/object-validator';
+
 /**
  * Represents an item (entity) of specific Type
  * @author Maurice
@@ -23,3 +25,21 @@ export interface Field {
     /** The field's display value */
     reference?: any;
 }
+
+export const ITEM = new ObjectValidator<Field[]>({
+    type: Array,
+    required: true,
+    elements: {
+        type: Object,
+        required: true,
+        properties: {
+            id: {
+                type: Number,
+                required: true
+            },
+            value: {
+                required: true
+            }
+        }
+    }
+});
