@@ -1,6 +1,6 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
-import { Type, TypeField } from '../api/models/type';
+import { Type, TypeField, TypeFieldType } from '../api/models/type';
 
 export interface Queries {
     /** Creates the company table */
@@ -11,6 +11,8 @@ export interface Queries {
     CREATE_TABLE_TYPE: StaticQuery<ObjectResultsets>;
     /** Creates the type field table */
     CREATE_TABLE_TYPE_FIELD: StaticQuery<ObjectResultsets>;
+    /** Creates the type field table self reference */
+    CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY: StaticQuery<ObjectResultsets>;
     /** Creates the role table */
     CREATE_TABLE_ROLE: StaticQuery<ObjectResultsets>;
     /** Creates the role permission table */
@@ -64,7 +66,7 @@ export interface Queries {
     /** Gets a type field by referenceId */
     TYPE_FIELD_GET_REFERENCEID: StaticQuery<ArrayResultsets>;
     /** Edit a type field by id */
-    TYPE_FIELD_EDIT: StaticQuery<ObjectResultsets>;
+    TYPE_FIELD_UPDATE: StaticQuery<ObjectResultsets>;
     /** Delete a type field by id */
     TYPE_FIELD_DELETE: StaticQuery<ObjectResultsets>;
 
@@ -90,11 +92,11 @@ export interface Queries {
     /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets, Type>;
     /** Gets all items of one type */
-    ITEM_GET: DynamicQuery<ArrayResultsets, Sortable<number, TypeField>>;
+    ITEM_GET: DynamicQuery<ArrayResultsets, Sortable<Type, TypeField>>;
     /** Gets all items of one type in range(offset, length) */
-    ITEM_GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<number, TypeField>>;
+    ITEM_GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<Type, TypeField>>;
     /** Gets an item by id on one type */
-    ITEM_GET_ID: DynamicQuery<ArrayResultsets, number>;
+    ITEM_GET_ID: DynamicQuery<ArrayResultsets, Type>;
     /** Gets the number of items of one type */
     ITEM_GET_COUNT: DynamicQuery<ArrayResultsets, number>;
     /** Updates (overwrites) an item by id of one type */
@@ -140,11 +142,7 @@ export function factory(pool: Pool, prefix: string): Queries {
     function generateTabel(structure: Type) {
         let constraints = 'PRIMARY KEY (\`id\`)';
         let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
-        structure.fields.forEach(function(field: TypeField) {
-            if (!Object.keys(types).some((type: string) => type === field.type)) {
-                throw new Error(`Invalid type '${field.type}'`);
-            }
-
+        structure.fields.forEach((field: TypeField) => {
             const name = `\`field_${field.id}\``;
             sql += `${name} ${types[field.type]}`;
             if (field.required) {
@@ -156,10 +154,7 @@ export function factory(pool: Pool, prefix: string): Queries {
                 constraints += `, CONSTRAINT ${name} UNIQUE INDEX (${name})`;
             }
             if (field.type === 'reference') {
-                if (typeof field.referenceId !== 'number') {
-                    throw new Error(`Invalid referenceTypeId '${field.referenceId}' is not a number`);
-                }
-                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`;
+                constraints += `, CONSTRAINT ${name} FOREIGN KEY (${name}) REFERENCES \`%_item_${field.reference.typeId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`;
             }
         });
         sql += constraints + ');';
@@ -192,7 +187,7 @@ export function factory(pool: Pool, prefix: string): Queries {
 
     function generateForeignKey(structure: TypeField) {
         const field = `\`field_${structure.id}\``;
-        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.referenceId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.split('%_').join(prefix);
+        return `ALTER TABLE \`%_item_${structure.typeId}\` ADD CONSTRAINT ${field} FOREIGN KEY (${field}) REFERENCES \`%_item_${structure.reference.typeId}\` (\`id\`) ON DELETE SET NULL ON UPDATE CASCADE`.split('%_').join(prefix);
     }
 
     function dropForeignKey(structure: TypeField) {
@@ -220,25 +215,38 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
-    function getItem(id: number) {
-        return `SELECT * FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
-    }
+    function itemSelectQuery(type: Type) {
+        const table = `\`%_item_${type.id}\``;
+        let select = `SELECT ${table}.*`;
+        let from = `FROM ${table}`;
 
-    function getItemList({ value, sorter, order }: Sortable<number, TypeField>) {
-        let sql = `SELECT * FROM \`%_item_${value}\``;
-        if (typeof sorter !== 'undefined') {
-            sql += `ORDER BY \`field_${sorter.id}\` ${order}`;
+        for (const field of type.fields) {
+            if (field.type === TypeFieldType.reference) {
+                const referenceTable = `\`%_item_${field.reference.typeId}\``;
+                select += `, ${referenceTable}.\`field_${field.reference.id}\``;
+                from += ` JOIN ${referenceTable} ON ${table}.\`field_${field.id}\` = ${referenceTable}.\`id\``;
+            }
         }
-        return sql.replace('%_', prefix);
+
+        return `${select} ${from}`.split('%_').join(prefix);
     }
 
-    function getItemListRange({ value, sorter, order }: Sortable<number, TypeField>) {
-        let sql = `SELECT * FROM \`%_item_${value}\``.replace('%_', prefix);
+    function getItem(type: Type) {
+        return `${itemSelectQuery(type)} WHERE \`%_item_${type.id}\`.\`id\` = ?`.replace('%_', prefix);
+    }
+
+    function getItemList({ value: type, sorter, order }: Sortable<Type, TypeField>) {
+        let sql = itemSelectQuery(type);
+
         if (typeof sorter !== 'undefined') {
             sql += ` ORDER BY \`field_${sorter.id}\` ${order}`;
         }
-        sql += ' LIMIT ?, ?';
-        return sql.replace('%_', prefix);
+
+        return sql;
+    }
+
+    function getItemListRange({ value: type, sorter, order }: Sortable<Type, TypeField>) {
+        return `${getItemList({ value: type, sorter, order })} LIMIT ?, ?`;
     }
 
     function getItemTotal(id: number) {
@@ -265,7 +273,8 @@ export function factory(pool: Pool, prefix: string): Queries {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, `email` VARCHAR(128), PRIMARY KEY (`id`), UNIQUE INDEX (`name`), UNIQUE INDEX (`email`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_TYPE: queryFactory('CREATE TABLE IF NOT EXISTS `%_types` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE);'),
-        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` MEDIUMINT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`referenceId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_TYPE_FIELD: queryFactory('CREATE TABLE IF NOT EXISTS `%_types_field` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `typeId` MEDIUMINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `type` ENUM(\'string\', \'number\', \'boolean\', \'file\', \'color\', \'date\', \'reference\') NOT NULL, `required` BIT NOT NULL, `unique` BIT NOT NULL, `referenceId` INT UNSIGNED, PRIMARY KEY (`id`), UNIQUE INDEX (`typeId`, `name`), FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
+        CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY: queryFactory('ALTER TABLE `%_types_field` ADD FOREIGN KEY (`referenceId`) REFERENCES `%_types_field` (`id`) ON DELETE CASCADE ON UPDATE CASCADE'),
         CREATE_TABLE_ROLE: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles` (`id` INT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `permissions` BIT(4) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
         CREATE_TABLE_ROLE_PERMISSION: queryFactory('CREATE TABLE IF NOT EXISTS `%_roles_permissions` (`roleId` INT UNSIGNED NOT NULL, `typeId` MEDIUMINT UNSIGNED NOT NULL, `permissions` BIT(3) NOT NULL, PRIMARY KEY (`roleId`, `typeId`), FOREIGN KEY (`roleId`) REFERENCES `%_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (`typeId`) REFERENCES `%_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
 
@@ -290,11 +299,11 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_UPDATE: queryFactory('UPDATE `%_types` SET `companyId` = ?, `name` = ? WHERE `id` = ?'),
         TYPE_DELETE: queryFactory('DELETE FROM `%_types` WHERE `id` = ?'),
 
-        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field`(`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
+        TYPE_FIELD_CREATE: queryFactory('INSERT INTO `%_types_field` (`id`, `typeId`, `name`, `type`, `required`, `unique`, `referenceId`) VALUES (NULL,?,?,?,?,?,?);'),
         TYPE_FIELD_GET_ID: queryFactory('SELECT * FROM `%_types_field` WHERE `id` = ?'),
         TYPE_FIELD_GET_TYPEID: queryFactory('SELECT * FROM `%_types_field` WHERE `typeId` = ?'),
         TYPE_FIELD_GET_REFERENCEID: queryFactory('SELECT * FROM `%_types_field` WHERE `referenceId` = ?'),
-        TYPE_FIELD_EDIT: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
+        TYPE_FIELD_UPDATE: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
         TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),

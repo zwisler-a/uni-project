@@ -20,4 +20,6 @@ export interface Field {
     id: number;
     /** The field's value */
     value: any;
+    /** The field's display value */
+    reference?: any;
 }

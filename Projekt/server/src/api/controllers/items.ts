@@ -2,7 +2,7 @@ import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { Type, TypeField } from '../models/type';
+import { Type, TypeField, TypeFieldType } from '../models/type';
 import { Item, Field } from '../models/item';
 import { TypeModel } from '../../database/models/type';
 import { Sortable, SortOrder } from '../../database/queries';
@@ -129,11 +129,11 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             order = SortOrder[order];
         }
 
-        let sorter: Sortable<number, TypeField>;
+        let sorter: Sortable<Type, TypeField>;
         if (orderBy !== null) {
-            sorter = { value: type.id, sorter: orderBy, order };
+            sorter = { value: type, sorter: orderBy, order };
         } else {
-            sorter = { value: type.id };
+            sorter = { value: type };
         }
 
         let total: number;
@@ -220,7 +220,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         const foundTypes: Type[] = [];
         // go through each type and process the items inside
         const itemQueries = types.map(async function(type: Type) {
-            const items = await getFilteredItems({ value: type.id }, type, searchQuery, database);
+            const items = await getFilteredItems({ value: type }, type, searchQuery, database);
             if (items.length) {
                 foundTypes.push(type);
             }
@@ -307,7 +307,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  * @param searchQuery String the Items should be filtered by
  * @param database DatabaseController to get the data from
  */
-async function getFilteredItems(sorter: Sortable<number, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
+async function getFilteredItems(sorter: Sortable<Type, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
     let items: Item[] = (await database.ITEM_GET.execute(sorter));
     // Filter items if a searchQuery is set
     if (searchQuery) {
@@ -327,16 +327,25 @@ async function getFilteredItems(sorter: Sortable<number, TypeField>, type: Type,
  * Converts an Item from the Database to the form it is send
  * @param type Type of the Item
  */
-function convertItem(type: Type) {
+function convertItem(type: Type): (item: any) => Item {
     return (item: any) => {
         const fields: Field[] = [];
         for (let i = 0; i < type.fields.length; i++) {
             const field = type.fields[i];
-            let value = item[`field_${field.id}`];
-            if (field.type === 'boolean') {
-                value = value.readUInt8() === 1;
+            const value = item[`field_${field.id}`];
+
+            const itemField: Field = {
+                id: field.id,
+                value
+            };
+
+            if (field.type === TypeFieldType.boolean) {
+                itemField.value = value.readUInt8() === 1;
+            } else if (field.type === TypeFieldType.reference) {
+                itemField.reference = item[`field_${field.referenceId}`];
             }
-            fields.push({ id: field.id, value });
+
+            fields.push(itemField);
         }
         return { typeId: type.id, id: item.id, fields };
     };
@@ -388,23 +397,13 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const items = await database.ITEM_GET_ID.execute(type.id, [ id ]);
+        const items = await database.ITEM_GET_ID.execute(type, [ id ]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
-        const item = items.pop();
+        const item = convertItem(type)(items.pop());
 
-        const fields = [];
-        for (let i = 0; i < type.fields.length; i++) {
-            const field = type.fields[i];
-            let value = item[`field_${field.id}`];
-            if (field.type === 'boolean') {
-                value = value.readUInt8() === 1;
-            }
-            fields.push({ id: field.id, value });
-        }
-
-        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
+        res.status(200).send(new EmbeddedItem([ type ], [ item ]));
     } catch (error) {
         next(error);
     }

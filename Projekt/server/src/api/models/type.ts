@@ -32,8 +32,10 @@ export interface TypeField {
     required: boolean;
     /** True if the field's value should be unique among one type */
     unique: boolean;
-    /** The this field's value references (only present if type === 'reference') */
+    /** The this field's value referenceId to another field of a different type (only present if type === 'reference') */
     referenceId?: number;
+    /** The referenced field */
+    reference?: TypeField;
 }
 
 /**
