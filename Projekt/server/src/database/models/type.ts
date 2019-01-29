@@ -2,6 +2,7 @@ import { Cache } from './cache';
 import { DatabaseController } from '../controller';
 import { Type, TypeField, TypeFieldType } from '../../api/models/type';
 import { ApiError, ErrorNumber } from '../../types';
+import { type } from 'os';
 
 export class TypeModel {
     /** Type cache 1h */
@@ -110,12 +111,7 @@ export class TypeModel {
         return types;
     }
 
-    /**
-     * Creates a new type and an associated dynamic item table
-     * @param type Type to be created
-     */
-    static async create(type: Type): Promise<Type> {
-        // Check if all referenced fields exist
+    private static async fetchReferences(type: Type) {
         const referencedTypes: number[] = [];
         for (const field of type.fields) {
             if (field.type === TypeFieldType.reference) {
@@ -133,6 +129,10 @@ export class TypeModel {
                 field.reference = TypeModel.mapField(references.pop());
                 const typeId = field.reference.typeId;
 
+                if (typeId === type.id) {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_SELF, typeId);
+                }
+
                 // A type can't reference a type multiple times
                 if (referencedTypes.indexOf(typeId) !== -1) {
                     throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_MULTIPLE, typeId);
@@ -141,6 +141,14 @@ export class TypeModel {
                 referencedTypes.push(typeId);
             }
         }
+    }
+
+    /**
+     * Creates a new type and an associated dynamic item table
+     * @param type Type to be created
+     */
+    static async create(type: Type): Promise<Type> {
+        await TypeModel.fetchReferences(type);
 
         let result: Type;
         await TypeModel.database.beginTransaction(async function(connection) {
@@ -171,35 +179,10 @@ export class TypeModel {
     }
 
     static async update(id: number, type: Type): Promise<Type> {
+        await TypeModel.fetchReferences(type);
+
         const fields = type.fields.slice();
         const old: Type = await TypeModel.get(id);
-
-        // Check if all fields are mostly valid
-        const referencedTypes: number[] = [];
-        for (const field of fields) {
-            if (field.type === TypeFieldType.reference) {
-                // Check if the reference is nullable
-                if (field.required) {
-                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_NOT_NULL, field);
-                }
-
-                // Check if referenceId exists
-                const references = await TypeModel.database.TYPE_FIELD_GET_ID.execute([ field.referenceId ]);
-                if (references.length === 0) {
-                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
-                }
-
-                field.reference = TypeModel.mapField(references.pop());
-                const typeId = field.reference.typeId;
-
-                // A type can't reference a type multiple times
-                if (referencedTypes.indexOf(typeId) !== -1) {
-                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_MULTIPLE, typeId);
-                }
-
-                referencedTypes.push(typeId);
-            }
-        }
 
         await TypeModel.database.beginTransaction(async function(connection) {
             // Update type table
