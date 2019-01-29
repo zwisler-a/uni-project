@@ -24,12 +24,27 @@ export class TypeModel {
         TypeModel.database = database;
     }
 
+    private static mapField(field: any): TypeField {
+        field.required = field.required.readUInt8() === 1;
+        field.unique = field.unique.readUInt8() === 1;
+        return field as TypeField;
+    }
+
     private static async fetchFields(id: number): Promise<TypeField[]> {
-        return (await TypeModel.database.TYPE_FIELD_GET_TYPEID.execute(id)).map((row: any) => {
-            row.required = row.required.readUInt8() === 1;
-            row.unique = row.unique.readUInt8() === 1;
-            return row as TypeField;
-        });
+        const fields = (await TypeModel.database.TYPE_FIELD_GET_TYPEID.execute(id)).map(TypeModel.mapField);
+
+        for (const field of fields) {
+            if (field.type === TypeFieldType.reference) {
+                const references = await TypeModel.database.TYPE_FIELD_GET_ID.execute([ field.referenceId ]);
+                if (references.length === 0) {
+                    throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, field.referenceId);
+                }
+
+                field.reference = TypeModel.mapField(references.pop());
+            }
+        }
+
+        return fields;
     }
 
     private static async fetchType(id: number): Promise<Type> {
@@ -101,18 +116,29 @@ export class TypeModel {
      */
     static async create(type: Type): Promise<Type> {
         // Check if all referenced fields exist
+        const referencedTypes: number[] = [];
         for (const field of type.fields) {
             if (field.type === TypeFieldType.reference) {
+                // Check if the reference is nullable
                 if (field.required) {
                     throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_NOT_NULL, field);
                 }
 
+                // Check if referenceId exists
                 const references = await TypeModel.database.TYPE_FIELD_GET_ID.execute([ field.referenceId ]);
                 if (references.length === 0) {
                     throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
                 }
 
-                field.reference = references.pop();
+                field.reference = TypeModel.mapField(references.pop());
+                const typeId = field.reference.typeId;
+
+                // A type can't reference a type multiple times
+                if (referencedTypes.indexOf(typeId) !== -1) {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_MULTIPLE, typeId);
+                }
+
+                referencedTypes.push(typeId);
             }
         }
 
@@ -149,6 +175,7 @@ export class TypeModel {
         const old: Type = await TypeModel.get(id);
 
         // Check if all fields are mostly valid
+        const referencedTypes: number[] = [];
         for (const field of fields) {
             if (field.type === TypeFieldType.reference) {
                 // Check if the reference is nullable
@@ -162,7 +189,15 @@ export class TypeModel {
                     throw ApiError.NOT_FOUND(ErrorNumber.TYPE_REFERENCE_NOT_FOUND, field);
                 }
 
-                field.reference = references.pop();
+                field.reference = TypeModel.mapField(references.pop());
+                const typeId = field.reference.typeId;
+
+                // A type can't reference a type multiple times
+                if (referencedTypes.indexOf(typeId) !== -1) {
+                    throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_MULTIPLE, typeId);
+                }
+
+                referencedTypes.push(typeId);
             }
         }
 
