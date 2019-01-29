@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import 'mocha';
 
-import { ObjectValidator, NewObjectValidator } from '../src/util/object-validator';
+import { ObjectValidator } from '../src/util/object-validator';
 import { ApiError, ErrorNumber } from '../src/types';
 
 describe('object-validator', () => {
-    let validator: NewObjectValidator<any>;
+    let validator: ObjectValidator<any>;
     before(async () => {
-        validator = new NewObjectValidator<any>({
+        validator = new ObjectValidator<any>({
             type: Object,
             required: true,
             properties: {
