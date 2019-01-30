@@ -1,6 +1,7 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
 import { Type, TypeField, TypeFieldType } from '../api/models/type';
+import { GlobalField } from '../api/models/global';
 
 export interface Queries {
     /** Creates the company table */
@@ -82,6 +83,8 @@ export interface Queries {
     GLOBAL_UPDATE: StaticQuery<ObjectResultsets>;
     /** Delete a global field by id */
     GLOBAL_DELETE: StaticQuery<ObjectResultsets>;
+
+    GLOBAL_TABLE_CREATE: DynamicQuery<ObjectResultsets, number>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets, Type>;
@@ -228,7 +231,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         return sql.split('%_').join(prefix);
     }
 
-    function itemSelectQuery(type: Type) {
+    function itemSelectQuery(type: Type, globals: GlobalField[]) {
         const table = `\`%_item_${type.id}\``;
         let select = `SELECT ${table}.*`;
         let from = `FROM ${table}`;
@@ -237,29 +240,38 @@ export function factory(pool: Pool, prefix: string): Queries {
             if (field.type === TypeFieldType.reference) {
                 const referenceTable = `\`%_item_${field.reference.typeId}\``;
                 select += `, ${referenceTable}.\`field_${field.reference.id}\``;
-                from += ` JOIN ${referenceTable} ON ${table}.\`field_${field.id}\` = ${referenceTable}.\`id\``;
+                from += ` LEFT JOIN ${referenceTable} ON ${table}.\`field_${field.id}\` = ${referenceTable}.\`id\``;
             }
+        }
+
+        if (globals.length !== 0) {
+            const globalTable = `\`%_global_${type.companyId}\``;
+            for (const global of globals) {
+                select += `, ${globalTable}.\`global_${global.id}\``;
+            }
+            from += ` LEFT JOIN ${globalTable} ON ${table}.\`id\` = ${globalTable}.\`id\` AND ${globalTable}.\`typeId\` = ${type.id}`;
         }
 
         return `${select} ${from}`.split('%_').join(prefix);
     }
 
     function getItem(type: Type) {
-        return `${itemSelectQuery(type)} WHERE \`%_item_${type.id}\`.\`id\` = ?`.replace('%_', prefix);
+        return `${itemSelectQuery(type, [])} WHERE \`%_item_${type.id}\`.\`id\` = ?`.replace('%_', prefix);
     }
 
     function getItemList({ value: type, sorter, order }: Sortable<Type, TypeField>) {
-        let sql = itemSelectQuery(type);
+        let sql = itemSelectQuery(type, []);
 
         if (typeof sorter !== 'undefined') {
+            // TODO `table`.`field` + `table`.`global`
             sql += ` ORDER BY \`field_${sorter.id}\` ${order}`;
         }
 
         return sql;
     }
 
-    function getItemListRange({ value: type, sorter, order }: Sortable<Type, TypeField>) {
-        return `${getItemList({ value: type, sorter, order })} LIMIT ?, ?`;
+    function getItemListRange(sortable: Sortable<Type, TypeField>) {
+        return `${getItemList(sortable)} LIMIT ?, ?`;
     }
 
     function getItemTotal(id: number) {
@@ -280,6 +292,10 @@ export function factory(pool: Pool, prefix: string): Queries {
 
     function deleteItem(id: number) {
         return `DELETE FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
+    }
+
+    function generateGlobalTable(id: number) {
+        return `CREATE TABLE \`%_global_${id}\` (\`typeId\` MEDIUMINT UNSIGNED NOT NULL, \`id\` INT UNSIGNED NOT NULL, PRIMARY KEY (\`typeId\`, \`id\`), FOREIGN KEY (\`typeId\`) REFERENCES \`%_types\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE);`.split('%_').join(prefix);
     }
 
     return {
@@ -320,11 +336,13 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_FIELD_UPDATE: queryFactory('UPDATE `%_types_field` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ?, `referenceId` = ? WHERE `id` = ?'),
         TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
 
-        GLOBAL_CREATE: queryFactory(''),
-        GLOBAL_GET: queryFactory(''),
-        GLOBAL_GET_ID: queryFactory(''),
-        GLOBAL_UPDATE: queryFactory(''),
-        GLOBAL_DELETE: queryFactory(''),
+        GLOBAL_CREATE: queryFactory('INSERT INTO `%_global` (`id`, `companyId`, `name`, `type`, `required`, `unique`) VALUES (NULL,?,?,?,?,?)'),
+        GLOBAL_GET: queryFactory('SELECT * FROM `%_global`'),
+        GLOBAL_GET_ID: queryFactory('SELECT * FROM `%_global` WHERE `id` = ?'),
+        GLOBAL_UPDATE: queryFactory('UPDATE `%_global` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ? WHERE `id` = ?'),
+        GLOBAL_DELETE: queryFactory('DELETE FROM `%_global` WHERE `id` = ?'),
+
+        GLOBAL_TABLE_CREATE: new DynamicQuery(pool, generateGlobalTable),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),

@@ -367,7 +367,8 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const values = verifyValues(type, fields.slice());
+        const values = verifyValues(type, fields);
+        // TODO set referenced field value (also in itemUpdate)
         fields = values.map((value: any, index: number) => {
             return {
                 id: type.fields[index].id,
@@ -424,7 +425,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const values = verifyValues(type, fields.slice());
+        const values = verifyValues(type, fields);
         fields = values.map((value: any, index: number) => {
             return {
                 id: type.fields[index].id,

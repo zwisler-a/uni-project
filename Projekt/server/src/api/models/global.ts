@@ -4,7 +4,7 @@ import { ObjectValidator } from '../../util/object-validator';
  * Represents a global field
  * @author Maurice
  */
-export interface TypeField {
+export interface GlobalField {
     /** The field's unique id */
     id: number;
     /** The id of the company this field belongs to */
@@ -19,7 +19,7 @@ export interface TypeField {
     unique: boolean;
 }
 
-export const GLOBAL = new ObjectValidator<TypeField[]>({
+export const GLOBAL = new ObjectValidator<GlobalField[]>({
     type: Array,
     required: true,
     elements: {

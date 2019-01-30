@@ -31,10 +31,14 @@ export class CompanyModel {
     }
 
     static async create(company: Company): Promise<Company> {
-        const id = (await CompanyModel.database.COMPANY_CREATE.execute([ company.name ])).insertId;
-        company.id = id;
+        await CompanyModel.database.beginTransaction(async function(connection) {
+            const id = (await CompanyModel.database.COMPANY_CREATE.execute([ company.name ])).insertId;
+            company.id = id;
 
-        await CompanyModel.cache.set(id.toString(), company);
+            await CompanyModel.database.GLOBAL_TABLE_CREATE.executeConnection(connection, id);
+        });
+
+        await CompanyModel.cache.set(company.id.toString(), company);
 
         return company;
     }
