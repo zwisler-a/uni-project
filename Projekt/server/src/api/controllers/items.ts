@@ -143,8 +143,8 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             total = items.length;
             items = items.slice(page * perPage, page * perPage + perPage);
         } else {
-            total = (await database.ITEM_GET_COUNT.execute(type.id)).pop()['COUNT(*)'];
-            items = (await database.ITEM_GET_RANGE.execute(sorter, [page * perPage, perPage])).map(convertItem(type));
+            total = (await database.ITEM.COUNT.execute(type.id)).pop()['COUNT(*)'];
+            items = (await database.ITEM.GET_RANGE.execute(sorter, [page * perPage, perPage])).map(convertItem(type));
         }
 
         const totalPages = Math.ceil(total / perPage);
@@ -308,7 +308,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  * @param database DatabaseController to get the data from
  */
 async function getFilteredItems(sorter: Sortable<Type, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
-    let items: Item[] = (await database.ITEM_GET.execute(sorter));
+    let items: Item[] = (await database.ITEM.GET.execute(sorter));
     // Filter items if a searchQuery is set
     if (searchQuery) {
         items = items.filter((item: any) => {
@@ -376,7 +376,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
             };
         });
 
-        const id: number = (await database.ITEM_CREATE.execute(type, values)).insertId;
+        const id: number = (await database.ITEM.CREATE.execute(type, values)).insertId;
 
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
     } catch (error) {
@@ -398,7 +398,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const database: DatabaseController = req.app.get('database');
         const type: Type = await TypeModel.get(typeId);
 
-        const items = await database.ITEM_GET_ID.execute(type, [ id ]);
+        const items = await database.ITEM.GET_ID.execute(type, [ id ]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
@@ -436,7 +436,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         // Need to push the where for sql to know what to update
         values.push(id);
 
-        const affectedRows = (await database.ITEM_UPDATE.execute(type, values)).affectedRows;
+        const affectedRows = (await database.ITEM.UPDATE.execute(type, values)).affectedRows;
         if (affectedRows > 0) {
             res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
         } else {
@@ -463,7 +463,7 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
             throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
         }
 
-        const affectedRows = (await database.ITEM_DELETE.execute(typeId, [ id ])).affectedRows;
+        const affectedRows = (await database.ITEM.DELETE.execute(typeId, [ id ])).affectedRows;
         if (affectedRows > 0) {
             res.status(204).send();
         } else {

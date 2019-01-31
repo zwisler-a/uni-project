@@ -1,4 +1,5 @@
 import { ObjectValidator } from '../../util/object-validator';
+import { GlobalField } from './global';
 
 /**
  * Represents the type (metadata) of an item
@@ -13,6 +14,10 @@ export interface Type {
     name: string;
     /** List of all the field's an item of this type (should) have */
     fields: TypeField[];
+}
+
+export interface FullType extends Type {
+    globals: GlobalField[];
 }
 
 /**

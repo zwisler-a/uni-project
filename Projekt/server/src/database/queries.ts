@@ -1,6 +1,6 @@
 import { Pool, ObjectResultsets, ArrayResultsets } from '../../types/mariadb';
 import { StaticQuery, DynamicQuery } from './query';
-import { Type, TypeField, TypeFieldType } from '../api/models/type';
+import { Type, TypeField, TypeFieldType, FullType } from '../api/models/type';
 import { GlobalField } from '../api/models/global';
 
 export interface Queries {
@@ -76,15 +76,21 @@ export interface Queries {
     /** Creates a new global field */
     GLOBAL_CREATE: StaticQuery<ObjectResultsets>;
     /** Gets all global fields */
-    GLOBAL_GET: StaticQuery<ObjectResultsets>;
+    GLOBAL_GET: StaticQuery<ArrayResultsets>;
     /** Gets a global fields by id */
-    GLOBAL_GET_ID: StaticQuery<ObjectResultsets>;
+    GLOBAL_GET_ID: StaticQuery<ArrayResultsets>;
     /** Update a global field by id */
     GLOBAL_UPDATE: StaticQuery<ObjectResultsets>;
     /** Delete a global field by id */
     GLOBAL_DELETE: StaticQuery<ObjectResultsets>;
 
     GLOBAL_TABLE_CREATE: DynamicQuery<ObjectResultsets, number>;
+    GLOBAL_TABLE_DROP: DynamicQuery<ObjectResultsets, number>;
+    GLOBAL_TABLE_FIELD_ADD: DynamicQuery<ObjectResultsets, GlobalField>;
+    GLOBAL_TABLE_FIELD_EDIT: DynamicQuery<ObjectResultsets, GlobalField>;
+    GLOBAL_TABLE_FIELD_DROP: DynamicQuery<ObjectResultsets, { companyId: number, id: number }>;
+    GLOBAL_TABLE_UI_ADD: DynamicQuery<ObjectResultsets, GlobalField>;
+    GLOBAL_TABLE_UI_DROP: DynamicQuery<ObjectResultsets, GlobalField>;
 
     /** Creates a new item table */
     ITEM_TABLE_CREATE: DynamicQuery<ObjectResultsets, Type>;
@@ -104,6 +110,14 @@ export interface Queries {
     ITEM_TABLE_UI_CREATE: DynamicQuery<ObjectResultsets, TypeField>;
     /** Deltes a unique index constraint in an item table */
     ITEM_TABLE_UI_DROP: DynamicQuery<ObjectResultsets, TypeField>;
+
+/*    ITEM_VIEW_EDIT_ADD: DynamicQuery<ObjectResultsets, FullType>;
+    ITEM_VIEW_EDIT_MODIFY: DynamicQuery<ObjectResultsets, FullType>;
+    ITEM_VIEW_EDIT_DROP: DynamicQuery<ObjectResultsets, FullType>;
+
+    ITEM_VIEW_GET_ADD: DynamicQuery<ObjectResultsets, FullType>;
+    ITEM_VIEW_GET_MODIFY: DynamicQuery<ObjectResultsets, FullType>;
+    ITEM_VIEW_GET_DROP: DynamicQuery<ObjectResultsets, FullType>;*/
 
     /** Creates a new item of one type */
     ITEM_CREATE: DynamicQuery<ObjectResultsets, Type>;
@@ -155,6 +169,7 @@ export function factory(pool: Pool, prefix: string): Queries {
         reference: 'INT UNSIGNED'
     };
 
+    /* TYPE */
     function generateTabel(structure: Type) {
         let constraints = 'PRIMARY KEY (\`id\`)';
         let sql = `CREATE TABLE \`%_item_${structure.id}\` (\`id\` INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
@@ -219,6 +234,52 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `ALTER TABLE \`%_item_${structure.typeId}\` DROP INDEX \`field_${structure.id}\``.replace('%_', prefix);
     }
 
+    /* GLOBAL FIELDS */
+    function generateGlobalTable(id: number) {
+        return `CREATE TABLE \`%_global_${id}\` (\`typeId\` MEDIUMINT UNSIGNED NOT NULL, \`id\` INT UNSIGNED NOT NULL, PRIMARY KEY (\`typeId\`, \`id\`), FOREIGN KEY (\`typeId\`) REFERENCES \`%_types\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE);`.split('%_').join(prefix);
+    }
+
+    function dropGlobalTable(id: number) {
+        return `DROP TABLE \`%_global_${id}\``.replace('%_', prefix);
+    }
+
+    function addTableGlobalField(structure: GlobalField) {
+        const field = `\`global_${structure.id}\``;
+        let sql = `ALTER TABLE \`%_global_${structure.companyId}\` ADD COLUMN ${field} ${types[structure.type]}`;
+
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+
+        if (structure.unique) {
+            sql += `, ADD CONSTRAINT ${field} UNIQUE INDEX (${field})`;
+        }
+
+        return sql.replace('%_', prefix);
+    }
+
+    function editTableGlobalField(structure: GlobalField) {
+        let sql = `ALTER TABLE \`%_global_${structure.companyId}\` MODIFY COLUMN \`global_${structure.id}\` ${types[structure.type]}`;
+        if (structure.required) {
+            sql += ' NOT NULL';
+        }
+        return sql.replace('%_', prefix);
+    }
+
+    function dropTableGlobalField({ companyId, id }: { companyId: number, id: number }) {
+        return `ALTER TABLE \`%_global_${companyId}\` DROP COLUMN \`global_${id}\``.replace('%_', prefix);
+    }
+
+    function generateGlobalUniqueIndex(structure: GlobalField) {
+        const field = `\`global_${structure.id}\``;
+        return `ALTER TABLE \`%_global_${structure.companyId}\` ADD CONSTRAINT ${field} UNIQUE INDEX (${field})`.replace('%_', prefix);
+    }
+
+    function dropGlobalUniqueIndex(structure: GlobalField) {
+        return `ALTER TABLE \`%_global_${structure.companyId}\` DROP INDEX \`global_${structure.id}\``.replace('%_', prefix);
+    }
+
+    /* ITEM */
     function generateItem(structure: Type) {
         let values = 'NULL';
         let sql = `INSERT INTO \`%_item_${structure.id}\` (\`id\``;
@@ -294,10 +355,6 @@ export function factory(pool: Pool, prefix: string): Queries {
         return `DELETE FROM \`%_item_${id}\` WHERE \`id\` = ?`.replace('%_', prefix);
     }
 
-    function generateGlobalTable(id: number) {
-        return `CREATE TABLE \`%_global_${id}\` (\`typeId\` MEDIUMINT UNSIGNED NOT NULL, \`id\` INT UNSIGNED NOT NULL, PRIMARY KEY (\`typeId\`, \`id\`), FOREIGN KEY (\`typeId\`) REFERENCES \`%_types\`(\`id\`) ON DELETE CASCADE ON UPDATE CASCADE);`.split('%_').join(prefix);
-    }
-
     return {
         CREATE_TABLE_COMPANY: queryFactory('CREATE TABLE IF NOT EXISTS `%_company` (`id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, `name` VARCHAR(64) NOT NULL, PRIMARY KEY (`id`), UNIQUE INDEX (`name`));'),
         CREATE_TABLE_USER: queryFactory('CREATE TABLE IF NOT EXISTS `%_users` (`id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT, `companyId` SMALLINT UNSIGNED NOT NULL, `name` VARCHAR(64) NOT NULL, `password` VARCHAR(60) NOT NULL, `email` VARCHAR(128), PRIMARY KEY (`id`), UNIQUE INDEX (`name`), UNIQUE INDEX (`email`), FOREIGN KEY (`companyId`) REFERENCES `%_company` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);'),
@@ -337,12 +394,18 @@ export function factory(pool: Pool, prefix: string): Queries {
         TYPE_FIELD_DELETE: queryFactory('DELETE FROM `%_types_field` WHERE `id` = ?'),
 
         GLOBAL_CREATE: queryFactory('INSERT INTO `%_global` (`id`, `companyId`, `name`, `type`, `required`, `unique`) VALUES (NULL,?,?,?,?,?)'),
-        GLOBAL_GET: queryFactory('SELECT * FROM `%_global`'),
+        GLOBAL_GET: queryFactory('SELECT * FROM `%_global` WHERE `companyId` = ?'),
         GLOBAL_GET_ID: queryFactory('SELECT * FROM `%_global` WHERE `id` = ?'),
         GLOBAL_UPDATE: queryFactory('UPDATE `%_global` SET `name` = ?, `type` = ?, `required` = ?, `unique` = ? WHERE `id` = ?'),
         GLOBAL_DELETE: queryFactory('DELETE FROM `%_global` WHERE `id` = ?'),
 
         GLOBAL_TABLE_CREATE: new DynamicQuery(pool, generateGlobalTable),
+        GLOBAL_TABLE_DROP: new DynamicQuery(pool, dropGlobalTable),
+        GLOBAL_TABLE_FIELD_ADD: new DynamicQuery(pool, addTableGlobalField),
+        GLOBAL_TABLE_FIELD_EDIT: new DynamicQuery(pool, editTableGlobalField),
+        GLOBAL_TABLE_FIELD_DROP: new DynamicQuery(pool, dropTableGlobalField),
+        GLOBAL_TABLE_UI_ADD: new DynamicQuery(pool, generateGlobalUniqueIndex),
+        GLOBAL_TABLE_UI_DROP: new DynamicQuery(pool, dropGlobalUniqueIndex),
 
         ITEM_TABLE_CREATE: new DynamicQuery(pool, generateTabel),
         ITEM_TABLE_DROP: new DynamicQuery(pool, dropTable),

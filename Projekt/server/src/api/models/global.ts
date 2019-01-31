@@ -19,32 +19,29 @@ export interface GlobalField {
     unique: boolean;
 }
 
-export const GLOBAL = new ObjectValidator<GlobalField[]>({
-    type: Array,
+export const GLOBAL = new ObjectValidator<GlobalField>({
+    type: Object,
     required: true,
-    elements: {
-        type: Object,
-        properties: {
-            id: {
-                type: Number
-            },
-            name: {
-                type: String,
-                required: true
-            },
-            type: {
-                type: String,
-                required: true,
-                enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date' ]
-            },
-            required: {
-                type: Boolean,
-                required: true
-            },
-            unique: {
-                type: Boolean,
-                required: true
-            }
+    properties: {
+        id: {
+            type: Number
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        type: {
+            type: String,
+            required: true,
+            enum: ['string', 'number', 'boolean', 'file', 'color', 'date']
+        },
+        required: {
+            type: Boolean,
+            required: true
+        },
+        unique: {
+            type: Boolean,
+            required: true
         }
     }
 });

@@ -1,9 +1,18 @@
 import { Pool, Connection } from '../../types/mariadb';
-import { factory, Queries } from './queries';
+
 import { UserModel } from './models/user';
 import { TypeModel } from './models/type';
 import { CompanyModel } from './models/company';
 import { GlobalFieldModel } from './models/global';
+
+import { CompanyQueries } from './queries/company';
+import { GlobalTableQueries } from './queries/global-table';
+import { GlobalQueries } from './queries/global';
+import { ItemTableQueries } from './queries/item-table';
+import { ItemQueries } from './queries/item';
+import { TypeFieldQueries } from './queries/type-field';
+import { TypeQueries } from './queries/type';
+import { UserQueries } from './queries/user';
 
 /**
  * Function that gets invoked inside a transaction
@@ -18,7 +27,16 @@ export interface TransactionHandler {
     (connection: Connection): Promise<void>;
 }
 
-export interface DatabaseController extends Queries, Pool {
+export interface DatabaseController extends Pool {
+    COMPANY: CompanyQueries;
+    GLOBAL_TABLE: GlobalTableQueries;
+    GLOBAL: GlobalQueries;
+    ITEM_TABLE: ItemTableQueries;
+    ITEM: ItemQueries;
+    TYPE_FIELD: TypeFieldQueries;
+    TYPE: TypeQueries;
+    USER: UserQueries;
+
     /**
      * Helper function for database transactions that automatically begins, commits and rollbacks
      * @param handler handler which contains code which want's to be executed inside a transaction
@@ -36,7 +54,15 @@ export interface DatabaseController extends Queries, Pool {
 export async function initializeDatabaseController(pool: Pool, prefix: string): Promise<DatabaseController> {
     const controller: DatabaseController = {
         ...pool,
-        ...factory(pool, prefix),
+
+        COMPANY: new CompanyQueries(pool, prefix),
+        GLOBAL_TABLE: new GlobalTableQueries(pool, prefix),
+        GLOBAL: new GlobalQueries(pool, prefix),
+        ITEM_TABLE: new ItemTableQueries(pool, prefix),
+        ITEM: new ItemQueries(pool, prefix),
+        TYPE_FIELD: new TypeFieldQueries(pool, prefix),
+        TYPE: new TypeQueries(pool, prefix),
+        USER: new UserQueries(pool, prefix),
 
         async beginTransaction(handler: TransactionHandler): Promise<void> {
             const connection: Connection = await this.getConnection();
@@ -53,14 +79,12 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     };
 
     // Initilize all tables
-    await controller.CREATE_TABLE_COMPANY.execute();
-    await controller.CREATE_TABLE_USER.execute();
-    await controller.CREATE_TABLE_TYPE.execute();
-    await controller.CREATE_TABLE_TYPE_FIELD.execute();
-    await controller.CREATE_TABLE_TYPE_FIELD_FOREIGN_KEY.execute();
-    await controller.CREATE_TABLE_GLOBAL.execute();
-    await controller.CREATE_TABLE_ROLE.execute();
-    await controller.CREATE_TABLE_ROLE_PERMISSION.execute();
+    await controller.COMPANY.CREATE_TABLE.execute();
+    await controller.USER.CREATE_TABLE.execute();
+    await controller.TYPE.CREATE_TABLE.execute();
+    await controller.TYPE_FIELD.CREATE_TABLE.execute();
+    await controller.TYPE_FIELD.CREATE_TABLE_FOREIGN_KEY.execute();
+    await controller.GLOBAL.CREATE_TABLE.execute();
 
     // Initilize all models
     UserModel.initialize(controller);
@@ -71,7 +95,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     try {
         // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
         let companyId;
-        const company = (await controller.COMPANY_GET_ID.execute(1)).pop();
+        const company = (await controller.COMPANY.GET_ID.execute(1)).pop();
         if (!company) {
             companyId = (await CompanyModel.create({ name: 'company' })).id;
         } else {
@@ -79,7 +103,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
         }
 
         // TODO REMOVE Add a mock user as long as there is no other way to add users ('username', 'password')
-        if (!(await controller.USER_GET_NAME.execute('username')).pop()) {
+        if (!(await controller.USER.GET_NAME.execute('username')).pop()) {
             await UserModel.create({
                 companyId,
                 name: 'username',
