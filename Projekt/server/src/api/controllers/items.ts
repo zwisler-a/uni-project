@@ -386,6 +386,8 @@ function convertItem(type: FullType): (item: any) => Item {
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
+        const companyId: number = req.params.user.companyId;
+
         const item: Item = ITEM.validate(req.body);
         let fields: Field[] = item.fields;
         let globals: Field[] = item.globals;
@@ -394,27 +396,31 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         const type: FullType = {
             ...(await TypeModel.get(typeId)),
             // TODO company id
-            globals: await GlobalFieldModel.get(1)
+            globals: await GlobalFieldModel.get(companyId)
         };
 
-        let values = verifyValues(type.fields, fields);
-        values = values.concat(verifyValues(type.globals, globals));
-        // TODO set referenced field value (also in itemUpdate)
-        fields = type.fields.map((field: TypeField, index: number) => {
-            return {
-                id: field.id,
-                value: values[index]
-            };
-        });
-        const offset = type.fields.length;
-        globals = type.globals.map((field: GlobalField, index: number) => {
-            return {
-                id: field.id,
-                value: values[offset + index]
-            };
-        });
+        let id = 0;
+        await database.beginTransaction(async function(connection) {
+            let values = verifyValues(type.fields, fields);
+            // TODO set referenced field value (also in itemUpdate)
+            fields = type.fields.map((field: TypeField, index: number) => {
+                return {
+                    id: field.id,
+                    value: values[index]
+                };
+            });
+            id = (await database.ITEM.CREATE.executeConnection(connection, type, values)).insertId;
 
-        const id: number = (await database.ITEM.CREATE.execute(type, values)).insertId;
+            values = verifyValues(type.globals, globals);
+            globals = type.globals.map((field: GlobalField, index: number) => {
+                return {
+                    id: field.id,
+                    value: values[index]
+                };
+            });
+            values.unshift(type.id, id);
+            await database.ITEM.CREATE_GLOBAL.executeConnection(connection, type, values);
+        });
 
         res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals } ]));
     } catch (error) {
@@ -462,6 +468,8 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
+        const companyId: number = req.params.user.companyId;
+
         const item: Item = ITEM.validate(req.body);
         let fields: Field[] = item.fields;
         let globals: Field[] = item.globals;
@@ -473,27 +481,31 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
             globals: await GlobalFieldModel.get(1)
         };
 
-        let values = verifyValues(type.fields, fields);
-        values = values.concat(verifyValues(type.globals, globals));
-        // TODO set referenced field value (also in itemUpdate)
-        fields = type.fields.map((field: TypeField, index: number) => {
-            return {
-                id: field.id,
-                value: values[index]
-            };
-        });
-        const offset = type.fields.length;
-        globals = type.globals.map((field: GlobalField, index: number) => {
-            return {
-                id: field.id,
-                value: values[offset + index]
-            };
+        let affectedRows = 0;
+        await database.beginTransaction(async function(connection) {
+            let values = verifyValues(type.fields, fields);
+            // TODO set referenced field value (also in itemUpdate)
+            fields = type.fields.map((field: TypeField, index: number) => {
+                return {
+                    id: field.id,
+                    value: values[index]
+                };
+            });
+            values.push(id);
+            affectedRows = (await database.ITEM.UPDATE.executeConnection(connection, type, values)).affectedRows;
+
+            values = verifyValues(type.globals, globals);
+            globals = type.globals.map((field: GlobalField, index: number) => {
+                return {
+                    id: field.id,
+                    value: values[index]
+                };
+            });
+            values.push(type.id, id);
+            await database.ITEM.UPDATE_GLOBAL.executeConnection(connection, type, values);
         });
 
-        // Need to push the where for sql to know what to update
-        values.push(id);
-
-        if ((await database.ITEM.UPDATE.execute(type, values)).affectedRows > 0) {
+        if (affectedRows > 0) {
             res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals } ]));
         } else {
             next(ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND));
@@ -513,13 +525,19 @@ export async function itemDelete(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
+        const companyId: number = req.params.user.companyId;
 
         const database: DatabaseController = req.app.get('database');
         if (!await TypeModel.exists(typeId)) {
             throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
         }
 
-        const affectedRows = (await database.ITEM.DELETE.execute(typeId, [ id ])).affectedRows;
+        let affectedRows = 0;
+        await database.beginTransaction(async function(connection) {
+            await database.ITEM.DELETE_GLOBAL.executeConnection(connection, companyId, [ typeId, id ]);
+            affectedRows = (await database.ITEM.DELETE.executeConnection(connection, typeId, [ id ])).affectedRows;
+        });
+
         if (affectedRows > 0) {
             res.status(204).send();
         } else {

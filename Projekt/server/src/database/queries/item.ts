@@ -17,15 +17,23 @@ export interface Sortable<U, V> {
 export class ItemQueries extends Queries {
 
     readonly CREATE: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: FullType) => {
+        let fields = 'id';
         let values = 'NULL';
-        let sql = `INSERT INTO ${this.prefix}item_${type.id} (id`;
-        type.fields.forEach(function(field: TypeField) {
-            sql += `, field_${field.id}`;
+        type.fields.forEach((field: TypeField) => {
+            fields += `, field_${field.id}`;
             values += ', ?';
         });
-        sql += ') VALUES (';
-        sql += values + ')';
-        return sql;
+        return `INSERT INTO ${this.prefix}item_${type.id} (${fields}) VALUES (${values})`;
+    });
+
+    readonly CREATE_GLOBAL: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: FullType) => {
+        let fields = 'typeId, id';
+        let values = '?, ?';
+        type.globals.forEach((field: GlobalField) => {
+            fields += `, global_${field.id}`;
+            values += ', ?';
+        });
+        return `INSERT INTO ${this.prefix}global_${type.companyId} (${fields}) VALUES (${values})`;
     });
 
     readonly GET: DynamicQuery<ArrayResultsets, Sortable<FullType, TypeField>> = this.dynamic(({ value, sorter, order }) => {
@@ -36,7 +44,6 @@ export class ItemQueries extends Queries {
             sql += ` ORDER BY ${this.prefix}item_${sorter.typeId}.field_${sorter.id} ${order}`;
         }
 
-        console.log(sql);
         return sql;
     });
 
@@ -52,20 +59,34 @@ export class ItemQueries extends Queries {
         return `SELECT COUNT(*) FROM ${this.prefix}item_${id}`;
     });
 
-    readonly UPDATE: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: Type) => {
-        let sql = `UPDATE ${this.prefix}item_${type.id} SET`;
-        type.fields.forEach(function(field: TypeField, index: number) {
+    readonly UPDATE: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: FullType) => {
+        let set = '';
+        type.fields.forEach((field: TypeField, index: number) => {
             if (index !== 0) {
-                sql += ',';
+                set += ',';
             }
-            sql += ` field_${field.id} = ?`;
+            set += ` field_${field.id} = ?`;
         });
-        sql += ' WHERE `id` = ?';
-        return sql;
+        return `UPDATE ${this.prefix}item_${type.id} SET ${set} WHERE id = ?`;
+    });
+
+    readonly UPDATE_GLOBAL: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: FullType) => {
+        let set = '';
+        type.globals.forEach((field: GlobalField, index: number) => {
+            if (index !== 0) {
+                set += ',';
+            }
+            set += ` global_${field.id} = ?`;
+        });
+        return `UPDATE ${this.prefix}global_${type.id} SET ${set} WHERE typeId = ? AND id = ?`;
     });
 
     readonly DELETE: DynamicQuery<ObjectResultsets, number> = this.dynamic((id: number) => {
         return `DELETE FROM ${this.prefix}item_${id} WHERE id = ?`;
+    });
+
+    readonly DELETE_GLOBAL: DynamicQuery<ObjectResultsets, number> = this.dynamic((id: number) => {
+        return `DELETE FROM ${this.prefix}global_${id} WHERE typeId = ? AND id = ?`;
     });
 
     private itemSelectQuery(type: Type, globals: GlobalField[]) {
