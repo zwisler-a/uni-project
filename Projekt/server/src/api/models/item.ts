@@ -11,6 +11,7 @@ export interface Item {
     id: number;
     /** Item's Field[] containing the item's values */
     fields: Field[];
+    globals: Field[];
 }
 
 /**

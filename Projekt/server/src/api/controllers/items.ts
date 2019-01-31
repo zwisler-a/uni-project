@@ -2,9 +2,11 @@ import { Response, Request, NextFunction } from 'express';
 
 import { DatabaseController } from '../../database/controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { Type, TypeField, TypeFieldType } from '../models/type';
+import { Type, TypeField, TypeFieldType, FullType } from '../models/type';
 import { Item, Field } from '../models/item';
+import { GlobalField } from '../models/global';
 import { TypeModel } from '../../database/models/type';
+import { GlobalFieldModel } from '../../database/models/global';
 import { Sortable, SortOrder } from '../../database/queries';
 
 /**
@@ -14,11 +16,11 @@ import { Sortable, SortOrder } from '../../database/queries';
  * @param mapping Remapped version of values based on the field order of a type
  * @throws {@link ApiError} if item's values don't match type
  */
-function verifyValues(type: Type, values: Field[]): any[] {
+function verifyValues(fields: TypeField[] | GlobalField[], values: Field[]): any[] {
     const mapping: any[] = [];
 
     typeLoop:
-    for (const field of type.fields) {
+    for (const field of fields) {
 
         // Search value for field
         for (let i = 0; i < values.length; i++) {
@@ -110,7 +112,11 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
         }
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(typeId);
+        const type: FullType = {
+            ...(await TypeModel.get(typeId)),
+            // TODO company id
+            globals: await GlobalFieldModel.get(1)
+        };
 
         let orderBy: TypeField = null;
         if ('orderBy' in query) {
@@ -129,7 +135,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
             order = SortOrder[order];
         }
 
-        let sorter: Sortable<Type, TypeField>;
+        let sorter: Sortable<FullType, TypeField>;
         if (orderBy !== null) {
             sorter = { value: type, sorter: orderBy, order };
         } else {
@@ -216,11 +222,13 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
             order = SortOrder[order];
         }
 
+        const globals = await GlobalFieldModel.get(1);
         // List of types that are in the response object
         const foundTypes: Type[] = [];
         // go through each type and process the items inside
         const itemQueries = types.map(async function(type: Type) {
-            const items = await getFilteredItems({ value: type }, type, searchQuery, database);
+            const full = { ...type, globals };
+            const items = await getFilteredItems({ value: full }, full, searchQuery, database);
             if (items.length) {
                 foundTypes.push(type);
             }
@@ -307,7 +315,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  * @param searchQuery String the Items should be filtered by
  * @param database DatabaseController to get the data from
  */
-async function getFilteredItems(sorter: Sortable<Type, TypeField>, type: Type, searchQuery: string, database: DatabaseController): Promise<Item[]> {
+async function getFilteredItems(sorter: Sortable<FullType, TypeField>, type: FullType, searchQuery: string, database: DatabaseController): Promise<Item[]> {
     let items: Item[] = (await database.ITEM.GET.execute(sorter));
     // Filter items if a searchQuery is set
     if (searchQuery) {
@@ -327,9 +335,10 @@ async function getFilteredItems(sorter: Sortable<Type, TypeField>, type: Type, s
  * Converts an Item from the Database to the form it is send
  * @param type Type of the Item
  */
-function convertItem(type: Type): (item: any) => Item {
+function convertItem(type: FullType): (item: any) => Item {
     return (item: any) => {
         const fields: Field[] = [];
+        const globals: Field[] = [];
         for (let i = 0; i < type.fields.length; i++) {
             const field = type.fields[i];
             const value = item[`field_${field.id}`];
@@ -347,7 +356,22 @@ function convertItem(type: Type): (item: any) => Item {
 
             fields.push(itemField);
         }
-        return { typeId: type.id, id: item.id, fields };
+        for (let i = 0; i < type.globals.length; i++) {
+            const global = type.globals[i];
+            const value = item[`global_${global.id}`];
+
+            const itemField: Field = {
+                id: global.id,
+                value
+            };
+
+            if (global.type === TypeFieldType.boolean) {
+                itemField.value = value.readUInt8() === 1;
+            }
+
+            globals.push(itemField);
+        }
+        return { typeId: type.id, id: item.id, fields, globals };
     };
 }
 
@@ -365,9 +389,13 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
         let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(typeId);
+        const type: FullType = {
+            ...(await TypeModel.get(typeId)),
+            // TODO company id
+            globals: await GlobalFieldModel.get(1)
+        };
 
-        const values = verifyValues(type, fields);
+        const values = verifyValues(type.fields, fields);
         // TODO set referenced field value (also in itemUpdate)
         fields = values.map((value: any, index: number) => {
             return {
@@ -378,7 +406,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
 
         const id: number = (await database.ITEM.CREATE.execute(type, values)).insertId;
 
-        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
+        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals: [] } ]));
     } catch (error) {
         next(error);
     }
@@ -396,7 +424,11 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const id: number = req.params.id;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(typeId);
+        const type: FullType = {
+            ...(await TypeModel.get(typeId)),
+            // TODO company id
+            globals: await GlobalFieldModel.get(1)
+        };
 
         const items = await database.ITEM.GET_ID.execute(type, [ id ]);
         if (items.length === 0) {
@@ -423,9 +455,13 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
         let fields: Field[] = req.body;
 
         const database: DatabaseController = req.app.get('database');
-        const type: Type = await TypeModel.get(typeId);
+        const type: FullType = {
+            ...(await TypeModel.get(typeId)),
+            // TODO company id
+            globals: await GlobalFieldModel.get(1)
+        };
 
-        const values = verifyValues(type, fields);
+        const values = verifyValues(type.fields, fields);
         fields = values.map((value: any, index: number) => {
             return {
                 id: type.fields[index].id,
@@ -438,7 +474,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
 
         const affectedRows = (await database.ITEM.UPDATE.execute(type, values)).affectedRows;
         if (affectedRows > 0) {
-            res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields } ]));
+            res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals: [] } ]));
         } else {
             next(ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND));
         }

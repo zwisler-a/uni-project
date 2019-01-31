@@ -92,9 +92,14 @@ export class TypeModel {
         return type;
     }
 
-    static async getAll(): Promise<Type[]> {
+    static async getAll(company?: number): Promise<Type[]> {
         // TODO use select * for type fields
-        const types: Type[] = await TypeModel.database.TYPE.GET.execute();
+        let types: Type[];
+        if (typeof company !== 'undefined') {
+            types = await TypeModel.database.TYPE.GET_COMPANY.execute();
+        } else {
+            types = await TypeModel.database.TYPE.GET.execute();
+        }
 
         for (const type of types) {
             const id = type.id.toString();
@@ -150,8 +155,6 @@ export class TypeModel {
      */
     static async create(type: Type): Promise<Type> {
         await TypeModel.fetchReferences(type);
-
-        const globals: GlobalField[] = await GlobalFieldModel.get(type.companyId);
 
         let result: Type;
         await TypeModel.database.beginTransaction(async function(connection) {
@@ -281,7 +284,6 @@ export class TypeModel {
         });
 
         // TODO later generate a valid Type object instead of fetching
-        type = await TypeModel.fetchType(id);
         await TypeModel.cache.set(id.toString(), type);
         return type;
     }

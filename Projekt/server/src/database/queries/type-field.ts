@@ -10,7 +10,7 @@ export class TypeFieldQueries extends Queries {
             name VARCHAR(64) NOT NULL,
             type ENUM('string', 'number', 'boolean', 'file', 'color', 'date', 'reference') NOT NULL,
             required BIT NOT NULL,
-            unique BIT NOT NULL,
+            \`unique\` BIT NOT NULL,
             referenceId INT UNSIGNED,
             PRIMARY KEY (id),
             UNIQUE INDEX (typeId, name),
@@ -28,7 +28,7 @@ export class TypeFieldQueries extends Queries {
 
     readonly CREATE: StaticQuery<ObjectResultsets> = this.sql(
         `INSERT INTO ${this.prefix}types_field
-            (id, typeId, name, type, required, unique, referenceId)
+            (id, typeId, name, type, required, \`unique\`, referenceId)
             VALUES (NULL,?,?,?,?,?,?)`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
@@ -45,7 +45,7 @@ export class TypeFieldQueries extends Queries {
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}types_field
-            SET name = ?, type = ?, required = ?, unique = ?, referenceId = ?
+            SET name = ?, type = ?, required = ?, \`unique\` = ?, referenceId = ?
             WHERE id = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(

@@ -4,6 +4,8 @@ import { GlobalField } from '../../api/models/global';
 import { TypeFieldType } from '../../api/models/type';
 import { DatabaseController } from '../controller';
 import { ApiError, ErrorNumber } from '../../types';
+import { Glob } from 'glob';
+import { TypeModel } from './type';
 
 /**
  * Database model class for global field objects
@@ -73,6 +75,11 @@ export class GlobalFieldModel {
             } else if (!old.unique && field.unique) {
                 await GlobalFieldModel.database.GLOBAL_TABLE.ADD_UNIQUE_INDEX.executeConnection(connection, field);
                 update = true;
+            }
+
+            if (update) {
+                const params = [ field.companyId, field.name, field.type, field.required, field.unique ];
+                await GlobalFieldModel.database.GLOBAL.UPDATE.executeConnection(connection, params);
             }
         });
 

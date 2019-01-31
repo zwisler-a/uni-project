@@ -1,6 +1,6 @@
 import { ObjectResultsets, ArrayResultsets } from 'mariadb';
 import { DynamicQuery, Queries } from '../query';
-import { Type, TypeField, TypeFieldType } from '../../api/models/type';
+import { Type, TypeField, TypeFieldType, FullType } from '../../api/models/type';
 import { GlobalField } from '../../api/models/global';
 
 export enum SortOrder {
@@ -16,7 +16,7 @@ export interface Sortable<U, V> {
 
 export class ItemQueries extends Queries {
 
-    readonly CREATE: DynamicQuery<ObjectResultsets, Type> = this.dynamic((type: Type) => {
+    readonly CREATE: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: FullType) => {
         let values = 'NULL';
         let sql = `INSERT INTO ${this.prefix}item_${type.id} (id`;
         type.fields.forEach(function(field: TypeField) {
@@ -28,30 +28,31 @@ export class ItemQueries extends Queries {
         return sql;
     });
 
-    readonly GET: DynamicQuery<ArrayResultsets, Sortable<Type, TypeField>> = this.dynamic(({ value, sorter, order }) => {
-        let sql = this.itemSelectQuery(value, []);
+    readonly GET: DynamicQuery<ArrayResultsets, Sortable<FullType, TypeField>> = this.dynamic(({ value, sorter, order }) => {
+        let sql = this.itemSelectQuery(value, value.globals);
 
         if (typeof sorter !== 'undefined') {
             // TODO `table`.`field` + `table`.`global`
             sql += ` ORDER BY ${this.prefix}item_${sorter.typeId}.field_${sorter.id} ${order}`;
         }
 
+        console.log(sql);
         return sql;
     });
 
-    readonly GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<Type, TypeField>> = this.dynamic((sortable: Sortable<Type, TypeField>) => {
+    readonly GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<FullType, TypeField>> = this.dynamic((sortable: Sortable<FullType, TypeField>) => {
         return `${this.GET.builder(sortable)} LIMIT ?, ?`;
     });
 
-    readonly GET_ID: DynamicQuery<ArrayResultsets, Type> = this.dynamic((type: Type) => {
-        return `${this.itemSelectQuery(type, [])} WHERE ${this.prefix}item_${type.id}.id = ?`;
+    readonly GET_ID: DynamicQuery<ArrayResultsets, FullType> = this.dynamic((type: FullType) => {
+        return `${this.itemSelectQuery(type, type.globals)} WHERE ${this.prefix}item_${type.id}.id = ?`;
     });
 
     readonly COUNT: DynamicQuery<ArrayResultsets, number> = this.dynamic((id: number) => {
         return `SELECT COUNT(*) FROM ${this.prefix}item_${id}`;
     });
 
-    readonly UPDATE: DynamicQuery<ObjectResultsets, Type> = this.dynamic((type: Type) => {
+    readonly UPDATE: DynamicQuery<ObjectResultsets, FullType> = this.dynamic((type: Type) => {
         let sql = `UPDATE ${this.prefix}item_${type.id} SET`;
         type.fields.forEach(function(field: TypeField, index: number) {
             if (index !== 0) {

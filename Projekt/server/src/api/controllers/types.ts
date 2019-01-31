@@ -12,6 +12,7 @@ import { TypeModel } from '../../database/models/type';
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = TYPE.validate(req.body);
+        type.companyId = req.params.user.companyId;
         const result: Type = await TypeModel.create(type);
         res.status(200).send(result);
     } catch (error) {
