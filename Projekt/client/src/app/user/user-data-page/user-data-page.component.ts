@@ -108,7 +108,7 @@ export class UserDataPageComponent implements OnInit {
     /** Deletes the user which is logged in after confirm */
     deleteMe() {
         this.confirmDialog.open('user.deleteMe', true).subscribe(_ => {
-            this.userService.deleteUser(this.authService.user.id).subscribe(_ => {
+            this.userService.deleteUser(this.authService.user.id).subscribe(() => {
                 this.authService.logout();
             });
         });

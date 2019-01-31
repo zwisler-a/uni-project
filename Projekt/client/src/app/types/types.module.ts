@@ -28,9 +28,17 @@ import { TypesListComponent } from './types-list/types-list.component';
 import { TypesResolver } from './types-list/types.resolver';
 import { GlobalFieldsComponent } from './global-fields/global-fields.component';
 import { GlobalFieldStoreModule } from './_global-field-store/global-field-store.module';
+import { FieldTypeSelectComponent } from './type-field/field-type-select/field-type-select.component';
 
 @NgModule({
-    declarations: [TypesListComponent, TypeDetailComponent, TypeFieldComponent, AddTypeComponent, GlobalFieldsComponent],
+    declarations: [
+        TypesListComponent,
+        TypeDetailComponent,
+        TypeFieldComponent,
+        AddTypeComponent,
+        GlobalFieldsComponent,
+        FieldTypeSelectComponent
+    ],
     imports: [
         CommonModule,
         RouterModule.forChild(typeRoutes),

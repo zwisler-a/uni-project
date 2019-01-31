@@ -1,8 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TypesService } from 'src/app/types/_type-store/types.service';
 
 import { Type } from '../../models/type.interface';
-import { TypesService } from 'src/app/types/_type-store/types.service';
-import { TypeField } from 'src/app/models/type-field.interface';
+import { TypeSelectEvent } from './type-selector-event.interface';
 
 @Component({
     selector: 'app-type-selector',
@@ -11,16 +11,13 @@ import { TypeField } from 'src/app/models/type-field.interface';
 })
 export class TypeSelectorComponent implements OnInit {
     @Output()
-    selected = new EventEmitter<{ type: Type; field?: TypeField }>();
+    selected = new EventEmitter<TypeSelectEvent>();
 
     @Input()
     disabled = false;
 
     @Input()
-    value: number;
-
-    @Input()
-    fieldId: number;
+    value: TypeSelectEvent = { typeId: 0, fieldId: 0 };
 
     type: Type = { fields: [], id: 0, name: '' };
 
@@ -38,7 +35,7 @@ export class TypeSelectorComponent implements OnInit {
 
     selectType(type: Type) {
         if (!this.withField) {
-            this.selected.emit({ type: type });
+            this.selected.emit({ typeId: type.id });
         } else {
             this.type = type;
             this.fieldSelectable = true;
@@ -47,12 +44,13 @@ export class TypeSelectorComponent implements OnInit {
 
     selectField(field) {
         if (this.withField) {
-            this.selected.emit({ type: this.type, field: field });
+            this.selected.emit({ typeId: this.type.id, fieldId: field.id });
         }
     }
 
     get fieldValue() {
-        const foundField = this.type.fields.find(field => field.id + `` === this.fieldId + '');
+        const fieldId = this.value.fieldId;
+        const foundField = this.type.fields.find(field => field.id + `` === fieldId + '');
         return foundField ? foundField.name : '';
     }
 

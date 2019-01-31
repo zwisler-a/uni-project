@@ -5,17 +5,17 @@
 
 <form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off">
     <!-- SELECT TYPE OF ITEM -->
-    <span *ngIf="typeId === -1" translate>items.create.selectType</span>
-    <app-type-selector (selected)="typeChange($event)"></app-type-selector>
+    <span *ngIf="form.typeId === -1" translate>items.create.selectType</span>
+    <app-type-selector [value]="{ typeId: form.typeId }" (selected)="typeChange($event)"></app-type-selector>
 
     <!-- EDITABLE FIELDS -->
-    <app-item-field *ngFor="let field of fields" [control]="field" [form]="form"></app-item-field>
+    <app-item-field *ngFor="let key of controlKeys" [control]="form.controls[key]" [form]="form"></app-item-field>
 
     <!-- ACTIONS -->
-    <div *ngIf="typeId !== -1" fxLayoutAlign="end center" class="actions">
+    <div *ngIf="form.typeId !== -1" fxLayoutAlign="end center" class="actions">
         <button
             color="primary"
-            [disabled]="isSubmitting || form ? form.invalid : false || typeId === -1"
+            [disabled]="isSubmitting || form ? form.invalid : false || form.typeId === -1"
             mat-raised-button
             (click)="submit()"
         >

@@ -2,11 +2,13 @@ import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
 
-import { ApiItem } from '../../models/api/api-item.interface';
+import { ApiItem, ApiItemField } from '../../models/api/api-item.interface';
 import { EmbeddedItems } from '../../models/api/embedded-items.interface';
 import { FieldType } from '../../models/field-type.enum';
 import { Item } from '../../models/item.interface';
 import { Type } from '../../models/type.interface';
+import { TypeField } from 'src/app/models/type-field.interface';
+import { Field } from 'src/app/models/field.interface';
 
 /**
  * Pipe to translate items from ApiItem to UIItems and via versa.
@@ -49,7 +51,6 @@ export class ItemPipe implements PipeTransform {
             typeId: item.typeId,
             fields: []
         };
-        // TODO refac
         uiItem.fields = item.fields.map(apiField => {
             const fieldType = itemType.fields.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
             if (!fieldType) {
@@ -62,32 +63,38 @@ export class ItemPipe implements PipeTransform {
                 required: fieldType.required,
                 unique: fieldType.unique,
                 type: fieldType.type,
+                referenceValue: apiField.reference,
+                referenceFieldId: fieldType.reference ? fieldType.reference.id : null,
                 referenceId: fieldType.referenceId,
-                displayValue: this.getFieldDisplayValue(apiField.value, fieldType.type)
-            };
+                displayValue: this.getFieldDisplayValue(apiField, fieldType)
+            } as Field;
         });
         return uiItem;
     }
 
     /** Determines how a value should be displayed */
-    private getFieldDisplayValue(value: any, type: string) {
-        switch (type) {
+    private getFieldDisplayValue(field: ApiItemField, fieldType: TypeField) {
+        switch (fieldType.type) {
             case FieldType.boolean:
-                return value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
+                return field.value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
             case FieldType.date:
-                return new Date(value).toLocaleDateString('de-De');
+                return new Date(field.value).toLocaleDateString('de-De');
             case FieldType.number:
-                return value + '';
+                return field.value + '';
             case FieldType.color:
                 // sanatize color beforehand and than bypass the display value
-                const svalue = this.sanatizer.sanitize(SecurityContext.HTML, value);
+                const svalue = this.sanatizer.sanitize(SecurityContext.HTML, field.value);
                 return this.sanatizer.bypassSecurityTrustHtml(
                     `${svalue} <span style="display: inline-block;width: 10px;height: 10px;background:${svalue}"></span>`
                 );
             case FieldType.reference:
-                return '<span class="table-cell-reference"><i class="material-icons">link</i> ' + value + '</span>';
+                return (
+                    '<span class="table-cell-reference"><i class="material-icons">link</i> ' +
+                    this.getFieldDisplayValue({ value: field.reference, id: 0 }, fieldType.reference) +
+                    '</span>'
+                );
             default:
-                return value;
+                return field.value;
         }
     }
 

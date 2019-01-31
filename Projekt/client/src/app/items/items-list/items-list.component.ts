@@ -12,6 +12,7 @@ import { FieldsService } from '../_fields-store/fields.service';
 import { ItemService } from '../_item-store/item.service';
 import { ItemListDataSource } from './items-list.datasource';
 import { fadeInOut, fadeIn } from 'src/app/shared/animations';
+import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 
 /**
  * Display a list of currently loaded items
@@ -39,6 +40,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
         private router: Router,
         private itemService: ItemService,
         private fieldsService: FieldsService,
+        private refSelectService: ItemFieldReferenceService,
         private activatedRoute: ActivatedRoute,
         @Optional() @Host() private pageComponent: DefaultPageComponent
     ) {}
@@ -83,8 +85,12 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     }
 
     /** Open item detail page (sidenav) */
-    async open(row: Item) {
-        await this.router.navigate(['/items', 'view', { outlets: { detail: ['details', row.typeId, row.id] } }]);
+    open(row: Item) {
+        if (this.refSelectService.isSelecting) {
+            this.refSelectService.select(row);
+        } else {
+            this.router.navigate(['/items', 'view', { outlets: { detail: ['details', row.typeId, row.id] } }]);
+        }
     }
 
     /** Returns a displayable value for a field */

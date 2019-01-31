@@ -50,6 +50,11 @@
     },
 
     "items": {
+        "reference": {
+            "selecting": "Referenz Auswahl",
+            "cancel": "Abbrechen",
+            "select": "Auswählen"
+        },
         "title": "Inventar",
         "new": "Neues Item",
         "noData": "Keine Items vorhanden",

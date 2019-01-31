@@ -4,6 +4,7 @@
         "types": "Object types",
         "admin": "Admin area",
         "roles": "User roles",
+        "user": "Users",
         "companies": "Companies"
     },
     "user": {
@@ -48,6 +49,11 @@
     },
 
     "items": {
+        "reference": {
+            "selecting": "Reference selection",
+            "cancel": "Cancel",
+            "select": "Select"
+        },
         "noData": "No Items available",
         "new": "New item",
         "error": {

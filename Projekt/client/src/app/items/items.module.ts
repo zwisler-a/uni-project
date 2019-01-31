@@ -45,6 +45,7 @@ import { ItemTypeListComponent } from './item-type-list/item-type-list.component
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
+import { ItemFieldReferenceService } from './item-field/item-field-reference/item-field-reference.service';
 
 @NgModule({
     declarations: [
@@ -95,6 +96,7 @@ import { itemsRoutes } from './items.routes';
     ],
     providers: [
         ItemsListResolver,
+        ItemFieldReferenceService,
         { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }
     ]
 })
