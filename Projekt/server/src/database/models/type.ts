@@ -96,7 +96,7 @@ export class TypeModel {
         // TODO use select * for type fields
         let types: Type[];
         if (typeof company !== 'undefined') {
-            types = await TypeModel.database.TYPE.GET_COMPANY.execute();
+            types = await TypeModel.database.TYPE.GET_COMPANY.execute(company);
         } else {
             types = await TypeModel.database.TYPE.GET.execute();
         }

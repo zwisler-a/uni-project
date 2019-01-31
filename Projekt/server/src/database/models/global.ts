@@ -1,10 +1,9 @@
+import { Connection } from 'mariadb';
 import { Cache } from '../../util/cache';
-import { Company } from '../../api/models/company';
 import { GlobalField } from '../../api/models/global';
-import { TypeFieldType } from '../../api/models/type';
+import { FullType } from '../../api/models/type';
 import { DatabaseController } from '../controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { Glob } from 'glob';
 import { TypeModel } from './type';
 
 /**
@@ -32,8 +31,14 @@ export class GlobalFieldModel {
         GlobalFieldModel.database = database;
     }
 
+    private static mapField(field: any): GlobalField {
+        field.required = field.required.readUInt8() === 1;
+        field.unique = field.unique.readUInt8() === 1;
+        return field as GlobalField;
+    }
+
     static async get(companyId: number): Promise<GlobalField[]> {
-        return await GlobalFieldModel.database.GLOBAL.GET_COMPANY.execute([ companyId ]);
+        return (await GlobalFieldModel.database.GLOBAL.GET_COMPANY.execute([ companyId ])).map(GlobalFieldModel.mapField);
     }
 
     static async create(field: GlobalField) {
@@ -56,7 +61,7 @@ export class GlobalFieldModel {
             throw ApiError.NOT_FOUND(ErrorNumber.GLOBAL_FIELD_NOT_FOUND, id);
         }
 
-        const old: GlobalField = fields.pop();
+        const old: GlobalField = GlobalFieldModel.mapField(fields.pop());
 
         field.id = id;
         field.companyId = old.companyId;
@@ -78,7 +83,7 @@ export class GlobalFieldModel {
             }
 
             if (update) {
-                const params = [ field.companyId, field.name, field.type, field.required, field.unique ];
+                const params = [ field.name, field.type, field.required, field.unique, old.id ];
                 await GlobalFieldModel.database.GLOBAL.UPDATE.executeConnection(connection, params);
             }
         });

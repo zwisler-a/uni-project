@@ -6,9 +6,9 @@ import { ObjectValidator } from '../../util/object-validator';
  */
 export interface Item {
     /** Id of this item's type */
-    typeId: number;
+    typeId?: number;
     /** unique interal type specific item id */
-    id: number;
+    id?: number;
     /** Item's Field[] containing the item's values */
     fields: Field[];
     globals: Field[];
@@ -27,19 +27,42 @@ export interface Field {
     reference?: any;
 }
 
-export const ITEM = new ObjectValidator<Field[]>({
-    type: Array,
+export const ITEM = new ObjectValidator<Item>({
+    type: Object,
     required: true,
-    elements: {
-        type: Object,
-        required: true,
-        properties: {
-            id: {
-                type: Number,
-                required: true
-            },
-            value: {
-                required: true
+    properties: {
+        fields: {
+            type: Array,
+            required: true,
+            elements: {
+                type: Object,
+                required: true,
+                properties: {
+                    id: {
+                        type: Number,
+                        required: true
+                    },
+                    value: {
+                        required: true
+                    }
+                }
+            }
+        },
+        globals: {
+            type: Array,
+            required: true,
+            elements: {
+                type: Object,
+                required: true,
+                properties: {
+                    id: {
+                        type: Number,
+                        required: true
+                    },
+                    value: {
+                        required: true
+                    }
+                }
             }
         }
     }

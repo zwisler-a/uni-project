@@ -3,11 +3,11 @@ import { Response, Request, NextFunction } from 'express';
 import { DatabaseController } from '../../database/controller';
 import { ApiError, ErrorNumber } from '../../types';
 import { Type, TypeField, TypeFieldType, FullType } from '../models/type';
-import { Item, Field } from '../models/item';
+import { Item, Field, ITEM } from '../models/item';
 import { GlobalField } from '../models/global';
 import { TypeModel } from '../../database/models/type';
 import { GlobalFieldModel } from '../../database/models/global';
-import { Sortable, SortOrder } from '../../database/queries';
+import { Sortable, SortOrder } from '../../database/queries/item';
 
 /**
  * Checks the integrity of all values based on a type and maps them for SQL calls
@@ -386,7 +386,9 @@ function convertItem(type: FullType): (item: any) => Item {
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const typeId: number = req.params.type;
-        let fields: Field[] = req.body;
+        const item: Item = ITEM.validate(req.body);
+        let fields: Field[] = item.fields;
+        let globals: Field[] = item.globals;
 
         const database: DatabaseController = req.app.get('database');
         const type: FullType = {
@@ -395,18 +397,26 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
             globals: await GlobalFieldModel.get(1)
         };
 
-        const values = verifyValues(type.fields, fields);
+        let values = verifyValues(type.fields, fields);
+        values = values.concat(verifyValues(type.globals, globals));
         // TODO set referenced field value (also in itemUpdate)
-        fields = values.map((value: any, index: number) => {
+        fields = type.fields.map((field: TypeField, index: number) => {
             return {
-                id: type.fields[index].id,
-                value
+                id: field.id,
+                value: values[index]
+            };
+        });
+        const offset = type.fields.length;
+        globals = type.globals.map((field: GlobalField, index: number) => {
+            return {
+                id: field.id,
+                value: values[offset + index]
             };
         });
 
         const id: number = (await database.ITEM.CREATE.execute(type, values)).insertId;
 
-        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals: [] } ]));
+        res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals } ]));
     } catch (error) {
         next(error);
     }
@@ -452,7 +462,9 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
     try {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
-        let fields: Field[] = req.body;
+        const item: Item = ITEM.validate(req.body);
+        let fields: Field[] = item.fields;
+        let globals: Field[] = item.globals;
 
         const database: DatabaseController = req.app.get('database');
         const type: FullType = {
@@ -461,20 +473,28 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
             globals: await GlobalFieldModel.get(1)
         };
 
-        const values = verifyValues(type.fields, fields);
-        fields = values.map((value: any, index: number) => {
+        let values = verifyValues(type.fields, fields);
+        values = values.concat(verifyValues(type.globals, globals));
+        // TODO set referenced field value (also in itemUpdate)
+        fields = type.fields.map((field: TypeField, index: number) => {
             return {
-                id: type.fields[index].id,
-                value
+                id: field.id,
+                value: values[index]
+            };
+        });
+        const offset = type.fields.length;
+        globals = type.globals.map((field: GlobalField, index: number) => {
+            return {
+                id: field.id,
+                value: values[offset + index]
             };
         });
 
         // Need to push the where for sql to know what to update
         values.push(id);
 
-        const affectedRows = (await database.ITEM.UPDATE.execute(type, values)).affectedRows;
-        if (affectedRows > 0) {
-            res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals: [] } ]));
+        if ((await database.ITEM.UPDATE.execute(type, values)).affectedRows > 0) {
+            res.status(200).send(new EmbeddedItem([ type ], [ { typeId: type.id, id, fields, globals } ]));
         } else {
             next(ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND));
         }

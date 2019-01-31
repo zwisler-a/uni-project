@@ -4,11 +4,11 @@ import { verifyJsonWebToken } from '../controllers/authentication';
 import { globalCreate, globalGet, globalUpdate, globalDelete } from '../controllers/global';
 import { param } from './util';
 
-/** express.Router for path `/api/companies` */
-export const companiesRoute: Router = Router();
-companiesRoute.param('id', param);
+/** express.Router for path `/api/globals` */
+export const globalRoute: Router = Router();
+globalRoute.param('id', param);
 
-companiesRoute.post('/', verifyJsonWebToken, globalCreate);
-companiesRoute.get('/', verifyJsonWebToken, globalGet);
-companiesRoute.patch('/:id', verifyJsonWebToken, globalUpdate);
-companiesRoute.delete('/:id', verifyJsonWebToken, globalDelete);
+globalRoute.post('/', verifyJsonWebToken, globalCreate);
+globalRoute.get('/', verifyJsonWebToken, globalGet);
+globalRoute.patch('/:id', verifyJsonWebToken, globalUpdate);
+globalRoute.delete('/:id', verifyJsonWebToken, globalDelete);

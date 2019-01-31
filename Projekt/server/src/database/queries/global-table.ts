@@ -49,10 +49,10 @@ export class GlobalTableQueries extends Queries {
 
     readonly ADD_UNIQUE_INDEX: DynamicQuery<ObjectResultsets, GlobalField> = this.dynamic((field: GlobalField) => {
         const name = `global_${field.id}`;
-        return `ALTER TABLE ${this.prefix}item_${field.companyId}\` ADD CONSTRAINT ${name} UNIQUE INDEX (${name})`;
+        return `ALTER TABLE ${this.prefix}global_${field.companyId} ADD CONSTRAINT ${name} UNIQUE INDEX (${name})`;
     });
 
     readonly DROP_UNIQUE_INDEX: DynamicQuery<ObjectResultsets, GlobalField> = this.dynamic((field: GlobalField) => {
-        return `ALTER TABLE ${this.prefix}item_${field.companyId} DROP INDEX global_${field.id}`;
+        return `ALTER TABLE ${this.prefix}global_${field.companyId} DROP INDEX global_${field.id}`;
     });
 }
