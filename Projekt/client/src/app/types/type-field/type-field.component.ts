@@ -47,7 +47,7 @@ export class TypeFieldComponent implements OnInit {
     }
 
     get reference(): TypeSelectEvent {
-        const ref = this.field.referenceId as any;
-        return { typeId: ref ? ref.typeId : 0, fieldId: ref ? ref.fieldId : 0 };
+        const ref = this.field.reference as any;
+        return { typeId: ref ? ref.typeId : 0, fieldId: ref ? ref.id : 0 };
     }
 }

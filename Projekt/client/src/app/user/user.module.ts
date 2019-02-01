@@ -26,9 +26,10 @@ import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserResolver } from './user-list/user.resolver';
 import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
+import { AddUserComponent } from './add-user/add-user.component';
 
 @NgModule({
-    declarations: [UserListComponent, UserDetailComponent, UserDataPageComponent],
+    declarations: [UserListComponent, UserDetailComponent, UserDataPageComponent, AddUserComponent],
     imports: [
         CommonModule,
         DefaultPageModule,

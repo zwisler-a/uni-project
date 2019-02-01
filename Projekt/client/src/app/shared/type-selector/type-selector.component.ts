@@ -31,7 +31,13 @@ export class TypeSelectorComponent implements OnInit {
     }
     constructor(private typesService: TypesService) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        if (this.value.typeId) {
+            this.typesService.getType(this.value.typeId).subscribe(type => {
+                this.type = type;
+            });
+        }
+    }
 
     selectType(type: Type) {
         if (!this.withField) {

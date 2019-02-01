@@ -28,7 +28,16 @@
             "update": "User could not be updated!",
             "delete": "User could not be deleted!",
             "get": "User could not be fetched!",
-            "load": "User could not be fetched!"
+            "load": "User could not be fetched!",
+            "create": "User could not be created!"
+        },
+        "new": {
+            "title": "Create user",
+            "company": "Company",
+            "password": "Generated password",
+            "add": "Add",
+            "cancel": "Cancel",
+            "created": "User created!"
         }
     },
 

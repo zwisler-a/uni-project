@@ -7,7 +7,15 @@
     </mat-toolbar>
     <form class="user-info-form" fxLayout="column">
         <mat-form-field>
-            <input disabled matInput disabled [placeholder]="'user.email' | translate" [value]="user.email" />
+            <input disabled matInput [placeholder]="'user.email' | translate" [value]="user.email" />
+        </mat-form-field>
+        <mat-form-field>
+            <input
+                disabled
+                matInput
+                [placeholder]="'user.email' | translate"
+                [value]="user.companyId | company | async"
+            />
         </mat-form-field>
     </form>
 
