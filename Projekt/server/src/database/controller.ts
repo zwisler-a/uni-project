@@ -1,9 +1,10 @@
-import { Pool, Connection } from '../../types/mariadb';
+import { Pool, Connection } from 'mariadb';
 
+import { CompanyModel } from './models/company';
 import { UserModel } from './models/user';
 import { TypeModel } from './models/type';
-import { CompanyModel } from './models/company';
 import { GlobalFieldModel } from './models/global';
+import { ItemModel } from './models/item';
 
 import { CompanyQueries } from './queries/company';
 import { GlobalTableQueries } from './queries/global-table';
@@ -87,10 +88,11 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.GLOBAL.CREATE_TABLE.execute();
 
     // Initilize all models
+    CompanyModel.initialize(controller);
     UserModel.initialize(controller);
     TypeModel.initialize(controller);
-    CompanyModel.initialize(controller);
     GlobalFieldModel.initialize(controller);
+    ItemModel.initialize(controller);
 
     try {
         // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')

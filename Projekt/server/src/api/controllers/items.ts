@@ -100,6 +100,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         if (orderBy.length !== 0) {
             const mul = options.order === SortOrder.ASC ? 1 : -1;
 
+            // TODO fix the damn search
             items.items = items.items.map((item: any) => {
                 item.sort = item.fields.reduce((object: any, { id, value }: any) => {
                     if (typeof value === 'boolean') {

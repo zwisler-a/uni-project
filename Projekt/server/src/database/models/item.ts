@@ -153,9 +153,9 @@ export class ItemModel {
                 global: false
             };
 
-            if (field.type === TypeFieldType.reference) {
+            if (result.value && field.type === TypeFieldType.reference) {
                 const item = await ItemModel.get(type.companyId, field.reference.typeId, result.value);
-                result.reference = item.fields.find(itemField => itemField.id === field.referenceId);
+                result.reference = item.fields.find(itemField => itemField.id === field.referenceId).value;
             }
 
             return result;
@@ -170,7 +170,7 @@ export class ItemModel {
         return fields;
     }
 
-    static async getFilteredItems(sorter: Sortable<FullType, TypeField>, searchQuery: string): Promise<Item[]> {
+    private static async getFilteredItems(sorter: Sortable<FullType, TypeField>, searchQuery: string): Promise<Item[]> {
         const items: Item[] = (await ItemModel.database.ITEM.GET.execute(sorter)).map(ItemModel.mapGet(sorter.value));
         return searchQuery ? items.filter((item: Item) => {
             for (const field of item.fields) {
@@ -197,10 +197,10 @@ export class ItemModel {
         const { page, perPage } = options;
 
         let orderBy: TypeField;
-        if ('orderBy' in options) {
+        if ('orderBy' in options && options.orderBy) {
             orderBy = type.fields.find((field: TypeField) => field.name === options.orderBy);
             if (!orderBy) {
-                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, orderBy);
+                throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, options.orderBy);
             }
         }
 
@@ -232,14 +232,14 @@ export class ItemModel {
         const globals = await GlobalFieldModel.get(companyId);
 
         const foundTypes: Type[] = [];
-        const items: Item[] = (await Promise.all(types.map(async function(type: Type) {
+        const items: Item[] = [].concat(...(await Promise.all(types.map(async function(type: Type) {
             const full = { ...type, globals };
             const items = await ItemModel.getFilteredItems({ value: full }, options.searchQuery);
             if (items.length) {
                 foundTypes.push(type);
             }
             return items;
-        }))).flat();
+        }))));
 
         return new EmbeddedItem(foundTypes, items);
     }

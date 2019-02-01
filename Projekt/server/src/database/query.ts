@@ -1,4 +1,4 @@
-import { Pool, Connection, Resultsets } from '../../types/mariadb';
+import { Pool, Connection, Resultsets } from 'mariadb';
 
 /**
  * Very simple abstraction for queries
