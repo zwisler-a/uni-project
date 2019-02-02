@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment.prod';
     providedIn: 'root'
 })
 export class GlobalFieldsService {
-    readonly baseUrl = environment.baseUrl + `/fields`;
+    readonly baseUrl = environment.baseUrl + `/globals`;
 
     private _fields = new BehaviorSubject<TypeField[]>([]);
     readonly fields = this._fields.asObservable();
@@ -26,8 +26,8 @@ export class GlobalFieldsService {
         );
     }
 
-    updateField(field): any {
-        return this.http.post<TypeField>(this.baseUrl, field).pipe(
+    updateField(field: TypeField): any {
+        return this.http.patch<TypeField>(this.baseUrl + '/' + field.id, field).pipe(
             tap(res => {
                 let fields = this._fields.getValue();
                 fields = fields.filter(filterField => filterField.id + '' !== field.id + '');
