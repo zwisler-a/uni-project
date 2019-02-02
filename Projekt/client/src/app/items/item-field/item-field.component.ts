@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { Field } from '../../models/field.interface';
-import { FieldType } from '../../models/field-type.enum';
 import { FormGroup } from '@angular/forms';
+
+import { FieldType } from '../../models/field-type.enum';
 import { ItemFormControl } from '../item-form-control';
 
 /**

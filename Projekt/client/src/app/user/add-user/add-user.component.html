@@ -1,0 +1,41 @@
+<mat-toolbar color="form">
+    <button mat-icon-button appNavigateBack><mat-icon>close</mat-icon></button>
+    <span translate>user.new.title</span>
+</mat-toolbar>
+<form fxLayout="column" [formGroup]="form" class="add-form">
+    <mat-form-field>
+        <input matInput [placeholder]="'user.name' | translate" formControlName="name" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <input
+            [placeholder]="'user.new.company' | translate"
+            matInput
+            [value]="form.get('companyId').value | company | async"
+            autocomplete="nope"
+            [matAutocomplete]="auto"
+            #autoCompleteTrigger="matAutocompleteTrigger"
+        />
+        <mat-autocomplete
+            (optionSelected)="selectCompany($event.option.value)"
+            #auto="matAutocomplete"
+            [displayWith]="toName"
+        >
+            <mat-option *ngFor="let company of (companies | async)" [value]="company.id">{{ company.name }}</mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [placeholder]="'user.email' | translate" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [placeholder]="'user.new.password' | translate" formControlName="password" />
+    </mat-form-field>
+    <div fxLayoutAlign="end center">
+        <button mat-button><span translate>user.new.cancel</span></button>
+        <button mat-raised-button (click)="createUser()" [disabled]="form.invalid" color="primary">
+            <span translate>user.new.add</span>
+        </button>
+    </div>
+</form>

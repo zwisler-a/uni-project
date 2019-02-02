@@ -1,4 +1,4 @@
 <mat-form-field fxFlex [formGroup]="form">
     <span matPrefix class="field-type">{{ 'items.field.string' | translate }}</span>
-    <input [formControlName]="control.name" [placeholder]="control.name" matInput />
+    <input [formControlName]="control.name" [placeholder]="control.name" matInput [required]="control.required" />
 </mat-form-field>

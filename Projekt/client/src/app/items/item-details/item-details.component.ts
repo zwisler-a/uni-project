@@ -11,6 +11,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { FieldType } from 'src/app/models/field-type.enum';
 import { CustomValidators } from 'src/app/shared/custom-validators';
 import { ItemFormControl } from '../item-form-control';
+import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -35,6 +36,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     constructor(
         private acitvatedRoute: ActivatedRoute,
         private confirmService: ConfirmDialogService,
+        private referenceService: ItemFieldReferenceService,
         private itemService: ItemService,
         private location: Location
     ) {}
@@ -43,6 +45,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         // Look out for route parameter change
         this.acitvatedRoute.params.subscribe(params => {
             this.changeItem(params['typeId'], params['id']);
+            // Restore state if its a selection process
+            if (this.referenceService.isSelecting) {
+                this.form = this.referenceService.restoreState();
+                this.controls = this.form.controls as any;
+                this.edit = true;
+            }
         });
     }
 
@@ -88,6 +96,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     /** Send a request to the backend to delete the displayed item. Navigates back on success. */
     delete() {
         this.confirmService.open('items.confirm.delete', true).subscribe(() => {
+            this.itemSub.unsubscribe();
             this.itemService.deleteItem(this.typeId, this.itemId).subscribe(res => {
                 this.location.back();
             });

@@ -1,14 +1,18 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EmbeddedItems } from 'src/app/models/api/embedded-items.interface';
-import { Field } from 'src/app/models/field.interface';
+import { TypeField } from 'src/app/models/type-field.interface';
+import { Type } from 'src/app/models/type.interface';
+import { TypeSelectEvent } from 'src/app/shared/type-selector/type-selector-event.interface';
+import { TypesService } from 'src/app/types/_type-store/types.service';
 
 import { ItemService } from '../_item-store/item.service';
 import { ItemFormControl } from '../item-form-control';
+import { ItemFormGroup } from '../item-form-group';
+import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 
 /**
  * UI to create an new Item
@@ -20,23 +24,26 @@ import { ItemFormControl } from '../item-form-control';
 })
 export class AddItemComponent implements OnInit, OnDestroy {
     typeSub: Subscription;
-    fields: Field[];
-
     @ViewChild(MatAutocompleteTrigger)
     autocompleteTrigger: MatAutocompleteTrigger;
     isSubmitting: boolean;
-    controls: { [key: string]: FormControl };
-    form: any;
-    typeId = -1;
+    form: ItemFormGroup = new ItemFormGroup(0, {});
 
     constructor(
         private itemService: ItemService,
+        private typeService: TypesService,
         private location: Location,
+        private refFieldService: ItemFieldReferenceService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) {}
 
-    ngOnInit() {}
+    ngOnInit() {
+        // restore state if its in a selection process
+        if (this.refFieldService.isSelecting) {
+            this.form = this.refFieldService.restoreState();
+        }
+    }
 
     ngOnDestroy(): void {
         if (this.typeSub) {
@@ -47,12 +54,11 @@ export class AddItemComponent implements OnInit, OnDestroy {
     /** Sends a request to add the new item */
     submit() {
         this.isSubmitting = true;
-        const item = Object.keys(this.controls).map(key => {
-            const ctrl = this.controls[key];
+        const item = Object.keys(this.form.controls).map(key => {
+            const ctrl = this.form.controls[key];
             return { id: (ctrl as any).id as number, value: ctrl.value };
         });
-        console.log(item);
-        this.itemService.createItem(this.typeId, item).subscribe(
+        this.itemService.createItem(this.form.typeId, item).subscribe(
             (res: EmbeddedItems) => {
                 // redirect to details of the newly created item
                 this.router.navigate(
@@ -83,17 +89,22 @@ export class AddItemComponent implements OnInit, OnDestroy {
     }
 
     /** Changes the type of the item and creates apropriate fields */
-    typeChange(ev) {
-        this.typeId = ev.type.id;
-        this.createFormConrols(ev.type.fields);
-        this.fields = ev.type.fields;
+    typeChange(ev: TypeSelectEvent) {
+        this.typeService.getType(ev.typeId).subscribe((type: Type) => {
+            this.form.typeId = type.id;
+            this.createFormConrols(ev.typeId, type.fields);
+        });
     }
 
-    createFormConrols(fields: Field[]) {
-        this.controls = {};
+    get controlKeys() {
+        return Object.keys(this.form.controls);
+    }
+
+    createFormConrols(typeId: number, fields: TypeField[]) {
+        const controls = {};
         fields.forEach(field => {
-            this.controls[field.name] = ItemFormControl.fromField(field);
+            controls[field.name] = ItemFormControl.fromField(field);
         });
-        this.form = new FormGroup(this.controls);
+        this.form = new ItemFormGroup(typeId, controls);
     }
 }

@@ -1,6 +1,13 @@
 <mat-form-field fxFlex [formGroup]="form">
     <span matPrefix class="field-type">{{ 'items.field.date' | translate }}</span>
-    <input [placeholder]="control.name" [formControlName]="control.name" [matDatepicker]="db" matInput #input />
+    <input
+        [required]="control.required"
+        [placeholder]="control.name"
+        [formControlName]="control.name"
+        [matDatepicker]="db"
+        matInput
+        #input
+    />
     <mat-datepicker-toggle matSuffix [for]="db"></mat-datepicker-toggle>
     <mat-datepicker #db></mat-datepicker>
     <mat-error><span translate>items.error.invalidDate</span></mat-error>

@@ -2,5 +2,10 @@
 export interface ApiItem {
     id: number;
     typeId: number;
-    fields: { id: number; value: any }[];
+    fields: ApiItemField[];
+}
+export interface ApiItemField {
+    id: number;
+    value: any;
+    reference?: any;
 }
