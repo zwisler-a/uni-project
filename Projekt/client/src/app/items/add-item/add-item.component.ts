@@ -13,6 +13,8 @@ import { ItemService } from '../_item-store/item.service';
 import { ItemFormControl } from '../item-form-control';
 import { ItemFormGroup } from '../item-form-group';
 import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
+import { GlobalFieldsService } from '../../types/_global-field-store/global-fields.service';
+import { FormGroup } from '@angular/forms';
 
 /**
  * UI to create an new Item
@@ -29,13 +31,17 @@ export class AddItemComponent implements OnInit, OnDestroy {
     isSubmitting: boolean;
     form: ItemFormGroup = new ItemFormGroup(0, {});
 
+    globalControls: {[key: string]: ItemFormControl };
+    globalForm: FormGroup;
+
     constructor(
         private itemService: ItemService,
         private typeService: TypesService,
         private location: Location,
         private refFieldService: ItemFieldReferenceService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private activatedRoute: ActivatedRoute,
+        private globalFieldService: GlobalFieldsService
     ) {}
 
     ngOnInit() {
@@ -43,6 +49,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
         if (this.refFieldService.isSelecting) {
             this.form = this.refFieldService.restoreState();
         }
+        this.globalFieldService.fields.subscribe( fields => this.createGlobalFormControls(fields));
     }
 
     ngOnDestroy(): void {
@@ -100,6 +107,10 @@ export class AddItemComponent implements OnInit, OnDestroy {
         return Object.keys(this.form.controls);
     }
 
+    get globalControlKeys() {
+        return Object.keys(this.globalForm.controls);
+    }
+
     createFormConrols(typeId: number, fields: TypeField[]) {
         const controls = {};
         fields.forEach(field => {
@@ -107,4 +118,13 @@ export class AddItemComponent implements OnInit, OnDestroy {
         });
         this.form = new ItemFormGroup(typeId, controls);
     }
+
+    private createGlobalFormControls(fields: TypeField[]) {
+        this.globalControls = {};
+        fields.forEach(field => {
+            this.globalControls[field.name] = ItemFormControl.fromField(field);
+        });
+        this.globalForm = new FormGroup(this.globalControls);
+    }
+
 }

@@ -5,13 +5,14 @@ import { EMPTY, Observable } from 'rxjs';
 import { Item } from '../../models/item.interface';
 import { ItemService } from '../_item-store/item.service';
 import { ListState } from '../_item-store/list-state.interface';
+import { GlobalFieldsService } from '../../types/_global-field-store/global-fields.service';
 
 /**
  * Loads the items and makes sure the route is correct
  */
 @Injectable({ providedIn: 'root' })
 export class ItemsListResolver implements Resolve<Item> {
-    constructor(private itemService: ItemService, private router: Router) {}
+    constructor(private itemService: ItemService, private router: Router, private globalFieldsService: GlobalFieldsService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
         const { page, perPage, itemTypeId, order, orderBy } = route.params;
@@ -29,6 +30,7 @@ export class ItemsListResolver implements Resolve<Item> {
             this.router.navigate(defaultRoute);
             return EMPTY;
         }
+        this.globalFieldsService.loadFields().subscribe();
         const listState: ListState = {
             page: page,
             perPage: perPage,
