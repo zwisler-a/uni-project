@@ -28,7 +28,16 @@
             "update": "User konnte nicht bearbeitet werden!",
             "delete": "User konnte nicht gelöscht werden!",
             "get": "User konnte nicht geladen werden!",
-            "load": "User konnte nicht gelöscht werden!"
+            "load": "User konnte nicht gelöscht werden!",
+            "create": "Benutzer konnte nicht angelegt werden"
+        },
+        "new": {
+            "title": "Benutzer anlegen",
+            "company": "Firma",
+            "password": "Generiertes Passwort",
+            "created": "Benutzer wurde angelegt!",
+            "add": "Anlegen",
+            "cancel": "Abbrechen"
         }
     },
 
@@ -50,6 +59,12 @@
     },
 
     "items": {
+        "columns": "Angezeigte Spalten",
+        "reference": {
+            "selecting": "Referenz Auswahl",
+            "cancel": "Abbrechen",
+            "select": "Auswählen"
+        },
         "title": "Inventar",
         "new": "Neues Item",
         "noData": "Keine Items vorhanden",

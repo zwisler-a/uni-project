@@ -86,4 +86,21 @@ export class UserService {
             })
         );
     }
+    /**
+     * Create a user
+     * @param user user
+     */
+    createUser(user: User) {
+        return this.http.post(this.baseUrl, user).pipe(
+            tap((newUser: User) => {
+                const users = this._users.getValue();
+                users.push(newUser);
+                this._users.next(users);
+            }),
+            catchError(err => {
+                this.snackbar.open(this.translate.instant('user.error.create'));
+                return throwError(err);
+            })
+        );
+    }
 }

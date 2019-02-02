@@ -1,12 +1,21 @@
 <ng-container *ngIf="user">
     <mat-toolbar color="form">
+        <button mat-icon-button appNavigateBack><mat-icon>close</mat-icon></button>
         <span>{{ user.name }}</span>
         <span fxFlex="1 1 auto"></span>
         <button mat-icon-button (click)="deleteUser()"><mat-icon>delete</mat-icon></button>
     </mat-toolbar>
     <form class="user-info-form" fxLayout="column">
         <mat-form-field>
-            <input disabled matInput disabled [placeholder]="'user.email' | translate" [value]="user.email" />
+            <input disabled matInput [placeholder]="'user.email' | translate" [value]="user.email" />
+        </mat-form-field>
+        <mat-form-field>
+            <input
+                disabled
+                matInput
+                [placeholder]="'user.email' | translate"
+                [value]="user.companyId | company | async"
+            />
         </mat-form-field>
     </form>
 
