@@ -15,6 +15,7 @@ import { DefaultPageModule } from 'src/app/shared/default-page/default-page.modu
 import { FieldsStoreModule } from '../_fields-store/fields-store.module';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 import { USE_VALUE } from '@angular/core/src/di/injector';
+import { ItemsModule } from '../items.module';
 
 describe('ItemsListComponent', () => {
     let component: ItemsListComponent;
@@ -22,8 +23,9 @@ describe('ItemsListComponent', () => {
     const defaultPageMock = { actions: new Subject(), search: new BehaviorSubject('') };
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ItemsListComponent],
+            declarations: [],
             imports: [
+                ItemsModule,
                 NoopAnimationsModule,
                 MatProgressBarModule,
                 MatTableModule,
