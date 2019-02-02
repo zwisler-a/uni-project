@@ -1,0 +1,30 @@
+<mat-form-field class="availableColumns" fxFlex>
+    <mat-chip-list #chipList>
+        <mat-chip
+            *ngFor="let column of columns"
+            [selectable]="selectable"
+            [removable]="removable"
+            (removed)="remove(column)"
+        >
+            {{ column }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+        </mat-chip>
+        <input
+            [placeholder]="'items.columns' | translate"
+            #columnInput
+            [formControl]="columnCtrl"
+            [matAutocomplete]="auto"
+            #autoTrigger="matAutocompleteTrigger"
+            autocompleteDisabled
+            [matChipInputFor]="chipList"
+            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            [matChipInputAddOnBlur]="addOnBlur"
+            (matChipInputTokenEnd)="add($event)"
+        />
+    </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let column of (availableColumns | async)" [value]="column">
+            {{ column }}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>
