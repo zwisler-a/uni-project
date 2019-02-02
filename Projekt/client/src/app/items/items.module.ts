@@ -20,6 +20,8 @@ import {
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatChipsModule,
+    MatDialogModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -46,6 +48,7 @@ import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { itemsRoutes } from './items.routes';
 import { ItemFieldReferenceService } from './item-field/item-field-reference/item-field-reference.service';
+import { ColumnSelectComponent } from './column-select/column-select.component';
 
 @NgModule({
     declarations: [
@@ -60,7 +63,8 @@ import { ItemFieldReferenceService } from './item-field/item-field-reference/ite
         ItemFieldBoolComponent,
         ItemFieldReferenceComponent,
         AddItemComponent,
-        ItemTypeListComponent
+        ItemTypeListComponent,
+        ColumnSelectComponent
     ],
     imports: [
         CommonModule,
@@ -76,6 +80,8 @@ import { ItemFieldReferenceService } from './item-field/item-field-reference/ite
         MatSnackBarModule,
         MatListModule,
         MatAutocompleteModule,
+        MatChipsModule,
+        MatDialogModule,
         MatCardModule,
         MatDatepickerModule,
         MatNativeDateModule,
@@ -98,6 +104,7 @@ import { ItemFieldReferenceService } from './item-field/item-field-reference/ite
         ItemsListResolver,
         ItemFieldReferenceService,
         { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }
-    ]
+    ],
+    entryComponents: [ColumnSelectComponent]
 })
 export class ItemsModule {}

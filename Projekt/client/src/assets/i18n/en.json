@@ -58,6 +58,7 @@
     },
 
     "items": {
+        "columns": "Displayed columns",
         "reference": {
             "selecting": "Reference selection",
             "cancel": "Cancel",

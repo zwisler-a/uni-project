@@ -44,6 +44,7 @@ export class ItemFormControl extends FormControl {
             ctrl.referenceFieldId = field.referenceFieldId;
         } else if ('reference' in field) {
             ctrl.referenceFieldId = field.reference.id;
+            ctrl.referenceType = field.reference.typeId;
         }
         return ctrl;
     }

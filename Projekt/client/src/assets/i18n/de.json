@@ -59,6 +59,7 @@
     },
 
     "items": {
+        "columns": "Angezeigte Spalten",
         "reference": {
             "selecting": "Referenz Auswahl",
             "cancel": "Abbrechen",
