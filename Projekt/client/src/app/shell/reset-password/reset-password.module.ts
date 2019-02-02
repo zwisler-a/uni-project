@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LoginComponent } from './login.component';
+import { ResetPasswordComponent } from './reset-password.component';
 // import {ResetPasswordComponent} from '../reset-password/reset-password.component';
 import {
     MatInputModule,
@@ -19,7 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
-    declarations: [LoginComponent],
+    declarations: [ResetPasswordComponent],
     imports: [
         CommonModule,
         TranslateModule,
@@ -32,8 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
         MatSnackBarModule,
         MatButtonModule,
         MatCheckboxModule,
-        RouterModule.forChild([{ path: 'login', component: LoginComponent }]),
+        RouterModule.forChild([{ path: '', component: ResetPasswordComponent }]),
         ReactiveFormsModule
     ]
 })
-export class LoginModule {}
+export class ResetPasswordModule {}

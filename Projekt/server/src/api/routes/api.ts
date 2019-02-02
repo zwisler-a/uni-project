@@ -6,6 +6,7 @@ import { typesRoute } from './types';
 import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
 import { companiesRoute } from './companies';
+import { passwordResetRoute } from './password_reset';
 import { ApiError, ErrorNumber } from '../../types';
 
 /** express.Router for path `/api` */
@@ -18,6 +19,7 @@ apiRouter.use('/types', typesRoute);
 apiRouter.use('/items', itemsRoute);
 apiRouter.use('/roles', rolesRoute);
 apiRouter.use('/companies', companiesRoute);
+apiRouter.use('/password_reset', passwordResetRoute);
 
 // If route is unknown throw a new NOT_FOUND error
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {

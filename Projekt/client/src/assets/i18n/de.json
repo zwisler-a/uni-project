@@ -136,5 +136,9 @@
         "submit": "Login",
         "title": "Login",
         "username": "Benutzername"
+    },
+    "resetPassword": {
+        "title": "Passwort zuruecksetzen",
+        "resetPassword": "Passwort vergessen?"
     }
 }

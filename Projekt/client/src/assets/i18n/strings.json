@@ -40,6 +40,10 @@
 		"title": "",
 		"username": ""
 	},
+	"resetPassword": {
+		"title": "",
+		"resetPassword": ""
+	},
 	"types": {
 		"edit": {
 			"addField": "",

@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { AuthGuard } from './shell/auth/auth.guard';
-import { NavigationComponent } from './shell/navigation/navigation.component';
+import {AuthGuard} from './shell/auth/auth.guard';
+import {NavigationComponent} from './shell/navigation/navigation.component';
 
 const routes: Routes = [
     {
@@ -35,7 +35,13 @@ const routes: Routes = [
                 loadChildren: './company/company.module#CompanyModule',
                 canLoad: [AuthGuard]
             }
+
         ]
+    },
+    {
+        path: 'reset',
+        // loadChildren: './shell/reset-password/reset-password.component',
+        loadChildren: './shell/reset-password/reset-password.module#ResetPasswordModule'
     }
 
     // Redirect all unidentifiable routes to login
@@ -51,4 +57,5 @@ const routes: Routes = [
     ],
     exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

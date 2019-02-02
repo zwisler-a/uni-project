@@ -33,5 +33,13 @@
         >
             <span translate>login.submit</span>
         </button>
+        <button
+                (click)="resetPassword()"
+                mat-button
+                color="primary"
+                [disabled]="!loginForm.valid"
+        >
+            <span translate>resetPassword.resetPassword</span>
+        </button>
     </form>
 </mat-card>

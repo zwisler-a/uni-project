@@ -5,6 +5,7 @@ import { MatSnackBar, MatSnackBarRef } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
+import {$TAB} from 'codelyzer/angular/styles/chars';
 
 /** Contains a login form for user authentication */
 @Component({
@@ -70,5 +71,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                     });
             }
         );
+    }
+
+    /** triggers the password recovery*/
+    resetPassword() {
+        window.open('/reset');
     }
 }
