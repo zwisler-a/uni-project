@@ -5,6 +5,7 @@ import {AuthService} from '../auth/auth.service';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 
 
@@ -16,7 +17,7 @@ import {environment} from '../../../environments/environment';
 export class ResetPasswordComponent implements OnInit {
     resetForm: FormGroup;
     loading = false;
-    baseUrl = `${environment.baseUrl}`;
+    baseUrl = environment.baseUrl + '/passwordReset' ;
 
     constructor(private fromBuilder: FormBuilder,
                 private http: HttpClient,
@@ -36,8 +37,12 @@ export class ResetPasswordComponent implements OnInit {
         const {email} = this.resetForm.getRawValue();
 
         // window.alert('xxx: ' + email);
-        window.alert(this.baseUrl);
+        console.log(email);
+        console.log(this.baseUrl);
+        // window.alert(this.baseUrl);
         // window.alert(this.http.get(`${this.baseUrl}/${user}/${userId}` ));
+        const data = this.http.post(this.baseUrl, {'email': 'penis'}, {});
+        console.log(data);
 
     }
 }

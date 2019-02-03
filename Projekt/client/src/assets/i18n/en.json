@@ -131,6 +131,7 @@
     },
     "resetPassword": {
         "title": "Password Recovery",
-        "resetPassword": "Forgot Password?"
+        "resetPassword": "Forgot Password?",
+        "submit": "Submit"
     }
 }

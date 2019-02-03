@@ -138,7 +138,8 @@
         "username": "Benutzername"
     },
     "resetPassword": {
-        "title": "Passwort zuruecksetzen",
-        "resetPassword": "Passwort vergessen?"
+        "title": "Passwort zurücksetzen",
+        "resetPassword": "Passwort vergessen?",
+        "submit": "Absenden"
     }
 }

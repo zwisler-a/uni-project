@@ -1,15 +1,16 @@
 import { Router } from 'express';
 
-// import { companyCreate, companyDelete, companyGet, companyGetAll, companyUpdate } from '../controllers/companies';
-import { companyCreate, companyDelete, companyGet, companyGetAll, companyUpdate } from '../controllers/companies';
+import { companyDelete, companyGet, companyGetAll, companyUpdate } from '../controllers/companies';
 import { param } from './util';
+import { emailCheck } from '../controllers/password_reset';
 
-/** express.Router for path `/api/companies` */
-export const companiesRoute: Router = Router();
-companiesRoute.param('id', param);
-companiesRoute.post('/', companyCreate);
-companiesRoute.get('/', companyGetAll);
-companiesRoute.get('/:id', companyGet);
-companiesRoute.patch('/:id', companyUpdate);
-companiesRoute.delete('/:id', companyDelete);
+/** express.Router for path `/api/passwordReset` */
+export const passwordResetRoute: Router = Router();
+passwordResetRoute.param('id', param);
+passwordResetRoute.post('/', emailCheck);
+passwordResetRoute.get('/', companyGetAll);
+passwordResetRoute.get('/:id', companyGet);
+passwordResetRoute.patch('/:id', companyUpdate);
+passwordResetRoute.delete('/:id', companyDelete);
+
 

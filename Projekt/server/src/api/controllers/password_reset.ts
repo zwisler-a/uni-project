@@ -5,11 +5,28 @@ import { User, USER_CREATE, USER_PATCH } from '../models/user';
 import { UserModel } from '../../database/models/user';
 
 /**
- * Route endpoint `POST /api/users`
+ * Route endpoint `GET /api/users/`
+ * Fetches all users
  * @param req the request object
  * @param res the response object
  * @param next indicating the next middleware function
  */
+export async function emailCheck(req: Request, res: Response, next: NextFunction) {
+    console.info('hallo du');
+    // try {
+    //     const users: User[] = await UserModel.getAll();
+    //     users.forEach(user => {
+    //         delete user.password;
+    //     });
+    //     res.status(200).send(users);
+    // } catch (error) {
+    //     next(error);
+    // }
+}
+
+
+
+
 export async function userCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const user: User = USER_CREATE.validate(req.body);
