@@ -10,7 +10,7 @@
 
     <!-- EDITABLE FIELDS -->
     <app-item-field *ngFor="let key of controlKeys" [control]="form.controls[key]" [form]="form"></app-item-field>
-
+    <app-item-field *ngFor="let key of globalControlKeys" [control]="globalForm.controls[key]" [form]="globalForm"></app-item-field>
     <!-- ACTIONS -->
     <div *ngIf="form.typeId !== -1" fxLayoutAlign="end center" class="actions">
         <button

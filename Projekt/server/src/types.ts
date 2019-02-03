@@ -55,6 +55,8 @@ export enum ErrorNumber {
 
     TYPE_FIELD_NOT_FOUND,
 
+    GLOBAL_FIELD_NOT_FOUND,
+
     ITEM_NOT_FOUND,
 }
 

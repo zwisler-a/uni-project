@@ -18,9 +18,9 @@
     </div>
     <h4>{{ 'types.global.new' | translate }}</h4>
     <div>
-        <app-type-field #fieldInput fxFlex="1 1 auto" [isGlobal]="true" [edit]="true" [field]="newField"></app-type-field>
+        <app-type-field fxFlex="1 1 auto" [isGlobal]="true" [edit]="true" [field]="newField"></app-type-field>
     </div>
     <div fxLayoutAlign="end center">
-        <button mat-raised-button color="primary" disabled (click)="create()">{{ 'types.global.add' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="create()">{{ 'types.global.add' | translate }}</button>
     </div>
 </div>

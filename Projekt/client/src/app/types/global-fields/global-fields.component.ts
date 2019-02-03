@@ -15,7 +15,7 @@ export class GlobalFieldsComponent implements OnInit {
     newField: TypeField = {
         id: 0,
         name: '',
-        required: false,
+        required: true,
         unique: false,
         type: 'string'
     };
@@ -54,7 +54,7 @@ export class GlobalFieldsComponent implements OnInit {
             this.newField = {
                 id: 0,
                 name: '',
-                required: false,
+                required: true,
                 unique: false,
                 type: 'string'
             };

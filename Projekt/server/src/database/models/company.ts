@@ -1,4 +1,4 @@
-import { Cache } from './cache';
+import { Cache } from '../../util/cache';
 import { TypeModel } from './type';
 import { DatabaseController } from '../controller';
 import { Type } from '../../api/models/type';
@@ -31,10 +31,14 @@ export class CompanyModel {
     }
 
     static async create(company: Company): Promise<Company> {
-        const id = (await CompanyModel.database.COMPANY_CREATE.execute([ company.name ])).insertId;
-        company.id = id;
+        await CompanyModel.database.beginTransaction(async function(connection) {
+            const id = (await CompanyModel.database.COMPANY.CREATE.execute([ company.name ])).insertId;
+            company.id = id;
 
-        await CompanyModel.cache.set(id.toString(), company);
+            await CompanyModel.database.GLOBAL_TABLE.CREATE.executeConnection(connection, id);
+        });
+
+        await CompanyModel.cache.set(company.id.toString(), company);
 
         return company;
     }
@@ -46,7 +50,7 @@ export class CompanyModel {
         let company: Company = await CompanyModel.cache.get(key);
         if (company === undefined) {
             // Fetch company
-            const companies = await CompanyModel.database.COMPANY_GET_ID.execute([ id ]);
+            const companies = await CompanyModel.database.COMPANY.GET_ID.execute([ id ]);
             if (companies.length === 0) {
                 throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
             }
@@ -61,7 +65,7 @@ export class CompanyModel {
     }
 
     static async getAll(): Promise<Company[]> {
-        const companies: Company[] = await CompanyModel.database.COMPANY_GET.execute();
+        const companies: Company[] = await CompanyModel.database.COMPANY.GET.execute();
         for (const company of companies) {
             await CompanyModel.cache.set(company.id.toString(), company);
         }
@@ -70,7 +74,7 @@ export class CompanyModel {
 
     static async update(id: number, company: Company): Promise<Company> {
         const params = [ company.name, id ];
-        if ((await CompanyModel.database.COMPANY_UPDATE.execute(params)).affectedRows === 0) {
+        if ((await CompanyModel.database.COMPANY.UPDATE.execute(params)).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
         }
 
@@ -81,13 +85,13 @@ export class CompanyModel {
     }
 
     static async delete(id: number): Promise<void> {
-        const types: Type[] = await CompanyModel.database.TYPE_GET_COMPANY.execute([ id ]);
+        const types: Type[] = await CompanyModel.database.TYPE.GET_COMPANY.execute([ id ]);
 
         for (const type of types) {
             await TypeModel.delete(type.id);
         }
 
-        if ((await CompanyModel.database.COMPANY_DELETE.execute([ id ])).affectedRows === 0) {
+        if ((await CompanyModel.database.COMPANY.DELETE.execute([ id ])).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
         }
 

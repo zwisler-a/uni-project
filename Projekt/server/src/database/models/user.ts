@@ -30,7 +30,7 @@ export class UserModel {
         // TODO maybe check if company exists
         const params = [ user.companyId, user.name, user.password, 'email' in user ? user.email : null ];
 
-        const id = (await UserModel.database.USER_CREATE.execute(params)).insertId;
+        const id = (await UserModel.database.USER.CREATE.execute(params)).insertId;
         user.id = id;
 
         return user;
@@ -44,9 +44,9 @@ export class UserModel {
     static async get(id: number | string): Promise<User> {
         let users;
         if (typeof id === 'number') {
-            users = await UserModel.database.USER_GET_ID.execute(id);
+            users = await UserModel.database.USER.GET_ID.execute(id);
         } else if (typeof id === 'string') {
-            users = await UserModel.database.USER_GET_NAME.execute(id);
+            users = await UserModel.database.USER.GET_NAME.execute(id);
         } else {
             throw new TypeError('Invalid argument, has to be either string(name) or number(id)');
         }
@@ -64,7 +64,7 @@ export class UserModel {
      * @returns retrived user object on success
      */
     static async getAll(): Promise<User[]> {
-        return UserModel.database.USER_GET.execute();
+        return await UserModel.database.USER.GET.execute();
     }
 
     /**
@@ -87,7 +87,7 @@ export class UserModel {
         }
 
         const params = [ result.name, result.password, result.email, id ];
-        if ((await UserModel.database.USER_UPDATE.execute(params)).affectedRows === 0) {
+        if ((await UserModel.database.USER.UPDATE.execute(params)).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
         }
 
@@ -100,7 +100,7 @@ export class UserModel {
      * @returns nothing on success
      */
     static async delete(id: number): Promise<void> {
-        if ((await UserModel.database.USER_DELETE.execute(id)).affectedRows === 0) {
+        if ((await UserModel.database.USER.DELETE.execute(id)).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, id);
         }
     }
