@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
+import { Field } from 'src/app/models/field.interface';
+import { TypeField } from 'src/app/models/type-field.interface';
 
 import { ApiItem, ApiItemField } from '../../models/api/api-item.interface';
 import { EmbeddedItems } from '../../models/api/embedded-items.interface';
 import { FieldType } from '../../models/field-type.enum';
 import { Item } from '../../models/item.interface';
 import { Type } from '../../models/type.interface';
-import { TypeField } from 'src/app/models/type-field.interface';
-import { Field } from 'src/app/models/field.interface';
 
 /**
  * Pipe to translate items from ApiItem to UIItems and via versa.
@@ -33,7 +33,9 @@ export class ItemPipe implements PipeTransform {
         const transformedItems = items.map(item => {
             const type = types.find(searchType => searchType.id + '' === item.typeId + '');
             if (!type) {
-                throw new Error(`Type ID ${item.typeId} of item ${item.id} not found!`);
+                throw new Error(
+                    `The type with the ID ${item.typeId} is missing. But the Item with the id ${item.id} is of that type!`
+                );
             }
             return this.transformItem(item, type);
         });
@@ -52,9 +54,14 @@ export class ItemPipe implements PipeTransform {
             fields: []
         };
         uiItem.fields = item.fields.map(apiField => {
-            const fieldType = itemType.fields.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            let fieldType;
+            if (apiField.global) {
+                fieldType = itemType.globals.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            } else {
+                fieldType = itemType.fields.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            }
             if (!fieldType) {
-                throw new Error(`No field with the id ${apiField.id} found in Type definition for ${item.typeId}`);
+                throw new Error(`The Type with the ID ${itemType.id} does not contain a field with the ID ${apiField.id}.`);
             }
             return {
                 name: fieldType.name,
@@ -64,8 +71,9 @@ export class ItemPipe implements PipeTransform {
                 unique: fieldType.unique,
                 type: fieldType.type,
                 referenceValue: apiField.reference,
+                global: apiField.global,
                 referenceFieldId: fieldType.reference ? fieldType.reference.id : null,
-                referenceId: fieldType.referenceId,
+                referenceTypeId: fieldType.reference ? fieldType.reference.typeId : null,
                 displayValue: this.getFieldDisplayValue(apiField, fieldType)
             } as Field;
         });
@@ -90,26 +98,11 @@ export class ItemPipe implements PipeTransform {
             case FieldType.reference:
                 return (
                     '<span class="table-cell-reference"><i class="material-icons">link</i> ' +
-                    this.getFieldDisplayValue({ value: field.reference, id: 0 }, fieldType.reference) +
+                    this.getFieldDisplayValue({ value: field.reference, id: 0, global: false }, fieldType.reference) +
                     '</span>'
                 );
             default:
                 return field.value;
         }
-    }
-
-    /** Converts an item to an item usable by the backend */
-    retransformItem(item: Item): ApiItem {
-        const apiItemFields: { id: number; value: any }[] = [];
-        item.fields.forEach(field => {
-            if (field.value !== undefined) {
-                apiItemFields.push({ id: field.id, value: field.value });
-            }
-        });
-        return {
-            fields: apiItemFields,
-            id: item.id,
-            typeId: item.typeId
-        };
     }
 }

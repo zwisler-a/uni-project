@@ -6,12 +6,14 @@ export interface Field {
     value: any;
     required: boolean;
     unique: boolean;
+    /** specify if the field is global. Only has to be carried around for the backend. Best no edit! */
+    global: boolean;
     /** String which represents the field value */
     displayValue: string;
     /** Value of its referencing object */
     referenceValue?: any;
-    /** Reference */
+    /** Id of the field referenced */
     referenceFieldId?: number;
-    /** type id of the referencing object */
-    referenceId?: number;
+    /** Id of the type referenced */
+    referenceTypeId?: number;
 }

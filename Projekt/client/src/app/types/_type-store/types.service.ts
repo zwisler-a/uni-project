@@ -1,54 +1,49 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { Storable } from 'src/app/shared/store/storable.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
+import { Store } from 'src/app/shared/store/store.class';
 import { environment } from 'src/environments/environment';
 
 import { Type } from '../../models/type.interface';
-import { TypeErrorService } from './type-error.service';
 
+/**
+ * This service is used for all type related backend actions.
+ * It uses the {@link Store} to store its data an handle backend requests
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class TypesService {
-    baseUrl = `${environment.baseUrl}/types`;
+    _store: Store<Type>;
 
-    private _types = new BehaviorSubject<Type[]>([]);
-    /** Stores all types */
-    readonly types = this._types.asObservable();
+    get types() {
+        return this._store.store;
+    }
 
-    constructor(private http: HttpClient, private errorService: TypeErrorService) {}
-
-    /** load all item types from the api. Only loads types once */
-    loadTypes(): Observable<BehaviorSubject<Type[]>> {
-        if (this._types.getValue().length) {
-            return of(this._types);
-        }
-        return this.http.get<Type[]>(this.baseUrl).pipe(
-            map(res => {
-                this._types.next(res);
-                return this._types;
-            }),
-            this.errorService.getError()
-        );
+    constructor(private storeFactory: StoreFactoryService) {
+        // Initialize store
+        this._store = this.storeFactory.create<Type>({
+            baseUrl: environment.baseUrl + '/types',
+            errorKeyBase: 'types.'
+        });
     }
 
     /**
-     * Retrieve a single type. First tries to look up the already loaded types, if not found retrieves it from the api.
-     * The type gets updated once the types update.
+     * Triggers the loading process of types. If there is still valid data in the store nothing is fetched from the backend.
+     * If there is still valid data the returned observable completes instantly with the current store value.
+     */
+    loadTypes() {
+        return this._store.load();
+    }
+
+    /**
+     * Tries to find the type inside the store. If not found, sends a request to the backend.
+     * The returned Observable is dependend on the stored Types. So once the types store updates, so does this observable.
      * @param id id of the type
      */
     getType(id: number): Observable<Type> {
-        return this.types.pipe(
-            flatMap(types => {
-                const storedType = types.find(type => type.id + '' === id + '');
-                if (!storedType) {
-                    return this.http.get([this.baseUrl, id].join('/')).pipe(this.rxjsStoreAddUpdate());
-                }
-                return of(storedType);
-            }),
-            this.errorService.getError()
-        );
+        return this._store.byId(id);
     }
 
     /**
@@ -56,34 +51,14 @@ export class TypesService {
      * @param type Type to create
      */
     createType(type: Type): Observable<Type> {
-        return this.http.post<Type>(this.baseUrl, this.transformType(type)).pipe(
-            this.rxjsStoreAddUpdate(),
-            this.errorService.createError()
-        );
+        return this._store.create(this.transformType(type));
     }
-    /** Ads a new type to the store */
-    private rxjsStoreAddUpdate() {
-        return this.updateStore((types, res) => {
-            types.push(res);
-            return types;
-        });
-    }
-
     /**
      * Sends a delete request to the api and updates the store if it succeeds
      * @param id TypeId of the type to delete
      */
-    deleteType(id: number): Observable<void> {
-        return this.http.delete([this.baseUrl, id].join('/')).pipe(
-            this.rxjsStoreDeleteUpdate(id),
-            this.errorService.deleteError()
-        );
-    }
-    /** removed a type from the store */
-    private rxjsStoreDeleteUpdate(id) {
-        return this.updateStore((types, res) => {
-            return types.filter(type => type.id + '' !== id + '');
-        });
+    deleteType(type: Storable): Observable<void> {
+        return this._store.delete(type);
     }
 
     /**
@@ -91,25 +66,7 @@ export class TypesService {
      * @param type Modified Type
      */
     updateType(type: Type): Observable<Type> {
-        return this.http.patch<Type>([this.baseUrl, type.id].join('/'), this.transformType(type)).pipe(
-            this.rxjsStoreUpdate(type.id),
-            this.errorService.updateError()
-        );
-    }
-    /** update the store */
-    private rxjsStoreUpdate(id) {
-        return this.updateStore((types, res) => {
-            return types.map(type => (type.id + '' === id + '' ? res : type));
-        });
-    }
-
-    /** helper to create an rxjs operator for the store */
-    private updateStore(update: (types: Type[], res: any) => Type[]) {
-        return map((res: Type) => {
-            const types = this._types.getValue();
-            this._types.next(update(types, res));
-            return res;
-        });
+        return this._store.update(this.transformType(type));
     }
 
     /** Transforms a type into a valid form for the backend */

@@ -1,5 +1,8 @@
 <mat-form-field fxFlex [formGroup]="form">
-    <span matPrefix class="field-type">{{ 'items.field.date' | translate }}</span>
+    <span matPrefix class="field-type">
+        <mat-icon *ngIf="control.global">public</mat-icon>
+        {{ 'items.field.date' | translate }}
+    </span>
     <input
         [required]="control.required"
         [placeholder]="control.name"

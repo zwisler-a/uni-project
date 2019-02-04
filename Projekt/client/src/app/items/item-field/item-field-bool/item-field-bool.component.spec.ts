@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MatCheckboxModule, MatInputModule } from '@angular/material';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatCheckboxModule, MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { ItemFieldBoolComponent } from './item-field-bool.component';
 import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldBoolComponent } from './item-field-bool.component';
 
 describe('ItemFieldBoolComponent', () => {
     let component: ItemFieldBoolComponent;
@@ -20,6 +20,7 @@ describe('ItemFieldBoolComponent', () => {
                 ReactiveFormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
+                MatIconModule,
                 MatCheckboxModule,
                 TranslateTestingModule.withTranslations({})
             ]

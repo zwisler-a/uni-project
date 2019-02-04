@@ -6,7 +6,7 @@ export interface TypeField {
     unique: boolean;
     /** id of the field */
     typeId?: number;
-    /** @depricated Type id its referencing */
+    /** id of the field referenced*/
     referenceId?: number;
     /** Field its referencing */
     reference?: TypeField;

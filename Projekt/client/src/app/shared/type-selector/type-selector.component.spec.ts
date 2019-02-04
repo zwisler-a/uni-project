@@ -5,8 +5,8 @@ import { MatAutocompleteModule, MatIconModule, MatInputModule, MatSnackBarModule
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
-import { TypeNameModule } from '../type-name-pipe/type-name.module';
 import { TypeSelectorComponent } from './type-selector.component';
+import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
 
 describe('TypeSelectorComponent', () => {
     let component: TypeSelectorComponent;
@@ -19,7 +19,7 @@ describe('TypeSelectorComponent', () => {
                 MatAutocompleteModule,
                 MatInputModule,
                 NoopAnimationsModule,
-                TypeNameModule,
+                TypeStoreModule.forRoot(),
                 FlexLayoutModule,
                 MatSnackBarModule,
                 MatIconModule,

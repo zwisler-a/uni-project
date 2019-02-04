@@ -1,17 +1,14 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Field } from 'src/app/models/field.interface';
 
-import { Item } from '../../models/item.interface';
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 import { ItemService } from '../_item-store/item.service';
-import { Field } from 'src/app/models/field.interface';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { FieldType } from 'src/app/models/field-type.enum';
-import { CustomValidators } from 'src/app/shared/custom-validators';
-import { ItemFormControl } from '../item-form-control';
 import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
+import { ItemFormControl } from '../item-form-control';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -122,7 +119,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     submit() {
         const fields = Object.keys(this.controls).map(key => {
             const ctrl = this.controls[key];
-            return { id: (ctrl as any).id as number, value: ctrl.value };
+            return { id: ctrl.id, value: ctrl.value, global: ctrl.global };
         });
         this.itemService.updateItem(this.typeId, this.itemId, fields).subscribe(res => {
             this.editFields(false);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { CompanyService } from '../_company-store/company.service';
+import { CompanyService } from './company.service';
 
 /** Makes sure the company are loaded before resolving */
 @Injectable({ providedIn: 'root' })

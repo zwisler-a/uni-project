@@ -20,15 +20,15 @@ import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.mod
 import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
+import { GlobalFieldStoreModule } from './_global-field-store/global-field-store.module';
 import { AddTypeComponent } from './add-type/add-type.component';
-import { typeRoutes } from './routes';
+import { GlobalFieldsComponent } from './global-fields/global-fields.component';
+import { typeRoutes } from './types.routes';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
+import { FieldTypeSelectComponent } from './type-field/field-type-select/field-type-select.component';
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
-import { TypesResolver } from './types-list/types.resolver';
-import { GlobalFieldsComponent } from './global-fields/global-fields.component';
-import { GlobalFieldStoreModule } from './_global-field-store/global-field-store.module';
-import { FieldTypeSelectComponent } from './type-field/field-type-select/field-type-select.component';
+import { TypeStoreModule } from './_type-store/type-store.module';
 
 @NgModule({
     declarations: [
@@ -60,6 +60,6 @@ import { FieldTypeSelectComponent } from './type-field/field-type-select/field-t
         MatToolbarModule,
         TranslateModule
     ],
-    providers: [TypesResolver]
+    providers: []
 })
 export class TypesModule {}

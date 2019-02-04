@@ -15,6 +15,7 @@ import { ItemFormGroup } from '../item-form-group';
 import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 import { GlobalFieldsService } from '../../types/_global-field-store/global-fields.service';
 import { FormGroup } from '@angular/forms';
+import { ApiItemField } from 'src/app/models/api/api-item.interface';
 
 /**
  * UI to create an new Item
@@ -28,10 +29,9 @@ export class AddItemComponent implements OnInit, OnDestroy {
     typeSub: Subscription;
     @ViewChild(MatAutocompleteTrigger)
     autocompleteTrigger: MatAutocompleteTrigger;
-    isSubmitting: boolean;
-    form: ItemFormGroup = new ItemFormGroup(0, {});
+    form: ItemFormGroup = new ItemFormGroup(-1, {});
 
-    globalControls: {[key: string]: ItemFormControl };
+    globalControls: { [key: string]: ItemFormControl };
     globalForm: FormGroup;
 
     constructor(
@@ -49,7 +49,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
         if (this.refFieldService.isSelecting) {
             this.form = this.refFieldService.restoreState();
         }
-        this.globalFieldService.fields.subscribe( fields => this.createGlobalFormControls(fields));
+        this.globalFieldService.fields.subscribe(fields => this.createGlobalFormControls(fields));
     }
 
     ngOnDestroy(): void {
@@ -60,46 +60,42 @@ export class AddItemComponent implements OnInit, OnDestroy {
 
     /** Sends a request to add the new item */
     submit() {
-        this.isSubmitting = true;
-        const item = Object.keys(this.form.controls).map(key => {
-            const ctrl = this.form.controls[key];
-            return { id: (ctrl as any).id as number, value: ctrl.value };
+        const item: ApiItemField[] = Object.keys(this.form.controls).map(key => {
+            const ctrl = this.form.controls[key] as ItemFormControl;
+            return { id: ctrl.id, value: ctrl.value, global: ctrl.global || false };
         });
-        this.itemService.createItem(this.form.typeId, item).subscribe(
-            (res: EmbeddedItems) => {
-                // redirect to details of the newly created item
-                this.router.navigate(
-                    [
-                        '/items',
-                        'view',
-                        {
-                            outlets: {
-                                detail: ['details', res.items[0].typeId, res.items[0].id]
-                            }
-                        }
-                    ],
+        const globalFields: ApiItemField[] = Object.keys(this.globalControls).map(key => {
+            const ctrl = this.globalControls[key] as ItemFormControl;
+            return { id: ctrl.id, value: ctrl.value, global: ctrl.global };
+        });
+        item.push(...globalFields);
+        this.itemService.createItem(this.form.typeId, item).subscribe((res: EmbeddedItems) => {
+            // redirect to details of the newly created item
+            this.router.navigate(
+                [
+                    '/items',
+                    'view',
                     {
-                        relativeTo: this.activatedRoute
+                        outlets: {
+                            detail: ['details', res.items[0].typeId, res.items[0].id]
+                        }
                     }
-                );
-                this.isSubmitting = false;
-            },
-            () => {
-                this.isSubmitting = false;
-            }
-        );
-    }
-
-    /** Navigate back */
-    back() {
-        this.location.back();
+                ],
+                {
+                    relativeTo: this.activatedRoute
+                }
+            );
+        });
     }
 
     /** Changes the type of the item and creates apropriate fields */
     typeChange(ev: TypeSelectEvent) {
-        this.typeService.getType(ev.typeId).subscribe((type: Type) => {
+        if (this.typeSub) {
+            this.typeSub.unsubscribe();
+        }
+        this.typeSub = this.typeService.getType(ev.typeId).subscribe((type: Type) => {
             this.form.typeId = type.id;
-            this.createFormConrols(ev.typeId, type.fields);
+            this.createFormControls(ev.typeId, type.fields);
         });
     }
 
@@ -111,7 +107,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
         return Object.keys(this.globalForm.controls);
     }
 
-    createFormConrols(typeId: number, fields: TypeField[]) {
+    private createFormControls(typeId: number, fields: TypeField[]) {
         const controls = {};
         fields.forEach(field => {
             controls[field.name] = ItemFormControl.fromField(field);
@@ -122,9 +118,8 @@ export class AddItemComponent implements OnInit, OnDestroy {
     private createGlobalFormControls(fields: TypeField[]) {
         this.globalControls = {};
         fields.forEach(field => {
-            this.globalControls[field.name] = ItemFormControl.fromField(field);
+            this.globalControls[field.name] = ItemFormControl.fromField(field, true);
         });
         this.globalForm = new FormGroup(this.globalControls);
     }
-
 }

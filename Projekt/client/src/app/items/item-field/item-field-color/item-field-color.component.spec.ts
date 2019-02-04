@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldColorComponent } from './item-field-color.component';
-import { MatInputModule } from '@angular/material';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldColorComponent } from './item-field-color.component';
 
 describe('ItemFieldColorComponent', () => {
     let component: ItemFieldColorComponent;
@@ -22,6 +22,7 @@ describe('ItemFieldColorComponent', () => {
                 FlexLayoutModule,
                 NoopAnimationsModule,
                 ColorPickerModule,
+                MatIconModule,
                 ReactiveFormsModule,
                 TranslateTestingModule.withTranslations({})
             ]
