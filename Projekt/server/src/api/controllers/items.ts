@@ -196,7 +196,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
         const typeId: number = req.params.type;
         const id: number = req.params.id;
 
-        res.status(200).send(await ItemModel.get(companyId, typeId, id));
+        res.status(200).send(await ItemModel.getAsEmbeddedItem(companyId, typeId, id));
     } catch (error) {
         next(error);
     }
