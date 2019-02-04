@@ -11,7 +11,7 @@ import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 import { AddCompanyComponent } from './add-company/add-company.component';
 import { CompanyListComponent } from './company-list/company-list.component';
-import { CompanyResolver } from './company-list/company.resolver';
+import { CompanyResolver } from './_company-store/company.resolver';
 import { companyRoutes } from './routes';
 
 @NgModule({
@@ -32,6 +32,6 @@ import { companyRoutes } from './routes';
         MatInputModule
     ],
     exports: [],
-    providers: [CompanyResolver]
+    providers: []
 })
 export class CompanyModule {}

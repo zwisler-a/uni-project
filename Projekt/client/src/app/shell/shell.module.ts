@@ -34,7 +34,7 @@ import { CompanyStoreModule } from '../company/_company-store/company-store.modu
     imports: [
         CommonModule,
         AuthModule,
-        CompanyStoreModule, // Needed for company name display
+        CompanyStoreModule.forChild(), // Needed for company name display
         RouterModule.forChild([
             { path: 'auth', loadChildren: './login/login.module#LoginModule' }
         ]),

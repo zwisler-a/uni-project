@@ -1,14 +1,14 @@
 import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
+import { Field } from 'src/app/models/field.interface';
+import { TypeField } from 'src/app/models/type-field.interface';
 
 import { ApiItem, ApiItemField } from '../../models/api/api-item.interface';
 import { EmbeddedItems } from '../../models/api/embedded-items.interface';
 import { FieldType } from '../../models/field-type.enum';
 import { Item } from '../../models/item.interface';
 import { Type } from '../../models/type.interface';
-import { TypeField } from 'src/app/models/type-field.interface';
-import { Field } from 'src/app/models/field.interface';
 
 /**
  * Pipe to translate items from ApiItem to UIItems and via versa.
@@ -65,7 +65,7 @@ export class ItemPipe implements PipeTransform {
                 type: fieldType.type,
                 referenceValue: apiField.reference,
                 referenceFieldId: fieldType.reference ? fieldType.reference.id : null,
-                referenceId: fieldType.referenceId,
+                referenceTypeId: fieldType.reference ? fieldType.reference.typeId : null,
                 displayValue: this.getFieldDisplayValue(apiField, fieldType)
             } as Field;
         });

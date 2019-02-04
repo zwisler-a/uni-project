@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { UserService } from '../_user-store/user.service';
+import { UserService } from './user.service';
 import { CompanyService } from 'src/app/company/_company-store/company.service';
 
 /** Makes sure the users are loaded before resolving */

@@ -10,8 +10,8 @@ export interface Field {
     displayValue: string;
     /** Value of its referencing object */
     referenceValue?: any;
-    /** Reference */
+    /** Id of the field referenced */
     referenceFieldId?: number;
-    /** type id of the referencing object */
-    referenceId?: number;
+    /** Id of the type referenced */
+    referenceTypeId?: number;
 }

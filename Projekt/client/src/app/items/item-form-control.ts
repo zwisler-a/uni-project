@@ -5,9 +5,9 @@ import { CustomValidators } from '../shared/custom-validators';
 import { TypeField } from '../models/type-field.interface';
 
 export class ItemFormControl extends FormControl {
-    referenceType;
-    referenceFieldId;
-    reference;
+    referenceType: number;
+    referenceFieldId: number;
+    reference: TypeField;
 
     constructor(
         value: any,
@@ -38,11 +38,15 @@ export class ItemFormControl extends FormControl {
         }
 
         const ctrl = new ItemFormControl(value, field.id, field.type, field.name, field.required, field.unique, validators);
-        ctrl.referenceType = field.referenceId;
+
         if ('referenceValue' in field) {
+            // field is of Type Field
+            ctrl.referenceType = field.referenceTypeId;
             ctrl.reference = field.referenceValue;
             ctrl.referenceFieldId = field.referenceFieldId;
         } else if ('reference' in field) {
+            // field is of Type TypeField
+            ctrl.reference = field.reference;
             ctrl.referenceFieldId = field.reference.id;
             ctrl.referenceType = field.reference.typeId;
         }

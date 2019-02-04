@@ -4,7 +4,7 @@ import { DefaultPageComponent } from '../shared/default-page/default-page.compon
 import { AddTypeComponent } from './add-type/add-type.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
 import { TypesListComponent } from './types-list/types-list.component';
-import { TypesResolver } from './types-list/types.resolver';
+import { TypesResolver } from './_type-store/types.resolver';
 import { GlobalFieldsComponent } from './global-fields/global-fields.component';
 
 export const typeRoutes: Routes = [

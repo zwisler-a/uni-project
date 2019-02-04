@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteSelectedEvent, MatChipInputEvent } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
 import { User } from 'src/app/shell/auth/user.interface';
 
@@ -28,6 +28,7 @@ export class UserDetailComponent implements OnInit {
 
     @ViewChild('permissionInput') permissionInput: ElementRef<HTMLInputElement>;
     @ViewChild('auto') matAutocomplete: MatAutocomplete;
+    userSub: Subscription;
     constructor(
         private route: ActivatedRoute,
         private userService: UserService,
@@ -45,14 +46,15 @@ export class UserDetailComponent implements OnInit {
             this.selectUser(params['id']);
         });
     }
-    selectUser(id: string): any {
-        this.userService.getUser(id).subscribe(user => {
+    selectUser(id: number): any {
+        this.userSub = this.userService.getUser(id).subscribe(user => {
             this.user = user;
         });
     }
 
     deleteUser() {
         this.confirm.open('user.delete', true).subscribe(() => {
+            this.userSub.unsubscribe();
             this.userService.deleteUser(this.user.id).subscribe(res => {
                 this.router.navigate(['/user/view']);
             });

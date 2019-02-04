@@ -74,7 +74,7 @@ export class TypeDetailComponent implements OnInit {
         // Open confirm first
         this.confirm.open('types.edit.confirmDelete', true).subscribe(() => {
             this.typeSub.unsubscribe();
-            this.typesService.deleteType(this.type.id).subscribe(
+            this.typesService.deleteType({ id: this.type.id }).subscribe(
                 () => {
                     this.router.navigate(['/types', 'view']);
                 },
