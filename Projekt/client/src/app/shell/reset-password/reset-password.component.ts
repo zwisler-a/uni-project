@@ -17,7 +17,7 @@ import {environment} from '../../../environments/environment';
 export class ResetPasswordComponent implements OnInit {
     resetForm: FormGroup;
     loading = false;
-    baseUrl = environment.baseUrl + '/passwordReset' ;
+    baseUrl = environment.baseUrl + '/passwordReset';
 
     constructor(private fromBuilder: FormBuilder,
                 private http: HttpClient,
@@ -34,15 +34,13 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     sendResetLink() {
-        const {email} = this.resetForm.getRawValue();
+        const body = this.resetForm.getRawValue();
 
-        // window.alert('xxx: ' + email);
-        console.log(email);
-        console.log(this.baseUrl);
-        // window.alert(this.baseUrl);
-        // window.alert(this.http.get(`${this.baseUrl}/${user}/${userId}` ));
-        const data = this.http.post(this.baseUrl, {'email': 'penis'}, {});
-        console.log(data);
+        console.log('aus dem eingabefeld: ' + body.toString());
+        console.log('baseurl: ' + this.baseUrl);
+        this.http.post(this.baseUrl, body, {}).subscribe(data => {
+            console.log(data['validEmail']);
+        });
 
     }
 }

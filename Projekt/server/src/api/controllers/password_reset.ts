@@ -11,20 +11,21 @@ import { UserModel } from '../../database/models/user';
  * @param res the response object
  * @param next indicating the next middleware function
  */
-export async function emailCheck(req: Request, res: Response, next: NextFunction) {
-    console.info('hallo du');
-    // try {
-    //     const users: User[] = await UserModel.getAll();
-    //     users.forEach(user => {
-    //         delete user.password;
-    //     });
-    //     res.status(200).send(users);
-    // } catch (error) {
-    //     next(error);
-    // }
+export async function emailCheck(req: Request, res: Response) {
+    console.info('*************');
+    console.info('*** ' + req.body.toString());
+
+    try {
+        const users: User[] = await UserModel.getAll();
+        if (users.filter(user => user.email === req.body['email']).length > 0) {
+            res.status(200).send({validEmail: true});
+        } else {
+            res.status(404).send({validEmail: false});
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
-
-
 
 
 export async function userCreate(req: Request, res: Response, next: NextFunction) {

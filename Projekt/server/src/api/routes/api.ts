@@ -19,7 +19,7 @@ apiRouter.use('/types', typesRoute);
 apiRouter.use('/items', itemsRoute);
 apiRouter.use('/roles', rolesRoute);
 apiRouter.use('/companies', companiesRoute);
-apiRouter.use('/password_reset', passwordResetRoute);
+apiRouter.use('/passwordReset', passwordResetRoute);
 
 // If route is unknown throw a new NOT_FOUND error
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {
