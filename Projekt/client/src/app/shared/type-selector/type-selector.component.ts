@@ -32,7 +32,7 @@ export class TypeSelectorComponent implements OnInit {
     constructor(private typesService: TypesService) {}
 
     ngOnInit() {
-        if (this.value.typeId) {
+        if (this.value.typeId && this.value.typeId >= 0) {
             this.typesService.getType(this.value.typeId).subscribe(type => {
                 this.type = type;
             });

@@ -4,8 +4,10 @@ export interface ApiItem {
     typeId: number;
     fields: ApiItemField[];
 }
+/** Value information of a Field */
 export interface ApiItemField {
     id: number;
     value: any;
+    global: boolean;
     reference?: any;
 }

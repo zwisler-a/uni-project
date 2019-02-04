@@ -20,11 +20,14 @@ export class ItemFieldReferenceComponent implements OnInit {
     ngOnInit() {}
 
     select() {
-        console.log(this.router.url);
         this.referencer.startSelectProcess(this.control, this.form, this.router.url);
     }
 
     openReference() {
-        this.router.navigate(['/items', 'view', { outlets: { detail: ['details', this.control.referenceType, this.control.value] } }]);
+        this.router.navigate([
+            '/items',
+            'view',
+            { outlets: { detail: ['details', this.control.referenceType, this.control.value] } }
+        ]);
     }
 }

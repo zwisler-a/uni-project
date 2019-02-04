@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-import { MatInputModule } from '@angular/material';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { ItemFieldNumberComponent } from './item-field-number.component';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldNumberComponent } from './item-field-number.component';
 
 describe('ItemFieldNumberComponent', () => {
     let component: ItemFieldNumberComponent;
@@ -19,6 +19,7 @@ describe('ItemFieldNumberComponent', () => {
                 MatInputModule,
                 ReactiveFormsModule,
                 FlexLayoutModule,
+                MatIconModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
             ]

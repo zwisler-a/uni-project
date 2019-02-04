@@ -3,23 +3,24 @@
     {{ 'types.global.title' | translate }}
 </mat-toolbar>
 <div class="globals" fxFlex fxLayout="column">
-    <div *ngFor="let field of (fields | async)" fxLayout="row">
+    <!-- DISPLAY EXISTING GLOBAL FIELDS -->
+    <div *ngFor="let field of (fields | async)" fxLayoutAlign="start center" fxLayout="row" fxFlex="0 0 auto">
         <app-type-field #fieldInput fxFlex="1 1 auto" [isGlobal]="true" [field]="field"></app-type-field>
 
-        <button *ngIf="!fieldInput.edit" fxFlex="0 0 auto" mat-icon-button (click)="fieldInput.edit = true">
+        <button *ngIf="!fieldInput.edit" fxFlex="1 0 auto" mat-icon-button (click)="fieldInput.edit = true">
             <mat-icon>edit</mat-icon>
         </button>
-        <button *ngIf="fieldInput.edit" fxFlex="0 0 auto" mat-icon-button (click)="save(fieldInput)">
+        <button *ngIf="fieldInput.edit" fxFlex="1 0 auto" mat-icon-button (click)="save(fieldInput)">
             <mat-icon>check</mat-icon>
         </button>
-        <button *ngIf="fieldInput.edit" fxFlex="0 0 auto" mat-icon-button (click)="delete(fieldInput.field.id)">
+        <button *ngIf="fieldInput.edit" fxFlex="1 0 auto" mat-icon-button (click)="delete(fieldInput.field.id)">
             <mat-icon>delete</mat-icon>
         </button>
     </div>
+
+    <!-- GIVE THE OPTION TO CREATE A NEW ONE -->
     <h4>{{ 'types.global.new' | translate }}</h4>
-    <div>
-        <app-type-field fxFlex="1 1 auto" [isGlobal]="true" [edit]="true" [field]="newField"></app-type-field>
-    </div>
+    <div><app-type-field fxFlex="1 1 auto" [isGlobal]="true" [edit]="true" [field]="newField"></app-type-field></div>
     <div fxLayoutAlign="end center">
         <button mat-raised-button color="primary" (click)="create()">{{ 'types.global.add' | translate }}</button>
     </div>

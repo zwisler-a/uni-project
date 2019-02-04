@@ -37,10 +37,12 @@ export class TypeDetailComponent implements OnInit {
         if (this.typeSub) {
             this.typeSub.unsubscribe();
         }
-        this.typeSub = this.typesService.getType(id).subscribe(type => {
-            // Make sure it is not the original object
-            this.type = JSON.parse(JSON.stringify(type));
-        });
+        this.typeSub = this.typesService.getType(id).subscribe(
+            type => {
+                // Make sure it is not the original object
+                this.type = JSON.parse(JSON.stringify(type));
+            }
+        );
     }
 
     /**
@@ -77,10 +79,6 @@ export class TypeDetailComponent implements OnInit {
             this.typesService.deleteType({ id: this.type.id }).subscribe(
                 () => {
                     this.router.navigate(['/types', 'view']);
-                },
-                () => {
-                    // resubscribe if deleting fails for some reason
-                    this.changeType(this.type.id);
                 }
             );
         });

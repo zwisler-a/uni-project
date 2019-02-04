@@ -1,13 +1,13 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldReferenceComponent } from './item-field-reference.component';
-import { MatInputModule, MatIconModule, MatTooltipModule, MatSnackBarModule } from '@angular/material';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatInputModule, MatSnackBarModule, MatTooltipModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldReferenceComponent } from './item-field-reference.component';
 import { ItemFieldReferenceService } from './item-field-reference.service';
 
 describe('ItemFieldLinkComponent', () => {
@@ -22,6 +22,7 @@ describe('ItemFieldLinkComponent', () => {
                 ReactiveFormsModule,
                 FlexLayoutModule,
                 NoopAnimationsModule,
+                MatIconModule,
                 RouterTestingModule,
                 MatSnackBarModule,
                 MatIconModule,

@@ -21,7 +21,7 @@ export class CompanyService {
     constructor(private storeFactory: StoreFactoryService) {
         this._store = this.storeFactory.create<Company>({
             baseUrl: environment.baseUrl + '/companies',
-            errorKeyBase: 'company'
+            errorKeyBase: 'company.'
         });
     }
 

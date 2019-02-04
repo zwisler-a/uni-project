@@ -76,7 +76,7 @@ export class ItemModel {
                                 try {
                                     const date = new Date(value.value);
                                     mapping[mapping.length - 1] = date;
-                                } catch {
+                                } catch (e) {
                                     throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_DATE_FORMAT, field.id);
                                 }
                                 continue typeLoop;
@@ -131,7 +131,7 @@ export class ItemModel {
             });
             type.globals.forEach((field: GlobalField) => {
                 let value = item[`global_${field.id}`];
-                if (field.type === TypeFieldType.boolean) {
+                if (field.type === TypeFieldType.boolean && value) {
                     value = value.readUInt8() === 1;
                 }
 
@@ -236,12 +236,25 @@ export class ItemModel {
             const full = { ...type, globals };
             const items = await ItemModel.getFilteredItems({ value: full }, options.searchQuery);
             if (items.length) {
-                foundTypes.push(type);
+                foundTypes.push(full);
             }
             return items;
         }))));
 
         return new EmbeddedItem(foundTypes, items);
+    }
+
+    /**
+     * Fetch an item and returned as proper api response
+     */
+    static async getAsEmbeddedItem(companyId: number, typeId: number, id: number) {
+        const type: FullType = await ItemModel.getType(companyId, typeId);
+
+        const items = await ItemModel.database.ITEM.GET_ID.execute(type, [id]);
+        if (items.length === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
+        }
+        return new EmbeddedItem([type], [ItemModel.mapGet(type)(items.pop())]);
     }
 
     static async create(companyId: number, typeId: number, fields: Field[]): Promise<EmbeddedItem> {

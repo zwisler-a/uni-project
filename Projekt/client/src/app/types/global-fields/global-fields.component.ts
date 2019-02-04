@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
 import { TypeField } from 'src/app/models/type-field.interface';
 
+/** UI to create, edit and delete global fields */
 @Component({
     selector: 'app-global-fields',
     templateUrl: './global-fields.component.html',
@@ -15,7 +16,7 @@ export class GlobalFieldsComponent implements OnInit {
     newField: TypeField = {
         id: 0,
         name: '',
-        required: true,
+        required: false,
         unique: false,
         type: 'string'
     };

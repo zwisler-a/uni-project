@@ -8,6 +8,7 @@ export class ItemFormControl extends FormControl {
     referenceType: number;
     referenceFieldId: number;
     reference: TypeField;
+    global = false;
 
     constructor(
         value: any,
@@ -21,7 +22,7 @@ export class ItemFormControl extends FormControl {
         super(value, ...args);
     }
 
-    static fromField(field: Field | TypeField) {
+    static fromField(field: Field | TypeField, isGlobal = false) {
         const validators = [];
         let value: any;
         if ('value' in field) {
@@ -44,12 +45,14 @@ export class ItemFormControl extends FormControl {
             ctrl.referenceType = field.referenceTypeId;
             ctrl.reference = field.referenceValue;
             ctrl.referenceFieldId = field.referenceFieldId;
+            ctrl.global = field.global;
         } else if ('reference' in field) {
             // field is of Type TypeField
             ctrl.reference = field.reference;
             ctrl.referenceFieldId = field.reference.id;
             ctrl.referenceType = field.reference.typeId;
         }
+        ctrl.global = isGlobal || field['global'];
         return ctrl;
     }
 }

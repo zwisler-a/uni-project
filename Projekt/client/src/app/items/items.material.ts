@@ -46,6 +46,6 @@ const material = [
 @NgModule({
     imports: material,
     exports: material,
-    providers: [, { provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }]
+    providers: [{ provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: { duration: 2500, horizontalPosition: 'end' } }]
 })
 export class ItemsMaterialModule {}
