@@ -6,6 +6,8 @@ export interface Field {
     value: any;
     required: boolean;
     unique: boolean;
+    /** specify if the field is global. Only has to be carried around for the backend. Best no edit! */
+    global: boolean;
     /** String which represents the field value */
     displayValue: string;
     /** Value of its referencing object */

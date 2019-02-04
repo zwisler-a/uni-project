@@ -1,5 +1,8 @@
 <mat-form-field fxFlex [formGroup]="form">
-    <span matPrefix class="field-type">{{ 'items.field.boolean' | translate }}</span>
+    <span matPrefix class="field-type">
+        <mat-icon *ngIf="control.global">public</mat-icon>
+        {{ 'items.field.boolean' | translate }}
+    </span>
     <input
         [placeholder]="control.name"
         [value]="form.get(control.name).value ? ('items.boolean.false' | translate) : ('items.boolean.true' | translate)"

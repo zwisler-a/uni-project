@@ -27,7 +27,7 @@
                 <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.unique">
                     {{ 'types.edit.unique' | translate }}
                 </mat-checkbox>
-                <button mat-icon-button [disabled]="!edit" (click)="deleteMe.emit()"><mat-icon>delete</mat-icon></button>
+                <button mat-icon-button *ngIf="!isGlobal" [disabled]="!edit" (click)="deleteMe.emit()"><mat-icon>delete</mat-icon></button>
             </div>
         </div>
     </div>

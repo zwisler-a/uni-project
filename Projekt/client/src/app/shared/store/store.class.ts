@@ -53,11 +53,11 @@ export class Store<T extends Storable> {
     byId(id: number) {
         return this.store.pipe(
             flatMap(entities => {
-                const foundCompany = entities.find(entity => entity.id + '' === id + '');
-                if (!foundCompany) {
+                const foundEntity = entities.find(entity => entity.id + '' === id + '');
+                if (!foundEntity) {
                     return this.loadSingle(id);
                 } else {
-                    return of(foundCompany);
+                    return of(foundEntity);
                 }
             })
         );
@@ -141,7 +141,6 @@ export class Store<T extends Storable> {
      * @param entity Object containing the keys and values to replace
      */
     private replaceQueryParams(url: string, entity: Storable) {
-        console.log(url, entity);
         Object.keys(entity).forEach(key => {
             url = url.replace(':' + key, entity[key]);
         });

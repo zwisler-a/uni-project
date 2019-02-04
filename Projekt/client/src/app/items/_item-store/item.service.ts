@@ -88,6 +88,10 @@ export class ItemService {
     private rxjsStoreCreateUpdate(entity: ApiItem) {
         return this.storeUpdate(entity.typeId, (store, res) => {
             store.items.push(...res.items);
+            const existingType = store.types.find(sType => sType.id + '' === res.types[0].id + '');
+            if (!existingType) {
+                store.types.push(...res.types);
+            }
             this.listState.total++;
             return store;
         });
@@ -111,6 +115,7 @@ export class ItemService {
     }
     /** Retriev item from backend if not found in the store */
     private getItemFromBackend(typeId, itemId): Observable<Item> {
+        console.log(this._items.getValue());
         return this.http.get<EmbeddedItems>(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             flatMap(res => {
                 return this.itemPipe.transform(res.items, res.types);

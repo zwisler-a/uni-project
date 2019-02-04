@@ -7,6 +7,7 @@ import { Storable } from './storable.interface';
 import { StoreConfig } from './store-config.interface';
 import { Store } from './store.class';
 
+/** Service to help creating a store. Avoids the need to provide services ect ... */
 @Injectable({ providedIn: 'root' })
 export class StoreFactoryService {
     private defaultConfig: StoreConfig = {
@@ -39,9 +40,11 @@ export class StoreFactoryService {
         const fullConfig = Object.assign({}, this.defaultConfig, config);
         // if there is a error key base, append it on all error keys
         if (fullConfig.errorKeyBase) {
+            const errorConfig = {};
             Object.keys(fullConfig.errorKeys).forEach(key => {
-                fullConfig.errorKeys[key] = fullConfig.errorKeyBase + fullConfig.errorKeys[key];
+                errorConfig[key] = fullConfig.errorKeyBase + fullConfig.errorKeys[key];
             });
+            fullConfig.errorKeys = errorConfig;
         }
 
         return new Store<T>(this.httpClient, this.translate, this.snackbar, fullConfig);
