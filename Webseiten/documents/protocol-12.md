@@ -1,3 +1,8 @@
+---
+layout: page
+permalink: /documents/protocol/12/
+---
+
 # Protokoll 1. Gruppentreffen
 
 ## Controlling
