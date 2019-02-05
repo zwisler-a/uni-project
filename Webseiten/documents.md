@@ -13,8 +13,8 @@ permalink: /documents/
 | Lastenheft            | [Lastenheft.pdf](Lastenheft.pdf)                                 | 12.12.2018 |
 | QS-Konzept            | [Qualitätssicherungskonzept.pdf](Qualitätssicherungskonzept.pdf) | 17.12.2018 |
 | Projektplan           | [Projektplan.pdf](Projektplan.pdf)                               | 25.01.2019 |
-| Releaseplan           | [Releaseplan.pdf](Releaseplan.pdf)                               | 28.01.2019 |
-| Entwurfsbeschreibung  | [Entwurfsbeschreibung.pdf](Entwurfsbeschreibung.pdf)             | 28.01.2019 |
+| Releaseplan           | [Releaseplan.pdf](Releaseplan.pdf)                               | 05.02.2019 |
+| Entwurfsbeschreibung  | [Entwurfsbeschreibung.pdf](Entwurfsbeschreibung.pdf)             | 05.02.2019 |
 
 ### Protokolle
 
@@ -35,6 +35,8 @@ permalink: /documents/
 | [Protokoll 10](protocol/10/)            | 18.01.2019 |
 | [Protokoll 10 - intern](protocol/10-i/) | 18.01.2019 |
 | [Protokoll 11](protocol/11/)            | 25.01.2019 |
+| [Protokoll 12](protocol/12/)            | 05.02.2019 |
+| [Protokoll 12 - intern](protocol/12-i/) | 05.02.2019 |
 
 ### Review-Protokolle
 
@@ -53,6 +55,7 @@ permalink: /documents/
 | [Report 4](report/4/) | 17.12.2018 |
 | [Report 5](report/5/) | 14.01.2019 |
 | [Report 6](report/6/) | 28.01.2019 |
+| [Report 7](report/7/) | 05.02.2019 |
 
 ### Testberichte
 
@@ -62,3 +65,5 @@ permalink: /documents/
 | [Test-Server 1](test-server/1/) | 25.01.2019 |
 | [Test-Client 2](test-client/2/) | 28.01.2019 |
 | [Test-Server 2](test-server/2/) | 28.01.2019 |
+| [Test-Client 3](test-client/3/) | 05.02.2019 |
+| [Test-Server 3](test-server/2/) | 05.02.2019 |
