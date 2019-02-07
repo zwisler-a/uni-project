@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResetPasswordComponent } from './reset-password.component';
-// import {ResetPasswordComponent} from '../reset-password/reset-password.component';
 import {
     MatInputModule,
     MatCardModule,
@@ -16,10 +15,11 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { TranslateModule } from '@ngx-translate/core';
 import { HttpClientModule } from '@angular/common/http';
+import { ChangePasswordComponent } from './change-password/change-password.component';
 
 
 @NgModule({
-    declarations: [ResetPasswordComponent],
+    declarations: [ResetPasswordComponent, ChangePasswordComponent],
     imports: [
         CommonModule,
         TranslateModule,

@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 
 import { User, USER_CREATE, USER_PATCH } from '../models/user';
 import { UserModel } from '../../database/models/user';
+import { verifyJsonWebToken } from './authentication';
+import jsonwebtoken from 'jsonwebtoken';
 
 /**
  * Route endpoint `GET /api/users/`
@@ -11,106 +13,51 @@ import { UserModel } from '../../database/models/user';
  * @param res the response object
  * @param next indicating the next middleware function
  */
-export async function emailCheck(req: Request, res: Response) {
+
+
+export async function receivingResetRequest(req: Request, res: Response) {
+    console.info('');
     console.info('*************');
-    console.info('*** ' + req.body.toString());
+    console.info('*************');
 
-    try {
-        const users: User[] = await UserModel.getAll();
-        if (users.filter(user => user.email === req.body['email']).length > 0) {
-            res.status(200).send({validEmail: true});
-        } else {
-            res.status(404).send({validEmail: false});
-        }
-    } catch (error) {
-        console.log(error);
+    const emailAddress = req.body.email;
+
+    // const requester = await checkEmail(emailAddress);
+
+    // console.log(requester);
+    const users: User[] = await UserModel.getAll();
+
+    if (users.filter(user => user.email === emailAddress).length > 0) {
+        // res.status(200).send({validEmail: true});
+    } else {
+        res.status(404).send({validEmail: false});
     }
+
+    const benutzer = users.filter(user => user.email === emailAddress)[0];
+
+    const payload = {
+        id: benutzer.id,
+        email: emailAddress
+    };
+    console.log(payload);
+
+    // const secret = benutzer.password + benutzer.id;
+    const secret = benutzer.password + benutzer.id + benutzer.companyId;
+    console.log(secret);
+
+    const token = generateToken(secret, '0.5h', payload);
+    console.log(token);
+    // TODO remove the resetLink from the body, because now it is just for presentation, but shall only send per email later
+    res.status(200).send({resetLink: '<a href="/resetpassword/' + payload.id + '/' + token + '">Reset password</a>', });
 }
 
+// function checkEmail(emailAddress: string): User {
+//     const users: User[] = UserModel.getAll();
+//     return users.filter(user => user.email === emailAddress)[0];
+//
+// }
 
-export async function userCreate(req: Request, res: Response, next: NextFunction) {
-    try {
-        const user: User = USER_CREATE.validate(req.body);
-        user.name = user.name.trim();
-        user.password = await bcrypt.hash(user.password, 12);
-
-        res.status(200).send(await UserModel.create(user));
-    } catch (error) {
-        next(error);
-    }
+function generateToken(secret: any, expiresIn: string, payload: any = {}) {
+    return jsonwebtoken.sign(payload, secret, {expiresIn});
 }
 
-/**
- * Route endpoint `GET /api/users/:id`
- * @param req the request object
- * @param res the response object
- * @param next indicating the next middleware function
- */
-export async function userGet(req: Request, res: Response, next: NextFunction) {
-    try {
-        const user: User = await UserModel.get(req.params.id);
-        delete user.password;
-        res.status(200).send(user);
-    } catch (error) {
-        next(error);
-    }
-}
-
-/**
- * Route endpoint `GET /api/users/`
- * Fetches all users
- * @param req the request object
- * @param res the response object
- * @param next indicating the next middleware function
- */
-export async function userGetList(req: Request, res: Response, next: NextFunction) {
-    try {
-        const users: User[] = await UserModel.getAll();
-        users.forEach(user => {
-            delete user.password;
-        });
-        res.status(200).send(users);
-    } catch (error) {
-        next(error);
-    }
-}
-
-/**
- * Route endpoint `PATCH /api/users/:id`
- * @param req the request object
- * @param res the response object
- * @param next indicating the next middleware function
- */
-export async function userUpdate(req: Request, res: Response, next: NextFunction) {
-    try {
-        let user: User = USER_PATCH.validate(req.body);
-
-        if ('name' in user) {
-            user.name = user.name.trim();
-        }
-        if ('password' in user) {
-            user.password = await bcrypt.hash(user.password, 12);
-        }
-
-        user = await UserModel.update(req.params.id, user);
-        delete user.password;
-        res.status(200).send(user);
-    } catch (error) {
-        next(error);
-    }
-}
-
-/**
- * Route endpoint `DELETE /api/users/:id`
- * @param req the request object
- * @param res the response object
- * @param next indicating the next middleware function
- */
-export async function userDelete(req: Request, res: Response, next: NextFunction) {
-    try {
-        await UserModel.delete(req.params.id);
-        res.status(204).send();
-    } catch (error) {
-        next(error);
-    }
-}
