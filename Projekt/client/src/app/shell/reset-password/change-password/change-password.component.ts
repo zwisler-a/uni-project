@@ -15,23 +15,24 @@ import {environment} from '../../../../environments/environment';
 })
 export class ChangePasswordComponent implements OnInit {
     changePasswordForm: FormGroup;
-    loading = false;
+    baseUrl = environment.baseUrl + '/passwordReset';
+    private id: number;
+    private token: string;
+    private antwort;
+
 
     constructor(
         private route: ActivatedRoute,
+        private http: HttpClient,
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private router: Router,
         private snackbar: MatSnackBar
     ) {
-
-        // this.changePasswordForm = this.formBuilder.group({
-        //     newPassword: ['', Validators.required],
-        //     confirmedPw: ['', ]
-        // }, );
     }
 
     ngOnInit() {
+        this.tokenValidation();
         this.setup();
     }
 
@@ -44,30 +45,46 @@ export class ChangePasswordComponent implements OnInit {
         });
     }
 
-    doSomething() {
-        const id = this.route.snapshot.params['id'];
-        const token = this.route.snapshot.params['token'];
+    async doSomething() {
 
-        this.setup();
-        console.log(id);
-        console.log(token);
-        const input = this.changePasswordForm.getRawValue();
-        const body = {
-            id: id,
-            token: token,
-            newPassword: input.username
-        };
+        let password;
 
-        console.log(body);
+
+        if (this.changePasswordForm.valid && this.changePasswordForm.dirty) {
+            password = this.changePasswordForm.get('newPassword').value;
+            console.log(password);
+        }
+
+        const input = this.changePasswordForm;
+
+        console.log(input);
+        console.log(password);
 
     }
+
+    tokenValidation() {
+        this.id = this.route.snapshot.params['id'];
+        this.token = this.route.snapshot.params['token'];
+        const body = {
+            id: this.id,
+            token: this.token,
+        };
+
+
+        this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
+            this.antwort = data['text'];
+            console.log(data);
+            console.log(this.antwort);
+        });
+    }
+
 
     private matchValidator(matchControl: FormControl): ValidatorFn {
         return (control: FormControl) => {
             if (control.value === matchControl.value) {
                 return null;
             } else {
-                return {missmatch: true};
+                return {mismatch: true};
             }
         };
     }

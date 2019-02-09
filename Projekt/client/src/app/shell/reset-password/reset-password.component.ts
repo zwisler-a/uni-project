@@ -16,6 +16,8 @@ export class ResetPasswordComponent implements OnInit {
     resetForm: FormGroup;
     loading = false;
     baseUrl = environment.baseUrl + '/passwordReset';
+    link = 'hallla';
+    linkname = '';
 
     constructor(private formBuilder: FormBuilder,
                 private http: HttpClient,
@@ -36,8 +38,11 @@ export class ResetPasswordComponent implements OnInit {
         console.log('aus dem eingabefeld: ' + body.email);
         console.log('baseurl: ' + this.baseUrl);
         this.http.post(this.baseUrl, body, {}).subscribe(data => {
-            console.log(data['resetLink'] + ' ist sent to ' + body.email);
+            // console.log(data['resetLink'] + ' ist sent to ' + body.email);
+            this.link = data['resetLink'];
+            this.linkname = 'link';
         });
+
 
     }
 }
