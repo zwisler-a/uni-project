@@ -1,6 +1,7 @@
 # Protokoll 13. Gruppentreffen
 
-## Allgemein
-- Besprechung des aktuellen Standes des Projekts
-- Analyse der Kapazitäten während der Prüfungsphase
+## Release Verschieben
 - Konsultation zum Verschieben bevorstehender Releases
+- genehmigt
+- einfach Mail
+- Release-Plan anpassen

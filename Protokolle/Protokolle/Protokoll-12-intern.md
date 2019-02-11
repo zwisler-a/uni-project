@@ -1,4 +1,4 @@
-# Protokoll 12. interes Gruppentreffen
+# Protokoll 12. internes Gruppentreffen
 
 ## Zeiterfassung
 - Gestaltungsvorschläge besprochen
