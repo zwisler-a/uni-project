@@ -1,8 +1,3 @@
----
-layout: page
-permalink: /documents/protocol/12-i/
----
-
 # Protokoll 12. interes Gruppentreffen
 
 ## Zeiterfassung
