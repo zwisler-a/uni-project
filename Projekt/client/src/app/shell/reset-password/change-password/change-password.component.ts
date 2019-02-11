@@ -18,7 +18,8 @@ export class ChangePasswordComponent implements OnInit {
     baseUrl = environment.baseUrl + '/passwordReset';
     private id: number;
     private token: string;
-    private antwort;
+    private test;
+    private validToken = false;
 
 
     constructor(
@@ -27,12 +28,18 @@ export class ChangePasswordComponent implements OnInit {
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private router: Router,
-        private snackbar: MatSnackBar
+        public snackbar: MatSnackBar
     ) {
     }
 
     ngOnInit() {
-        this.tokenValidation();
+        if (this.tokenValidation()) {
+            console.log('2: token valid');
+            this.test = 'boolean.true';
+        } else {
+            console.log('2: token invalid');
+            this.test = ' \'boolean.false\' ';
+        }
         this.setup();
     }
 
@@ -45,21 +52,25 @@ export class ChangePasswordComponent implements OnInit {
         });
     }
 
-    async doSomething() {
+    async changePassword() {
+        this.snackbar.open('hihihihi', null, {duration: 2000, horizontalPosition: 'end', panelClass: ['errorPanel']});
 
-        let password;
+        let password1;
+        let password2;
 
 
         if (this.changePasswordForm.valid && this.changePasswordForm.dirty) {
-            password = this.changePasswordForm.get('newPassword').value;
-            console.log(password);
+            password1 = this.changePasswordForm.get('newPassword').value;
+            password2 = this.changePasswordForm.get('confirmedPw').value;
+            console.log('p1: ' + password1);
+            console.log('p2: ' + password2);
         }
+        const body = {
+            pass1: password1,
+            pass2: password2
+        };
 
-        const input = this.changePasswordForm;
-
-        console.log(input);
-        console.log(password);
-
+        this.http.post(this.baseUrl + '/reset', body).subscribe();
     }
 
     tokenValidation() {
@@ -69,13 +80,28 @@ export class ChangePasswordComponent implements OnInit {
             id: this.id,
             token: this.token,
         };
-
-
         this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
-            this.antwort = data['text'];
-            console.log(data);
-            console.log(this.antwort);
+
+
+            if (data['success'] === true) {
+                this.snackbar.open('Your reset link is fine, I love You', 'OK', {
+                    duration: 20000,
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top',
+                });
+                this.validToken = true;
+                console.log('token valid');
+                return true;
+            } else {
+                this.snackbar.open('Your reset link is invalid or expired', 'OK', {
+                    duration: 20000,
+                    horizontalPosition: 'center',
+                    verticalPosition: 'top'
+                });
+                console.log('token invalid');
+            }
         });
+        return false;
     }
 
 

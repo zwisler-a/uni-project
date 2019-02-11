@@ -50,11 +50,30 @@ export async function validate(req: Request, res: Response) {
 
     jsonwebtoken.verify(token, secret, function (err: Error, data: any) {
         if (err) {
-            res.json({text: 'hallo'});
+            // TODO try to get it working with status code 400
+            res.status(200).json({message: 'Password reset token is invalid or expired', success: false});
         } else {
-            res.json(data);
+            res.status(200).json({success: true});
         }
     });
+}
+
+export async function reset(req: Request, res: Response) {
+    console.log(req.body);
+    let user: User = USER_PATCH.validate(req.body);
+    // let user: User = {
+    //     password: req.body['pass1']
+    // };
+    user.name = 'Hugo';
+    user.companyId = 666;
+    user.email = 'abc@def.gh';
+    user.email = 'test@gmail.com';
+    user.password = req.body['pass1'];
+
+    user = await UserModel.update(2, user);
+
+    res.status(200).send(user);
+
 }
 
 function generateToken(secret: any, expiresIn: string, payload: any = {}) {
