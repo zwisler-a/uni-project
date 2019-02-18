@@ -29,6 +29,7 @@ import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemsMaterialModule } from './items.material';
 import { itemsRoutes } from './items.routes';
+import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 
 @NgModule({
     declarations: [
@@ -65,6 +66,7 @@ import { itemsRoutes } from './items.routes';
         // Shared modules
         ConfirmDialogModule,
         DefaultPageModule,
+        NavigateBackModule,
         TypeSelectorModule
     ],
     providers: [ItemsListResolver, ItemFieldReferenceService],

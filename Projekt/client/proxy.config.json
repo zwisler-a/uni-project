@@ -1,6 +1,6 @@
 {
     "/api": {
-        "target": "http://localhost:3000",
+        "target": "http://pcai042.informatik.uni-leipzig.de:1590",
         "secure": false
     }
 }
