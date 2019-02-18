@@ -35,8 +35,7 @@ const routes: Routes = [
                 loadChildren: './company/company.module#CompanyModule',
                 canLoad: [AuthGuard]
             },
-
-            { path: '**', redirectTo: '/items/view', pathMatch: 'full' }
+            { path: '**', redirectTo: '/items', pathMatch: 'full' }
         ]
     }
 

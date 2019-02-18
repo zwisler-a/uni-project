@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
-import { throwError } from 'rxjs';
+import { throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
 /**
@@ -47,6 +47,15 @@ export class ItemErrorService {
             this.translate.get('items.error.get').subscribe(message => this.snackbar.open(message));
             console.error(err);
             return throwError(err);
+        });
+    }
+
+    /** operator to handle errors during fetching of items */
+    getItemsError(): any {
+        return catchError(err => {
+            this.translate.get('items.error.getAll').subscribe(message => this.snackbar.open(message));
+            console.error(err);
+            return of();
         });
     }
 }

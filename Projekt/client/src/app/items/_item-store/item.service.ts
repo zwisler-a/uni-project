@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { flatMap, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { ApiItem } from '../../models/api/api-item.interface';
@@ -60,7 +60,8 @@ export class ItemService {
                     this.listState.total = Number.parseInt(res.headers.get('X-Total'), 10);
                     this._items.next(res.body);
                     return this.items;
-                })
+                }),
+                this.itemErrorService.getItemsError()
             );
     }
 
