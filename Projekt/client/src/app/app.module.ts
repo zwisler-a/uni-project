@@ -69,11 +69,11 @@ export class AppModule {
                 {
                     title: translations['nav.admin'],
                     items: [
-                        /* {
+                        {
                             label: translations['nav.roles'],
                             icon: 'view_compact',
                             route: ['/roles/view']
-                        },*/
+                        },
                         {
                             label: translations['nav.user'],
                             icon: 'account_circle',
