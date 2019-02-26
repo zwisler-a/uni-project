@@ -1,0 +1,11 @@
+<button [matMenuTriggerFor]="companyMenu" mat-button>
+    <span class="current-company" fxLayoutAlign="space-between center" fxLayoutGap="8px">
+        <span>{{ currentCompany | company | async }}</span>
+        <mat-icon>keyboard_arrow_down</mat-icon>
+    </span>
+</button>
+<mat-menu #companyMenu="matMenu">
+    <button mat-menu-item *ngFor="let company of (companies | async)" (click)="selectCompany(company)">
+        {{ company.name }}
+    </button>
+</mat-menu>

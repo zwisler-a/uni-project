@@ -47,4 +47,9 @@ export class TypesListComponent implements OnInit {
             return types.filter(type => type.name.includes(query));
         });
     }
+
+    /** Function to track type for ngFor */
+    typeTrackBy(index, type: Type) {
+        return type && type.id;
+    }
 }

@@ -1,11 +1,19 @@
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { AuthService } from './auth.service';
-import { catchError, retryWhen, flatMap } from 'rxjs/operators';
+import { catchError, flatMap } from 'rxjs/operators';
 
-/** Injector to append the Authorization header on every request done.
- *  If the AuthService has a jwt available
+import { AuthService } from './auth.service';
+
+/**
+ * Authorization:
+ * Interceptor to add the jwt to each request.
+ * If a request is made and it gets a 401 from the server it tries to request a new short lived jwt before failing the request.
+ * If the request for a new short lived token succeeds, is sends the request triggering the 401 again.
+ *
+ * X-companyId:
+ * It also appends the companyId header. This is actually just needed for when a 'global admin' changes
+ * the company but is appended to every request for simplicty. The id is taken from the AuthService.user object
  */
 @Injectable({ providedIn: 'root' })
 export class AuthInterceptor implements HttpInterceptor {

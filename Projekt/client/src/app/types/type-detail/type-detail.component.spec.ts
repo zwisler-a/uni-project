@@ -6,6 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { TypeStoreModule } from '../_type-store/type-store.module';
+import { MatSnackBarModule } from '@angular/material';
 
 describe('TypeDetailComponent', () => {
     let component: TypeDetailComponent;
@@ -18,6 +19,7 @@ describe('TypeDetailComponent', () => {
                 RouterTestingModule,
                 TypeStoreModule,
                 HttpClientTestingModule,
+                MatSnackBarModule,
                 TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();

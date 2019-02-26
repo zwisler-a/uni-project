@@ -14,6 +14,7 @@ import { ShellModule } from './shell/shell.module';
 import { TypeStoreModule } from './types/_type-store/type-store.module';
 import { GlobalFieldStoreModule } from './types/_global-field-store/global-field-store.module';
 import { UserStoreModule } from './user/_user-store/user-store.module';
+import { StoreModule } from './shared/store/store.module';
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
@@ -25,6 +26,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         ShellModule,
+        StoreModule,
         GlobalFieldStoreModule,
         TypeStoreModule.forRoot(),
         CompanyStoreModule.forRoot(),

@@ -43,6 +43,9 @@ export class UserDetailComponent implements OnInit {
         });
     }
     selectUser(id: number): any {
+        if (this.userSub) {
+            this.userSub.unsubscribe();
+        }
         this.userSub = this.userService.getUser(id).subscribe(user => {
             this.user = user;
         });

@@ -61,5 +61,5 @@ export const itemsRoutes: Routes = [
             }
         ]
     },
-    { path: '**', pathMatch: 'full', redirectTo: 'view' }
+    { path: '**', redirectTo: 'view' }
 ];
