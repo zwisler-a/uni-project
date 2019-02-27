@@ -84,6 +84,7 @@ export class RoleModel {
     }
 
     static async create(role: Role): Promise<Role> {
+        // TODO check if company exists
         await RoleModel.database.beginTransaction(async function(connection) {
             const id = (await RoleModel.database.ROLE.CREATE.executeConnection(connection,
                 [ role.companyId, role.name, Buffer.of(role.permission) ])).insertId;
@@ -143,7 +144,9 @@ export class RoleModel {
     }
 
     static async delete(id: number) {
-        await RoleModel.database.ROLE.DELETE.execute([ id ]);
+        if ((await RoleModel.database.ROLE.DELETE.execute(id)).affectedRows === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, id);
+        }
         await RoleModel.cache.del(id.toString());
     }
 }

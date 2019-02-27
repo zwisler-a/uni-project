@@ -2,6 +2,7 @@ import { ObjectResultsets, ArrayResultsets } from 'mariadb';
 import { DynamicQuery, Queries } from '../query';
 import { Type, TypeField, TypeFieldType, FullType } from '../../api/models/type';
 import { GlobalField } from '../../api/models/global';
+import { Field } from '../../api/models/item';
 
 export enum SortOrder {
     DESC = 'DESC',
@@ -36,18 +37,21 @@ export class ItemQueries extends Queries {
         return `INSERT INTO ${this.prefix}global_${type.companyId} (${fields}) VALUES (${values})`;
     });
 
-    readonly GET: DynamicQuery<ArrayResultsets, Sortable<FullType, TypeField>> = this.dynamic(({ value, sorter, order }) => {
+    readonly GET: DynamicQuery<ArrayResultsets, Sortable<FullType, { id: number, global: boolean }>> = this.dynamic(({ value, sorter, order }) => {
         let sql = this.itemSelectQuery(value, value.globals);
 
         if (typeof sorter !== 'undefined') {
-            // TODO `table`.`field` + `table`.`global`
-            sql += ` ORDER BY ${this.prefix}item_${sorter.typeId}.field_${sorter.id} ${order}`;
+            if (sorter.global) {
+                sql += ` ORDER BY global_${sorter.id} ${order}`;
+            } else {
+                sql += ` ORDER BY field_${sorter.id} ${order}`;
+            }
         }
 
         return sql;
     });
 
-    readonly GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<FullType, TypeField>> = this.dynamic((sortable: Sortable<FullType, TypeField>) => {
+    readonly GET_RANGE: DynamicQuery<ArrayResultsets, Sortable<FullType, { id: number, global: boolean }>> = this.dynamic((sortable: Sortable<FullType, Field>) => {
         return `${this.GET.builder(sortable)} LIMIT ?, ?`;
     });
 

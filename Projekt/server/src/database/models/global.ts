@@ -39,6 +39,7 @@ export class GlobalFieldModel {
     }
 
     static async create(field: GlobalField) {
+        // TODO check if company exists
         await GlobalFieldModel.database.beginTransaction(async function(connection) {
             const params = [ field.companyId, field.name, field.type, field.required, field.unique ];
             const id = (await GlobalFieldModel.database.GLOBAL.CREATE.executeConnection(connection, params)).insertId;
@@ -92,8 +93,11 @@ export class GlobalFieldModel {
 
     static async delete(companyId: number, id: number) {
         await GlobalFieldModel.database.beginTransaction(async function(connection) {
+            if ((await GlobalFieldModel.database.GLOBAL.DELETE.executeConnection(connection, [ id ])).affectedRows === 0) {
+                throw ApiError.NOT_FOUND(ErrorNumber.GLOBAL_FIELD_NOT_FOUND, id);
+            }
+
             await GlobalFieldModel.database.GLOBAL_TABLE.DROP_COLUMN.executeConnection(connection, { companyId, id } as GlobalField);
-            await GlobalFieldModel.database.GLOBAL.DELETE.executeConnection(connection, [ id ]);
         });
 
         await GlobalFieldModel.cache.del(id.toString());

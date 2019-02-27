@@ -28,13 +28,9 @@ export class TypeQueries extends Queries {
         `SELECT * FROM ${this.prefix}types
             WHERE id = ?`);
 
-    readonly EXISTS_ID: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT 1 FROM ${this.prefix}types
-            WHERE id = ?`);
-
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}types
-            SET companyId = ?, name = ?
+            SET name = ?
             WHERE id = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(
