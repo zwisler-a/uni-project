@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FileField, DeterminedField } from '../../../models/field.interface';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-item-field-file',
@@ -8,7 +7,7 @@ import { FileField, DeterminedField } from '../../../models/field.interface';
 })
 export class ItemFieldFileComponent implements OnInit {
     @Input()
-    field: DeterminedField<any>;
+    field: any;
 
     @Input()
     edit: boolean;

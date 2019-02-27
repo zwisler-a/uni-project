@@ -1,56 +1,65 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { BehaviorSubject, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { User } from 'src/app/models/user.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
 import { environment } from 'src/environments/environment.prod';
+import { Store } from 'src/app/shared/store/store.class';
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    private readonly baseUrl = environment.baseUrl + '/users';
+    private _store: Store<User>;
 
-    private _users = new BehaviorSubject<User[]>([]);
-    readonly users = this._users.asObservable();
+    get users() {
+        return this._store.store;
+    }
 
-    constructor(private http: HttpClient) {}
+    constructor(private storeFactory: StoreFactoryService) {
+        // Create a fitting store
+        this._store = this.storeFactory.create<User>({
+            baseUrl: environment.baseUrl + '/users',
+            errorKeyBase: 'users.'
+        });
+    }
 
+    /**
+     * Fetch all users form the backend
+     */
     loadUsers() {
-        return this.http.get(this.baseUrl).pipe(
-            map((res: User[]) => {
-                this._users.next(res);
-                return res;
-            })
-        );
+        return this._store.load();
     }
 
-    getUser(id: string): any {
-        return this.users.pipe(
-            map(users => {
-                return users.find(user => user.id + '' === id + '');
-            })
-        );
+    /**
+     * Gets a single user. Tries store first then fallback to backend call
+     * @param id id of user
+     */
+    getUser(id: number): any {
+        return this._store.byId(id);
     }
 
-    deleteUser(id: string | number) {
-        return this.http.delete(this.baseUrl + '/' + id).pipe(
-            tap(_ => {
-                const users = this._users.getValue();
-                const newUsers = users.filter(user => user.id + '' === id + '');
-                this._users.next(newUsers);
-            })
-        );
+    /**
+     * Create a user
+     * @param user user
+     */
+    createUser(user: User) {
+        return this._store.create(user);
     }
 
+    /**
+     * Updates a user (id in Userobject must be correct)
+     * @param user Changed user
+     */
     updateUser(user: User) {
-        return this.http.patch(this.baseUrl + '/' + user.id, user).pipe(
-            tap((changed: User) => {
-                const users = this._users.getValue();
-                const newUsers = users.filter(filterUser => filterUser.id + '' === user.id + '');
-                newUsers.push(changed);
-                this._users.next(newUsers);
-            })
-        );
+        return this._store.update(user);
+    }
+
+    /**
+     * Delete a user
+     * @param id id of the user
+     */
+    deleteUser(id: number) {
+        return this._store.delete({ id });
     }
 }

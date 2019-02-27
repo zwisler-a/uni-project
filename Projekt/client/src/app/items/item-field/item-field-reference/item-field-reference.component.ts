@@ -1,6 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DeterminedField, LinkField } from '../../../models/field.interface';
-import { FieldType } from '../../../models/field-type.enum';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldReferenceService } from './item-field-reference.service';
+
 @Component({
     selector: 'app-item-field-reference',
     templateUrl: './item-field-reference.component.html',
@@ -8,14 +12,22 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldReferenceComponent implements OnInit {
     @Input()
-    field: DeterminedField<any> = {
-        name: '',
-        type: 'reference',
-        value: { name: '', ref: '' }
-    };
+    control: ItemFormControl;
     @Input()
-    edit: boolean;
-    constructor() {}
+    form: FormGroup;
+    constructor(private referencer: ItemFieldReferenceService, private router: Router) {}
 
     ngOnInit() {}
+
+    select() {
+        this.referencer.startSelectProcess(this.control, this.form, this.router.url);
+    }
+
+    openReference() {
+        this.router.navigate([
+            '/items',
+            'view',
+            { outlets: { detail: ['details', this.control.referenceType, this.control.value] } }
+        ]);
+    }
 }

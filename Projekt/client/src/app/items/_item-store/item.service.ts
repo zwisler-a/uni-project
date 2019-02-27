@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { flatMap, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { ApiItem } from '../../models/api/api-item.interface';
@@ -10,6 +10,7 @@ import { Item } from '../../models/item.interface';
 import { ItemErrorService } from './item-error.service';
 import { ItemPipe } from './item-pipe.service';
 import { ListState } from './list-state.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
 
 /**
  * The Item store is used to create, delete, update and retrieve items.
@@ -38,7 +39,17 @@ export class ItemService {
     /** Stores all currently loaded items */
     readonly items: Observable<Item[]> = this._items.pipe(this.itemPipe.toItem());
 
-    constructor(private http: HttpClient, private itemErrorService: ItemErrorService, private itemPipe: ItemPipe) {}
+    constructor(
+        private http: HttpClient,
+        private itemErrorService: ItemErrorService,
+        private itemPipe: ItemPipe,
+        private storeFactory: StoreFactoryService
+    ) {
+        console.log(this.storeFactory);
+        this.storeFactory.resetAllStores.subscribe(() => {
+            this.loadItems({}).subscribe();
+        });
+    }
 
     /**
      * Loads a list of items into the store
@@ -60,7 +71,8 @@ export class ItemService {
                     this.listState.total = Number.parseInt(res.headers.get('X-Total'), 10);
                     this._items.next(res.body);
                     return this.items;
-                })
+                }),
+                this.itemErrorService.getItemsError()
             );
     }
 
@@ -78,10 +90,9 @@ export class ItemService {
      * Creates a new Entity
      * @param entity Entity to create
      */
-    createItem(item: Item) {
-        const entity = this.itemPipe.retransformItem(item);
-        return this.http.post(`${this.baseUrl}/${entity.typeId}`, entity.fields).pipe(
-            this.rxjsStoreCreateUpdate(entity),
+    createItem(typeId: number, item: { id: number; value: any }[]) {
+        return this.http.post(`${this.baseUrl}/${typeId}`, item).pipe(
+            this.rxjsStoreCreateUpdate({ typeId } as ApiItem),
             this.itemErrorService.createError()
         );
     }
@@ -89,6 +100,10 @@ export class ItemService {
     private rxjsStoreCreateUpdate(entity: ApiItem) {
         return this.storeUpdate(entity.typeId, (store, res) => {
             store.items.push(...res.items);
+            const existingType = store.types.find(sType => sType.id + '' === res.types[0].id + '');
+            if (!existingType) {
+                store.types.push(...res.types);
+            }
             this.listState.total++;
             return store;
         });
@@ -112,6 +127,7 @@ export class ItemService {
     }
     /** Retriev item from backend if not found in the store */
     private getItemFromBackend(typeId, itemId): Observable<Item> {
+        console.log(this._items.getValue());
         return this.http.get<EmbeddedItems>(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             flatMap(res => {
                 return this.itemPipe.transform(res.items, res.types);
@@ -124,10 +140,9 @@ export class ItemService {
      * Updates a an item
      * @param entity item to update
      */
-    updateItem(item: Item) {
-        const entity = this.itemPipe.retransformItem(item);
-        return this.http.patch(`${this.baseUrl}/${entity.typeId}/${entity.id}`, entity.fields).pipe(
-            this.rxjsStoreEditUpdate(entity.typeId),
+    updateItem(typeId: number, itemId: number, fields: { id: number; value: any }[]) {
+        return this.http.patch(`${this.baseUrl}/${typeId}/${itemId}`, fields).pipe(
+            this.rxjsStoreEditUpdate(typeId),
             this.itemErrorService.updateError()
         );
     }

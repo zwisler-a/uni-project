@@ -1,0 +1,20 @@
+@mixin mat-chip-override($theme) {
+    $accent: map-get(
+        $map: $theme,
+        $key: accent
+    );
+    mat-chip.mat-standard-chip::before {
+        content: '';
+        width: 4px;
+        left: 0;
+        background: map-get($map: $accent, $key: 500);
+        position: absolute;
+        height: 100%;
+        display: block;
+    }
+    mat-chip.mat-standard-chip {
+        position: relative;
+        left: 0px;
+        border-radius: 0;
+    }
+}

@@ -19,6 +19,7 @@ import { RouterLoadingIndicatorComponent } from './router-loading-indicator/rout
 import { AuthModule } from './auth/auth.module';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 import { CompanyStoreModule } from '../company/_company-store/company-store.module';
+import { CompanySelectorComponent } from './company-selector/company-selector.component';
 
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
@@ -29,12 +30,13 @@ import { CompanyStoreModule } from '../company/_company-store/company-store.modu
         RouterLoadingIndicatorComponent,
         SidenavControlButtonComponent,
         NavigationGroupComponent,
-        LanguageSelectorComponent
+        LanguageSelectorComponent,
+        CompanySelectorComponent
     ],
     imports: [
         CommonModule,
         AuthModule,
-        CompanyStoreModule, // Needed for company name display
+        CompanyStoreModule.forChild(), // Needed for company name display
         RouterModule.forChild([
             { path: 'auth', loadChildren: './login/login.module#LoginModule' }
         ]),

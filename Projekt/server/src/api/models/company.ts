@@ -1,4 +1,4 @@
-import { ObjectValidator } from './object-validator';
+import { ObjectValidator } from '../../util/object-validator';
 
 /**
  * Represents a company
@@ -13,9 +13,13 @@ export interface Company {
 
 /** Object validator for {@link Company} */
 export const COMPANY = new ObjectValidator<Company>({
-    name: {
-        type: String,
-        required: true,
+    type: Object,
+    required: true,
+    properties: {
+        name: {
+            type: String,
+            required: true,
+        }
     }
 });
 

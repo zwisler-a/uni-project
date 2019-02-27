@@ -2,9 +2,10 @@
     <a
         mat-list-item
         class="navigation-item"
-        *ngFor="let type of (types | async)"
+        *ngFor="let type of (types | async); trackBy: typeTrackBy"
         [routerLink]="['/types', 'view', { outlets: { detail: [type.id] } }]"
         [routerLinkActive]="'active'"
+        @fadeInOut
     >
         <span class="name">{{ type.name }}</span>
         <span fxHide.lt-md class="type-field" *ngFor="let field of type.fields">{{ field.name }}</span>

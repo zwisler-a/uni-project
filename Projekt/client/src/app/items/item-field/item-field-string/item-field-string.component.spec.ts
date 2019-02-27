@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldStringComponent } from './item-field-string.component';
-import { MatInputModule } from '@angular/material';
-import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { MatInputModule, MatIconModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
+import { ItemFieldStringComponent } from './item-field-string.component';
+import { ItemFormControl } from '../../item-form-control';
 
 describe('ItemFieldStringComponent', () => {
     let component: ItemFieldStringComponent;
@@ -16,8 +17,9 @@ describe('ItemFieldStringComponent', () => {
             declarations: [ItemFieldStringComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
+                MatIconModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
             ]
@@ -27,6 +29,18 @@ describe('ItemFieldStringComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldStringComponent);
         component = fixture.componentInstance;
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
+        });
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

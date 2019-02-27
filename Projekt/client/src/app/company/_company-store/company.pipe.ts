@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { CompanyService } from './company.service';
 
+/** Translates a companyId to the actual comapny name. Return an observable. */
 @Pipe({
     name: 'company'
 })

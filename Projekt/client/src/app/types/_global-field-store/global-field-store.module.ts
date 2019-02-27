@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+
 import { GlobalFieldsService } from './global-fields.service';
-import { MatSnackBarModule } from '@angular/material';
 
 @NgModule({
     declarations: [],
-    imports: [CommonModule, MatSnackBarModule],
+    imports: [CommonModule],
     providers: [GlobalFieldsService]
 })
 export class GlobalFieldStoreModule {}

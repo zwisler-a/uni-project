@@ -1,14 +1,26 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { MatSnackBarModule } from '@angular/material';
-import { TranslateModule } from '@ngx-translate/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 
-import { TypeErrorService } from './type-error.service';
+import { TypeNamePipe } from './type-name.pipe';
+import { TypesResolver } from './types.resolver';
 import { TypesService } from './types.service';
 
 @NgModule({
-    declarations: [],
-    imports: [CommonModule, MatSnackBarModule, TranslateModule],
-    providers: [TypesService, TypeErrorService]
+    declarations: [TypeNamePipe],
+    imports: [CommonModule],
+    exports: [TypeNamePipe]
 })
-export class TypeStoreModule {}
+export class TypeStoreModule {
+    static forRoot(): ModuleWithProviders {
+        return {
+            ngModule: TypeStoreModule,
+            providers: [TypesService, TypesResolver]
+        };
+    }
+    static forChild(): ModuleWithProviders {
+        return {
+            ngModule: TypeStoreModule,
+            providers: []
+        };
+    }
+}

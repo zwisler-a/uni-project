@@ -1,11 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule } from '@angular/forms';
-import { MatInputModule } from '@angular/material';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule, MatInputModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-
-import { ItemFieldNumberComponent } from './item-field-number.component';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
+import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldNumberComponent } from './item-field-number.component';
 
 describe('ItemFieldNumberComponent', () => {
     let component: ItemFieldNumberComponent;
@@ -16,8 +17,9 @@ describe('ItemFieldNumberComponent', () => {
             declarations: [ItemFieldNumberComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
+                MatIconModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
             ]
@@ -27,6 +29,18 @@ describe('ItemFieldNumberComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldNumberComponent);
         component = fixture.componentInstance;
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
+        });
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

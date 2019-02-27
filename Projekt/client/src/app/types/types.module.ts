@@ -11,7 +11,7 @@ import {
     MatListModule,
     MatMenuModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -21,16 +21,22 @@ import { DefaultPageModule } from '../shared/default-page/default-page.module';
 import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
 import { AddTypeComponent } from './add-type/add-type.component';
-import { typeRoutes } from './routes';
+import { GlobalFieldsComponent } from './global-fields/global-fields.component';
 import { TypeDetailComponent } from './type-detail/type-detail.component';
+import { FieldTypeSelectComponent } from './type-field/field-type-select/field-type-select.component';
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
-import { TypesResolver } from './types-list/types.resolver';
-import { GlobalFieldsComponent } from './global-fields/global-fields.component';
-import { GlobalFieldStoreModule } from './_global-field-store/global-field-store.module';
+import { typeRoutes } from './types.routes';
 
 @NgModule({
-    declarations: [TypesListComponent, TypeDetailComponent, TypeFieldComponent, AddTypeComponent, GlobalFieldsComponent],
+    declarations: [
+        TypesListComponent,
+        TypeDetailComponent,
+        TypeFieldComponent,
+        AddTypeComponent,
+        GlobalFieldsComponent,
+        FieldTypeSelectComponent
+    ],
     imports: [
         CommonModule,
         RouterModule.forChild(typeRoutes),
@@ -47,11 +53,10 @@ import { GlobalFieldStoreModule } from './_global-field-store/global-field-store
         NavigateBackModule,
         ConfirmDialogModule,
         DefaultPageModule,
-        GlobalFieldStoreModule,
         TypeSelectorModule,
         MatToolbarModule,
         TranslateModule
     ],
-    providers: [TypesResolver]
+    providers: []
 })
 export class TypesModule {}

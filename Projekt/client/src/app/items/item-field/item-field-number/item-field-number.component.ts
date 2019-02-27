@@ -1,6 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { DeterminedField } from '../../../models/field.interface';
-import { FieldType } from '../../../models/field-type.enum';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+
+import { ItemFormControl } from '../../item-form-control';
 
 @Component({
     selector: 'app-item-field-number',
@@ -9,14 +10,11 @@ import { FieldType } from '../../../models/field-type.enum';
 })
 export class ItemFieldNumberComponent implements OnInit {
     @Input()
-    field: DeterminedField<number>  = {
-        name: '',
-        type: FieldType.number,
-        value: 0
-    };
+    form: FormGroup;
 
     @Input()
-    edit: boolean;
+    control: ItemFormControl;
+
     constructor() {}
 
     ngOnInit() {}

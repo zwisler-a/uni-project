@@ -1,5 +1,6 @@
-<div class="search-box" fxLayoutAlign="start center">
+<div class="search-box" [ngClass]="{ 'indicator': !liftLabel }" fxLayoutAlign="start center">
     <mat-icon>search</mat-icon>
-    <input (input)="search.next(input.value)" #input [placeholder]="'items.list.search' | translate" />
+    <label for="search" [ngClass]="{ 'focused': !liftLabel }">{{ 'items.list.search' | translate }}</label>
+    <input (input)="searchFor(input.value)" #input id="search" />
     <button mat-icon-button *ngIf="input.value" (click)="clearSearch(input)"><mat-icon>close</mat-icon></button>
 </div>

@@ -1,6 +1,6 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Host, OnDestroy, OnInit, ViewChild, Optional } from '@angular/core';
-import { MatPaginator, MatSidenav, MatSort } from '@angular/material';
+import { MatPaginator, MatSidenav, MatSort, MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skip, throttleTime } from 'rxjs/operators';
@@ -11,6 +11,9 @@ import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.c
 import { FieldsService } from '../_fields-store/fields.service';
 import { ItemService } from '../_item-store/item.service';
 import { ItemListDataSource } from './items-list.datasource';
+import { fadeInOut, fadeIn } from 'src/app/shared/animations';
+import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
+import { ColumnSelectComponent } from '../column-select/column-select.component';
 
 /**
  * Display a list of currently loaded items
@@ -18,7 +21,8 @@ import { ItemListDataSource } from './items-list.datasource';
 @Component({
     selector: 'app-items-list',
     templateUrl: './items-list.component.html',
-    styleUrls: ['./items-list.component.scss']
+    styleUrls: ['./items-list.component.scss'],
+    animations: [fadeInOut, fadeIn]
 })
 export class ItemsListComponent implements OnInit, OnDestroy {
     // Material tabel
@@ -30,6 +34,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
     /** Columns which should be in the table */
     displayedColumns = [];
+    showColumnSelect = false;
     displayColsSub: Subscription;
     searchSub: Subscription;
 
@@ -37,6 +42,8 @@ export class ItemsListComponent implements OnInit, OnDestroy {
         private router: Router,
         private itemService: ItemService,
         private fieldsService: FieldsService,
+        private refSelectService: ItemFieldReferenceService,
+        private dialog: MatDialog,
         private activatedRoute: ActivatedRoute,
         @Optional() @Host() private pageComponent: DefaultPageComponent
     ) {}
@@ -44,7 +51,7 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.dataSource = new ItemListDataSource(this.paginator, this.sort, this.itemService, this.activatedRoute, this.router);
         // Subscribe to which columns should be displayed
-        this.displayColsSub = this.fieldsService.displayableColumns.subscribe(cols => {
+        this.displayColsSub = this.fieldsService.displayColumns.subscribe(cols => {
             this.displayedColumns = cols;
         });
 
@@ -56,6 +63,13 @@ export class ItemsListComponent implements OnInit, OnDestroy {
                 tooltip: '',
                 click: () => {
                     this.router.navigate(['/items', 'view', { outlets: { detail: ['add'] } }]);
+                }
+            },
+            {
+                icon: 'filter_list',
+                tooltip: '',
+                click: () => {
+                    this.showColumnSelect = !this.showColumnSelect;
                 }
             }
         ]);
@@ -81,8 +95,12 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     }
 
     /** Open item detail page (sidenav) */
-    async open(row: Item) {
-        await this.router.navigate(['/items', 'view', { outlets: { detail: ['details', row.typeId, row.id] } }]);
+    open(row: Item) {
+        if (this.refSelectService.isSelecting) {
+            this.refSelectService.select(row);
+        } else {
+            this.router.navigate(['/items', 'view', { outlets: { detail: ['details', row.typeId, row.id] } }]);
+        }
     }
 
     /** Returns a displayable value for a field */

@@ -4,6 +4,9 @@ import { UserListComponent } from './user-list.component';
 import { UserModule } from '../user.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('UserListComponent', () => {
     let component: UserListComponent;
@@ -11,7 +14,13 @@ describe('UserListComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [UserModule, HttpClientTestingModule],
+            imports: [
+                UserModule,
+                HttpClientTestingModule,
+                TranslateTestingModule.withTranslations({}),
+                RouterTestingModule.withRoutes([]),
+                NoopAnimationsModule
+            ],
             declarations: []
         }).compileComponents();
     }));

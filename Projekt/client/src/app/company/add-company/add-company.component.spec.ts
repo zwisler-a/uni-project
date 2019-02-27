@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatInputModule, MatToolbarModule } from '@angular/material';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule, MatInputModule, MatToolbarModule, MatSnackBarModule } from '@angular/material';
 
 import { AddCompanyComponent } from './add-company.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -18,12 +18,13 @@ describe('AddCompanyComponent', () => {
         TestBed.configureTestingModule({
             declarations: [AddCompanyComponent],
             imports: [
-                FormsModule,
+                ReactiveFormsModule,
                 MatInputModule,
                 NoopAnimationsModule,
                 MatToolbarModule,
                 MatButtonModule,
                 FlexLayoutModule,
+                MatSnackBarModule,
                 CompanyStoreModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({})

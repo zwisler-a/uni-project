@@ -1,26 +1,20 @@
-<mat-form-field fxFlex>
+<mat-form-field fxFlex [formGroup]="form">
     <span matPrefix class="field-type">
+        <mat-icon *ngIf="control.global">public</mat-icon>
         <mat-icon matTooltip="Verlinkt mit">link</mat-icon>
-        {{ "items.field.reference" | translate }}
+        {{ 'items.field.reference' | translate }}
     </span>
-    <input
-        [placeholder]="field.name"
-        [(ngModel)]="field.value"
-        type="number"
-        [disabled]="!edit"
-        matInput
-        [required]="field.required"
-    />
+    <input [placeholder]="control.name" [value]="control.reference" matInput disabled />
     <span
+        *ngIf="control.disabled"
+        (click)="openReference()"
         matSuffix
         class="link-icon"
-        [routerLink]="[
-            '/items',
-            'view',
-            { outlets: { detail: ['details', field.referenceId , field.value] } }
-        ]"
-        matTooltip="Gehe zu -"
+        matTooltip="Gehe zu {{ control.reference }}"
     >
         <mat-icon>play_circle_outline</mat-icon>
+    </span>
+    <span *ngIf="!control.disabled" matSuffix (click)="select()">
+        <button color="accent" mat-button>{{ 'items.reference.select' | translate }}</button>
     </span>
 </mat-form-field>

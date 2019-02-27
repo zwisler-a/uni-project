@@ -2,5 +2,12 @@
 export interface ApiItem {
     id: number;
     typeId: number;
-    fields: { id: number; value: any }[];
+    fields: ApiItemField[];
+}
+/** Value information of a Field */
+export interface ApiItemField {
+    id: number;
+    value: any;
+    global: boolean;
+    reference?: any;
 }

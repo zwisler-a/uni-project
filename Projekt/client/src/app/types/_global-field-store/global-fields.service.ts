@@ -1,74 +1,45 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
-import { BehaviorSubject, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { TypeField } from 'src/app/models/type-field.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
+import { Store } from 'src/app/shared/store/store.class';
 import { environment } from 'src/environments/environment.prod';
 
 @Injectable({
     providedIn: 'root'
 })
 export class GlobalFieldsService {
-    readonly baseUrl = environment.baseUrl + `/fields`;
+    /** All global fields */
+    get fields(): Observable<TypeField[]> {
+        return this._store.store;
+    }
+    private _store: Store<TypeField>;
 
-    private _fields = new BehaviorSubject<TypeField[]>([
-        { name: 'Test', id: 0, required: false, type: '', unique: false },
-        { name: 'Test2', id: 2, required: false, type: '', unique: false }
-    ]);
-    readonly fields = this._fields.asObservable();
+    constructor(private storeFactory: StoreFactoryService) {
+        // Configure store
+        this._store = this.storeFactory.create<TypeField>({
+            baseUrl: environment.baseUrl + `/globals`,
+            errorKeyBase: 'globals.'
+        });
+    }
 
-    constructor(private http: HttpClient, private snackbar: MatSnackBar) {}
-
+    /** Loads the global fields if necessary */
     loadFields() {
-        return this.http.get<TypeField[]>(this.baseUrl).pipe(
-            map(res => {
-                this._fields.next(res);
-                return this.fields;
-            })
-        );
+        return this._store.load();
     }
 
-    updateField(field): any {
-        return this.http.post<TypeField>(this.baseUrl, field).pipe(
-            tap(res => {
-                let fields = this._fields.getValue();
-                fields = fields.filter(filterField => filterField.id + '' !== field.id + '');
-                fields.push(res);
-                this._fields.next(fields);
-            }),
-            catchError(err => {
-                this.snackbar.open('Something went wrong!', null, { duration: 2000, horizontalPosition: 'end' });
-                return throwError(err);
-            })
-        );
+    /** Updates a global field */
+    updateField(field: TypeField): any {
+        return this._store.update(field);
     }
 
-    deleteField(id: any): any {
-        return this.http.delete(this.baseUrl + '/' + id).pipe(
-            tap(res => {
-                let fields = this._fields.getValue();
-                fields = fields.filter(filterField => filterField.id + '' !== id + '');
-                this._fields.next(fields);
-            }),
-            catchError(err => {
-                this.snackbar.open('Something went wrong!', null, { duration: 2000, horizontalPosition: 'end' });
-                return throwError(err);
-            })
-        );
+    /** Deletes a global field */
+    deleteField(id: number): any {
+        return this._store.delete({ id });
     }
 
+    /** Creates a new global field */
     createField(field: TypeField): any {
-        return this.http.post<TypeField>(this.baseUrl, field).pipe(
-            tap(res => {
-                const fields = this._fields.getValue();
-                fields.push(res);
-                this._fields.next(fields);
-            }),
-            catchError(err => {
-                this.snackbar.open('Something went wrong!', null, { duration: 2000, horizontalPosition: 'end' });
-                return throwError(err);
-            })
-        );
+        return this._store.create(field);
     }
 }

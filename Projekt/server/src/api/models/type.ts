@@ -1,4 +1,5 @@
-import { ObjectValidator } from './object-validator';
+import { ObjectValidator } from '../../util/object-validator';
+import { GlobalField } from './global';
 
 /**
  * Represents the type (metadata) of an item
@@ -13,6 +14,10 @@ export interface Type {
     name: string;
     /** List of all the field's an item of this type (should) have */
     fields: TypeField[];
+}
+
+export interface FullType extends Type {
+    globals: GlobalField[];
 }
 
 /**
@@ -32,8 +37,10 @@ export interface TypeField {
     required: boolean;
     /** True if the field's value should be unique among one type */
     unique: boolean;
-    /** The this field's value references (only present if type === 'reference') */
+    /** The this field's value referenceId to another field of a different type (only present if type === 'reference') */
     referenceId?: number;
+    /** The referenced field */
+    reference?: TypeField;
 }
 
 /**
@@ -51,40 +58,48 @@ export enum TypeFieldType {
 }
 
 export const TYPE = new ObjectValidator<Type>({
-    companyId: {
-        type: Number
-        // TODO maybe required?
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    fields: {
-        type: Array,
-        require: true,
-        elements: {
-            id: {
-                type: Number
-            },
-            name: {
-                type: String,
-                required: true
-            },
-            type: {
-                type: String,
+    type: Object,
+    required: true,
+    properties: {
+        companyId: {
+            type: Number
+            // TODO maybe required?
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        fields: {
+            type: Array,
+            required: true,
+            elements: {
+                type: Object,
                 required: true,
-                enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
-            },
-            required: {
-                type: Boolean,
-                required: true
-            },
-            unique: {
-                type: Boolean,
-                required: true
-            },
-            referenceId: {
-                type: Number
+                properties: {
+                    id: {
+                        type: Number
+                    },
+                    name: {
+                        type: String,
+                        required: true
+                    },
+                    type: {
+                        type: String,
+                        required: true,
+                        enum: [ 'string', 'number', 'boolean', 'file', 'color', 'date', 'reference' ]
+                    },
+                    required: {
+                        type: Boolean,
+                        required: true
+                    },
+                    unique: {
+                        type: Boolean,
+                        required: true
+                    },
+                    referenceId: {
+                        type: Number
+                    }
+                }
             }
         }
     }

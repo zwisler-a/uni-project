@@ -84,7 +84,7 @@ export class App {
                     cause: err.cause
                 });
             }
-            console.error(err);
+            console.dir(err);
         });
     }
 

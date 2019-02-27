@@ -2,9 +2,15 @@ import { TestBed } from '@angular/core/testing';
 
 import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { MatSnackBarModule } from '@angular/material';
+import { TranslateTestingModule } from 'ngx-translate-testing';
 
 describe('UserService', () => {
-    beforeEach(() => TestBed.configureTestingModule({ imports: [HttpClientTestingModule] }));
+    beforeEach(() =>
+        TestBed.configureTestingModule({
+            imports: [HttpClientTestingModule, MatSnackBarModule, TranslateTestingModule.withTranslations({})]
+        })
+    );
 
     it('should be created', () => {
         const service: UserService = TestBed.get(UserService);

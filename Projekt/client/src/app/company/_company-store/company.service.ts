@@ -1,70 +1,53 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Company } from 'src/app/models/company.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
+import { Store } from 'src/app/shared/store/store.class';
 import { environment } from 'src/environments/environment.prod';
 
+/**
+ * Handles all company related backend communication
+ */
 @Injectable({
     providedIn: 'root'
 })
 export class CompanyService {
-    readonly baseUrl = environment.baseUrl + '/companies';
+    private _store: Store<Company>;
 
-    companies = new BehaviorSubject<Company[]>([]);
+    get companies() {
+        return this._store.store;
+    }
 
-    constructor(private http: HttpClient) {}
+    constructor(private storeFactory: StoreFactoryService) {
+        this._store = this.storeFactory.create<Company>({
+            baseUrl: environment.baseUrl + '/companies',
+            errorKeyBase: 'company.'
+        });
+    }
 
+    /** Fetch the list of companies */
     loadCompanies() {
-        return this.http.get<Company[]>(this.baseUrl).pipe(
-            map(res => {
-                this.companies.next(res);
-                return this.companies;
-            })
-        );
+        return this._store.load();
     }
 
+    /** Tries to get a company. First tries store fallback to backend request */
     getCompany(id: number): Observable<Company> {
-        return this.companies.pipe(
-            flatMap(companies => {
-                const foundCompany = companies.find(company => company.id + '' === id + '');
-                if (!foundCompany) {
-                    return this.loadCompany(id);
-                } else {
-                    return of(foundCompany);
-                }
-            })
-        );
+        return this._store.byId(id);
     }
 
+    /**
+     * Creates a new company
+     * @param name Name of the company
+     */
     createCompany(name: string) {
-        return this.http.post(this.baseUrl, { name }).pipe(
-            tap((res: Company) => {
-                const store = this.companies.getValue();
-                store.push(res);
-                this.companies.next(store);
-            })
-        );
+        return this._store.create({ name: name, id: 0 });
     }
 
+    /**
+     * Creates a new company
+     * @param id Id of the company
+     */
     deleteCompany(id: number): any {
-        return this.http.delete(this.baseUrl + `/` + id).pipe(
-            tap(res => {
-                let store = this.companies.getValue();
-                store = store.filter(company => company.id + '' !== id + '');
-                this.companies.next(store);
-            })
-        );
-    }
-
-    private loadCompany(id: number) {
-        return this.http.get<Company>(this.baseUrl + '/' + id).pipe(
-            map(res => {
-                const store = this.companies.getValue();
-                store.push(res);
-                this.companies.next(store);
-                return res;
-            })
-        );
+        return this._store.delete({ id });
     }
 }

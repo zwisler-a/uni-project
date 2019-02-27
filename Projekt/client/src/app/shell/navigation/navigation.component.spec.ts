@@ -6,7 +6,8 @@ import {
     MatProgressBarModule,
     MatToolbarModule,
     MatListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -20,6 +21,7 @@ import { AuthService } from '../auth/auth.service';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TranslateService } from '@ngx-translate/core';
 import { CompanyStoreModule } from 'src/app/company/_company-store/company-store.module';
+import { CompanySelectorComponent } from '../company-selector/company-selector.component';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -32,7 +34,8 @@ describe('NavigationComponent', () => {
                 RouterLoadingIndicatorComponent,
                 SidenavControlButtonComponent,
                 NavigationGroupComponent,
-                LanguageSelectorComponent
+                LanguageSelectorComponent,
+                CompanySelectorComponent
             ],
             imports: [
                 RouterTestingModule,
@@ -41,6 +44,7 @@ describe('NavigationComponent', () => {
                 MatIconModule,
                 CompanyStoreModule,
                 MatButtonModule,
+                MatSnackBarModule,
                 MatMenuModule,
                 HttpClientTestingModule,
                 FlexLayoutModule,

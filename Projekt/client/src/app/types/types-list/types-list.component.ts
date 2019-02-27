@@ -2,6 +2,7 @@ import { Component, Host, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 import { Type } from 'src/app/models/type.interface';
+import { fadeInOut } from 'src/app/shared/animations';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
 
 import { TypesService } from '../_type-store/types.service';
@@ -10,7 +11,8 @@ import { TypesService } from '../_type-store/types.service';
 @Component({
     selector: 'app-types-list',
     templateUrl: './types-list.component.html',
-    styleUrls: ['./types-list.component.scss']
+    styleUrls: ['./types-list.component.scss'],
+    animations: [fadeInOut]
 })
 export class TypesListComponent implements OnInit {
     types;
@@ -44,5 +46,10 @@ export class TypesListComponent implements OnInit {
         this.types = combineLatest(this.typeService.types, this.defaultPage.search, (types: Type[], query: string) => {
             return types.filter(type => type.name.includes(query));
         });
+    }
+
+    /** Function to track type for ngFor */
+    typeTrackBy(index, type: Type) {
+        return type && type.id;
     }
 }

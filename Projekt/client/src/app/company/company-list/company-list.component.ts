@@ -5,11 +5,13 @@ import { Company } from 'src/app/models/company.interface';
 import { CompanyService } from '../_company-store/company.service';
 import { Router } from '@angular/router';
 import { ConfirmDialogService } from 'src/app/shared/confirm-dialog/confirm-dialog.service';
+import { fadeInOut } from 'src/app/shared/animations';
 
 @Component({
     selector: 'app-company-list',
     templateUrl: './company-list.component.html',
-    styleUrls: ['./company-list.component.scss']
+    styleUrls: ['./company-list.component.scss'],
+    animations: [fadeInOut]
 })
 export class CompanyListComponent implements OnInit {
     companies: Observable<Company[]>;
@@ -22,15 +24,15 @@ export class CompanyListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.companyService.loadCompanies().subscribe();
         if (!this.defaultPage) {
             return;
         }
+
+        // Setup page
         this.defaultPage.title = 'company.title';
         this.companies = combineLatest(this.defaultPage.search, this.companyService.companies, (query, company) => {
             return company.filter(role => role.name.includes(query));
         });
-
         this.defaultPage.actions.next([
             {
                 click: () => {
@@ -42,9 +44,17 @@ export class CompanyListComponent implements OnInit {
         ]);
     }
 
+    /**
+     * Open confirm dialog, than delete company if confired
+     */
     deleteCompany(id: number) {
         this.confirm.open('company.delete', true).subscribe(() => {
             this.companyService.deleteCompany(id).subscribe();
         });
+    }
+
+    /** Function to track companies by for ngFor */
+    companyTrackBy(index, company: Company) {
+        return company && company.id;
     }
 }

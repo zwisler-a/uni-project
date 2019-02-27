@@ -13,10 +13,12 @@
             <button mat-icon-button (click)="leftSidenav.toggle()" *ngIf="showSidenavMenuButton">
                 <mat-icon>list</mat-icon>
             </button>
-            <app-search (search)="search.next($event)"></app-search>
-            <button mat-icon-button *ngFor="let action of (_actions | async)" (click)="action.click()">
-                <mat-icon>{{ action.icon }}</mat-icon>
-            </button>
+            <app-search fxFlex="1 1 auto" (search)="search.next($event)"></app-search>
+            <div fxFlex="0 0 auto">
+                <button mat-icon-button *ngFor="let action of (_actions | async)" (click)="action.click()">
+                    <mat-icon>{{ action.icon }}</mat-icon>
+                </button>
+            </div>
         </div>
         <mat-drawer-container fxFlex>
             <mat-drawer #leftSidenav mode="side" fxFlex="0 0 150px">

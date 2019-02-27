@@ -1,32 +1,19 @@
-import { FieldType } from './field-type.enum';
 /** A property of an item */
 export interface Field {
     name: string;
     id: number;
     type: string;
-    value: string | number;
-    displayValue: string;
+    value: any;
     required: boolean;
     unique: boolean;
-    referenceId?: number;
-}
-/** A property of an item in a better usable state for ts */
-export interface DeterminedField<T> {
-    name: string;
-    type: string;
-    value: T;
-    required?: boolean;
-    unique?: boolean;
-    referenceId?: string;
-}
-/** @deprecated */
-export interface LinkField {
-    name: string;
-    ref: string;
-}
-/** @deprecated */
-export interface FileField {
-    name: string;
-    ref: string;
-    history: string[];
+    /** specify if the field is global. Only has to be carried around for the backend. Best no edit! */
+    global: boolean;
+    /** String which represents the field value */
+    displayValue: string;
+    /** Value of its referencing object */
+    referenceValue?: any;
+    /** Id of the field referenced */
+    referenceFieldId?: number;
+    /** Id of the type referenced */
+    referenceTypeId?: number;
 }

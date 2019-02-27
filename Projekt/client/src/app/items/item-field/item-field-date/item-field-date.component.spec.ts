@@ -1,15 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldDateComponent } from './item-field-date.component';
-import {
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule
-} from '@angular/material';
-import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule, MatIconModule, MatInputModule, MatNativeDateModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
+import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldDateComponent } from './item-field-date.component';
 
 describe('ItemFieldDateComponent', () => {
     let component: ItemFieldDateComponent;
@@ -20,10 +17,11 @@ describe('ItemFieldDateComponent', () => {
             declarations: [ItemFieldDateComponent],
             imports: [
                 MatInputModule,
-                FormsModule,
+                ReactiveFormsModule,
                 FlexLayoutModule,
                 MatDatepickerModule,
                 MatNativeDateModule,
+                MatIconModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
             ]
@@ -33,6 +31,18 @@ describe('ItemFieldDateComponent', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(ItemFieldDateComponent);
         component = fixture.componentInstance;
+        component.control = ItemFormControl.fromField({
+            id: 0,
+            name: 'test',
+            required: false,
+            unique: false,
+            displayValue: '',
+            type: 'boolean',
+            value: ''
+        });
+        component.form = new FormGroup({
+            test: component.control
+        });
         fixture.detectChanges();
     });
 

@@ -2,12 +2,12 @@
     <a
         mat-list-item
         class="navigation-item"
-        *ngFor="let user of (users | async)"
+        *ngFor="let user of (users | async); trackBy: userTrackBy"
         [routerLink]="['/user', 'view', { outlets: { detail: [user.id] } }]"
         [routerLinkActive]="'active'"
+        @fadeInOut
     >
         <span class="name">{{ user.name }}</span>
-        <span>{{ user.email }}</span>
-        <span fxFlex="1 1 auto"></span>
+        <span class="email">{{ user.email }}</span>
     </a>
 </mat-nav-list>

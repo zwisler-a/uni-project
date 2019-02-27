@@ -4,6 +4,7 @@
         "types": "Object types",
         "admin": "Admin area",
         "roles": "User roles",
+        "user": "Users",
         "companies": "Companies"
     },
     "user": {
@@ -20,7 +21,32 @@
         "password": "Old password",
         "newPassword": "New password",
         "repeadPassword": "Repeat password",
-        "passwordUpdated": "Password changed!"
+        "passwordUpdated": "Password changed!",
+        "updateInfoUpdated": "Successfully updated user data!",
+        "permissions": "User roles",
+        "error": {
+            "update": "User could not be updated!",
+            "delete": "User could not be deleted!",
+            "get": "User could not be fetched!",
+            "load": "User could not be fetched!",
+            "create": "User could not be created!"
+        },
+        "new": {
+            "title": "Create user",
+            "company": "Company",
+            "password": "Generated password",
+            "add": "Add",
+            "cancel": "Cancel",
+            "created": "User created!"
+        }
+    },
+
+    "company": {
+        "title": "Company",
+        "delete": "Are you sure you want to delete the company?",
+        "add": "New company",
+        "save": "Add",
+        "cancel": "Cancel"
     },
 
     "role": {
@@ -32,13 +58,21 @@
     },
 
     "items": {
+        "columns": "Displayed columns",
+        "reference": {
+            "selecting": "Reference selection",
+            "cancel": "Cancel",
+            "select": "Select"
+        },
         "noData": "No Items available",
         "new": "New item",
         "error": {
             "delete": "Something went wrong while deleting the item!",
             "create": "Something went wrong while createing the item!",
             "get": "Could not get Item!",
-            "update": "Could not update the item!"
+            "getAll": "Items could not be loaded!",
+            "update": "Could not update the item!",
+            "invalidDate": "Dateformat is incorrect!"
         },
         "boolean": {
             "false": "Yes",

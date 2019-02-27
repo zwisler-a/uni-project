@@ -1,4 +1,4 @@
-import { Pool, Connection, Resultsets } from '../../types/mariadb';
+import { Pool, Connection, Resultsets } from 'mariadb';
 
 /**
  * Very simple abstraction for queries
@@ -143,5 +143,28 @@ export class DynamicQuery<T extends Resultsets, U> extends Query {
     async executeConnection(connection: Connection, structure: U, values?: any[] | any): Promise<T> {
         const sql = this.builder(structure);
         return connection.query(sql, values).catch(error => this.errorDynamic(error, sql)) as Promise<T>;
+    }
+}
+
+export class Queries {
+
+    pool: Pool;
+    prefix: string;
+
+    constructor(pool: Pool, prefix: string) {
+        this.pool = pool;
+        this.prefix = prefix;
+    }
+
+    private strip(value: string): string {
+        return value.split(/\s{2,}/).join(' ');
+    }
+
+    protected sql<T>(query: string): StaticQuery<T> {
+        return new StaticQuery<T>(this.pool, this.strip(query));
+    }
+
+    protected dynamic<T, U>(builder: DynamicQueryBuilder<U>): DynamicQuery<T, U> {
+        return new DynamicQuery<T, U>(this.pool, builder);
     }
 }

@@ -4,7 +4,7 @@
         [placeholder]="'items.create.itemTyp' | translate"
         matInput
         [disabled]="disabled"
-        [value]="value | typeName | async"
+        [value]="value.typeId | typeName | async"
         autocomplete="nope"
         [matAutocomplete]="auto"
         #autoCompleteTrigger="matAutocompleteTrigger"
@@ -20,12 +20,17 @@
         type="text"
         [placeholder]="'items.create.displayField' | translate"
         matInput
-        [disabled]="!fieldSelectable || edit"
+        [disabled]="!fieldSelectable || disabled"
         autocomplete="nope"
+        [value]="fieldValue"
         [matAutocomplete]="fieldAuto"
         #autoCompleteTrigger="matAutocompleteTrigger"
     />
-    <mat-autocomplete (optionSelected)="selectField($event.option.value)" #fieldAuto="matAutocomplete" [displayWith]="toItemTypeName">
+    <mat-autocomplete
+        (optionSelected)="selectField($event.option.value)"
+        #fieldAuto="matAutocomplete"
+        [displayWith]="toItemTypeName"
+    >
         <mat-option *ngFor="let field of type.fields" [value]="field">{{ field.name }}</mat-option>
     </mat-autocomplete>
 </mat-form-field>

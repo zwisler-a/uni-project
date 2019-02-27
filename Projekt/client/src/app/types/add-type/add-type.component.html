@@ -11,7 +11,7 @@
             <input name="name" required matInput [placeholder]="'types.edit.typeName' | translate" [(ngModel)]="type.name" />
         </mat-form-field>
 
-        <div fxLayout="column" fxLayoutAlign="start center">
+        <div fxLayout="column" fxLayoutGap="8px">
             <!-- EDITABLE FIELDS -->
             <app-type-field
                 *ngFor="let field of type.fields"
@@ -20,7 +20,9 @@
                 (deleteMe)="removeField(field)"
             ></app-type-field>
 
-            <button mat-button (click)="addField()">{{ 'types.edit.addField' | translate }}</button>
+            <div fxFlex="1 1 auto" fxLayoutAlign="center center">
+                <button mat-button (click)="addField()">{{ 'types.edit.addField' | translate }}</button>
+            </div>
         </div>
         <!-- SAVE/CANCEL ACTIONS -->
         <div fxLayoutAlign="end center">

@@ -21,7 +21,33 @@
         "save": "Save",
         "deleteMe": "Sind Sie sicher dass Sie Ihren Account löschen wollen?",
         "delete": "Wollen Sie diesen Account wirklich löschen?",
-        "passwordUpdated": "Passwort wurde geändert"
+        "passwordUpdated": "Passwort wurde geändert",
+        "updateInfoUpdated": "Benutzerdaten wurden geändern!",
+        "permissions": "Benutzerrollen",
+        "error": {
+            "update": "User konnte nicht bearbeitet werden!",
+            "delete": "User konnte nicht gelöscht werden!",
+            "get": "User konnte nicht geladen werden!",
+            "load": "User konnte nicht gelöscht werden!",
+            "create": "Benutzer konnte nicht angelegt werden"
+        },
+        "new": {
+            "title": "Benutzer anlegen",
+            "company": "Firma",
+            "password": "Generiertes Passwort",
+            "created": "Benutzer wurde angelegt!",
+            "add": "Anlegen",
+            "cancel": "Abbrechen"
+        }
+    },
+
+    "company": {
+        "title": "Firmen",
+        "delete": "Wollen Sie die Firma wirklich löschen?",
+        "add": "Neue Firma hinzufügen",
+        "save": "Hinzufügen",
+        "cancel": "Abbrechen",
+        "name": "Firmenname"
     },
 
     "role": {
@@ -33,6 +59,12 @@
     },
 
     "items": {
+        "columns": "Angezeigte Spalten",
+        "reference": {
+            "selecting": "Referenz Auswahl",
+            "cancel": "Abbrechen",
+            "select": "Auswählen"
+        },
         "title": "Inventar",
         "new": "Neues Item",
         "noData": "Keine Items vorhanden",
@@ -40,7 +72,9 @@
             "delete": "Item konnte nicht gelöscht werden!",
             "create": "Item konnte nicht erstellt werden!",
             "get": "Item konnte nicht geladen werden!",
-            "update": "Item konnte nicht verändert werden!"
+            "getAll": "Items konnten nicht geladen werden!",
+            "update": "Item konnte nicht verändert werden!",
+            "invalidDate": "Datumsformat ist nicht korrekt"
         },
         "boolean": {
             "false": "Ja",
@@ -85,7 +119,7 @@
             "title": "Globale Felder",
             "add": "Hinzufügen",
             "new": "Neues Feld",
-            "confirmDelete":"Wollen Sie dieses Feld wirklich löschen?"
+            "confirmDelete": "Wollen Sie dieses Feld wirklich löschen?"
         },
         "edit": {
             "addField": "Neues Feld hinzufügen",
