@@ -228,7 +228,7 @@ export class ItemModel {
     }
 
     static async getAll(companyId: number, options: ItemGetOptions): Promise<EmbeddedItem> {
-        const types: Type[] = await TypeModel.getAll();
+        const types: Type[] = await TypeModel.getAll(companyId);
         const globals = await GlobalFieldModel.get(companyId);
 
         const foundTypes: Type[] = [];

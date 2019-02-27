@@ -44,7 +44,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     try {
-        res.status(200).send(await TypeModel.getAll());
+        res.status(200).send(await TypeModel.getAll(req.params.companyId));
     } catch (error) {
         next(error);
     }

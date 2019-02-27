@@ -21,8 +21,9 @@ export class RoleQueries extends Queries {
             (id, companyId, name, permissions)
             VALUES (NULL,?,?,?)`);
 
-    readonly GET: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}roles`);
+    readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
+        `SELECT * FROM ${this.prefix}roles
+            WHERE companyId = ?`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
         `SELECT * FROM ${this.prefix}roles

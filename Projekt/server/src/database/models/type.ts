@@ -25,8 +25,8 @@ export class TypeModel {
     }
 
     private static mapField(field: any): TypeField {
-        field.required = field.required.readUInt8(0) === 1;
-        field.unique = field.unique.readUInt8(0) === 1;
+        field.required = field.required.readUInt8() === 1;
+        field.unique = field.unique.readUInt8() === 1;
         return field as TypeField;
     }
 
@@ -90,14 +90,8 @@ export class TypeModel {
         return type;
     }
 
-    static async getAll(company?: number): Promise<Type[]> {
-        // TODO use select * for type fields
-        let types: Type[];
-        if (typeof company !== 'undefined') {
-            types = await TypeModel.database.TYPE.GET_COMPANY.execute(company);
-        } else {
-            types = await TypeModel.database.TYPE.GET.execute();
-        }
+    static async getAll(companyId: number): Promise<Type[]> {
+        const types: Type[] = await TypeModel.database.TYPE.GET_COMPANY.execute([ companyId ]);
 
         for (const type of types) {
             const id = type.id.toString();
@@ -153,6 +147,7 @@ export class TypeModel {
      */
     static async create(type: Type): Promise<Type> {
         await TypeModel.fetchReferences(type);
+        // TODO at least one field same for update
 
         let result: Type;
         await TypeModel.database.beginTransaction(async function(connection) {
@@ -187,6 +182,7 @@ export class TypeModel {
 
         const fields = type.fields.slice();
         const old: Type = await TypeModel.get(id);
+        type.id = id;
         type.companyId = old.companyId;
 
         await TypeModel.database.beginTransaction(async function(connection) {
@@ -203,7 +199,7 @@ export class TypeModel {
                         field.typeId = id;
 
                         // Remove field for faster loop
-                        fields.splice(i, 1);
+                        fields.splice(i--, 1);
 
                         // Reset update flag
                         // Update if the name has changed
@@ -265,8 +261,8 @@ export class TypeModel {
                 await TypeModel.database.ITEM_TABLE.DROP_COLUMN.executeConnection(connection, oldField);
             }
 
+            // Create new type field
             for (const field of fields) {
-                // Create type field for field id
                 const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
                 field.id = (await TypeModel.database.TYPE_FIELD.CREATE.executeConnection(connection,
                     [ id, field.name, field.type, field.required, field.unique, reference ])).insertId;

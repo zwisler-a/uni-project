@@ -6,7 +6,7 @@ export interface Role {
     name: string;
     permission: number;
     types: {
-        [typeId: number]: number
+        [typeId: string]: number
     };
 }
 
