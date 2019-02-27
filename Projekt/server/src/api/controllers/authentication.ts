@@ -34,7 +34,18 @@ export function verifyJsonWebToken(req: Request, res: Response, next: NextFuncti
         } else if (decoded.type !== TokenType.SHORT) {
             next(ApiError.UNAUTHORIZED(ErrorNumber.AUTHENTICATION_INVALID_JSONWEBTOKEN, 'type !== SHORT'));
         } else {
+            let companyId;
+            if (companyId = req.get('X-Company')) {
+                companyId = parseInt(companyId);
+                if (isNaN(companyId)) {
+                    next(ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_NUMBER_FORMAT, 'X-Company isNaN'));
+                }
+            } else {
+                companyId = decoded.companyId;
+            }
+
             req.params.user = decoded;
+            req.params.companyId = companyId;
             next();
         }
     });

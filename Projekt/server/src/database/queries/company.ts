@@ -5,7 +5,7 @@ export class CompanyQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}company (
-            id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
             name VARCHAR(64) NOT NULL,
             PRIMARY KEY (id),
             UNIQUE INDEX (name))`);

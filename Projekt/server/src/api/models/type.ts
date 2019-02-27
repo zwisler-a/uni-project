@@ -7,9 +7,9 @@ import { GlobalField } from './global';
  */
 export interface Type {
     /** Type's unique id */
-    id: number;
+    id?: number;
     /** Id of company that owns this type */
-    companyId: number;
+    companyId?: number;
     /** Type's unique name */
     name: string;
     /** List of all the field's an item of this type (should) have */
@@ -26,7 +26,7 @@ export interface FullType extends Type {
  */
 export interface TypeField {
     /** The field's unique id */
-    id: number;
+    id?: number;
     /** The id of the type this field belongs to */
     typeId: number;
     /** The field's type specifiy unique name */
@@ -61,17 +61,20 @@ export const TYPE = new ObjectValidator<Type>({
     type: Object,
     required: true,
     properties: {
-        companyId: {
-            type: Number
-            // TODO maybe required?
-        },
         name: {
             type: String,
-            required: true
+            required: true,
+            range: {
+                min: 1,
+                max: 64
+            }
         },
         fields: {
             type: Array,
             required: true,
+            range: {
+                min: 1
+            },
             elements: {
                 type: Object,
                 required: true,
@@ -81,7 +84,11 @@ export const TYPE = new ObjectValidator<Type>({
                     },
                     name: {
                         type: String,
-                        required: true
+                        required: true,
+                        range: {
+                            min: 1,
+                            max: 64
+                        }
                     },
                     type: {
                         type: String,

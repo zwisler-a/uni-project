@@ -27,7 +27,7 @@ export class UserModel {
      * @returns created user object on success
      */
     static async create(user: User): Promise<User> {
-        // TODO maybe check if company exists
+        // TODO check if company exists
         const params = [ user.companyId, user.name, user.password, 'email' in user ? user.email : null ];
 
         const id = (await UserModel.database.USER.CREATE.execute(params)).insertId;
@@ -64,6 +64,7 @@ export class UserModel {
      * @returns retrived user object on success
      */
     static async getAll(): Promise<User[]> {
+        // TODO maybe only users of one company
         return await UserModel.database.USER.GET.execute();
     }
 

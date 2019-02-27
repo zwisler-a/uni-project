@@ -48,7 +48,7 @@ function parseOptions(query: any): ItemGetOptions {
  */
 export async function itemGetList(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
 
         const options = parseOptions(req.query);
@@ -82,7 +82,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
  */
 export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
 
         const options = parseOptions(req.query);
         const { page, perPage } = options;

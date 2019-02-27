@@ -1,16 +1,14 @@
 import { Router } from 'express';
 import { verifyJsonWebToken } from '../controllers/authentication';
+import { roleCreate, roleGetList, roleGet, roleUpdate, roleDelete } from '../controllers/roles';
 import { param } from './util';
 
 /** express.Router for path `/api/roles` */
 export const rolesRoute: Router = Router();
 rolesRoute.param('id', param);
-rolesRoute.param('type', param);
-/*
-rolesRoute.post('/', verifyJsonWebToken, null); // Create a role
-rolesRoute.get('/', verifyJsonWebToken, null); // Get list of roles
-rolesRoute.get('/:id', verifyJsonWebToken, null); // Gat a role by id
-rolesRoute.patch('/:id', verifyJsonWebToken, null); // Update role metadata (name)
-rolesRoute.patch('/:id/:type', verifyJsonWebToken, null); // Set role's permission for single type
-rolesRoute.delete('/:id', verifyJsonWebToken, null); // Delete role
-*/
+
+rolesRoute.post('/', verifyJsonWebToken, roleCreate); // Create a role
+rolesRoute.get('/', verifyJsonWebToken, roleGetList); // Get list of roles
+rolesRoute.get('/:id', verifyJsonWebToken, roleGet); // Gat a role by id
+rolesRoute.patch('/:id', verifyJsonWebToken, roleUpdate); // Update role
+rolesRoute.delete('/:id', verifyJsonWebToken, roleDelete); // Delete role

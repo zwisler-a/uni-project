@@ -60,8 +60,12 @@ export class ItemModel {
                     switch (field.type) {
                         case 'string':
                         case 'color':
-                            if (typeof value.value === 'string' && value.value.length > 0)
+                            if (typeof value.value === 'string') {
+                                if (field.required && value.value.length === 0) {
+                                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_LENGTH, field.id);
+                                }
                                 continue typeLoop;
+                            }
                             throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                         case 'number':
                             if (typeof value.value === 'number')
@@ -121,7 +125,7 @@ export class ItemModel {
                     value,
                 };
 
-                if (field.type === TypeFieldType.boolean) {
+                if (field.type === TypeFieldType.boolean && value) {
                     itemField.value = value.readUInt8() === 1;
                 } else if (field.type === TypeFieldType.reference) {
                     itemField.reference = item[`field_${field.referenceId}`];
@@ -170,7 +174,7 @@ export class ItemModel {
         return fields;
     }
 
-    private static async getFilteredItems(sorter: Sortable<FullType, TypeField>, searchQuery: string): Promise<Item[]> {
+    private static async getFilteredItems(sorter: Sortable<FullType, { id: number, global: boolean }>, searchQuery: string): Promise<Item[]> {
         const items: Item[] = (await ItemModel.database.ITEM.GET.execute(sorter)).map(ItemModel.mapGet(sorter.value));
         return searchQuery ? items.filter((item: Item) => {
             for (const field of item.fields) {
@@ -196,15 +200,24 @@ export class ItemModel {
         const type: FullType = await ItemModel.getType(companyId, typeId);
         const { page, perPage } = options;
 
-        let orderBy: TypeField;
+        let orderBy: { id: number, global: boolean };
         if ('orderBy' in options && options.orderBy) {
-            orderBy = type.fields.find((field: TypeField) => field.name === options.orderBy);
+            let field: any = type.fields.find((field: TypeField) => field.name === options.orderBy);
+            if (field) {
+                orderBy = { id: field.id, global: false };
+            }
+
+            field = type.globals.find((field: GlobalField) => field.name === options.orderBy);
+            if (!orderBy && field) {
+                orderBy = { id: field.id, global: true };
+            }
+
             if (!orderBy) {
                 throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, options.orderBy);
             }
         }
 
-        let sorter: Sortable<FullType, TypeField>;
+        let sorter: Sortable<FullType, { id: number, global: boolean }>;
         if (orderBy !== null) {
             sorter = { value: type, sorter: orderBy, order: options.order };
         } else {
@@ -228,7 +241,7 @@ export class ItemModel {
     }
 
     static async getAll(companyId: number, options: ItemGetOptions): Promise<EmbeddedItem> {
-        const types: Type[] = await TypeModel.getAll();
+        const types: Type[] = await TypeModel.getAll(companyId);
         const globals = await GlobalFieldModel.get(companyId);
 
         const foundTypes: Type[] = [];
@@ -257,6 +270,7 @@ export class ItemModel {
         return new EmbeddedItem([type], [ItemModel.mapGet(type)(items.pop())]);
     }
 
+    // TODO check if company exists
     static async create(companyId: number, typeId: number, fields: Field[]): Promise<EmbeddedItem> {
         const type: FullType = await ItemModel.getType(companyId, typeId);
 
@@ -294,15 +308,15 @@ export class ItemModel {
     }
 
     static async delete(companyId: number, typeId: number, id: number): Promise<void> {
-        if (!await TypeModel.exists(typeId)) {
-            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
-        }
+        // Throws error if type doesn't exist
+        await TypeModel.get(typeId);
 
         await ItemModel.database.beginTransaction(async function(connection) {
             const affectedRows = (await ItemModel.database.ITEM.DELETE_GLOBAL.executeConnection(connection, companyId, [ typeId, id ])).affectedRows;
             if (affectedRows === 0) {
                 throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
             }
+
             (await ItemModel.database.ITEM.DELETE.executeConnection(connection, typeId, [ id ]));
         });
     }

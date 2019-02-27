@@ -91,6 +91,8 @@ export class CompanyModel {
             await TypeModel.delete(type.id);
         }
 
+        await CompanyModel.database.GLOBAL_TABLE.DROP.execute(id);
+
         if ((await CompanyModel.database.COMPANY.DELETE.execute([ id ])).affectedRows === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.COMPANY_NOT_FOUND, id);
         }

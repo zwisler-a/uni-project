@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { verifyJsonWebToken } from '../controllers/authentication';
-import { globalCreate, globalGet, globalUpdate, globalDelete } from '../controllers/global';
+import { globalCreate, globalGet, globalUpdate, globalDelete } from '../controllers/globals';
 import { param } from './util';
 
 /** express.Router for path `/api/globals` */

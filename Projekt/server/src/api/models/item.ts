@@ -23,8 +23,9 @@ export interface Field {
     id: number;
     /** The field's value */
     value: any;
+    /** If the field's a {@link GlobalField} */
     global: boolean;
-    /** The field's display value */
+    /** The field's referenced display value */
     reference?: any;
 }
 
@@ -48,9 +49,13 @@ export class EmbeddedItem {
     }
 }
 
+/** Object validator for {@link Field[]} */
 export const ITEM = new ObjectValidator<Field[]>({
     type: Array,
     required: true,
+    range: {
+        min: 1
+    },
     elements: {
         type: Object,
         required: true,
@@ -60,7 +65,8 @@ export const ITEM = new ObjectValidator<Field[]>({
                 required: true
             },
             value: {
-                required: true
+                required: true,
+                nullable: true
             },
             global: {
                 type: Boolean,

@@ -1,42 +1,40 @@
 import { ObjectResultsets, ArrayResultsets } from 'mariadb';
 import { StaticQuery, Queries } from '../query';
 
-export class GlobalQueries extends Queries {
+export class RoleQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
-        `CREATE TABLE IF NOT EXISTS ${this.prefix}global (
+        `CREATE TABLE IF NOT EXISTS ${this.prefix}roles (
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
-            type ENUM('string', 'number', 'boolean', 'file', 'color', 'date') NOT NULL,
-            required BIT NOT NULL,
-            \`unique\` BIT NOT NULL,
+            permissions BIT(4) NOT NULL,
             PRIMARY KEY (id),
-            UNIQUE INDEX (companyId, name),
+            UNIQUE INDEX (name),
             FOREIGN KEY (companyId)
-              REFERENCES ${this.prefix}company(id)
+              REFERENCES ${this.prefix}company (id)
               ON DELETE CASCADE
               ON UPDATE CASCADE)`);
 
     readonly CREATE: StaticQuery<ObjectResultsets> = this.sql(
-        `INSERT INTO ${this.prefix}global
-            (id, companyId, name, type, required, \`unique\`)
-            VALUES (NULL,?,?,?,?,?)`);
+        `INSERT INTO ${this.prefix}roles
+            (id, companyId, name, permissions)
+            VALUES (NULL,?,?,?)`);
 
     readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}global
+        `SELECT * FROM ${this.prefix}roles
             WHERE companyId = ?`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}global
+        `SELECT * FROM ${this.prefix}roles
             WHERE id = ?`);
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
-        `UPDATE ${this.prefix}global
-            SET name = ?, type = ?, required = ?, \`unique\` = ?
+        `UPDATE ${this.prefix}roles
+            SET name = ?, permissions = ?
             WHERE id = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(
-        `DELETE FROM ${this.prefix}global
+        `DELETE FROM ${this.prefix}roles
             WHERE id = ?`);
 }
