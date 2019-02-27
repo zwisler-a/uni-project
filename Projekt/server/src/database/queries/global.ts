@@ -6,7 +6,7 @@ export class GlobalQueries extends Queries {
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}global (
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            companyId SMALLINT UNSIGNED NOT NULL,
+            companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             type ENUM('string', 'number', 'boolean', 'file', 'color', 'date') NOT NULL,
             required BIT NOT NULL,

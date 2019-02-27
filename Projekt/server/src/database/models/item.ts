@@ -60,8 +60,12 @@ export class ItemModel {
                     switch (field.type) {
                         case 'string':
                         case 'color':
-                            if (typeof value.value === 'string' && value.value.length > 0)
+                            if (typeof value.value === 'string') {
+                                if (field.required && value.value.length === 0) {
+                                    throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_LENGTH, field.id);
+                                }
                                 continue typeLoop;
+                            }
                             throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_TYPE, field.id);
                         case 'number':
                             if (typeof value.value === 'number')

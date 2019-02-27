@@ -5,6 +5,7 @@ import { UserModel } from './models/user';
 import { TypeModel } from './models/type';
 import { GlobalFieldModel } from './models/global';
 import { ItemModel } from './models/item';
+import { RoleModel } from './models/role';
 
 import { CompanyQueries } from './queries/company';
 import { GlobalTableQueries } from './queries/global-table';
@@ -16,7 +17,7 @@ import { TypeQueries } from './queries/type';
 import { RolePermissionQueries } from './queries/role-permission';
 import { RoleQueries } from './queries/role';
 import { UserQueries } from './queries/user';
-import { RoleModel } from './models/role';
+import { UserRoleQueries } from './queries/user-role';
 
 /**
  * Function that gets invoked inside a transaction
@@ -42,6 +43,7 @@ export interface DatabaseController extends Pool {
     ROLE_PERMISSION: RolePermissionQueries;
     ROLE: RoleQueries;
     USER: UserQueries;
+    USER_ROLE: UserRoleQueries;
 
     /**
      * Helper function for database transactions that automatically begins, commits and rollbacks
@@ -71,6 +73,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
         ROLE_PERMISSION: new RolePermissionQueries(pool, prefix),
         ROLE: new RoleQueries(pool, prefix),
         USER: new UserQueries(pool, prefix),
+        USER_ROLE: new UserRoleQueries(pool, prefix),
 
         async beginTransaction(handler: TransactionHandler): Promise<void> {
             const connection: Connection = await this.getConnection();
@@ -95,6 +98,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.GLOBAL.CREATE_TABLE.execute();
     await controller.ROLE.CREATE_TABLE.execute();
     await controller.ROLE_PERMISSION.CREATE_TABLE.execute();
+    await controller.USER_ROLE.CREATE_TABLE.execute();
 
     // Initilize all models
     CompanyModel.initialize(controller);

@@ -5,8 +5,8 @@ export class TypeQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}types (
-            id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-            companyId SMALLINT UNSIGNED NOT NULL,
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             PRIMARY KEY (id),
             UNIQUE INDEX (companyId, name),

@@ -6,7 +6,7 @@ export class RolePermissionQueries extends Queries {
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}roles_permissions (
             roleId INT UNSIGNED NOT NULL,
-            typeId MEDIUMINT UNSIGNED NOT NULL,
+            typeId INT UNSIGNED NOT NULL,
             permissions BIT(3) NOT NULL,
             PRIMARY KEY (roleId, typeId),
             FOREIGN KEY (roleId)

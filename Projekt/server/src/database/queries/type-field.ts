@@ -6,7 +6,7 @@ export class TypeFieldQueries extends Queries {
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}types_field (
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            typeId MEDIUMINT UNSIGNED NOT NULL,
+            typeId INT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             type ENUM('string', 'number', 'boolean', 'file', 'color', 'date', 'reference') NOT NULL,
             required BIT NOT NULL,
