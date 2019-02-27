@@ -116,7 +116,12 @@ export class ObjectValidator<T> {
                 }
 
                 if ('range' in schema) {
-                    this.range(schema.range, value.length, path);
+                    const { min, max } = schema.range;
+                    const length = value.length;
+
+                    if (length < min || length > max) {
+                        throw this.error(ErrorNumber.REQUEST_FIELD_LENGTH, path, schema.range, length);
+                    }
                 }
 
                 if ('enum' in schema && schema.enum.indexOf(value) === -1) {
