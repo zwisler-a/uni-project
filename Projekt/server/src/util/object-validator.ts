@@ -145,6 +145,12 @@ export class ObjectValidator<T> {
                         this.verify(schema.properties[key], value[key], `${path}.${key}`);
                     }
                 }
+
+                if ('elements' in schema) {
+                    for (const key in value) {
+                        this.verify(schema.elements, value[key], `${path}.${key}`);
+                    }
+                }
             }
         }
 

@@ -13,6 +13,7 @@ import { UserModel } from '../../database/models/user';
 export async function userCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const user: User = USER_CREATE.validate(req.body);
+        user.companyId = req.params.companyId;
         user.name = user.name.trim();
         user.password = await bcrypt.hash(user.password, 12);
 

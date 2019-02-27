@@ -1,5 +1,5 @@
 import { ObjectResultsets, ArrayResultsets } from 'mariadb';
-import { StaticQuery, Queries } from '../query';
+import { StaticQuery, Queries, DynamicQuery } from '../query';
 
 export class TypeFieldQueries extends Queries {
 
@@ -39,9 +39,10 @@ export class TypeFieldQueries extends Queries {
         `SELECT * FROM ${this.prefix}types_field
             WHERE typeId = ?`);
 
-    readonly GET_REFERENCE: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}types_field
-            WHERE referenceId = ?`);
+    readonly GET_REFERENCE: DynamicQuery<ArrayResultsets, number> = this.dynamic((length: number) => {
+        return `SELECT * FROM ${this.prefix}types_field
+            WHERE referenceId IN (?${length > 1 ? ', ?'.repeat(length - 1) : ''})`;
+    });
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}types_field

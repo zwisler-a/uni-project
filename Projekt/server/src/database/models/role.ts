@@ -1,6 +1,5 @@
-import { Cache } from './cache';
 import { DatabaseController } from '../controller';
-import { Role, RoleTablePermission, RolePermission, PermissionType } from '../../api/models/roles';
+import { Role } from '../../api/models/role';
 import { ApiError, ErrorNumber } from '../../types';
 
 /**
@@ -8,12 +7,6 @@ import { ApiError, ErrorNumber } from '../../types';
  * @author Maurice
  */
 export class RoleModel {
-    /** Role cache 1h */
-    private static readonly cache = new Cache<Role>({
-        stdTTL: 3600,
-        checkperiod: 600
-    });
-
     /** current instance of DatabaseController */
     private static database: DatabaseController;
 
@@ -28,30 +21,38 @@ export class RoleModel {
         RoleModel.database = database;
     }
 
-    static async create(role: Role): Promise<Role> {
-        let mask = 0;
-        for (const permission of role.permission as RolePermission[]) {
-            if (permission.allowed) {
-                mask |= (1 << permission.type);
-            }
+    static async get(id: number): Promise<Role> {
+        const roles = await RoleModel.database.ROLE.GET_ID.execute([ id ]);
+        if (roles.length === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.ROLE_NOT_FOUND, id);
         }
 
-        RoleModel.database.beginTransaction(async function(connection) {
-            const id = (await RoleModel.database.ROLE_CREATE.executeConnection(connection, [ 1, role.name, mask ])).insertId;
+        const role: Role = roles.pop();
+        role.permission = (role.permission as any).readUInt8();
+        role.types = (await RoleModel.database.ROLE_PERMISSION.GET.execute([ role.id ]))
+            .reduce((akku, value) => {
+                akku[value.typeId] = value.permission.readUInt8();
+            }, {});
+
+        return role;
+    }
+
+    static async create(role: Role): Promise<Role> {
+        await RoleModel.database.beginTransaction(async function(connection) {
+            const id = (await RoleModel.database.ROLE.CREATE.executeConnection(connection,
+                [ role.companyId, role.name, Buffer.of(role.permission) ])).insertId;
             role.id = id;
 
-            for (const table of role.tablePermission) {
-                let mask = 0;
-                for (const permission of table.permission as RolePermission[]) {
-                    if (permission.allowed) {
-                        mask |= (1 << permission.type);
-                    }
-                }
-
-                await RoleModel.database.ROLE_PERMISSION_CREATE.executeConnection(connection, [ id, table.typeId, mask ]);
-            }
+            await Promise.all(Object.keys(role.types).map(function(typeId: any) {
+                return RoleModel.database.ROLE_PERMISSION.CREATE.executeConnection(connection,
+                    [ id, typeId, Buffer.of(role.types[typeId]) ]);
+            }));
         });
 
         return role;
+    }
+
+    static async update(id: number, role: Role) {
+
     }
 }

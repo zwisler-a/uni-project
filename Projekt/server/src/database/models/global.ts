@@ -1,10 +1,7 @@
-import { Connection } from 'mariadb';
 import { Cache } from '../../util/cache';
 import { GlobalField } from '../../api/models/global';
-import { FullType } from '../../api/models/type';
 import { DatabaseController } from '../controller';
 import { ApiError, ErrorNumber } from '../../types';
-import { TypeModel } from './type';
 
 /**
  * Database model class for global field objects

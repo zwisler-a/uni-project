@@ -9,11 +9,11 @@ export interface User {
     /** User's unique id */
     id?: number;
     /** Id of the user's company */
-    companyId: number;
+    companyId?: number;
     /** User's unique name */
-    name: string;
+    name?: string;
     /** User's password */
-    password: string;
+    password?: string;
     /** User's email address */
     email?: string;
 }
@@ -28,10 +28,6 @@ function userSchema(required: boolean): Schema {
         type: Object,
         required: true,
         properties: {
-            companyId: {
-                type: Number,
-                required
-            },
             name: {
                 type: String,
                 required,
@@ -61,6 +57,7 @@ function userSchema(required: boolean): Schema {
     };
 }
 
+/** Object validator for authenticating an {@link User} */
 export const USER_AUTH = new ObjectValidator<User>({
     type: Object,
     required: true,
@@ -76,9 +73,9 @@ export const USER_AUTH = new ObjectValidator<User>({
     }
 });
 
-/** Object validator for creating {@link User} */
+/** Object validator for creating an {@link User} */
 export const USER_CREATE = new ObjectValidator<User>(userSchema(true));
 
-/** Object validator for updating {@link User} */
+/** Object validator for updating an {@link User} */
 export const USER_PATCH = new ObjectValidator<User>(userSchema(false));
 

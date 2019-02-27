@@ -78,7 +78,7 @@ export class ItemQueries extends Queries {
             }
             set += ` global_${field.id} = ?`;
         });
-        return `UPDATE ${this.prefix}global_${type.id} SET ${set} WHERE typeId = ? AND id = ?`;
+        return `UPDATE ${this.prefix}global_${type.companyId} SET ${set} WHERE typeId = ? AND id = ?`;
     });
 
     readonly DELETE: DynamicQuery<ObjectResultsets, number> = this.dynamic((id: number) => {

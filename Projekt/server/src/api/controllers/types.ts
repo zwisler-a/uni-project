@@ -60,6 +60,7 @@ export async function typeUpdate(req: Request, res: Response, next: NextFunction
     try {
         const id: number = req.params.id;
         let type: Type = TYPE.validate(req.body);
+        type.companyId = req.params.user.companyId;
 
         type = await TypeModel.update(id, type);
         res.status(200).send(type);

@@ -58,6 +58,8 @@ export enum ErrorNumber {
     GLOBAL_FIELD_NOT_FOUND,
 
     ITEM_NOT_FOUND,
+
+    ROLE_NOT_FOUND,
 }
 
 export class ApiError extends Error {

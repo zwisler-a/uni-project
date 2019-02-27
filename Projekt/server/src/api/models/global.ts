@@ -6,9 +6,9 @@ import { ObjectValidator } from '../../util/object-validator';
  */
 export interface GlobalField {
     /** The field's unique id */
-    id: number;
+    id?: number;
     /** The id of the company this field belongs to */
-    companyId: number;
+    companyId?: number;
     /** The field's specifiy unique name */
     name: string;
     /** The field's {@link TypeFieldType} */
@@ -19,6 +19,7 @@ export interface GlobalField {
     unique: boolean;
 }
 
+/** Object validator for {@link GlobalField} */
 export const GLOBAL = new ObjectValidator<GlobalField>({
     type: Object,
     required: true,

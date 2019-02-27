@@ -1,9 +1,7 @@
 import { Cache } from '../../util/cache';
 import { DatabaseController } from '../controller';
 import { Type, TypeField, TypeFieldType } from '../../api/models/type';
-import { GlobalField } from '../../api/models/global';
 import { ApiError, ErrorNumber } from '../../types';
-import { GlobalFieldModel } from './global';
 
 export class TypeModel {
     /** Type cache 1h */
@@ -27,8 +25,8 @@ export class TypeModel {
     }
 
     private static mapField(field: any): TypeField {
-        field.required = field.required.readUInt8() === 1;
-        field.unique = field.unique.readUInt8() === 1;
+        field.required = field.required.readUInt8(0) === 1;
+        field.unique = field.unique.readUInt8(0) === 1;
         return field as TypeField;
     }
 
@@ -158,7 +156,7 @@ export class TypeModel {
 
         let result: Type;
         await TypeModel.database.beginTransaction(async function(connection) {
-            const id = (await TypeModel.database.TYPE.CREATE.executeConnection(connection, [1, type.name])).insertId;
+            const id = (await TypeModel.database.TYPE.CREATE.executeConnection(connection, [type.companyId, type.name])).insertId;
 
             // TODO Maybe use batch instead of query
             // Insert all fields
@@ -169,7 +167,7 @@ export class TypeModel {
 
             result = {
                 id,
-                companyId: 1,
+                companyId: type.companyId,
                 name: type.name,
                 fields: type.fields.map((field, index) => {
                     field.id = fieldIds[index].insertId;
@@ -189,10 +187,11 @@ export class TypeModel {
 
         const fields = type.fields.slice();
         const old: Type = await TypeModel.get(id);
+        type.companyId = old.companyId;
 
         await TypeModel.database.beginTransaction(async function(connection) {
             // Update type table
-            await TypeModel.database.TYPE.UPDATE.executeConnection(connection, [1, type.name, id]);
+            await TypeModel.database.TYPE.UPDATE.executeConnection(connection, [old.companyId, type.name, id]);
 
             let update = false;
             oldLoop:
@@ -283,7 +282,6 @@ export class TypeModel {
             }
         });
 
-        // TODO later generate a valid Type object instead of fetching
         await TypeModel.cache.set(id.toString(), type);
         return type;
     }
@@ -300,7 +298,8 @@ export class TypeModel {
         }
 
         // Get a list of all fields that reference TypeModel type
-        const references: TypeField[] = await TypeModel.database.TYPE_FIELD.GET_REFERENCE.execute(id);
+        const fieldIds = (await TypeModel.get(id)).fields.map(field => field.id);
+        const references: TypeField[] = await TypeModel.database.TYPE_FIELD.GET_REFERENCE.execute(fieldIds.length, fieldIds);
 
         await TypeModel.database.beginTransaction(async function(connection) {
             // Delete all foreign-keys and fields that reference TypeModel table

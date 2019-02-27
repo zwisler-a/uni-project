@@ -13,7 +13,10 @@ import { ItemTableQueries } from './queries/item-table';
 import { ItemQueries } from './queries/item';
 import { TypeFieldQueries } from './queries/type-field';
 import { TypeQueries } from './queries/type';
+import { RolePermissionQueries } from './queries/role-permission';
+import { RoleQueries } from './queries/role';
 import { UserQueries } from './queries/user';
+import { RoleModel } from './models/role';
 
 /**
  * Function that gets invoked inside a transaction
@@ -36,6 +39,8 @@ export interface DatabaseController extends Pool {
     ITEM: ItemQueries;
     TYPE_FIELD: TypeFieldQueries;
     TYPE: TypeQueries;
+    ROLE_PERMISSION: RolePermissionQueries;
+    ROLE: RoleQueries;
     USER: UserQueries;
 
     /**
@@ -63,6 +68,8 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
         ITEM: new ItemQueries(pool, prefix),
         TYPE_FIELD: new TypeFieldQueries(pool, prefix),
         TYPE: new TypeQueries(pool, prefix),
+        ROLE_PERMISSION: new RolePermissionQueries(pool, prefix),
+        ROLE: new RoleQueries(pool, prefix),
         USER: new UserQueries(pool, prefix),
 
         async beginTransaction(handler: TransactionHandler): Promise<void> {
@@ -86,6 +93,8 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.TYPE_FIELD.CREATE_TABLE.execute();
     await controller.TYPE_FIELD.CREATE_TABLE_FOREIGN_KEY.execute();
     await controller.GLOBAL.CREATE_TABLE.execute();
+    await controller.ROLE.CREATE_TABLE.execute();
+    await controller.ROLE_PERMISSION.CREATE_TABLE.execute();
 
     // Initilize all models
     CompanyModel.initialize(controller);
@@ -93,6 +102,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     TypeModel.initialize(controller);
     GlobalFieldModel.initialize(controller);
     ItemModel.initialize(controller);
+    RoleModel.initialize(controller);
 
     try {
         // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
