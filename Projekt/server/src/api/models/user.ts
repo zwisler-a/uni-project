@@ -51,7 +51,11 @@ function userSchema(required: boolean): Schema {
             },
             email: {
                 type: String,
-                nullable: true
+                nullable: true,
+                range: {
+                    min: 8,
+                    max: 128
+                }
             }
         }
     };

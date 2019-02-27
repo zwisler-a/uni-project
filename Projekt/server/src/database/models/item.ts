@@ -196,6 +196,7 @@ export class ItemModel {
         return ItemModel.mapGet(type)(items.pop());
     }
 
+    // TODO global field sort
     static async getAllType(companyId: number, typeId: number, options: ItemGetOptions): Promise<{ total: number, items: EmbeddedItem }> {
         const type: FullType = await ItemModel.getType(companyId, typeId);
         const { page, perPage } = options;

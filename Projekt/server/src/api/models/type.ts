@@ -63,11 +63,18 @@ export const TYPE = new ObjectValidator<Type>({
     properties: {
         name: {
             type: String,
-            required: true
+            required: true,
+            range: {
+                min: 1,
+                max: 64
+            }
         },
         fields: {
             type: Array,
             required: true,
+            range: {
+                min: 1
+            },
             elements: {
                 type: Object,
                 required: true,
@@ -77,7 +84,11 @@ export const TYPE = new ObjectValidator<Type>({
                     },
                     name: {
                         type: String,
-                        required: true
+                        required: true,
+                        range: {
+                            min: 1,
+                            max: 64
+                        }
                     },
                     type: {
                         type: String,

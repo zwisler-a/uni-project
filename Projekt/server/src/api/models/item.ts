@@ -53,6 +53,9 @@ export class EmbeddedItem {
 export const ITEM = new ObjectValidator<Field[]>({
     type: Array,
     required: true,
+    range: {
+        min: 1
+    },
     elements: {
         type: Object,
         required: true,
@@ -62,7 +65,8 @@ export const ITEM = new ObjectValidator<Field[]>({
                 required: true
             },
             value: {
-                required: true
+                required: true,
+                nullable: true
             },
             global: {
                 type: Boolean,

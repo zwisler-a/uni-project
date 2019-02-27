@@ -33,7 +33,11 @@ export const ROLE = new ObjectValidator<Role>({
         },
         name: {
             type: String,
-            required: true
+            required: true,
+            range: {
+                min: 1,
+                max: 64
+            }
         },
         permission: {
             type: Number,

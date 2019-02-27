@@ -29,7 +29,11 @@ export const GLOBAL = new ObjectValidator<GlobalField>({
         },
         name: {
             type: String,
-            required: true
+            required: true,
+            range: {
+                min: 1,
+                max: 64
+            }
         },
         type: {
             type: String,

@@ -19,6 +19,10 @@ export const COMPANY = new ObjectValidator<Company>({
         name: {
             type: String,
             required: true,
+            range: {
+                min: 1,
+                max: 64
+            }
         }
     }
 });

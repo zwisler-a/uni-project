@@ -302,6 +302,9 @@ export class TypeModel {
             for (const reference of references) {
                 await TypeModel.database.ITEM_TABLE.DROP_FOREIGN_KEY.executeConnection(connection, reference);
                 await TypeModel.database.ITEM_TABLE.DROP_COLUMN.executeConnection(connection, reference);
+
+                // Remove invalid types from cache
+                await TypeModel.cache.del(reference.typeId.toString());
             }
 
             // Drop the table and delete the type
