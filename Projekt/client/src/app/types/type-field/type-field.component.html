@@ -5,6 +5,7 @@
             <app-field-type-select
                 (select)="selectType($event)"
                 [disabled]="!edit"
+                [type]="field.type"
                 class="field-type"
                 matPrefix
             ></app-field-type-select>
