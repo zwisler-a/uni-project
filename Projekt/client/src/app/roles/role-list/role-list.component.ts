@@ -1,8 +1,10 @@
-import { Component, OnInit, Optional, Host } from '@angular/core';
+import { Component, Host, OnInit, Optional } from '@angular/core';
+import { Router } from '@angular/router';
+import { combineLatest, Observable } from 'rxjs';
+import { IRole } from 'src/app/models/role.interface';
 import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.component';
+
 import { RoleService } from '../_roles-store/role.service';
-import { Subject, Observable, combineLatest } from 'rxjs';
-import { Role } from 'src/app/models/role.interface';
 
 @Component({
     selector: 'app-role-list',
@@ -10,16 +12,29 @@ import { Role } from 'src/app/models/role.interface';
     styleUrls: ['./role-list.component.scss']
 })
 export class RoleListComponent implements OnInit {
-    roles: Observable<Role[]>;
+    roles: Observable<IRole[]>;
 
-    constructor(@Optional() @Host() private defaultPage: DefaultPageComponent, private roleService: RoleService) {}
+    constructor(
+        @Optional() @Host() private defaultPage: DefaultPageComponent,
+        private roleService: RoleService,
+        private router: Router
+    ) {}
 
     ngOnInit() {
         this.roleService.loadRoles().subscribe();
         if (!this.defaultPage) {
             return;
         }
-        this.defaultPage.title = 'roles.title';
+        this.defaultPage.title = 'role.title';
+        this.defaultPage.actions.next([
+            {
+                icon: 'add',
+                click: () => {
+                    this.router.navigate(['/roles', 'view', { outlets: { detail: ['add'] } }]);
+                },
+                tooltip: 'Add'
+            }
+        ]);
         this.roles = combineLatest(this.defaultPage.search, this.roleService.roles, (query, roles) => {
             return roles.filter(role => role.name.includes(query));
         });
