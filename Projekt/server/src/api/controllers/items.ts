@@ -174,7 +174,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  */
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const fields: Field[] = ITEM.validate(req.body);
 
@@ -192,7 +192,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
  */
 export async function itemGet(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
 
@@ -210,7 +210,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function itemUpdate(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
         const fields: Field[] = ITEM.validate(req.body);
@@ -229,7 +229,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
  */
 export async function itemDelete(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
 

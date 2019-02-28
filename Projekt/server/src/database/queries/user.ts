@@ -23,8 +23,9 @@ export class UserQueries extends Queries {
             (id, companyId, name, password, email)
             VALUES (NULL,?,?,?,?)`);
 
-    readonly GET: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}users`);
+    readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
+        `SELECT * FROM ${this.prefix}users
+            WHERE companyId = ?`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
         `SELECT * FROM ${this.prefix}users

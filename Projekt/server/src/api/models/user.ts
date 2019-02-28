@@ -1,5 +1,6 @@
 import { ObjectValidator, Schema } from '../../util/object-validator';
 import { ApiError, ErrorNumber } from '../../types';
+import { Role } from './role';
 
 /**
  * Represents an User
@@ -16,6 +17,8 @@ export interface User {
     password?: string;
     /** User's email address */
     email?: string;
+    /** User's roles */
+    roles: number[] | Role[];
 }
 
 /**
@@ -47,6 +50,14 @@ function userSchema(required: boolean): Schema {
                     if (!value.match(/[a-z]/g) || !value.match(/[A-Z]/g) || !value.match(/[0-9]/g) || !value.match(/[~!@#$%^&*_\-+=`|\\(){}[\]:;"'<>,.?/]/g)) {
                         throw ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_STRING_FORMAT, path);
                     }
+                }
+            },
+            roles: {
+                type: Array,
+                required,
+                elements: {
+                    type: Number,
+                    required: true
                 }
             },
             email: {
