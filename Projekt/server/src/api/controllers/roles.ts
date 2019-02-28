@@ -1,7 +1,36 @@
 import { Response, Request, NextFunction } from 'express';
 
-import { Role, ROLE } from '../models/role';
+import { Role, ROLE, Permission } from '../models/role';
+import { User } from '../models/user';
 import { RoleModel } from '../../database/models/role';
+import { ApiError, ErrorNumber } from '../../types';
+
+export function verifyPermission(permission: Permission, typeFieldName?: string) {
+    return (req: Request, res: Response, next: NextFunction) => {
+        const user: User = req.params.user;
+        if (checkPermission(user, permission, typeFieldName ? req.params[typeFieldName] : undefined)) {
+            next();
+            return;
+        }
+        next(ApiError.FORBIDDEN(ErrorNumber.AUTHENTICATION_INSUFFICIENT_PERMISSION, permission));
+    };
+}
+
+export function checkPermission(user: User, permission: Permission, typeId?: number) {
+    for (const role of user.roles as Role[]) {
+        if ((role.permission & permission) !== 0) {
+            return true;
+        }
+
+        if (typeof typeId !== 'undefined' && permission <= Permission.TYPE_EDIT) {
+            const type = typeId.toString();
+            if (type in role.types && (role.types[type] & permission) !== 0) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 /**
  * Route endpoint `POST /api/roles`

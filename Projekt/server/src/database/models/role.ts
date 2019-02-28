@@ -1,5 +1,5 @@
 import { Cache } from '../../util/cache';
-import { Role } from '../../api/models/role';
+import { Role, Permission } from '../../api/models/role';
 import { ApiError, ErrorNumber } from '../../types';
 import { DatabaseController } from '../controller';
 
@@ -32,6 +32,7 @@ export class RoleModel {
         return (await RoleModel.database.ROLE_PERMISSION.GET.execute([ id ]))
             .reduce((akku, value) => {
                 akku[value.typeId] = value.permission.readUInt8();
+                return akku;
             }, {});
     }
 
@@ -46,6 +47,17 @@ export class RoleModel {
         role.types = await RoleModel.fetchTypes(id);
 
         return role;
+    }
+
+    private static bundlePermission(permission: number) {
+        if ((permission & Permission.GLOBAL_ADMIN) !== 0) {
+            permission =  0b111111;
+        } else if ((permission & Permission.LOCAL_ADMIN) !== 0) {
+            permission =  0b011111;
+        } else if ((permission & Permission.ITEM_WRITE) !== 0) {
+            permission |= 0b000001;
+        }
+        return Buffer.of(permission);
     }
 
     static async get(id: number): Promise<Role> {
@@ -87,12 +99,12 @@ export class RoleModel {
         // TODO check if company exists
         await RoleModel.database.beginTransaction(async function(connection) {
             const id = (await RoleModel.database.ROLE.CREATE.executeConnection(connection,
-                [ role.companyId, role.name, Buffer.of(role.permission) ])).insertId;
+                [ role.companyId, role.name, RoleModel.bundlePermission(role.permission) ])).insertId;
             role.id = id;
 
             await Promise.all(Object.keys(role.types).map(function(typeId: any) {
                 return RoleModel.database.ROLE_PERMISSION.CREATE.executeConnection(connection,
-                    [ id, typeId, Buffer.of(role.types[typeId]) ]);
+                    [ id, typeId, RoleModel.bundlePermission(role.types[typeId]) ]);
             }));
         });
 
@@ -109,7 +121,8 @@ export class RoleModel {
 
         await RoleModel.database.beginTransaction(async function(connection) {
             if (role.name !== old.name || role.permission !== old.permission) {
-                await RoleModel.database.ROLE.UPDATE.executeConnection(connection, [role.name, role.permission, id]);
+                await RoleModel.database.ROLE.UPDATE.executeConnection(connection,
+                    [role.name, RoleModel.bundlePermission(role.permission), id]);
             }
 
             oldLoop:
@@ -123,7 +136,8 @@ export class RoleModel {
 
                         // If permission changed update
                         if (role.types[type] !== old.types[type]) {
-                            await RoleModel.database.ROLE_PERMISSION.UPDATE.executeConnection(connection, [role.types[type], id, type]);
+                            await RoleModel.database.ROLE_PERMISSION.UPDATE.executeConnection(connection,
+                                [RoleModel.bundlePermission(role.types[type]), id, type]);
                         }
                         continue oldLoop;
                     }
@@ -135,7 +149,8 @@ export class RoleModel {
 
             // Create new type permissions
             for (const type of types) {
-                await RoleModel.database.ROLE_PERMISSION.CREATE.executeConnection(connection, [id, type, role.types[type]]);
+                await RoleModel.database.ROLE_PERMISSION.CREATE.executeConnection(connection,
+                    [id, type, RoleModel.bundlePermission(role.types[type])]);
             }
         });
 

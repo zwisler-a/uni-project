@@ -5,6 +5,8 @@ import bcrypt from 'bcrypt';
 import { ApiError, ErrorNumber } from '../../types';
 import { USER_AUTH, User } from '../models/user';
 import { UserModel } from '../../database/models/user';
+import { checkPermission } from './roles';
+import { Permission } from '../models/role';
 
 enum TokenType {
     SHORT,
@@ -35,10 +37,10 @@ export function verifyJsonWebToken(req: Request, res: Response, next: NextFuncti
             next(ApiError.UNAUTHORIZED(ErrorNumber.AUTHENTICATION_INVALID_JSONWEBTOKEN, 'type !== SHORT'));
         } else {
             let companyId;
-            if (companyId = req.get('X-Company')) {
+            if (checkPermission(decoded, Permission.GLOBAL_ADMIN) && (companyId = req.get('X-comapnyId'))) {
                 companyId = parseInt(companyId);
                 if (isNaN(companyId)) {
-                    next(ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_NUMBER_FORMAT, 'X-Company isNaN'));
+                    next(ApiError.BAD_REQUEST(ErrorNumber.REQUEST_FIELD_NUMBER_FORMAT, 'X-comapnyId isNaN'));
                 }
             } else {
                 companyId = decoded.companyId;

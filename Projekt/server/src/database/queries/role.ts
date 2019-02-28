@@ -8,9 +8,9 @@ export class RoleQueries extends Queries {
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
             companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
-            permissions BIT(4) NOT NULL,
+            permission BIT(6) NOT NULL,
             PRIMARY KEY (id),
-            UNIQUE INDEX (name),
+            UNIQUE INDEX (companyId, name),
             FOREIGN KEY (companyId)
               REFERENCES ${this.prefix}company (id)
               ON DELETE CASCADE
@@ -18,7 +18,7 @@ export class RoleQueries extends Queries {
 
     readonly CREATE: StaticQuery<ObjectResultsets> = this.sql(
         `INSERT INTO ${this.prefix}roles
-            (id, companyId, name, permissions)
+            (id, companyId, name, permission)
             VALUES (NULL,?,?,?)`);
 
     readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
@@ -31,7 +31,7 @@ export class RoleQueries extends Queries {
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}roles
-            SET name = ?, permissions = ?
+            SET name = ?, permission = ?
             WHERE id = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(

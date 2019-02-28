@@ -82,6 +82,7 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
  */
 export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
     try {
+        // TODO permissions
         const companyId: number = req.params.companyId;
 
         const options = parseOptions(req.query);

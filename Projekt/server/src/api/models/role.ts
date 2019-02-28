@@ -11,17 +11,12 @@ export interface Role {
 }
 
 export enum Permission {
-    ITEM_READ,
-    ITEM_WRITE,
-    TYPE_EDIT,
-    LOCAL_ADMIN,
-    GLOBAL_ADMIN
-}
-
-export enum PermissionType {
-    ITEM_READ,
-    ITEM_WRITE,
-    TYPE_EDIT
+    ITEM_READ = 1,
+    ITEM_WRITE = 2,
+    TYPE_EDIT = 4,
+    GLOBAL_FIELD = 8,
+    LOCAL_ADMIN = 16,
+    GLOBAL_ADMIN = 32
 }
 
 export const ROLE = new ObjectValidator<Role>({

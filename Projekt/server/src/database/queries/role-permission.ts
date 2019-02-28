@@ -7,7 +7,7 @@ export class RolePermissionQueries extends Queries {
         `CREATE TABLE IF NOT EXISTS ${this.prefix}roles_permissions (
             roleId INT UNSIGNED NOT NULL,
             typeId INT UNSIGNED NOT NULL,
-            permissions BIT(3) NOT NULL,
+            permission BIT(3) NOT NULL,
             PRIMARY KEY (roleId, typeId),
             FOREIGN KEY (roleId)
               REFERENCES ${this.prefix}roles (id)
@@ -20,7 +20,7 @@ export class RolePermissionQueries extends Queries {
 
     readonly CREATE: StaticQuery<ObjectResultsets> = this.sql(
         `INSERT INTO ${this.prefix}roles_permissions
-            (roleId, typeId, permissions)
+            (roleId, typeId, permission)
             VALUES (?,?,?)`);
 
     readonly GET: StaticQuery<ArrayResultsets> = this.sql(
@@ -29,7 +29,7 @@ export class RolePermissionQueries extends Queries {
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}roles_permissions
-            SET permissions = ?
+            SET permission = ?
             WHERE roleId = ? AND typeId = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(

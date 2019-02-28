@@ -110,12 +110,22 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
 
     try {
         // TODO REMOVE Add a mock company as long as there is no other way to add companies ('company')
-        let companyId;
+        let companyId = 1;
         const company = (await controller.COMPANY.GET_ID.execute(1)).pop();
         if (!company) {
             companyId = (await CompanyModel.create({ name: 'company' })).id;
         } else {
             companyId = company.id;
+        }
+
+        let roleId = 1;
+        if (!(await controller.ROLE.GET_ID.execute(1)).pop()) {
+            roleId = (await RoleModel.create({
+                companyId,
+                name: 'Admin',
+                permission: 0b11111,
+                types: {}
+            })).id;
         }
 
         // TODO REMOVE Add a mock user as long as there is no other way to add users ('username', 'password')
@@ -124,6 +134,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
                 companyId,
                 name: 'username',
                 password: '$2b$10$sFut8f1wXaMisJ750uiGbOD8UefoIZLLad5a66M7f/YMV5okNUgEC',
+                roles: [ roleId ]
             });
         }
     } catch (error) {

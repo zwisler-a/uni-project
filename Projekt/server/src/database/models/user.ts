@@ -29,20 +29,19 @@ export class UserModel {
      * @returns created user object on success
      */
     static async create(user: User): Promise<User> {
-        // TODO check if company exists
         const params = [ user.companyId, user.name, user.password, 'email' in user ? user.email : null ];
         const id = (await UserModel.database.USER.CREATE.execute(params)).insertId;
 
         user.id = id;
-        user.roles = await UserModel.updateRoles(id, user.roles as number[]);
+        // TODO maybe do this: user.roles = await UserModel.updateRoles(id, user.roles as number[]);
 
         return user;
     }
 
     private static async getRoles(id: number): Promise<Role[]> {
         return Promise.all((await UserModel.database.USER_ROLE.GET_USER.execute([ id ]))
-            .map(async function(roleId) {
-                return RoleModel.get(roleId);
+            .map(async function(entry) {
+                return RoleModel.get(entry.roleId);
             }));
     }
 
@@ -90,8 +89,13 @@ export class UserModel {
      * @param user new user object to update to
      * @returns update user object on success
      */
-    static async update(id: number, user: User): Promise<User> {
+    static async update(id: number, user: User, companyId: number): Promise<User> {
         const result: User = await UserModel.get(id);
+
+        // Should only be able to edit user from own company
+        if (result.companyId !== companyId) {
+            throw ApiError.FORBIDDEN(ErrorNumber.AUTHENTICATION_INVALID_COMPANY);
+        }
 
         if ('name' in user) {
             result.name = user.name;

@@ -18,7 +18,7 @@ export interface User {
     /** User's email address */
     email?: string;
     /** User's roles */
-    roles: number[] | Role[];
+    roles?: number[] | Role[];
 }
 
 /**
@@ -52,14 +52,14 @@ function userSchema(required: boolean): Schema {
                     }
                 }
             },
-            roles: {
+            /* TODO roles: {
                 type: Array,
                 required,
                 elements: {
                     type: Number,
                     required: true
                 }
-            },
+            },*/
             email: {
                 type: String,
                 nullable: true,
