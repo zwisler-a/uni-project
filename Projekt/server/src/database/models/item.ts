@@ -299,7 +299,9 @@ export class ItemModel {
             if (affectedRows === 0) {
                 throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
             }
-            await ItemModel.database.ITEM.UPDATE_GLOBAL.executeConnection(connection, type, [ ...globalValues, type.id, id ]);
+            if (type.globals && type.globals.length > 0) {
+                await ItemModel.database.ITEM.UPDATE_GLOBAL.executeConnection(connection, type, [ ...globalValues, type.id, id ]);
+            }
 
             fields = await ItemModel.mapChange(type, typeValues, globalValues);
         });

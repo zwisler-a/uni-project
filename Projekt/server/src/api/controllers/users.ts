@@ -62,10 +62,11 @@ export async function userGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function userGetList(req: Request, res: Response, next: NextFunction) {
     try {
-        const users: User[] = await UserModel.getAll(req.params.companyId);
-        users.forEach(user => {
-            delete user.password;
-        });
+        const users: User[] = (await UserModel.getAll(req.params.companyId))
+            .map(user => {
+                delete user.password;
+                return user;
+            });
         res.status(200).send(users);
     } catch (error) {
         next(error);

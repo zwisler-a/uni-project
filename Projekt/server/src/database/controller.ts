@@ -84,8 +84,9 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
             } catch (error) {
                 await connection.rollback();
                 throw error;
+            } finally {
+                await connection.end();
             }
-            await connection.end();
         }
     };
 
