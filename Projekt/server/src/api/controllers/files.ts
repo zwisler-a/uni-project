@@ -2,7 +2,8 @@ import { Response, Request, NextFunction } from 'express';
 
 import { Field, ITEM } from '../models/item';
 
-export async function uploadFile(req: Request, res: Response, next: NextFunction) {
+
+export async function fileInformation(req: Request, res: Response, next: NextFunction){
     try {
         res.status(200);
     } catch (error) {
@@ -10,7 +11,7 @@ export async function uploadFile(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function downloadFile(req: Request, res: Response, next: NextFunction) {
+export async function fileUpload(req: Request, res: Response, next: NextFunction) {
     try {
         res.status(200);
     } catch (error) {
@@ -18,7 +19,15 @@ export async function downloadFile(req: Request, res: Response, next: NextFuncti
     }
 }
 
-export async function updateFile(req: Request, res: Response, next: NextFunction) {
+export async function fileDownload(req: Request, res: Response, next: NextFunction) {
+    try {
+        res.status(200);
+    } catch (error) {
+        next(error);
+    }
+}
+
+export async function fileUpdate(req: Request, res: Response, next: NextFunction) {
     try {
        
         res.status(200);
@@ -27,7 +36,7 @@ export async function updateFile(req: Request, res: Response, next: NextFunction
     }
 }
 
-export async function deleteFile(req: Request, res: Response, next: NextFunction) {
+export async function fileDelete(req: Request, res: Response, next: NextFunction) {
     try {
         res.status(204);
     } catch (error) {
