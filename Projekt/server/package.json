@@ -10,7 +10,7 @@
     "doc": "typedoc --out ./documentation/ ./src/"
   },
   "dependencies": {
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^3.0.4",
     "compression": "^1.7.3",
     "debug": "~2.6.9",
     "express": "~4.16.0",
