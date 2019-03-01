@@ -1,11 +1,14 @@
-import { TypeModel } from './type';
-import { DatabaseController } from '../controller';
-import { FullType, TypeField, TypeFieldType, Type } from '../../api/models/type';
+import { checkPermission } from '../../api/controllers/roles';
 import { GlobalField } from '../../api/models/global';
-import { Item, Field, EmbeddedItem } from '../../api/models/item';
+import { EmbeddedItem, Field, Item } from '../../api/models/item';
+import { Permission } from '../../api/models/role';
+import { FullType, Type, TypeField, TypeFieldType } from '../../api/models/type';
+import { User } from '../../api/models/user';
 import { ApiError, ErrorNumber } from '../../types';
+import { DatabaseController } from '../controller';
+import { Sortable, SortOrder } from '../queries/item';
 import { GlobalFieldModel } from './global';
-import { SortOrder, Sortable } from '../queries/item';
+import { TypeModel } from './type';
 
 export interface ItemGetOptions {
     page: number;
@@ -240,9 +243,13 @@ export class ItemModel {
         return { total, items: new EmbeddedItem([ type ], items) };
     }
 
-    static async getAll(companyId: number, options: ItemGetOptions): Promise<EmbeddedItem> {
-        const types: Type[] = await TypeModel.getAll(companyId);
+    static async getAll(companyId: number, options: ItemGetOptions, user: User): Promise<EmbeddedItem> {
+        let types: Type[] = await TypeModel.getAll(companyId);
         const globals = await GlobalFieldModel.get(companyId);
+
+        if (!checkPermission(user, Permission.ITEM_READ)) {
+            types = types.filter(type => checkPermission(user, Permission.ITEM_READ, type.id));
+        }
 
         const foundTypes: Type[] = [];
         const items: Item[] = [].concat(...(await Promise.all(types.map(async function(type: Type) {

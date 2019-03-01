@@ -5,6 +5,7 @@ import { Field, ITEM } from '../models/item';
 import { SortOrder } from '../../database/queries/item';
 import { ItemModel, ItemGetOptions } from '../../database/models/item';
 import { TypeField } from '../models/type';
+import { User } from '../models/user';
 
 function parseOptions(query: any): ItemGetOptions {
     let page = 0;
@@ -82,13 +83,13 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
  */
 export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
     try {
-        // TODO permissions
+        const user: User = req.params.user;
         const companyId: number = req.params.companyId;
 
         const options = parseOptions(req.query);
         const { page, perPage } = options;
 
-        const items = await ItemModel.getAll(companyId, options);
+        const items = await ItemModel.getAll(companyId, options, user);
         const orderBy: string[] = [];
 
         for (const type of items.types) {
