@@ -1,6 +1,7 @@
 
 import { Server } from 'http';
 import request from 'supertest';
+import bcrypt from 'bcrypt';
 import { expect } from 'chai';
 import 'mocha';
 
@@ -22,7 +23,7 @@ describe('authentication', () => {
         await UserModel.create({
             companyId,
             name: 'username',
-            password: 'password',
+            password: await bcrypt.hash('password', 12),
             roles: []
         });
     });
