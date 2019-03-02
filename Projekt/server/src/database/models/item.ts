@@ -181,10 +181,10 @@ export class ItemModel {
         const items: Item[] = (await ItemModel.database.ITEM.GET.execute(sorter)).map(ItemModel.mapGet(sorter.value));
         return searchQuery ? items.filter((item: Item) => {
             for (const field of item.fields) {
-                if (field.value === null) {
-                    return;
+                if (field.value !== null && field.value.toString().includes(searchQuery)) {
+                    return true;
                 }
-                if (field.value.toString().includes(searchQuery)) {
+                if (field.reference && field.reference.toString().includes(searchQuery)) {
                     return true;
                 }
             }
