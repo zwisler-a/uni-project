@@ -52,14 +52,14 @@ function userSchema(required: boolean): Schema {
                     }
                 }
             },
-            /* TODO roles: {
+            roles: {
                 type: Array,
                 required,
                 elements: {
                     type: Number,
                     required: true
                 }
-            },*/
+            },
             email: {
                 type: String,
                 nullable: true,

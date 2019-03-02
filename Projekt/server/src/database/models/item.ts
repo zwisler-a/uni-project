@@ -184,8 +184,11 @@ export class ItemModel {
                 if (field.value === null) {
                     return;
                 }
-                return field.value.toString().includes(searchQuery);
+                if (field.value.toString().includes(searchQuery)) {
+                    return true;
+                }
             }
+            return false;
         }) : items;
     }
 

@@ -33,7 +33,7 @@ export class UserModel {
         const id = (await UserModel.database.USER.CREATE.execute(params)).insertId;
 
         user.id = id;
-        // TODO maybe do this: user.roles = await UserModel.updateRoles(id, user.roles as number[]);
+        user.roles = await UserModel.updateRoles(id, user.roles as number[]);
 
         return user;
     }

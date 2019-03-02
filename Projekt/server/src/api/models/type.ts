@@ -28,7 +28,7 @@ export interface TypeField {
     /** The field's unique id */
     id?: number;
     /** The id of the type this field belongs to */
-    typeId: number;
+    typeId?: number;
     /** The field's type specifiy unique name */
     name: string;
     /** The field's {@link TypeFieldType} */

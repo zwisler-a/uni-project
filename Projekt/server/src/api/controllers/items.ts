@@ -102,7 +102,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         if (orderBy.length !== 0) {
             const mul = options.order === SortOrder.ASC ? 1 : -1;
 
-            // TODO fix the damn search
+            // TODO fix the damn sort
             items.items = items.items.map((item: any) => {
                 item.sort = item.fields.reduce((object: any, { id, value }: any) => {
                     if (typeof value === 'boolean') {
@@ -158,7 +158,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         res.set('X-Prev-Page', Math.max(0, page - 1).toString());
         res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
 
-        if (page * perPage > 50) {
+        if (page * perPage > total) {
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
