@@ -8,7 +8,8 @@ import {
     MatInputModule,
     MatSortModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { NavigateBackModule } from 'src/app/shared/navigate-back/navigate-back.module';
@@ -36,6 +37,7 @@ describe('RoleDetailComponent', () => {
                 MatSortModule,
                 MatToolbarModule,
                 MatInputModule,
+                MatSnackBarModule,
                 MatButtonModule,
                 TypeStoreModule,
                 FormsModule,

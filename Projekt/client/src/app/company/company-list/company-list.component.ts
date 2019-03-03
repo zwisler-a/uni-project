@@ -52,4 +52,9 @@ export class CompanyListComponent implements OnInit {
             this.companyService.deleteCompany(id).subscribe();
         });
     }
+
+    /** Function to track companies by for ngFor */
+    companyTrackBy(index, company: Company) {
+        return company && company.id;
+    }
 }

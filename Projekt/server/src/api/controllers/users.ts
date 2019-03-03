@@ -3,6 +3,9 @@ import bcrypt from 'bcrypt';
 
 import { User, USER_CREATE, USER_PATCH } from '../models/user';
 import { UserModel } from '../../database/models/user';
+import { checkPermission } from './roles';
+import { Permission } from '../models/role';
+import { ApiError, ErrorNumber } from '../../types';
 
 /**
  * Route endpoint `POST /api/users`
@@ -13,6 +16,7 @@ import { UserModel } from '../../database/models/user';
 export async function userCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const user: User = USER_CREATE.validate(req.body);
+        user.companyId = req.params.companyId;
         user.name = user.name.trim();
         user.password = await bcrypt.hash(user.password, 12);
 
@@ -30,8 +34,19 @@ export async function userCreate(req: Request, res: Response, next: NextFunction
  */
 export async function userGet(req: Request, res: Response, next: NextFunction) {
     try {
+        // Can get himself but only other users with permission
+        if (req.params.user.id !== req.params.id && !checkPermission(req.params.user, Permission.LOCAL_ADMIN)) {
+            throw ApiError.FORBIDDEN(ErrorNumber.AUTHENTICATION_INSUFFICIENT_PERMISSION, Permission.LOCAL_ADMIN);
+        }
+
         const user: User = await UserModel.get(req.params.id);
         delete user.password;
+
+        // Should only be able to get user from own company
+        if (user.companyId !== req.params.companyId) {
+            throw ApiError.FORBIDDEN(ErrorNumber.AUTHENTICATION_INVALID_COMPANY);
+        }
+
         res.status(200).send(user);
     } catch (error) {
         next(error);
@@ -47,10 +62,11 @@ export async function userGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function userGetList(req: Request, res: Response, next: NextFunction) {
     try {
-        const users: User[] = await UserModel.getAll();
-        users.forEach(user => {
-            delete user.password;
-        });
+        const users: User[] = (await UserModel.getAll(req.params.companyId))
+            .map(user => {
+                delete user.password;
+                return user;
+            });
         res.status(200).send(users);
     } catch (error) {
         next(error);
@@ -67,6 +83,11 @@ export async function userUpdate(req: Request, res: Response, next: NextFunction
     try {
         let user: User = USER_PATCH.validate(req.body);
 
+        // Can edit himself but only other users with permission
+        if (req.params.user.id !== req.params.id && !checkPermission(req.params.user, Permission.LOCAL_ADMIN)) {
+            throw ApiError.FORBIDDEN(ErrorNumber.AUTHENTICATION_INSUFFICIENT_PERMISSION, Permission.LOCAL_ADMIN);
+        }
+
         if ('name' in user) {
             user.name = user.name.trim();
         }
@@ -74,7 +95,7 @@ export async function userUpdate(req: Request, res: Response, next: NextFunction
             user.password = await bcrypt.hash(user.password, 12);
         }
 
-        user = await UserModel.update(req.params.id, user);
+        user = await UserModel.update(req.params.id, user, req.params.companyId);
         delete user.password;
         res.status(200).send(user);
     } catch (error) {

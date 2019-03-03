@@ -41,4 +41,9 @@ export class UserListComponent implements OnInit {
             }
         ]);
     }
+
+    /** Identify a user so ngFor can only update dom when user changes */
+    userTrackBy(index, user: User): number {
+        return user && user.id;
+    }
 }

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { StoreModule } from 'src/app/shared/store/store.module';
 
 import { TypeNamePipe } from './type-name.pipe';
 import { TypesResolver } from './types.resolver';
@@ -8,7 +7,7 @@ import { TypesService } from './types.service';
 
 @NgModule({
     declarations: [TypeNamePipe],
-    imports: [CommonModule, StoreModule],
+    imports: [CommonModule],
     exports: [TypeNamePipe]
 })
 export class TypeStoreModule {

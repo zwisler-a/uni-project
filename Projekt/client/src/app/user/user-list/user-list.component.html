@@ -2,7 +2,7 @@
     <a
         mat-list-item
         class="navigation-item"
-        *ngFor="let user of (users | async)"
+        *ngFor="let user of (users | async); trackBy: userTrackBy"
         [routerLink]="['/user', 'view', { outlets: { detail: [user.id] } }]"
         [routerLinkActive]="'active'"
         @fadeInOut

@@ -10,6 +10,7 @@ import { Item } from '../../models/item.interface';
 import { ItemErrorService } from './item-error.service';
 import { ItemPipe } from './item-pipe.service';
 import { ListState } from './list-state.interface';
+import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
 
 /**
  * The Item store is used to create, delete, update and retrieve items.
@@ -38,7 +39,17 @@ export class ItemService {
     /** Stores all currently loaded items */
     readonly items: Observable<Item[]> = this._items.pipe(this.itemPipe.toItem());
 
-    constructor(private http: HttpClient, private itemErrorService: ItemErrorService, private itemPipe: ItemPipe) {}
+    constructor(
+        private http: HttpClient,
+        private itemErrorService: ItemErrorService,
+        private itemPipe: ItemPipe,
+        private storeFactory: StoreFactoryService
+    ) {
+        console.log(this.storeFactory);
+        this.storeFactory.resetAllStores.subscribe(() => {
+            this.loadItems({}).subscribe();
+        });
+    }
 
     /**
      * Loads a list of items into the store

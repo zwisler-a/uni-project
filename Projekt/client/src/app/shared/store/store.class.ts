@@ -21,8 +21,14 @@ export class Store<T extends Storable> {
         private httpClient: HttpClient,
         private translate: TranslateService,
         private snackbar: MatSnackBar,
-        private config: StoreConfig
-    ) {}
+        private config: StoreConfig,
+        private reset: Observable<void>
+    ) {
+        // reload data from backend when a force reload is triggered
+        this.reset.subscribe(() => {
+            this.loadFromBackend().subscribe();
+        });
+    }
 
     /**
      * Returns observable which completes, once there is data in the store.
@@ -71,7 +77,9 @@ export class Store<T extends Storable> {
         return this.httpClient.get<T>(this.replaceQueryParams(this.config.baseUrl + '/' + this.config.urls.get, { id })).pipe(
             tap((res: T) => {
                 const store = this._store.getValue();
-                store.push(res);
+                if (!store.find(searchEntity => searchEntity.id === res.id)) {
+                    store.push(res);
+                }
                 this._store.next(store);
             }),
             this.catch(this.config.errorKeys.get)
@@ -88,7 +96,9 @@ export class Store<T extends Storable> {
             .pipe(
                 tap((res: T) => {
                     const store = this._store.getValue();
-                    store.push(res);
+                    if (!store.find(searchEntity => searchEntity.id === res.id)) {
+                        store.push(res);
+                    }
                     this._store.next(store);
                 }),
                 this.catch(this.config.errorKeys.create)

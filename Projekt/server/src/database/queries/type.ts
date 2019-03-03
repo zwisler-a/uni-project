@@ -5,8 +5,8 @@ export class TypeQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}types (
-            id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-            companyId SMALLINT UNSIGNED NOT NULL,
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             PRIMARY KEY (id),
             UNIQUE INDEX (companyId, name),
@@ -20,24 +20,17 @@ export class TypeQueries extends Queries {
             (id, companyId, name)
             VALUES (NULL,?,?)`);
 
-    readonly GET: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}types`);
+    readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
+        `SELECT * FROM ${this.prefix}types
+            WHERE companyId = ?`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
         `SELECT * FROM ${this.prefix}types
             WHERE id = ?`);
 
-    readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}types
-            WHERE companyId = ?`);
-
-    readonly EXISTS_ID: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT 1 FROM ${this.prefix}types
-            WHERE id = ?`);
-
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}types
-            SET companyId = ?, name = ?
+            SET name = ?
             WHERE id = ?`);
 
     readonly DELETE: StaticQuery<ObjectResultsets> = this.sql(

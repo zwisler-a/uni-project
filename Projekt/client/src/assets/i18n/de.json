@@ -25,10 +25,10 @@
         "updateInfoUpdated": "Benutzerdaten wurden geändern!",
         "permissions": "Benutzerrollen",
         "error": {
-            "update": "User konnte nicht bearbeitet werden!",
-            "delete": "User konnte nicht gelöscht werden!",
-            "get": "User konnte nicht geladen werden!",
-            "load": "User konnte nicht gelöscht werden!",
+            "update": "Benutzer konnte nicht bearbeitet werden!",
+            "delete": "Benutzer konnte nicht gelöscht werden!",
+            "get": "Benutzer konnte nicht geladen werden!",
+            "load": "Benutzer konnte nicht geladen werden!",
             "create": "Benutzer konnte nicht angelegt werden"
         },
         "new": {
@@ -51,10 +51,18 @@
     },
 
     "role": {
+        "title": "Benutzerrollen",
         "edit": {
             "filter": "Suchen",
             "cancel": "Abbrechen",
             "save": "Speichern"
+        },
+        "error": {
+            "update": "Eine Benutzerrolle konnte nicht bearbeitet werden!",
+            "delete": "Die Benutzerrolle konnte nicht gelöscht werden!",
+            "get": "Die Benutzerrolle konnte nicht geladen werden!",
+            "load": "Die Benutzerrolle konnte nicht geladen werden!",
+            "create": "Die Benutzerrolle konnte nicht erstellt werden!"
         }
     },
 

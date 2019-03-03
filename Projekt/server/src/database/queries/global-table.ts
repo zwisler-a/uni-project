@@ -7,7 +7,7 @@ export class GlobalTableQueries extends Queries {
 
     readonly CREATE: DynamicQuery<ObjectResultsets, number> = this.dynamic((id: number) => {
         return `CREATE TABLE ${this.prefix}global_${id} (
-            typeId MEDIUMINT UNSIGNED NOT NULL,
+            typeId INT UNSIGNED NOT NULL,
             id INT UNSIGNED NOT NULL,
             PRIMARY KEY (typeId, id),
             FOREIGN KEY (typeId)

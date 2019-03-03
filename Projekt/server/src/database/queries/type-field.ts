@@ -1,12 +1,12 @@
 import { ObjectResultsets, ArrayResultsets } from 'mariadb';
-import { StaticQuery, Queries } from '../query';
+import { StaticQuery, Queries, DynamicQuery } from '../query';
 
 export class TypeFieldQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}types_field (
             id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-            typeId MEDIUMINT UNSIGNED NOT NULL,
+            typeId INT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             type ENUM('string', 'number', 'boolean', 'file', 'color', 'date', 'reference') NOT NULL,
             required BIT NOT NULL,
@@ -39,9 +39,10 @@ export class TypeFieldQueries extends Queries {
         `SELECT * FROM ${this.prefix}types_field
             WHERE typeId = ?`);
 
-    readonly GET_REFERENCE: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}types_field
-            WHERE referenceId = ?`);
+    readonly GET_REFERENCE: DynamicQuery<ArrayResultsets, number> = this.dynamic((length: number) => {
+        return `SELECT * FROM ${this.prefix}types_field
+            WHERE referenceId IN (?${length > 1 ? ', ?'.repeat(length - 1) : ''})`;
+    });
 
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}types_field

@@ -2,44 +2,8 @@
     <button appNavigateBack mat-icon-button><mat-icon>close</mat-icon></button>
     <span></span>
 </mat-toolbar>
-<mat-form-field class="filter">
-    <input #filter (input)="dataSource.filter = filter.value" matInput [placeholder]="'role.edit.filter' | translate" />
-</mat-form-field>
-<div class="role-form" fxLayout="column">
-    <div>
-        <table mat-table [dataSource]="dataSource" matSort class="table">
-            <ng-container [matColumnDef]="'name'">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-                <td mat-cell *matCellDef="let row">
-                    <span>{{ row.name }}</span>
-                </td>
-            </ng-container>
-            <ng-container [matColumnDef]="'read'">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <mat-checkbox [checked]="checked.read" [indeterminate]="indeterminate.read" (change)="readChange($event)">
-                        <span>read</span>
-                    </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row"><mat-checkbox [(ngModel)]="row.read"></mat-checkbox></td>
-            </ng-container>
-            <ng-container [matColumnDef]="'write'">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                    <mat-checkbox
-                        [checked]="checked.write"
-                        [indeterminate]="indeterminate.write"
-                        (change)="writeChange($event)"
-                    >
-                        <span>write</span>
-                    </mat-checkbox>
-                </th>
-                <td mat-cell *matCellDef="let row"><mat-checkbox [(ngModel)]="row.write"></mat-checkbox></td>
-            </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="['name', 'read', 'write']; sticky: true"></tr>
-            <tr mat-row *matRowDef="let row; columns: ['name', 'read', 'write']"></tr>
-        </table>
-    </div>
-</div>
+   <app-types-permissions></app-types-permissions>
 <div class="actions" fxLayoutAlign="end center">
     <button mat-button>{{ 'role.edit.cancel' | translate }}</button>
     <button mat-raised-button color="primary">{{ 'role.edit.save' | translate }}</button>

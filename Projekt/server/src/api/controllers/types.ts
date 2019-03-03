@@ -12,7 +12,7 @@ import { TypeModel } from '../../database/models/type';
 export async function typeCreate(req: Request, res: Response, next: NextFunction) {
     try {
         const type: Type = TYPE.validate(req.body);
-        type.companyId = req.params.user.companyId;
+        type.companyId = req.params.companyId;
         const result: Type = await TypeModel.create(type);
         res.status(200).send(result);
     } catch (error) {
@@ -44,7 +44,7 @@ export async function typeGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function typeGetAll(req: Request, res: Response, next: NextFunction) {
     try {
-        res.status(200).send(await TypeModel.getAll());
+        res.status(200).send(await TypeModel.getAll(req.params.companyId));
     } catch (error) {
         next(error);
     }
@@ -60,6 +60,7 @@ export async function typeUpdate(req: Request, res: Response, next: NextFunction
     try {
         const id: number = req.params.id;
         let type: Type = TYPE.validate(req.body);
+        type.companyId = req.params.companyId;
 
         type = await TypeModel.update(id, type);
         res.status(200).send(type);
