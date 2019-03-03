@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Inject} from '@angular/core';
 import {MatSnackBar, MatSnackBarRef} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
+import {ReactiveFormsModule} from '@angular/forms';
 
 
 @Component({
@@ -13,13 +14,16 @@ import {environment} from '../../../../environments/environment';
     templateUrl: './change-password.component.html',
     styleUrls: ['./change-password.component.scss']
 })
+
+
 export class ChangePasswordComponent implements OnInit {
     changePasswordForm: FormGroup;
     baseUrl = environment.baseUrl + '/passwordReset';
     private id: number;
     private token: string;
-    private test;
-    private validToken = false;
+    public information1: string;
+    public information2: string;
+    private tokenIsValid = false;
 
 
     constructor(
@@ -28,21 +32,18 @@ export class ChangePasswordComponent implements OnInit {
         private formBuilder: FormBuilder,
         private translate: TranslateService,
         private router: Router,
-        public snackbar: MatSnackBar
+        public snackbar: MatSnackBar,
     ) {
     }
 
     ngOnInit() {
-        if (this.tokenValidation()) {
-            console.log('2: token valid');
-            this.test = 'boolean.true';
-        } else {
-            console.log('2: token invalid');
-            this.test = ' \'boolean.false\' ';
-        }
+        this.information1 = 'Your reset link is invalid or has expired.';
+        this.information2 = 'Please repeat the process or contact your administrator.';
+        this.tokenValidation();
         this.setup();
     }
 
+    // TODO activate the passwordValidator
     private setup() {
         const newPassword = new FormControl('', [Validators.required/*, this.passwordValidator()*/]);
         const confirmedPw = new FormControl('', [Validators.required, this.matchValidator(newPassword)]);
@@ -52,56 +53,70 @@ export class ChangePasswordComponent implements OnInit {
         });
     }
 
+    /**
+     *  Sends the new password to the backend to change it there.
+     */
     async changePassword() {
-        this.snackbar.open('hihihihi', null, {duration: 2000, horizontalPosition: 'end', panelClass: ['errorPanel']});
+        await this.tokenValidation();
+        if (this.tokenIsValid) {
+            let password1;
+            let password2;
 
-        let password1;
-        let password2;
+            if (this.changePasswordForm.valid && this.changePasswordForm.dirty && this.tokenIsValid) {
+                password1 = this.changePasswordForm.get('newPassword').value;
+                password2 = this.changePasswordForm.get('confirmedPw').value;
+            }
+            const body = {
+                id: this.id,
+                token: this.token,
+                pass1: password1,
+                pass2: password2
+            };
 
+            this.http.post(this.baseUrl + '/reset', body).subscribe();
+        } else {
+            this.snackbar.open('Your reset link is invalid or expired', 'OK', {
+                duration: 20000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top'
+            });
 
-        if (this.changePasswordForm.valid && this.changePasswordForm.dirty) {
-            password1 = this.changePasswordForm.get('newPassword').value;
-            password2 = this.changePasswordForm.get('confirmedPw').value;
-            console.log('p1: ' + password1);
-            console.log('p2: ' + password2);
         }
-        const body = {
-            pass1: password1,
-            pass2: password2
-        };
-
-        this.http.post(this.baseUrl + '/reset', body).subscribe();
     }
 
-    tokenValidation() {
+    /**
+     * Asks the backend, whether the token is still valid or not.
+     */
+    async tokenValidation() {
         this.id = this.route.snapshot.params['id'];
         this.token = this.route.snapshot.params['token'];
         const body = {
             id: this.id,
             token: this.token,
         };
-        this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
-
+        await this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
 
             if (data['success'] === true) {
-                this.snackbar.open('Your reset link is fine, I love You', 'OK', {
-                    duration: 20000,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top',
-                });
-                this.validToken = true;
-                console.log('token valid');
-                return true;
+                this.tokenIsValid = true;
+                this.information1 = 'Hello ' + data['username'] + '!';
+                this.information2 = 'Please enter your new password.';
             } else {
-                this.snackbar.open('Your reset link is invalid or expired', 'OK', {
-                    duration: 20000,
-                    horizontalPosition: 'center',
-                    verticalPosition: 'top'
-                });
-                console.log('token invalid');
+                this.invalidTokenSnackbar();
+                this.changePasswordForm.get('confirmedPw').disable();
             }
         });
-        return false;
+    }
+
+    /**
+     * opens a popup to let the user know his reset link is not valid
+     */
+
+    private invalidTokenSnackbar() {
+        this.snackbar.open('Your reset link is invalid or has expired', 'OK', {
+            duration: 20000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top'
+        });
     }
 
 

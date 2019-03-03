@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {MatSnackBar, MatSnackBarRef} from '@angular/material';
+import {MatSnackBar, MatSnackBarRef, MatFormField} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
@@ -16,8 +16,8 @@ export class ResetPasswordComponent implements OnInit {
     resetForm: FormGroup;
     loading = false;
     baseUrl = environment.baseUrl + '/passwordReset';
-    link = 'hallla';
-    linkname = '';
+    link = '';
+    linkName = '';
 
     constructor(private formBuilder: FormBuilder,
                 private http: HttpClient,
@@ -25,24 +25,32 @@ export class ResetPasswordComponent implements OnInit {
                 private router: Router,
                 private snackbar: MatSnackBar) {
         this.resetForm = this.formBuilder.group({
-            email: ['', Validators.email]
+            email: ['', [Validators.email, Validators.required]]
         });
     }
 
     ngOnInit() {
     }
 
+
+    /**
+     * Sends the provided email to the backend to the backend.
+     * The user gets no information, if his email is valid for security reasons.
+     * TODO remove the resetLink which we are only getting for now, as long as no email service is implemented
+     */
     requestResetLink() {
         const body = this.resetForm.getRawValue();
-
-        console.log('aus dem eingabefeld: ' + body.email);
-        console.log('baseurl: ' + this.baseUrl);
         this.http.post(this.baseUrl, body, {}).subscribe(data => {
-            // console.log(data['resetLink'] + ' ist sent to ' + body.email);
+            console.log(data);
             this.link = data['resetLink'];
-            this.linkname = 'link';
+            this.linkName = 'link';
         });
-
-
+        this.snackbar.open('A reset link has been send to ' + body['email'], '', {
+            duration: 20000,
+            horizontalPosition: 'center',
+            verticalPosition: 'bottom',
+        });
+        // this.resetForm.reset();
+        // this.resetForm.disable();
     }
 }
