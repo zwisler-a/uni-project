@@ -20,6 +20,7 @@ import { RoleDetailComponent } from './role-detail.component';
 import { FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TypesPermissionsComponent } from '../types-permissions/types-permissions.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RoleDetailComponent', () => {
     let component: RoleDetailComponent;
@@ -44,9 +45,10 @@ describe('RoleDetailComponent', () => {
                 FormsModule,
                 HttpClientTestingModule,
                 RolesStoreModule,
+                RouterTestingModule.withRoutes([]),
                 TranslateTestingModule.withTranslations({})
             ],
-            providers: [{ provide: Location, useValue: {} }]
+            providers: [{ provide: Location, useValue: { path: () => '' } }]
         }).compileComponents();
     }));
 
