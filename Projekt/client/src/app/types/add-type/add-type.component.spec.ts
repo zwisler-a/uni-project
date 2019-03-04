@@ -7,6 +7,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TypeStoreModule } from '../_type-store/type-store.module';
+import { MatSnackBarModule } from '@angular/material';
 
 describe('AddTypeComponent', () => {
     let component: AddTypeComponent;
@@ -18,6 +19,7 @@ describe('AddTypeComponent', () => {
                 TypesModule,
                 NoopAnimationsModule,
                 TypeStoreModule,
+                MatSnackBarModule,
                 TranslateTestingModule.withTranslations({}),
                 HttpClientTestingModule,
                 RouterTestingModule

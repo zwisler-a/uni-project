@@ -6,7 +6,7 @@ import { typesRoute } from './types';
 import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
 import { companiesRoute } from './companies';
-import { globalRoute } from './global';
+import { globalRoute } from './globals';
 import { ApiError, ErrorNumber } from '../../types';
 
 /** express.Router for path `/api` */

@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { Storable } from './storable.interface';
 import { StoreConfig } from './store-config.interface';
 import { Store } from './store.class';
+import { Subject } from 'rxjs';
 
 /** Service to help creating a store. Avoids the need to provide services ect ... */
 @Injectable({ providedIn: 'root' })
@@ -29,6 +30,10 @@ export class StoreFactoryService {
         }
     };
 
+    private _resetAllStores = new Subject<void>();
+    /** Triggered when all stores reload */
+    resetAllStores = this._resetAllStores.asObservable();
+
     constructor(private httpClient: HttpClient, private snackbar: MatSnackBar, private translate: TranslateService) {}
 
     /**
@@ -47,6 +52,14 @@ export class StoreFactoryService {
             fullConfig.errorKeys = errorConfig;
         }
 
-        return new Store<T>(this.httpClient, this.translate, this.snackbar, fullConfig);
+        return new Store<T>(this.httpClient, this.translate, this.snackbar, fullConfig, this.resetAllStores);
+    }
+
+    /**
+     * WARNING!
+     * This reloads all stores created by this factory! This may couse some errors or loosing of data!
+     */
+    forceReset() {
+        this._resetAllStores.next();
     }
 }

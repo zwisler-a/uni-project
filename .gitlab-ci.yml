@@ -79,3 +79,14 @@ deploy:
     name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
     paths:
       - Projekt/dist/
+
+      
+test_data:
+  stage: production
+  script:
+    - cd Projekt/
+    - npm install
+    - node test-data
+  only:
+    - master
+  when: manual

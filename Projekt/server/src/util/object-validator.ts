@@ -58,6 +58,21 @@ export class ObjectValidator<T> {
     }
 
     /**
+     * Helper function for range checks
+     * @param range range object to check against
+     * @param value value to check
+     * @param path current path
+     */
+    private range(range: { min?: number, max?: number }, value: number, path: string) {
+        if ('min' in range && value < range.min) {
+            throw this.error(ErrorNumber.REQUEST_FIELD_MIN, path, range.min, value);
+        }
+        if ('max' in range && value > range.max) {
+            throw this.error(ErrorNumber.REQUEST_FIELD_MAX, path, range.max, value);
+        }
+    }
+
+    /**
      * This function validates it the value with the given schema
      * @param schema Shema to validate against
      * @param value Value to validate
@@ -91,15 +106,7 @@ export class ObjectValidator<T> {
                 }
 
                 if ('range' in schema) {
-                    const range = schema.range;
-
-                    if ('min' in range && value < range.min) {
-                        throw this.error(ErrorNumber.REQUEST_FIELD_MIN, path, range.min, value);
-                    }
-
-                    if ('max' in range && value > range.max) {
-                        throw this.error(ErrorNumber.REQUEST_FIELD_MAX, path, range.max, value);
-                    }
+                    this.range(schema.range, value, path);
                 }
             }
 
@@ -133,6 +140,10 @@ export class ObjectValidator<T> {
                         this.verify(schema.elements, item, `${path}.[${i++}]`);
                     }
                 }
+
+                if ('range' in schema) {
+                    this.range(schema.range, value.length, path);
+                }
             }
 
             if (schema.type === Object) {
@@ -143,6 +154,12 @@ export class ObjectValidator<T> {
                 if ('properties' in schema) {
                     for (const key in schema.properties) {
                         this.verify(schema.properties[key], value[key], `${path}.${key}`);
+                    }
+                }
+
+                if ('elements' in schema) {
+                    for (const key in value) {
+                        this.verify(schema.elements, value[key], `${path}.${key}`);
                     }
                 }
             }

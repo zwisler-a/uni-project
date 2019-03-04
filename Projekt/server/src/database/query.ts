@@ -7,7 +7,7 @@ import { Pool, Connection, Resultsets } from 'mariadb';
 export abstract class Query {
 
     /** Current datbase pool instance */
-    pool: Pool;
+    protected pool: Pool;
 
     /**
      * Creates a new query
@@ -44,7 +44,7 @@ export abstract class Query {
 export class StaticQuery<T extends Resultsets> extends Query {
 
     /** The static sql query */
-    sql: string;
+    private sql: string;
 
     /**
      * Creates a new static query
@@ -148,8 +148,8 @@ export class DynamicQuery<T extends Resultsets, U> extends Query {
 
 export class Queries {
 
-    pool: Pool;
-    prefix: string;
+    protected pool: Pool;
+    protected prefix: string;
 
     constructor(pool: Pool, prefix: string) {
         this.pool = pool;

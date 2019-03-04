@@ -5,6 +5,7 @@ import { Field, ITEM } from '../models/item';
 import { SortOrder } from '../../database/queries/item';
 import { ItemModel, ItemGetOptions } from '../../database/models/item';
 import { TypeField } from '../models/type';
+import { User } from '../models/user';
 
 function parseOptions(query: any): ItemGetOptions {
     let page = 0;
@@ -48,7 +49,7 @@ function parseOptions(query: any): ItemGetOptions {
  */
 export async function itemGetList(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
 
         const options = parseOptions(req.query);
@@ -82,12 +83,13 @@ export async function itemGetList(req: Request, res: Response, next: NextFunctio
  */
 export async function itemGetGlobalList(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const user: User = req.params.user;
+        const companyId: number = req.params.companyId;
 
         const options = parseOptions(req.query);
         const { page, perPage } = options;
 
-        const items = await ItemModel.getAll(companyId, options);
+        const items = await ItemModel.getAll(companyId, options, user);
         const orderBy: string[] = [];
 
         for (const type of items.types) {
@@ -100,7 +102,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         if (orderBy.length !== 0) {
             const mul = options.order === SortOrder.ASC ? 1 : -1;
 
-            // TODO fix the damn search
+            // TODO fix the damn sort
             items.items = items.items.map((item: any) => {
                 item.sort = item.fields.reduce((object: any, { id, value }: any) => {
                     if (typeof value === 'boolean') {
@@ -156,7 +158,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
         res.set('X-Prev-Page', Math.max(0, page - 1).toString());
         res.set('X-Next-Page', Math.min(totalPages, page + 1).toString());
 
-        if (page * perPage > 50) {
+        if (page * perPage > total) {
             throw ApiError.BAD_REQUEST(ErrorNumber.PAGINATION_OUT_OF_BOUNDS, { index: page * perPage, total });
         }
 
@@ -174,7 +176,7 @@ export async function itemGetGlobalList(req: Request, res: Response, next: NextF
  */
 export async function itemCreate(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const fields: Field[] = ITEM.validate(req.body);
 
@@ -192,7 +194,7 @@ export async function itemCreate(req: Request, res: Response, next: NextFunction
  */
 export async function itemGet(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
 
@@ -210,7 +212,7 @@ export async function itemGet(req: Request, res: Response, next: NextFunction) {
  */
 export async function itemUpdate(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
         const fields: Field[] = ITEM.validate(req.body);
@@ -229,7 +231,7 @@ export async function itemUpdate(req: Request, res: Response, next: NextFunction
  */
 export async function itemDelete(req: Request, res: Response, next: NextFunction) {
     try {
-        const companyId: number = req.params.user.companyId;
+        const companyId: number = req.params.companyId;
         const typeId: number = req.params.type;
         const id: number = req.params.id;
 

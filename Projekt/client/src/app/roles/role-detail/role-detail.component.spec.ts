@@ -8,7 +8,8 @@ import {
     MatInputModule,
     MatSortModule,
     MatTableModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { NavigateBackModule } from 'src/app/shared/navigate-back/navigate-back.module';
@@ -18,6 +19,8 @@ import { RolesStoreModule } from '../_roles-store/roles-store.module';
 import { RoleDetailComponent } from './role-detail.component';
 import { FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TypesPermissionsComponent } from '../types-permissions/types-permissions.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RoleDetailComponent', () => {
     let component: RoleDetailComponent;
@@ -25,7 +28,7 @@ describe('RoleDetailComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RoleDetailComponent],
+            declarations: [RoleDetailComponent, TypesPermissionsComponent],
             imports: [
                 CommonModule,
                 NoopAnimationsModule,
@@ -36,14 +39,16 @@ describe('RoleDetailComponent', () => {
                 MatSortModule,
                 MatToolbarModule,
                 MatInputModule,
+                MatSnackBarModule,
                 MatButtonModule,
                 TypeStoreModule,
                 FormsModule,
                 HttpClientTestingModule,
                 RolesStoreModule,
+                RouterTestingModule.withRoutes([]),
                 TranslateTestingModule.withTranslations({})
             ],
-            providers: [{ provide: Location, useValue: {} }]
+            providers: [{ provide: Location, useValue: { path: () => '' } }]
         }).compileComponents();
     }));
 

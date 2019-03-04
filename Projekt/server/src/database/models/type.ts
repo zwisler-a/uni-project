@@ -1,9 +1,7 @@
 import { Cache } from '../../util/cache';
 import { DatabaseController } from '../controller';
 import { Type, TypeField, TypeFieldType } from '../../api/models/type';
-import { GlobalField } from '../../api/models/global';
 import { ApiError, ErrorNumber } from '../../types';
-import { GlobalFieldModel } from './global';
 
 export class TypeModel {
     /** Type cache 1h */
@@ -62,16 +60,6 @@ export class TypeModel {
     }
 
     /**
-     * Check if a type exists
-     * @param id id of the type
-     * @returns Promise that resolves whether the type exists
-     */
-    static async exists(id: number): Promise<boolean> {
-        // Use a faster query (smaller answer) for exists since we don't care about data
-        return (await TypeModel.database.TYPE.EXISTS_ID.execute(id)).length > 0;
-    }
-
-    /**
      * Gets a type from cache or the network
      * @param id id of the type
      * @returns Promise that resolves requested type
@@ -92,14 +80,8 @@ export class TypeModel {
         return type;
     }
 
-    static async getAll(company?: number): Promise<Type[]> {
-        // TODO use select * for type fields
-        let types: Type[];
-        if (typeof company !== 'undefined') {
-            types = await TypeModel.database.TYPE.GET_COMPANY.execute(company);
-        } else {
-            types = await TypeModel.database.TYPE.GET.execute();
-        }
+    static async getAll(companyId: number): Promise<Type[]> {
+        const types: Type[] = await TypeModel.database.TYPE.GET_COMPANY.execute([ companyId ]);
 
         for (const type of types) {
             const id = type.id.toString();
@@ -121,7 +103,7 @@ export class TypeModel {
         const referencedTypes: number[] = [];
         for (const field of type.fields) {
             if (field.type === TypeFieldType.reference) {
-                // Check if the reference is nullable
+                // Check that the reference is nullable
                 if (field.required) {
                     throw ApiError.BAD_REQUEST(ErrorNumber.TYPE_REFERENCE_NOT_NULL, field);
                 }
@@ -156,11 +138,11 @@ export class TypeModel {
     static async create(type: Type): Promise<Type> {
         await TypeModel.fetchReferences(type);
 
+        // TODO check if company exists
         let result: Type;
         await TypeModel.database.beginTransaction(async function(connection) {
-            const id = (await TypeModel.database.TYPE.CREATE.executeConnection(connection, [1, type.name])).insertId;
+            const id = (await TypeModel.database.TYPE.CREATE.executeConnection(connection, [type.companyId, type.name])).insertId;
 
-            // TODO Maybe use batch instead of query
             // Insert all fields
             const fieldIds = await Promise.all(type.fields.map(function(field: TypeField) {
                 const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
@@ -169,7 +151,7 @@ export class TypeModel {
 
             result = {
                 id,
-                companyId: 1,
+                companyId: type.companyId,
                 name: type.name,
                 fields: type.fields.map((field, index) => {
                     field.id = fieldIds[index].insertId;
@@ -189,10 +171,14 @@ export class TypeModel {
 
         const fields = type.fields.slice();
         const old: Type = await TypeModel.get(id);
+        type.id = id;
+        type.companyId = old.companyId;
 
         await TypeModel.database.beginTransaction(async function(connection) {
             // Update type table
-            await TypeModel.database.TYPE.UPDATE.executeConnection(connection, [1, type.name, id]);
+            if (old.name !== type.name) {
+                await TypeModel.database.TYPE.UPDATE.executeConnection(connection, [type.name, id]);
+            }
 
             let update = false;
             oldLoop:
@@ -204,7 +190,7 @@ export class TypeModel {
                         field.typeId = id;
 
                         // Remove field for faster loop
-                        fields.splice(i, 1);
+                        fields.splice(i--, 1);
 
                         // Reset update flag
                         // Update if the name has changed
@@ -237,7 +223,7 @@ export class TypeModel {
 
                         // Delete/Create unique index
                         // TODO fix (also happens when creating new column): everything could have the same value
-                        // when the type changed but unique enfources unique values TypeModel is a problem think about solutions
+                        // when the type changed but unique enfources unique values, this is a problem think about solutions
                         if (oldField.unique && !field.unique) {
                             await TypeModel.database.ITEM_TABLE.DROP_UNIQUE_INDEX.executeConnection(connection, oldField);
                             update = true;
@@ -266,12 +252,13 @@ export class TypeModel {
                 await TypeModel.database.ITEM_TABLE.DROP_COLUMN.executeConnection(connection, oldField);
             }
 
+            // Create new type field
             for (const field of fields) {
-                // Create type field for field id
                 const reference = field.type === TypeFieldType.reference ? field.referenceId : null;
                 field.id = (await TypeModel.database.TYPE_FIELD.CREATE.executeConnection(connection,
                     [ id, field.name, field.type, field.required, field.unique, reference ])).insertId;
                 field.typeId = id;
+
                 // Create new column in item table + constraints
                 await TypeModel.database.ITEM_TABLE.ADD_COLUMN.executeConnection(connection, field);
                 if (field.unique) {
@@ -283,7 +270,6 @@ export class TypeModel {
             }
         });
 
-        // TODO later generate a valid Type object instead of fetching
         await TypeModel.cache.set(id.toString(), type);
         return type;
     }
@@ -294,19 +280,18 @@ export class TypeModel {
      * @returns Promise that finishes when successfully deleted
      */
     static async delete(id: number): Promise<void> {
-        // Check if the type event exists
-        if (!TypeModel.exists(id)) {
-            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_NOT_FOUND);
-        }
-
-        // Get a list of all fields that reference TypeModel type
-        const references: TypeField[] = await TypeModel.database.TYPE_FIELD.GET_REFERENCE.execute(id);
+        // Get a list of all fields that reference this type + throws NOT_FOUND if type is unknown
+        const fieldIds = (await TypeModel.get(id)).fields.map(field => field.id);
+        const references: TypeField[] = await TypeModel.database.TYPE_FIELD.GET_REFERENCE.execute(fieldIds.length, fieldIds);
 
         await TypeModel.database.beginTransaction(async function(connection) {
-            // Delete all foreign-keys and fields that reference TypeModel table
+            // Delete all foreign-keys and fields that reference this table
             for (const reference of references) {
                 await TypeModel.database.ITEM_TABLE.DROP_FOREIGN_KEY.executeConnection(connection, reference);
                 await TypeModel.database.ITEM_TABLE.DROP_COLUMN.executeConnection(connection, reference);
+
+                // Remove invalid types from cache
+                await TypeModel.cache.del(reference.typeId.toString());
             }
 
             // Drop the table and delete the type

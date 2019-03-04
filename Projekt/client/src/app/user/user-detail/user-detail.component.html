@@ -19,7 +19,7 @@
         </mat-form-field>
     </form>
 
-    <mat-form-field class="permissions" matTooltip="Not yet implemented!">
+    <mat-form-field class="permissions">
         <mat-chip-list #chipList>
             <mat-chip
                 *ngFor="let permission of permissions"
@@ -33,17 +33,17 @@
             <input
                 [placeholder]="'user.permissions' | translate"
                 #permissionInput
+                #autoTrigger="matAutocompleteTrigger"
                 [formControl]="permissionCtrl"
                 [matAutocomplete]="auto"
                 autocompleteDisabled
                 [matChipInputFor]="chipList"
                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
                 [matChipInputAddOnBlur]="addOnBlur"
-                (matChipInputTokenEnd)="add($event)"
             />
         </mat-chip-list>
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-            <mat-option *ngFor="let permission of (filteredPermissions | async)" [value]="permission">
+            <mat-option *ngFor="let permission of allPermissions" [value]="permission">
                 {{ permission }}
             </mat-option>
         </mat-autocomplete>

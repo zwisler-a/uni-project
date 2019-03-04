@@ -48,12 +48,22 @@
         "save": "Add",
         "cancel": "Cancel"
     },
-
+    "error": {
+        "insufficient_permission": "Insufficient permissions!"
+    },
     "role": {
+        "title": "User roles",
         "edit": {
             "filter": "Search",
             "cancel": "Cancel",
             "save": "Save"
+        },
+        "error": {
+            "update": "The user role could not be updated!",
+            "delete": "The user role could not be deleted!",
+            "get": "The user role could not be loaded!",
+            "load": "The user role could not be loaded!",
+            "create": "The user role could not be created!"
         }
     },
 

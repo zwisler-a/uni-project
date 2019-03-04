@@ -1,13 +1,3 @@
-.role-form {
-    padding: 0 16px;
-    flex-direction: column;
-    box-sizing: border-box;
-    display: flex;
-    overflow: auto;
-}
-.filter {
-    margin: 16px 16px 0 16px;
-}
 .actions {
     background: white;
     padding: 16px;
@@ -19,4 +9,7 @@
 :host {
     flex-direction: column;
     height: 100%;
+}
+form {
+    padding: 16px;
 }

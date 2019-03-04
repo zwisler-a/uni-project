@@ -1,0 +1,16 @@
+<mat-toolbar color="form">{{ 'role.new' | translate }}</mat-toolbar>
+<form fxLayout="column" fxLayoutGap="16px">
+    <mat-form-field>
+        <input name="rolename" [(ngModel)]="newRole.name" matInput [placeholder]="'role.name' | translate" />
+    </mat-form-field>
+
+    <mat-checkbox name="globaladmin" [(ngModel)]="globalAdmin">{{ 'role.globalAdmin' | translate }}</mat-checkbox>
+    <mat-checkbox name="localadmin" [(ngModel)]="localAdmin">{{ 'role.localAdmin' | translate }}</mat-checkbox>
+
+    <app-types-permissions></app-types-permissions>
+
+    <div fxLayout="row-reverse">
+        <button mat-raised-button color="primary" (click)="save()">{{ 'roles.save' | translate }}</button>
+        <button appNavigateBack mat-button>{{ 'roles.cancel' | translate }}</button>
+    </div>
+</form>
