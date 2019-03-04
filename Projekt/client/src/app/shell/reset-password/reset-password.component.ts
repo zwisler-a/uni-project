@@ -5,6 +5,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+import {log} from 'util';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     ngOnInit() {
+
     }
 
 
@@ -39,7 +41,10 @@ export class ResetPasswordComponent implements OnInit {
      * TODO remove the resetLink which we are only getting for now, as long as no email service is implemented
      */
     requestResetLink() {
+        console.log(this.baseUrl)
         const body = this.resetForm.getRawValue();
+        body.baseURL = window.location.href;
+
         this.http.post(this.baseUrl, body, {}).subscribe(data => {
             console.log(data);
             this.link = data['resetLink'];
