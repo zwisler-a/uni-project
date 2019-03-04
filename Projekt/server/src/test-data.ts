@@ -1,5 +1,6 @@
 import debug from 'debug';
 import fs from 'fs-extra';
+import bcrypt from 'bcrypt';
 import path from 'path';
 import mariadb from 'mariadb';
 
@@ -247,7 +248,7 @@ if (process.argv.indexOf('--debug') !== -1) {
         const superUser: User = await UserModel.create({
             companyId: company.id,
             name: 'superuser',
-            password: 'password',
+            password: await bcrypt.hash('password', 12),
             roles: [ systemAdmin.id ]
         });
         console.log(`${Date.now() - time}ms DONE!`);

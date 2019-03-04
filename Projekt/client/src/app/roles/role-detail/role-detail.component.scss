@@ -1,4 +1,3 @@
-
 .actions {
     background: white;
     padding: 16px;
@@ -10,4 +9,7 @@
 :host {
     flex-direction: column;
     height: 100%;
+}
+form {
+    padding: 16px;
 }

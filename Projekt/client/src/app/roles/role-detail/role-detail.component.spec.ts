@@ -19,6 +19,7 @@ import { RolesStoreModule } from '../_roles-store/roles-store.module';
 import { RoleDetailComponent } from './role-detail.component';
 import { FormsModule } from '@angular/forms';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { TypesPermissionsComponent } from '../types-permissions/types-permissions.component';
 
 describe('RoleDetailComponent', () => {
     let component: RoleDetailComponent;
@@ -26,7 +27,7 @@ describe('RoleDetailComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RoleDetailComponent],
+            declarations: [RoleDetailComponent, TypesPermissionsComponent],
             imports: [
                 CommonModule,
                 NoopAnimationsModule,
