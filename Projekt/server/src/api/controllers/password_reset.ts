@@ -1,17 +1,17 @@
-import { Response, Request, NextFunction } from 'express';
+import { Response, Request } from 'express';
 
 import { User, USER_PATCH } from '../models/user';
 import { UserModel } from '../../database/models/user';
-import jsonwebtoken, { TokenExpiredError } from 'jsonwebtoken';
+import jsonwebtoken from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 export async function receivingResetRequest(req: Request, res: Response) {
     const emailAddress = req.body.email;
-    const resetLink = req.body.baseURL + 'password/' + req.body.id + '/' + req.body.token;
     const users: User[] = await UserModel.getAll();
 
     if (users.filter(user => user.email === emailAddress).length < 1) {
         // if the email address is does not belong to any user the frontend gets no information about that
-        // that way it is not possible to check for attackers which emails are registered
+        // this way it is not possible to check for attackers which emails are registered
         return res.status(200).send({});
     } else {
         const user = users.filter(user => user.email === emailAddress)[0];
@@ -27,7 +27,7 @@ export async function receivingResetRequest(req: Request, res: Response) {
 
         const resetLink = req.body.baseURL + 'password/' + payload.id + '/' + token;
 
-        // TODO remove the resetLink from the body, because now it is just for presentation, but shall only be send via email later
+        // TODO remove the resetLink from the body later, because now it is just for presentation, but shall only be send via email later
         res.status(200).send({resetLink: '/resetpassword/' + payload.id + '/' + token});
 
         sendResetLinkViaEmail(emailAddress, user.name, resetLink);
@@ -56,11 +56,12 @@ export async function reset(req: Request, res: Response) {
     let user: User = USER_PATCH.validate(req.body);
 
     if (req.body['pass1'] == req.body['pass2']) {
-        user.password = req.body['pass1'];
+        user.password = await bcrypt.hash(req.body['pass1'], 12);
+    } else {
+        return res.status(409).send;
     }
     const id: number = Number.parseInt(req.body['id']);
     console.log(user);
-
     try {
         user = await UserModel.update(id, user);
     } catch (e) {
@@ -118,7 +119,8 @@ function sendMail(recipient: string, subject: string, template: string) {
 function getResetLinkMailTemplate(username: string, resetLink: string): string {
     return '<h3>Dear ' + username + ',</h3>' +
         '<p>You requested for a password reset, kindly use this <a href="' + resetLink + '">link</a>' +
-        ' to reset your password</p>';
+        ' to reset your password</p>' +
+        '<p>This password reset is only valid for the next 30 minutes.</p>';
 }
 
 function getPasswordResetConfirmationTemplate(username: string): string {

@@ -36,7 +36,7 @@ export class ResetPasswordComponent implements OnInit {
     /**
      * Sends the provided email to the backend to the backend.
      * The user gets no information, if his email is valid for security reasons.
-     * TODO remove the resetLink which we are only getting for now, as long as no email service is implemented
+     * TODO(steve) remove the resetLink which we are only getting for now, as long as no email service is implemented
      */
     requestResetLink() {
         const body = this.resetForm.getRawValue();

@@ -45,7 +45,7 @@ export class ChangePasswordComponent implements OnInit {
 
     // TODO activate the passwordValidator
     private setup() {
-        const newPassword = new FormControl('', [Validators.required/*, this.passwordValidator()*/]);
+        const newPassword = new FormControl('', [Validators.required, this.passwordValidator()]);
         const confirmedPw = new FormControl('', [Validators.required, this.matchValidator(newPassword)]);
         this.changePasswordForm = new FormGroup({
             newPassword,
