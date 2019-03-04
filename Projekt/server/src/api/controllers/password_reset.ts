@@ -110,9 +110,7 @@ function sendMail(recipient: string, subject: string, template: string) {
         if (error) {
             return console.log(error);
         }
-        console.log('message was sent');
-        console.log(info);
-
+        // console.log(info);
     });
 }
 
