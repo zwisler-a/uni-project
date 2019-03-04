@@ -1,11 +1,10 @@
 import {Component, OnInit} from '@angular/core';
-import {MatSnackBar, MatSnackBarRef, MatFormField} from '@angular/material';
+import {MatSnackBar,} from '@angular/material';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
 import {Router} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
-import {log} from 'util';
 
 
 @Component({
@@ -31,7 +30,6 @@ export class ResetPasswordComponent implements OnInit {
     }
 
     ngOnInit() {
-
     }
 
 
@@ -41,21 +39,19 @@ export class ResetPasswordComponent implements OnInit {
      * TODO remove the resetLink which we are only getting for now, as long as no email service is implemented
      */
     requestResetLink() {
-        console.log(this.baseUrl)
         const body = this.resetForm.getRawValue();
         body.baseURL = window.location.href;
 
         this.http.post(this.baseUrl, body, {}).subscribe(data => {
-            console.log(data);
             this.link = data['resetLink'];
-            this.linkName = 'link';
+            this.linkName = 'This link is only for testing and is also sent to akbreceiver(at)gmail.com';
         });
         this.snackbar.open('A reset link has been send to ' + body['email'], '', {
             duration: 20000,
             horizontalPosition: 'center',
             verticalPosition: 'bottom',
         });
-        // this.resetForm.reset();
-        // this.resetForm.disable();
+        this.resetForm.disable();
+        this.resetForm.get('email').setValue('A mail has been sent! :)');
     }
 }

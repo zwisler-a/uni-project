@@ -61,7 +61,6 @@ export class ChangePasswordComponent implements OnInit {
         if (this.tokenIsValid) {
             let password1;
             let password2;
-
             if (this.changePasswordForm.valid && this.changePasswordForm.dirty && this.tokenIsValid) {
                 password1 = this.changePasswordForm.get('newPassword').value;
                 password2 = this.changePasswordForm.get('confirmedPw').value;
@@ -75,26 +74,21 @@ export class ChangePasswordComponent implements OnInit {
 
             this.http.post(this.baseUrl + '/reset', body).subscribe();
         } else {
-            this.snackbar.open('Your reset link is invalid or expired', 'OK', {
-                duration: 20000,
-                horizontalPosition: 'center',
-                verticalPosition: 'top'
-            });
-
+            this.invalidTokenSnackbar();
         }
     }
 
     /**
      * Asks the backend, whether the token is still valid or not.
      */
-    async tokenValidation() {
+    tokenValidation() {
         this.id = this.route.snapshot.params['id'];
         this.token = this.route.snapshot.params['token'];
         const body = {
             id: this.id,
             token: this.token,
         };
-        await this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
+        this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
 
             if (data['success'] === true) {
                 this.tokenIsValid = true;
@@ -102,7 +96,10 @@ export class ChangePasswordComponent implements OnInit {
                 this.information2 = 'Please enter your new password.';
             } else {
                 this.invalidTokenSnackbar();
+                this.changePasswordForm.get('newPassword').disable();
+                this.changePasswordForm.get('newPassword').setValue('Your link has expired.');
                 this.changePasswordForm.get('confirmedPw').disable();
+                this.changePasswordForm.get('confirmedPw').setValue('Your link has expired!');
             }
         });
     }
