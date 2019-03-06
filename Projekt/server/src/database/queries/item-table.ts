@@ -1,6 +1,6 @@
 import { ObjectResultsets } from 'mariadb';
 import { DynamicQuery, Queries } from '../query';
-import { Type, TypeField } from '../../api/models/type';
+import { Type, TypeField, TypeFieldType } from '../../api/models/type';
 
 export class ItemTableQueries extends Queries {
 
@@ -18,6 +18,11 @@ export class ItemTableQueries extends Queries {
         let constraints = 'PRIMARY KEY (id)';
         let sql = `CREATE TABLE ${this.prefix}item_${type.id} (id INT UNSIGNED NOT NULL AUTO_INCREMENT, `;
         type.fields.forEach((field: TypeField) => {
+            // Skip file fields, they're in another table
+            if (field.type === TypeFieldType.file) {
+                return;
+            }
+
             const name = `field_${field.id}`;
             sql += `${name} ${ItemTableQueries.types[field.type]}`;
             if (field.required) {

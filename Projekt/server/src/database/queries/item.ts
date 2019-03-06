@@ -21,6 +21,10 @@ export class ItemQueries extends Queries {
         let fields = 'id';
         let values = 'NULL';
         type.fields.forEach((field: TypeField) => {
+            // Skip file fields, they're in another table
+            if (field.type === TypeFieldType.file) {
+                return;
+            }
             fields += `, field_${field.id}`;
             values += ', ?';
         });
@@ -35,6 +39,10 @@ export class ItemQueries extends Queries {
             values += ', ?';
         });
         return `INSERT INTO ${this.prefix}global_${type.companyId} (${fields}) VALUES (${values})`;
+    });
+
+    readonly EXISTS: DynamicQuery<ArrayResultsets, number> = this.dynamic((typeId: number) => {
+        return `SELECT 1 FROM ${this.prefix}item_${typeId} WHERE id = ?`;
     });
 
     readonly GET: DynamicQuery<ArrayResultsets, Sortable<FullType, { id: number, global: boolean }>> = this.dynamic(({ value, sorter, order }) => {
