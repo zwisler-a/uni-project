@@ -27,7 +27,6 @@ const upload = multer({
     }
 })();
 
-
 export async function fileCreate(req: Request, res: Response, next: NextFunction) {
     upload(req, res, async function(error) {
         const file: MulterFile = req.file as MulterFile;
