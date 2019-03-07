@@ -11,5 +11,5 @@ export const filesRoute: Router = Router();
 filesRoute.param('field', param);
 filesRoute.param('item', param);
 
-filesRoute.post('/:field/:item',        fileCreate); // Upload new version of file
-filesRoute.get('/:field/:item/:time',   fileGet); // Get specific file versions content
+filesRoute.post('/:field/:item',        verifyJsonWebToken, fileCreate); // Upload new version of file
+filesRoute.get('/:field/:item/:time',   verifyJsonWebToken, fileGet); // Get specific file versions content

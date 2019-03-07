@@ -59,6 +59,14 @@ export class TypeModel {
         return type;
     }
 
+    static async getField(id: number): Promise<TypeField> {
+        const fields: TypeField[] = await TypeModel.database.TYPE_FIELD.GET_ID.execute(id);
+        if (fields.length === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.TYPE_FIELD_NOT_FOUND, id);
+        }
+        return fields.pop();
+    }
+
     /**
      * Gets a type from cache or the network
      * @param id id of the type

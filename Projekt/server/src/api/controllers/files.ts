@@ -5,6 +5,11 @@ import fs from 'fs-extra';
 import { File } from '../models/file';
 import { FileModel } from '../../database/models/file';
 
+import { checkPermission } from '../controllers/roles';
+import { Permission } from '../models/role';
+import { TypeModel } from '../../database/models/type';
+import { ApiError, ErrorNumber } from '../../types';
+
 interface MulterFile extends Express.Multer.File {
     timestamp: Date;
 }
@@ -28,6 +33,11 @@ const upload = multer({
 })();
 
 export async function fileCreate(req: Request, res: Response, next: NextFunction) {
+    const typeId: number = (await TypeModel.getField(req.params.field)).typeId;
+    if (!checkPermission(req.params.user, Permission.ITEM_WRITE, typeId)) {
+        return next(ApiError.BAD_REQUEST(ErrorNumber.AUTHENTICATION_INSUFFICIENT_PERMISSION, Permission.ITEM_WRITE));
+    }
+
     upload(req, res, async function(error) {
         const file: MulterFile = req.file as MulterFile;
         try {
@@ -58,8 +68,12 @@ export async function fileCreate(req: Request, res: Response, next: NextFunction
 
 export async function fileGet(req: Request, res: Response, next: NextFunction) {
     try {
-        const file: File = await FileModel.get(req.params.field, req.params.item, new Date(req.params.time));
+        const typeId: number = (await TypeModel.getField(req.params.field)).typeId;
+        if (!checkPermission(req.params.user, Permission.ITEM_READ, typeId)) {
+            throw ApiError.BAD_REQUEST(ErrorNumber.AUTHENTICATION_INSUFFICIENT_PERMISSION, Permission.ITEM_READ);
+        }
 
+        const file: File = await FileModel.get(req.params.field, req.params.item, new Date(req.params.time));
         res.status(200).sendFile(`${file.fieldId}-${file.itemId}-${file.timestamp.getTime()}`, {
             root: `uploads/`,
             headers: {
