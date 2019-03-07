@@ -163,6 +163,9 @@ export class Store<T extends Storable> {
      */
     private catch(text: string): OperatorFunction<any, any> {
         return catchError(res => {
+            if(res.status === 403) {
+                text = 'error.insufficient_permission'
+            }
             const translated = this.translate.instant(text);
             this.snackbar.open(translated);
             return throwError(res);

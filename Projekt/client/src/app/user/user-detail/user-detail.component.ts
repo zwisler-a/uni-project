@@ -46,8 +46,9 @@ export class UserDetailComponent implements OnInit {
         if (this.userSub) {
             this.userSub.unsubscribe();
         }
-        this.userSub = this.userService.getUser(id).subscribe(user => {
+        this.userSub = this.userService.getUser(id).subscribe((user: User) => {
             this.user = user;
+            this.permissions = user.roles.map(role => role.name);
         });
     }
 

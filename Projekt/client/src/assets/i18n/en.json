@@ -48,7 +48,9 @@
         "save": "Add",
         "cancel": "Cancel"
     },
-
+    "error": {
+        "insufficient_permission": "Insufficient permissions!"
+    },
     "role": {
         "title": "User roles",
         "edit": {

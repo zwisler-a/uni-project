@@ -49,7 +49,9 @@
         "cancel": "Abbrechen",
         "name": "Firmenname"
     },
-
+    "error": {
+        "insufficient_permission": "Sie haben nicht die benötigte Berechtigung für die angefragte Resource!"
+    },
     "role": {
         "title": "Benutzerrollen",
         "edit": {

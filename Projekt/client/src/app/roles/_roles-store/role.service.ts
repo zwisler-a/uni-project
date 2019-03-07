@@ -30,6 +30,10 @@ export class RoleService {
         return this._store.load();
     }
 
+    getRole(id: number) {
+        return this._store.byId(id);
+    }
+
     /** Creates a new role */
     createRole(role: IRole) {
         return this._store.create(Role.toBackendForm(role));
