@@ -3,9 +3,9 @@
     <span>{{ role?.name }}</span>
 </mat-toolbar>
 <form>
-    <app-types-permissions></app-types-permissions>
+    <app-types-permissions [permissions]="role?.types"></app-types-permissions>
     <div class="actions" fxLayoutAlign="end center">
         <button mat-button>{{ 'role.edit.cancel' | translate }}</button>
-        <button mat-raised-button color="primary">{{ 'role.edit.save' | translate }}</button>
+        <button mat-raised-button (click)="save()" color="primary">{{ 'role.edit.save' | translate }}</button>
     </div>
 </form>

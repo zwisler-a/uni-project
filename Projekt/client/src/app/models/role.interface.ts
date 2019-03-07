@@ -18,24 +18,4 @@ export enum PERMISSIONS {
 
 export class Role implements IRole {
     constructor(public id, public companyId, public name, public permission, public types) {}
-
-    /** Transform a role into a from the backend accepted form. (Bitmasking permissions) */
-    static toBackendForm(role: IRole) {
-        const toBitmask = (permissions: string[]) => 100;
-        const transformTypes = types => {
-            const typesMasked = {};
-            for (const key in types) {
-                if (types.hasOwnProperty(key)) {
-                    typesMasked[key] = toBitmask(types[key]);
-                }
-            }
-        };
-        return {
-            id: role.id,
-            companyId: role.companyId,
-            name: role.name,
-            permission: toBitmask(role.permission),
-            types: transformTypes(role.types)
-        };
-    }
 }

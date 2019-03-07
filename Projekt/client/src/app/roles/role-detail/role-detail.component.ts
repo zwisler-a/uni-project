@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { RoleService } from '../_roles-store/role.service';
-import { Role } from 'src/app/models/role.interface';
 import { Subscription } from 'rxjs';
+import { Role } from 'src/app/models/role.interface';
+
+import { RoleService } from '../_roles-store/role.service';
 
 @Component({
     selector: 'app-role-detail',
@@ -34,5 +35,9 @@ export class RoleDetailComponent implements OnInit, OnDestroy {
         this.roleSub = this.roleService.getRole(roleId).subscribe((role: Role) => {
             this.role = role;
         });
+    }
+
+    save() {
+        this.roleService.updateRole(this.role).subscribe();
     }
 }
