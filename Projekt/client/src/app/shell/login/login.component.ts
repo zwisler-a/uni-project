@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             if (environment.showLoginDemoInfo) {
                 this.userDemoInfo = this.snackbar.open(
-                    'Demo Username: "username", password: "password"'
+                    'Demo Username: "superuser", password: "password"'
                 );
             }
             if (this.authService.jwt) {

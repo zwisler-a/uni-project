@@ -107,7 +107,7 @@ export class UserModel {
             result.email = user.email;
         }
         if ('roles' in user) {
-            user.roles = await UserModel.updateRoles(id, user.roles as number[]);
+            result.roles = await UserModel.updateRoles(id, user.roles as number[]);
         }
 
         const params = [ result.name, result.password, result.email, id ];
@@ -118,16 +118,29 @@ export class UserModel {
         return result;
     }
 
+    /** TODO(Maurice) Schau mal nochmal drüber und mach das wie du das willst. Das vorherige hat nicht funktioniert */
     private static async updateRoles(id: number, roles: number[]): Promise<Role[]> {
         const rolesCopy = roles.slice();
-        const old = await UserModel.database.USER_ROLE.GET_USER.execute([ id ]);
+        const old = (await UserModel.database.USER_ROLE.GET_USER.execute([id])).map(role => role.roleId);
 
         await UserModel.database.beginTransaction(async function(connection) {
-            oldLoop:
+            // added
+            await Promise.all(roles.map(async role => {
+                if (!old.includes(role)) {
+                    await UserModel.database.USER_ROLE.CREATE.executeConnection(connection, [id, role]);
+                }
+            }));
+            // Removed
+            await Promise.all(old.map(async oldRole => {
+                if (!roles.includes(oldRole)) {
+                    await UserModel.database.USER_ROLE.DELETE.executeConnection(connection, [id, oldRole]);
+                }
+            }));
+
+           /* oldLoop:
             for (const oldRole of old) {
                 for (let i = 0; i < rolesCopy.length; i++) {
-                    const role = rolesCopy[i];
-                    if (oldRole === role) {
+                    if (oldRole.roleId === rolesCopy[i]) {
                         rolesCopy.splice(i--, 1);
                         continue oldLoop;
                     }
@@ -135,13 +148,12 @@ export class UserModel {
 
                 await UserModel.database.USER_ROLE.DELETE.executeConnection(connection, [ id, oldRole ]);
             }
-
             for (const role of rolesCopy) {
                 await UserModel.database.USER_ROLE.CREATE.executeConnection(connection, [ id, role ]);
-            }
+            }*/
         });
 
-        return Promise.all(roles.map(async function(roleId) {
+        return await Promise.all(roles.map(async function(roleId) {
             return RoleModel.get(roleId);
         }));
     }
