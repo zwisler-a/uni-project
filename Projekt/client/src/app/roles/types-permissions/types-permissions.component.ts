@@ -1,49 +1,82 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { MatCheckboxChange, MatTableDataSource } from '@angular/material';
 import { Type } from 'src/app/models/type.interface';
 import { TypesService } from 'src/app/types/_type-store/types.service';
 import { Permission } from 'src/app/models/permission.enum';
-import { Subject, combineLatest } from 'rxjs';
+import { BehaviorSubject, combineLatest, Subscription, Subject } from 'rxjs';
 
+/**
+ * Displays a searchable list with all permission for each type.
+ */
 @Component({
     selector: 'app-types-permissions',
     templateUrl: './types-permissions.component.html',
     styleUrls: ['./types-permissions.component.scss']
 })
-export class TypesPermissionsComponent implements OnInit, OnChanges {
+export class TypesPermissionsComponent implements OnInit, OnChanges, OnDestroy {
     dataSource = new MatTableDataSource();
 
     checked = {
         write: false,
+        type: false,
         read: false
     };
     indeterminate = {
         write: false,
+        type: false,
         read: false
     };
 
+    /** Permissions to be displayed */
     @Input()
     permissions: { [key: string]: number };
 
+    private _disabled = false;
+
+    /** If the user can input data */
+    @Input()
+    set disabled(val: boolean) {
+        this.dataSource.data.forEach((row: { disabled: boolean }) => (row.disabled = val));
+        this._disabled = val;
+    }
+
+    get disabled() {
+        return this._disabled;
+    }
+
+    /** Helper to trigger transformation of types to permission objects. Emits onChange */
     private permissions$ = new Subject<{ [key: string]: number }>();
+    objTransformSub: Subscription;
 
     constructor(private typeService: TypesService) {}
 
     ngOnInit() {
-        combineLatest(this.typeService.types, this.permissions$).subscribe(([types]: [Type[], any]) => {
+        this.objTransformSub = combineLatest(this.typeService.types, this.permissions$).subscribe(([types]: [Type[], any]) => {
             this.dataSource.data = types.map(type => {
                 const typePerm = {
                     name: type.name,
-                    typeId: type.id
+                    typeId: type.id,
+                    disabled: this._disabled
                 };
-                console.log(typePerm)
                 this.defineObjectPermissionBitmaskProps(typePerm, 'read', Permission.ITEM_READ, type.id);
                 this.defineObjectPermissionBitmaskProps(typePerm, 'write', Permission.ITEM_WRITE, type.id);
+                this.defineObjectPermissionBitmaskProps(typePerm, 'type', Permission.TYPE_EDIT, type.id);
                 return typePerm;
             });
         });
+        if (this.permissions) {
+            this.permissions$.next(this.permissions);
+        }
     }
 
+    /**
+     * Adds a property to the object with a getter and setter. This property accesses this.permission at the
+     * apropiate type and updates the bit defined by the permission param.
+     * @param obj Object to add the property to.
+     * @param property Property to be added
+     * @param permission Which bitmask should be used
+     * @param typeId For which type the permission should be set
+     */
     private defineObjectPermissionBitmaskProps(obj: Object, property: string, permission: Permission, typeId: number) {
         Object.defineProperty(obj, property, {
             set: val => {
@@ -65,6 +98,12 @@ export class TypesPermissionsComponent implements OnInit, OnChanges {
         }
     }
 
+    ngOnDestroy(): void {
+        if (this.objTransformSub) {
+            this.objTransformSub.unsubscribe();
+        }
+    }
+
     readChange(ev: MatCheckboxChange) {
         this.dataSource.data.forEach((col: { read: boolean }) => {
             col.read = ev.checked;
@@ -77,5 +116,12 @@ export class TypesPermissionsComponent implements OnInit, OnChanges {
             col.write = ev.checked;
         });
         this.checked.write = ev.checked;
+    }
+
+    typeChange(ev: MatCheckboxChange) {
+        this.dataSource.data.forEach((col: { type: boolean }) => {
+            col.type = ev.checked;
+        });
+        this.checked.type = ev.checked;
     }
 }

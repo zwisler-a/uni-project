@@ -15,7 +15,7 @@ export class RoleService {
         return this._store.store;
     }
 
-    constructor(private http: HttpClient, private storeFactory: StoreFactoryService) {
+    constructor(private storeFactory: StoreFactoryService) {
         // Initialize store
         this._store = this.storeFactory.create<Role>({
             baseUrl: `${environment.baseUrl}/roles`,

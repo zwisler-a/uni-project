@@ -1,11 +1,24 @@
 <mat-toolbar color="form" fxFlex="0 0 auto">
     <button appNavigateBack mat-icon-button><mat-icon>close</mat-icon></button>
-    <span>{{ role?.name }}</span>
+    <span *ngIf="!edit" fxFlex>{{ role?.name }}</span>
+    <mat-form-field *ngIf="edit">
+        <input matInput [(ngModel)]="role.name" />
+    </mat-form-field>
+    <button *ngIf="!edit" mat-icon-button (click)="edit = true"><mat-icon>edit</mat-icon></button>
 </mat-toolbar>
-<form>
-    <app-types-permissions [permissions]="role?.types"></app-types-permissions>
-    <div class="actions" fxLayoutAlign="end center">
-        <button mat-button>{{ 'role.edit.cancel' | translate }}</button>
+<form fxLayout="column" fxLayoutGap="8px">
+    <mat-checkbox name="globalAdmin" [disabled]="!edit" [(ngModel)]="globalAdmin">
+        {{ 'role.globalAdmin' | translate }}
+    </mat-checkbox>
+    <mat-checkbox name="localAdmin" [disabled]="!edit" [(ngModel)]="localAdmin">
+        {{ 'role.localAdmin' | translate }}
+    </mat-checkbox>
+    <mat-checkbox name="globalField" [disabled]="!edit" [(ngModel)]="globalField">
+        {{ 'role.globalField' | translate }}
+    </mat-checkbox>
+    <app-types-permissions [disabled]="!edit" [permissions]="role?.types"></app-types-permissions>
+    <div class="actions" fxLayoutAlign="end center" *ngIf="edit">
+        <button mat-button (click)="edit = false">{{ 'role.edit.cancel' | translate }}</button>
         <button mat-raised-button (click)="save()" color="primary">{{ 'role.edit.save' | translate }}</button>
     </div>
 </form>

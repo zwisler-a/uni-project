@@ -1,15 +1,12 @@
-import {
-    async,
-    ComponentFixture,
-    fakeAsync,
-    TestBed,
-    tick
-} from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { MatIconModule, MatListModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { NavigationGroupComponent } from './navigation-group.component';
 import { Router } from '@angular/router';
+import { PermissionModule } from 'src/app/permission/permission.module';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('NavigationGroupComponent', () => {
     let component: NavigationGroupComponent;
@@ -21,6 +18,9 @@ describe('NavigationGroupComponent', () => {
             imports: [
                 MatListModule,
                 MatIconModule,
+                PermissionModule.forRoot(),
+                HttpClientTestingModule,
+                TranslateTestingModule.withTranslations({}),
                 RouterTestingModule.withRoutes([{ path: '1', children: [] }])
             ]
         }).compileComponents();
@@ -36,7 +36,7 @@ describe('NavigationGroupComponent', () => {
         expect(component).toBeTruthy();
     });
 
-   it('should have a "a" element', () => {
+    it('should have a "a" element', () => {
         component.group = {
             title: 'title',
             items: [{ icon: '', label: '', route: ['/1'] }]

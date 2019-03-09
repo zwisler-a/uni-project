@@ -53,11 +53,16 @@
     },
     "role": {
         "title": "User roles",
+        "new": "New role",
+        "name": "Role name",
         "edit": {
             "filter": "Search",
             "cancel": "Cancel",
             "save": "Save"
         },
+        "globalAdmin": "System administrator",
+        "localAdmin": "Company administrator",
+        "globalField": "Edit global fields",
         "error": {
             "update": "The user role could not be updated!",
             "delete": "The user role could not be deleted!",

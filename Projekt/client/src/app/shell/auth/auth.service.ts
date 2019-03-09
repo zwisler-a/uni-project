@@ -25,7 +25,7 @@ export class AuthService {
     private _jwt: string;
     private _longLivedJwt: string;
 
-    private _authChange = new Subject();
+    private _authChange = new Subject<void>();
     readonly authChange = this._authChange.asObservable();
 
     readonly rolesUrl = role => [environment.baseUrl, 'roles', role].join('/');

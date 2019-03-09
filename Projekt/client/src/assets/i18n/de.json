@@ -38,6 +38,10 @@
             "created": "Benutzer wurde angelegt!",
             "add": "Anlegen",
             "cancel": "Abbrechen"
+        },
+        "edit": {
+            "cancel": "Abbrechen",
+            "save": "Speichern"
         }
     },
 
@@ -54,11 +58,16 @@
     },
     "role": {
         "title": "Benutzerrollen",
+        "new": "Neue Benutzerrolle",
+        "name": "Rollenname",
         "edit": {
             "filter": "Suchen",
             "cancel": "Abbrechen",
             "save": "Speichern"
         },
+        "globalAdmin": "System Administrator",
+        "localAdmin": "Firmen Administrator",
+        "globalField": "Globale Felder bearbeiten",
         "error": {
             "update": "Eine Benutzerrolle konnte nicht bearbeitet werden!",
             "delete": "Die Benutzerrolle konnte nicht gelöscht werden!",
