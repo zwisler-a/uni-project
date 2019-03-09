@@ -8,8 +8,10 @@
 
         <span fxFlex></span>
         <!-- EDIT/DELETE ACTIONS -->
-        <button mat-icon-button [hidden]="edit" (click)="edit = true"><mat-icon>edit</mat-icon></button>
-        <button mat-icon-button (click)="delete()"><mat-icon>delete</mat-icon></button>
+        <div appHasPermission="TYPE_EDIT" [typeId]="type.id">
+            <button mat-icon-button [hidden]="edit" (click)="edit = true"><mat-icon>edit</mat-icon></button>
+            <button mat-icon-button (click)="delete()"><mat-icon>delete</mat-icon></button>
+        </div>
     </mat-toolbar>
 
     <form class="type-form" autocomplete="off">

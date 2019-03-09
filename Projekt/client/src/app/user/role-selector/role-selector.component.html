@@ -1,0 +1,22 @@
+<mat-form-field fxFlex>
+    <mat-chip-list #chipList>
+        <mat-chip *ngFor="let role of roles" [removable]="true" (removed)="remove(role)">
+            {{ role.name }}
+            <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input
+            [placeholder]="'user.permissions' | translate"
+            #permissionInput
+            #autoTrigger="matAutocompleteTrigger"
+            [formControl]="roleCtrl"
+            [matAutocomplete]="auto"
+            autocompleteDisabled
+            [matChipInputFor]="chipList"
+        />
+    </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let role of (roles$ | async)" [value]="role">
+            {{ role.name }}
+        </mat-option>
+    </mat-autocomplete>
+</mat-form-field>

@@ -20,6 +20,8 @@ import { AuthModule } from './auth/auth.module';
 import { LanguageSelectorComponent } from './language-selector/language-selector.component';
 import { CompanyStoreModule } from '../company/_company-store/company-store.module';
 import { CompanySelectorComponent } from './company-selector/company-selector.component';
+import { PermissionModule } from '../permission/permission.module';
+import { TranslateModule } from '@ngx-translate/core';
 
 /**
  * App-Shell Module to contain eveything loaded on initial pageload
@@ -36,10 +38,11 @@ import { CompanySelectorComponent } from './company-selector/company-selector.co
     imports: [
         CommonModule,
         AuthModule,
+        PermissionModule.forChild(), // Needed to hide the company selector if necessary
         CompanyStoreModule.forChild(), // Needed for company name display
-        RouterModule.forChild([
-            { path: 'auth', loadChildren: './login/login.module#LoginModule' }
-        ]),
+        PermissionModule.forChild(),
+        TranslateModule.forChild(),
+        RouterModule.forChild([{ path: 'auth', loadChildren: './login/login.module#LoginModule' }]),
         MatProgressBarModule,
         MatToolbarModule,
         MatIconModule,

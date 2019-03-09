@@ -11,22 +11,60 @@
         </ng-container>
         <ng-container [matColumnDef]="'read'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                <mat-checkbox [checked]="checked.read" [indeterminate]="indeterminate.read" (change)="readChange($event)">
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px" class="checkbox-cell">
                     <span>read</span>
-                </mat-checkbox>
+                    <mat-checkbox
+                        [disabled]="disabled"
+                        [checked]="checked.read"
+                        [indeterminate]="indeterminate.read"
+                        (change)="readChange($event)"
+                    ></mat-checkbox>
+                </div>
             </th>
-            <td mat-cell *matCellDef="let row"><mat-checkbox [(ngModel)]="row.read"></mat-checkbox></td>
+            <td mat-cell *matCellDef="let row">
+                <div fxLayoutAlign="center center" class="checkbox-cell">
+                    <mat-checkbox [disabled]="row.disabled" [(ngModel)]="row.read"></mat-checkbox>
+                </div>
+            </td>
         </ng-container>
         <ng-container [matColumnDef]="'write'">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                <mat-checkbox [checked]="checked.write" [indeterminate]="indeterminate.write" (change)="writeChange($event)">
+                <div fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="8px" class="checkbox-cell">
                     <span>write</span>
-                </mat-checkbox>
+                    <mat-checkbox
+                        [disabled]="disabled"
+                        [checked]="checked.write"
+                        [indeterminate]="indeterminate.write"
+                        (change)="writeChange($event)"
+                    ></mat-checkbox>
+                </div>
             </th>
-            <td mat-cell *matCellDef="let row"><mat-checkbox [(ngModel)]="row.write"></mat-checkbox></td>
+            <td mat-cell *matCellDef="let row">
+                <div fxLayoutAlign="center center" class="checkbox-cell">
+                    <mat-checkbox [disabled]="row.disabled" [(ngModel)]="row.write"></mat-checkbox>
+                </div>
+            </td>
+        </ng-container>
+        <ng-container [matColumnDef]="'type'">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                <div fxLayout="column" fxLayoutAlign="center center" class="checkbox-cell" fxLayoutGap="8px">
+                    <span>type</span>
+                    <mat-checkbox
+                        [disabled]="disabled"
+                        [checked]="checked.type"
+                        [indeterminate]="indeterminate.type"
+                        (change)="typeChange($event)"
+                    ></mat-checkbox>
+                </div>
+            </th>
+            <td mat-cell *matCellDef="let row">
+                <div fxLayoutAlign="center center" class="checkbox-cell">
+                    <mat-checkbox [disabled]="row.disabled" [(ngModel)]="row.type"></mat-checkbox>
+                </div>
+            </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="['name', 'read', 'write']; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: ['name', 'read', 'write']"></tr>
+        <tr mat-header-row *matHeaderRowDef="['name', 'read', 'write', 'type']; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['name', 'read', 'write', 'type']"></tr>
     </table>
 </div>

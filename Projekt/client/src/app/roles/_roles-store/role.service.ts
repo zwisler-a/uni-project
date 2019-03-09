@@ -1,11 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { IRole, Role } from 'src/app/models/role.interface';
 import { StoreFactoryService } from 'src/app/shared/store/store-factory.service';
-import { environment } from 'src/environments/environment';
 import { Store } from 'src/app/shared/store/store.class';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +15,7 @@ export class RoleService {
         return this._store.store;
     }
 
-    constructor(private http: HttpClient, private storeFactory: StoreFactoryService) {
+    constructor(private storeFactory: StoreFactoryService) {
         // Initialize store
         this._store = this.storeFactory.create<Role>({
             baseUrl: `${environment.baseUrl}/roles`,
@@ -36,7 +34,7 @@ export class RoleService {
 
     /** Creates a new role */
     createRole(role: IRole) {
-        return this._store.create(Role.toBackendForm(role));
+        return this._store.create(role);
     }
 
     /** Deletes a role */
@@ -46,6 +44,6 @@ export class RoleService {
 
     /** Updates a role */
     updateRole(role: Role) {
-        return this._store.update(Role.toBackendForm(role));
+        return this._store.update(role);
     }
 }

@@ -22,6 +22,9 @@ import { LanguageSelectorComponent } from '../language-selector/language-selecto
 import { TranslateService } from '@ngx-translate/core';
 import { CompanyStoreModule } from 'src/app/company/_company-store/company-store.module';
 import { CompanySelectorComponent } from '../company-selector/company-selector.component';
+import { PermissionModule } from 'src/app/permission/permission.module';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+import { AuthModule } from '../auth/auth.module';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -48,13 +51,12 @@ describe('NavigationComponent', () => {
                 MatMenuModule,
                 HttpClientTestingModule,
                 FlexLayoutModule,
+                TranslateTestingModule.withTranslations({}),
+                AuthModule,
+                PermissionModule.forRoot(),
                 MatListModule
             ],
-            providers: [
-                NavigationService,
-                { provide: AuthService, useValue: {} },
-                { provide: TranslateService, useValue: {} }
-            ]
+            providers: [NavigationService, { provide: AuthService, useValue: {} }, { provide: TranslateService, useValue: {} }]
         }).compileComponents();
     }));
 

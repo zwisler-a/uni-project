@@ -1,3 +1,5 @@
+import { Permission } from 'src/app/models/permission.enum';
+
 /** Single navigational point */
 export interface NavigationItem {
     /** Icon to be displayed infront of the item */
@@ -6,4 +8,6 @@ export interface NavigationItem {
     label: string;
     /** Angular router route */
     route: (string | number)[];
+    /** What permission is required to display the item */
+    requiredPermission?: Permission[];
 }

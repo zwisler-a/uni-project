@@ -16,6 +16,7 @@ describe('UserListComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 UserModule,
+                NoopAnimationsModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({}),
                 RouterTestingModule.withRoutes([]),
