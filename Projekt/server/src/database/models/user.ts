@@ -80,8 +80,7 @@ export class UserModel {
         if (users.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, email);
         }
-	const user: User = users.pop();
-        return user;
+        return users.pop();
     }
 
     /**
