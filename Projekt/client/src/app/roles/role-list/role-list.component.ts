@@ -21,10 +21,10 @@ export class RoleListComponent implements OnInit {
     ) {}
 
     ngOnInit() {
-        this.roleService.loadRoles().subscribe();
         if (!this.defaultPage) {
             return;
         }
+        this.roleService.loadRoles().subscribe();
         this.defaultPage.title = 'role.title';
         this.defaultPage.actions.next([
             {
