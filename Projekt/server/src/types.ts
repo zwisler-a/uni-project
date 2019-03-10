@@ -62,6 +62,9 @@ export enum ErrorNumber {
 
     ITEM_NOT_FOUND,
 
+    FILE_NOT_FOUND,
+    FILE_FIELD_WRONG_TYPE,
+
     ROLE_NOT_FOUND,
 }
 

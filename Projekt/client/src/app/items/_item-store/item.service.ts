@@ -45,7 +45,6 @@ export class ItemService {
         private itemPipe: ItemPipe,
         private storeFactory: StoreFactoryService
     ) {
-        console.log(this.storeFactory);
         this.storeFactory.resetAllStores.subscribe(() => {
             this.loadItems({}).subscribe();
         });
@@ -127,7 +126,6 @@ export class ItemService {
     }
     /** Retriev item from backend if not found in the store */
     private getItemFromBackend(typeId, itemId): Observable<Item> {
-        console.log(this._items.getValue());
         return this.http.get<EmbeddedItems>(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             flatMap(res => {
                 return this.itemPipe.transform(res.items, res.types);

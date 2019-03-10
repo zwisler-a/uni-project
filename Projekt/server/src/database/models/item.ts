@@ -9,6 +9,8 @@ import { DatabaseController } from '../controller';
 import { Sortable, SortOrder } from '../queries/item';
 import { GlobalFieldModel } from './global';
 import { TypeModel } from './type';
+import { FileModel } from './file';
+import { File } from '../../api/models/file';
 
 export interface ItemGetOptions {
     page: number;
@@ -61,6 +63,10 @@ export class ItemModel {
 
                     // Check if value is valid
                     switch (field.type) {
+                        case 'file':
+                            // Don't need any value files have extra table
+                            mapping.pop();
+                            continue typeLoop;
                         case 'string':
                         case 'color':
                             if (typeof value.value === 'string') {
@@ -177,14 +183,61 @@ export class ItemModel {
         return fields;
     }
 
+    private static async getFiles(type: Type, items: any[]) {
+        for (const field of type.fields) {
+            if (field.type === TypeFieldType.reference && field.reference.type === TypeFieldType.file) {
+                const files: { [key: string]: File[] } = (await FileModel.getAll(field.reference.id)).reduce((akku: { [key: string]: File[] }, value) => {
+                    if (!(value.itemId in akku)) {
+                        akku[value.itemId] = [ value ];
+                    } else {
+                        akku[value.itemId].push(value);
+                    }
+                    delete value.fieldId;
+                    delete value.itemId;
+                    return akku;
+                }, {});
+                for (const item of items) {
+                    item[`field_${field.reference.id}`] = item.id in files ? files[item.id] : [];
+                }
+            } else if (field.type === TypeFieldType.file) {
+                const files: { [key: string]: File[] } = (await FileModel.getAll(field.id)).reduce((akku: { [key: string]: File[] }, value) => {
+                    if (!(value.itemId in akku)) {
+                        akku[value.itemId] = [ value ];
+                    } else {
+                        akku[value.itemId].push(value);
+                    }
+                    delete value.fieldId;
+                    delete value.itemId;
+                    return akku;
+                }, {});
+                for (const item of items) {
+                    item[`field_${field.id}`] = item.id in files ? files[item.id] : [];
+                }
+            }
+        }
+    }
+
     private static async getFilteredItems(sorter: Sortable<FullType, { id: number, global: boolean }>, searchQuery: string): Promise<Item[]> {
-        const items: Item[] = (await ItemModel.database.ITEM.GET.execute(sorter)).map(ItemModel.mapGet(sorter.value));
+        const data: any[] = await ItemModel.database.ITEM.GET.execute(sorter);
+        await ItemModel.getFiles(sorter.value, data);
+
+        const items: Item[] = data.map(ItemModel.mapGet(sorter.value));
         return searchQuery ? items.filter((item: Item) => {
             for (const field of item.fields) {
+                // Search value
                 if (field.value !== null && field.value.toString().includes(searchQuery)) {
                     return true;
                 }
+                // Search files
+                if (Array.isArray(field.value) && field.value.some((file: File) => file.name.includes(searchQuery))) {
+                    return true;
+                }
+                // Search reference
                 if (field.reference && field.reference.toString().includes(searchQuery)) {
+                    return true;
+                }
+                // Search reference files
+                if (Array.isArray(field.reference) && field.reference.some((file: File) => file.name.includes(searchQuery))) {
                     return true;
                 }
             }
@@ -199,7 +252,16 @@ export class ItemModel {
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
-        return ItemModel.mapGet(type)(items.pop());
+        const item = items.pop();
+
+        // Fetch all files
+        for (const field of type.fields) {
+            if (field.type === TypeFieldType.file) {
+                item[`field_${field.id}`] = await FileModel.getAllItem(field.id, id);
+            }
+        }
+
+        return ItemModel.mapGet(type)(item);
     }
 
     static async getAllType(companyId: number, typeId: number, options: ItemGetOptions): Promise<{ total: number, items: EmbeddedItem }> {
@@ -232,15 +294,18 @@ export class ItemModel {
 
         let total: number;
         let items: Item[];
-        if ('searchQuery' in options) {
+        if ('searchQuery' in options && options.searchQuery) {
             items = (await ItemModel.getFilteredItems(sorter, options.searchQuery));
             total = items.length;
 
             items = items.slice(page * perPage, page * perPage + perPage);
         } else {
             total = (await ItemModel.database.ITEM.COUNT.execute(type.id)).pop()['COUNT(*)'];
-            items = (await ItemModel.database.ITEM.GET_RANGE.execute(sorter, [page * perPage, perPage]))
-                .map(ItemModel.mapGet(type));
+
+            const data: any[] = await ItemModel.database.ITEM.GET_RANGE.execute(sorter, [page * perPage, perPage]);
+            await ItemModel.getFiles(sorter.value, data);
+
+            items = data.map(ItemModel.mapGet(type));
         }
 
         return { total, items: new EmbeddedItem([ type ], items) };
@@ -270,14 +335,25 @@ export class ItemModel {
     /**
      * Fetch an item and returned as proper api response
      */
-    static async getAsEmbeddedItem(companyId: number, typeId: number, id: number) {
+    static async getAsEmbeddedItem(companyId: number, typeId: number, id: number): Promise<EmbeddedItem> {
         const type: FullType = await ItemModel.getType(companyId, typeId);
 
         const items = await ItemModel.database.ITEM.GET_ID.execute(type, [id]);
         if (items.length === 0) {
             throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
         }
-        return new EmbeddedItem([type], [ItemModel.mapGet(type)(items.pop())]);
+        const item = items.pop();
+
+        // Fetch all files
+        for (const field of type.fields) {
+            if (field.type === TypeFieldType.reference && field.reference.type === TypeFieldType.file) {
+                item[`field_${field.reference.id}`] = await FileModel.getAllItem(field.reference.id, item[`field_${field.id}`]);
+            } else if (field.type === TypeFieldType.file) {
+                item[`field_${field.id}`] = await FileModel.getAllItem(field.id, id);
+            }
+        }
+
+        return new EmbeddedItem([type], [ItemModel.mapGet(type)(item)]);
     }
 
     // TODO check if company exists
@@ -321,7 +397,7 @@ export class ItemModel {
 
     static async delete(companyId: number, typeId: number, id: number): Promise<void> {
         // Throws error if type doesn't exist
-        await TypeModel.get(typeId);
+        const type: Type = await TypeModel.get(typeId);
 
         await ItemModel.database.beginTransaction(async function(connection) {
             const affectedRows = (await ItemModel.database.ITEM.DELETE_GLOBAL.executeConnection(connection, companyId, [ typeId, id ])).affectedRows;
@@ -329,7 +405,13 @@ export class ItemModel {
                 throw ApiError.NOT_FOUND(ErrorNumber.ITEM_NOT_FOUND);
             }
 
-            (await ItemModel.database.ITEM.DELETE.executeConnection(connection, typeId, [ id ]));
+            for (const field of type.fields) {
+                if (field.type === TypeFieldType.file) {
+                    await FileModel.delete(field.id, id);
+                }
+            }
+
+            await ItemModel.database.ITEM.DELETE.executeConnection(connection, typeId, [ id ]);
         });
     }
 }

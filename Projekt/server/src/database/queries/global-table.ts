@@ -3,6 +3,7 @@ import { DynamicQuery, Queries } from '../query';
 import { GlobalField } from '../../api/models/global';
 import { ItemTableQueries } from './item-table';
 
+// TODO maybe don't allow type file
 export class GlobalTableQueries extends Queries {
 
     readonly CREATE: DynamicQuery<ObjectResultsets, number> = this.dynamic((id: number) => {

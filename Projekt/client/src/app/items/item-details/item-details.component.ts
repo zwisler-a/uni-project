@@ -9,6 +9,7 @@ import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog
 import { ItemService } from '../_item-store/item.service';
 import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 import { ItemFormControl } from '../item-form-control';
+import { ItemFormGroup } from '../item-form-group';
 
 /**
  * Displays and allows editing of the fields of an Item
@@ -27,7 +28,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     edit: boolean;
     itemSub: Subscription;
 
-    form: FormGroup = new FormGroup({});
+    form: ItemFormGroup = new ItemFormGroup(0, 0, {});
     controls: { [key: string]: ItemFormControl } = {};
 
     constructor(
@@ -61,13 +62,13 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
      * Create form controls for each field and stores them in {@link ItemDetailsComponent.controls}
      * @param fields Fields for which controls are needed for
      */
-    createFormConrols(fields: Field[]) {
+    createFormConrols(fields: Field[], typeId: number, itemId: number) {
         this.controls = {};
         fields.forEach(field => {
             this.controls[field.name] = ItemFormControl.fromField(field);
             this.controls[field.name].disable();
         });
-        this.form = new FormGroup(this.controls);
+        this.form = new ItemFormGroup(typeId, itemId, this.controls);
     }
 
     /** To itearte over all item fields */
@@ -85,7 +86,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
             if (!this.edit) {
                 this.itemId = itemId;
                 this.typeId = typeId;
-                this.createFormConrols(item.fields);
+                this.createFormConrols(item.fields, typeId, itemId);
             }
         });
     }
