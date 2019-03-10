@@ -84,6 +84,12 @@
             "cancel": "Abbrechen",
             "select": "Auswählen"
         },
+        "file": {
+            "history": "Versionshistory",
+            "download": "Herunterladen",
+            "upload": "Hochladen",
+            "selectFile": "Datei ausählen"
+        },
         "title": "Inventar",
         "new": "Neues Item",
         "noData": "Keine Items vorhanden",
@@ -154,6 +160,7 @@
                 "boolean": "Wahr/Falsch",
                 "color": "Farbe",
                 "number": "Nummer",
+                "file": "Datei",
                 "reference": "Ref.",
                 "date": "Datum",
                 "string": "Text"

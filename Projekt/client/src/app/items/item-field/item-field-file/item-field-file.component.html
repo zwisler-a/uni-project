@@ -1,30 +1,40 @@
 <div class="file-input">
-    <span class="field-type">File</span>
-    <mat-sidenav-container>
-        <mat-sidenav #sidenav mode="over" style="width:200px;">
-            <mat-list dense>
-                <mat-list-item> 10.05.2001 </mat-list-item>
-                <mat-list-item> 10.05.2002 </mat-list-item>
-                <mat-list-item> 10.05.2003 </mat-list-item>
-            </mat-list>
-        </mat-sidenav>
-        <mat-sidenav-content>
-            <div class="file-preview">
-                <mat-icon> insert_drive_file </mat-icon>
-            </div>
-            <span class="file-history" (click)="sidenav.open()">
-                Versionshistory
-            </span>
-        </mat-sidenav-content>
-    </mat-sidenav-container>
-    <div style="margin:8px;display:flex;" *ngIf="!!edit">
-        <span style="flex: 1 1 auto"></span>
-        <button
-            (click)="$event.preventDefault()"
-            mat-button
-            color="primary"
-        >
-            Upload new File
-        </button>
+    <span class="field-type">{{ control.name }}</span>
+    <div [ngClass]="{ fullScreen: fullScreen }">
+        <mat-sidenav-container>
+            <mat-sidenav #sidenav mode="over">
+                <div fxLayoutAlign="end center" style="margin-right:8px;">
+                    <button mat-icon-button (click)="sidenav.close()"><mat-icon>close</mat-icon></button>
+                </div>
+                <mat-list dense *ngIf="control?.value.length">
+                    <mat-list-item
+                        class="version"
+                        (click)="loadPreview(version.time, version.name)"
+                        *ngFor="let version of versions"
+                    >
+                        {{ version.readable }} - {{ version.name }}
+                    </mat-list-item>
+                </mat-list>
+            </mat-sidenav>
+            <mat-sidenav-content>
+                <button mat-icon-button class="full-screen" (click)="fullScreen = !fullScreen">
+                    <mat-icon>fullscreen</mat-icon>
+                </button>
+                <div class="file-preview">
+                    <iframe frameBorder="0" *ngIf="previewUrl.url" [src]="previewUrl.url"></iframe>
+                </div>
+                <button mat-button color="accent" class="file-history" (click)="sidenav.open()">
+                    {{ 'items.file.history' | translate }}
+                </button>
+                <button mat-button class="file-download" (click)="download()">
+                        {{ 'items.file.download' | translate }}
+                </button>
+            </mat-sidenav-content>
+        </mat-sidenav-container>
+    </div>
+    <div style="margin:8px;display:flex;" *ngIf="!control.disabled" fxLayout="row-reverse">
+        <input id="file-upload" accept="image/*,application/pdf" type="file" #fileInput />
+        <button mat-raised-button color="primary" (click)="upload()">{{ 'items.file.upload' | translate }}</button>
+        <button for="file-upload" (click)="fileInput.click()" mat-button>{{ 'items.file.selectFile' | translate }}</button>
     </div>
 </div>

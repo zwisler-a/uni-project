@@ -29,7 +29,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
     typeSub: Subscription;
     @ViewChild(MatAutocompleteTrigger)
     autocompleteTrigger: MatAutocompleteTrigger;
-    form: ItemFormGroup = new ItemFormGroup(-1, {});
+    form: ItemFormGroup = new ItemFormGroup(-1, -1, {});
 
     globalControls: { [key: string]: ItemFormControl };
     globalForm: FormGroup;
@@ -37,7 +37,6 @@ export class AddItemComponent implements OnInit, OnDestroy {
     constructor(
         private itemService: ItemService,
         private typeService: TypesService,
-        private location: Location,
         private refFieldService: ItemFieldReferenceService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
@@ -112,7 +111,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
         fields.forEach(field => {
             controls[field.name] = ItemFormControl.fromField(field);
         });
-        this.form = new ItemFormGroup(typeId, controls);
+        this.form = new ItemFormGroup(typeId, 0, controls);
     }
 
     private createGlobalFormControls(fields: TypeField[]) {
