@@ -6,18 +6,11 @@ import bcrypt from 'bcrypt';
 
 export async function receivingResetRequest(req: Request, res: Response) {
     const emailAddress = req.body.email;
-    const users: User[] = await UserModel.getAll();
-
-    if (users.filter(user => user.email === emailAddress).length < 1) {
-        // if the email address is does not belong to any user the frontend gets no information about that
-        // this way it is not possible to check for attackers which emails are registered
-        return res.status(200).send({});
-    } else {
-        const user = users.filter(user => user.email === emailAddress)[0];
-
+    try {
+        const user = await UserModel.getByEmail(emailAddress.trim());
         const payload = {
             id: user.id,
-            email: emailAddress
+            email: user.email
         };
         // the secret contains the hash of the former password, thus it is not possible to use the same reset link again after password reset
         const secret = user.password + user.id + user.companyId;
@@ -29,14 +22,16 @@ export async function receivingResetRequest(req: Request, res: Response) {
         res.status(200).send();
 
         sendResetLinkViaEmail(emailAddress, user.name, resetLink);
+    } catch (e) {
+        console.log('Password reset requested by unknown email address (' + emailAddress + ')');
+        res.status(200).send;
     }
 }
 
 
 export async function validate(req: Request, res: Response) {
     const token = req.body.token;
-    const users: User[] = await UserModel.getAll();
-    const user = users.filter(user => user.id === Number.parseInt(req.body['id']))[0];
+    const user = await UserModel.get(Number.parseInt(req.body['id']));
     const secret = user.password + user.id + user.companyId;
 
     jsonwebtoken.verify(token, secret, function (err: Error, data: any) {
@@ -49,17 +44,20 @@ export async function validate(req: Request, res: Response) {
 }
 
 
-export async function reset(req: Request, res: Response) {
-    let user: User = USER_PATCH.validate(req.body);
+export async function changePassword(req: Request, res: Response) {
 
+    // let user: User = USER_PATCH.validate(req.body);
+    const userId = Number.parseInt(req.body['id']);
+    const user = await UserModel.get(userId);
     if (req.body['pass1'] == req.body['pass2']) {
+
         user.password = await bcrypt.hash(req.body['pass1'], 12);
     } else {
         return res.status(409).send;
     }
-    const id: number = Number.parseInt(req.body['id']);
+
     try {
-        user = await UserModel.update(id, user);
+        await UserModel.update(user.id, user, user.companyId);
     } catch (e) {
         console.log(e);
     }
