@@ -27,6 +27,7 @@ import { FieldTypeSelectComponent } from './type-field/field-type-select/field-t
 import { TypeFieldComponent } from './type-field/type-field.component';
 import { TypesListComponent } from './types-list/types-list.component';
 import { typeRoutes } from './types.routes';
+import { PermissionModule } from '../permission/permission.module';
 
 @NgModule({
     declarations: [
@@ -40,6 +41,7 @@ import { typeRoutes } from './types.routes';
     imports: [
         CommonModule,
         RouterModule.forChild(typeRoutes),
+        PermissionModule.forChild(),
         MatListModule,
         MatCardModule,
         FlexLayoutModule,

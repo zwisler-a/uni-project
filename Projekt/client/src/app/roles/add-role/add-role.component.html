@@ -6,11 +6,12 @@
 
     <mat-checkbox name="globaladmin" [(ngModel)]="globalAdmin">{{ 'role.globalAdmin' | translate }}</mat-checkbox>
     <mat-checkbox name="localadmin" [(ngModel)]="localAdmin">{{ 'role.localAdmin' | translate }}</mat-checkbox>
+    <mat-checkbox name="globalField" [(ngModel)]="globalField">{{ 'role.globalField' | translate }}</mat-checkbox>
 
-    <app-types-permissions></app-types-permissions>
+    <app-types-permissions [permissions]="newRole.types"></app-types-permissions>
 
     <div fxLayout="row-reverse">
-        <button mat-raised-button color="primary" (click)="save()">{{ 'roles.save' | translate }}</button>
-        <button appNavigateBack mat-button>{{ 'roles.cancel' | translate }}</button>
+        <button mat-raised-button color="primary" (click)="save()">{{ 'role.edit.save' | translate }}</button>
+        <button appNavigateBack mat-button>{{ 'role.edit.cancel' | translate }}</button>
     </div>
 </form>

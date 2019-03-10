@@ -83,6 +83,8 @@ export class RoleModel {
             const id = role.id.toString();
             const cached: Role = await RoleModel.cache.get(id);
 
+            role.permission = (role.permission as any).readUInt8();
+
             if (cached === undefined) {
                 role.types = await RoleModel.fetchTypes(role.id);
                 await RoleModel.cache.set(id, role);

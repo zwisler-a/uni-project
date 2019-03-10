@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../_user-store/user.service';
-import { User } from 'src/app/models/user.interface';
-import { Company } from 'src/app/models/company.interface';
-import { CompanyService } from 'src/app/company/_company-store/company.service';
-import { TranslateService } from '@ngx-translate/core';
 import { MatSnackBar } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
+import { CompanyService } from 'src/app/company/_company-store/company.service';
+import { Company } from 'src/app/models/company.interface';
+import { Role } from 'src/app/models/role.interface';
+import { User } from 'src/app/models/user.interface';
+
+import { UserService } from '../_user-store/user.service';
 
 @Component({
     selector: 'app-add-user',
@@ -14,6 +16,7 @@ import { MatSnackBar } from '@angular/material';
 })
 export class AddUserComponent implements OnInit {
     form: FormGroup;
+    newUserRoles: Role[] = [];
 
     get companies() {
         return this.companyService.companies;
@@ -46,6 +49,8 @@ export class AddUserComponent implements OnInit {
                     .slice(-8)
         );
         const user: User = this.form.getRawValue();
+        user.roles = this.newUserRoles.map(role => role.id);
+        this.newUserRoles = [];
         this.userService.createUser(user).subscribe(() => {
             this.textToClipboard(this.form.get('password').value);
             const text = this.translate.instant('user.new.created');

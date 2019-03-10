@@ -30,6 +30,7 @@ import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemsMaterialModule } from './items.material';
 import { itemsRoutes } from './items.routes';
+import { PermissionModule } from '../permission/permission.module';
 
 @NgModule({
     declarations: [
@@ -60,6 +61,7 @@ import { itemsRoutes } from './items.routes';
         // Local modules
         ItemStoreModule,
         TypeStoreModule.forChild(),
+        PermissionModule.forChild(),
         FieldsStoreModule,
         ItemsMaterialModule,
 

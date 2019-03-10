@@ -62,7 +62,7 @@
             <!-- Button to open the sidenav on over (small) mode -->
             <button fxHide.gt-sm mat-icon-button (click)="expandSidenav()"><mat-icon>menu</mat-icon></button>
             <span fxFlex="1 1 auto"></span>
-            <app-company-selector></app-company-selector>
+            <app-company-selector appHasPermission="GLOBAL_ADMIN"></app-company-selector>
             <app-language-selector></app-language-selector>
         </mat-toolbar>
 

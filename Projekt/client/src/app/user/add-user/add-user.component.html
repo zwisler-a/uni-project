@@ -29,6 +29,8 @@
         <input matInput [placeholder]="'user.email' | translate" formControlName="email" />
     </mat-form-field>
 
+    <app-role-selector [roles]="newUserRoles"></app-role-selector>
+
     <mat-form-field>
         <input matInput [placeholder]="'user.new.password' | translate" formControlName="password" />
     </mat-form-field>
