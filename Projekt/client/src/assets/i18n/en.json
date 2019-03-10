@@ -79,6 +79,12 @@
             "cancel": "Cancel",
             "select": "Select"
         },
+        "file": {
+            "history": "Version history",
+            "download": "Download",
+            "upload": "Upload",
+            "selectFile": "Select file"
+        },
         "noData": "No Items available",
         "new": "New item",
         "error": {
@@ -142,6 +148,7 @@
                 "boolean": "Boolean",
                 "color": "Color",
                 "number": "Number",
+                "file": "File",
                 "reference": "Ref.",
                 "date": "Date",
                 "string": "Text"

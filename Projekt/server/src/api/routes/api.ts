@@ -9,6 +9,7 @@ import { companiesRoute } from './companies';
 import { passwordResetRoute } from './password_reset';
 import { globalRoute } from './globals';
 import { ApiError, ErrorNumber } from '../../types';
+import { filesRoute } from './files';
 
 /** express.Router for path `/api` */
 export const apiRouter: Router = Router();
@@ -22,6 +23,7 @@ apiRouter.use('/roles', rolesRoute);
 apiRouter.use('/companies', companiesRoute);
 apiRouter.use('/passwordReset', passwordResetRoute);
 apiRouter.use('/globals', globalRoute);
+apiRouter.use('/files', filesRoute);
 
 // If route is unknown throw a new NOT_FOUND error
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {

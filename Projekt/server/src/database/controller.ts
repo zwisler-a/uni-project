@@ -10,6 +10,7 @@ import { RoleModel } from './models/role';
 import { CompanyQueries } from './queries/company';
 import { GlobalTableQueries } from './queries/global-table';
 import { GlobalQueries } from './queries/global';
+import { ItemFileQueries } from './queries/item-file';
 import { ItemTableQueries } from './queries/item-table';
 import { ItemQueries } from './queries/item';
 import { TypeFieldQueries } from './queries/type-field';
@@ -18,6 +19,7 @@ import { RolePermissionQueries } from './queries/role-permission';
 import { RoleQueries } from './queries/role';
 import { UserQueries } from './queries/user';
 import { UserRoleQueries } from './queries/user-role';
+import { FileModel } from './models/file';
 
 /**
  * Function that gets invoked inside a transaction
@@ -36,6 +38,7 @@ export interface DatabaseController extends Pool {
     COMPANY: CompanyQueries;
     GLOBAL_TABLE: GlobalTableQueries;
     GLOBAL: GlobalQueries;
+    ITEM_FILE: ItemFileQueries;
     ITEM_TABLE: ItemTableQueries;
     ITEM: ItemQueries;
     TYPE_FIELD: TypeFieldQueries;
@@ -66,6 +69,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
         COMPANY: new CompanyQueries(pool, prefix),
         GLOBAL_TABLE: new GlobalTableQueries(pool, prefix),
         GLOBAL: new GlobalQueries(pool, prefix),
+        ITEM_FILE: new ItemFileQueries(pool, prefix),
         ITEM_TABLE: new ItemTableQueries(pool, prefix),
         ITEM: new ItemQueries(pool, prefix),
         TYPE_FIELD: new TypeFieldQueries(pool, prefix),
@@ -96,6 +100,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     await controller.TYPE.CREATE_TABLE.execute();
     await controller.TYPE_FIELD.CREATE_TABLE.execute();
     await controller.TYPE_FIELD.CREATE_TABLE_FOREIGN_KEY.execute();
+    await controller.ITEM_FILE.CREATE_TABLE.execute();
     await controller.GLOBAL.CREATE_TABLE.execute();
     await controller.ROLE.CREATE_TABLE.execute();
     await controller.ROLE_PERMISSION.CREATE_TABLE.execute();
@@ -107,6 +112,7 @@ export async function initializeDatabaseController(pool: Pool, prefix: string): 
     TypeModel.initialize(controller);
     GlobalFieldModel.initialize(controller);
     ItemModel.initialize(controller);
+    FileModel.initialize(controller);
     RoleModel.initialize(controller);
 
     return controller;

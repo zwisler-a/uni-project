@@ -5,7 +5,7 @@
 
     <app-item-field-color *ngIf="control.type === FieldType.color" [control]="control" [form]="form"></app-item-field-color>
 
-    <!--<app-item-field-file *ngIf="control.type === FieldType.file" [field]="field" [edit]="edit"></app-item-field-file>-->
+    <app-item-field-file *ngIf="control.type === FieldType.file" [control]="control" [form]="form"></app-item-field-file>
 
     <app-item-field-bool *ngIf="control.type === FieldType.boolean" [control]="control" [form]="form"></app-item-field-bool>
 
