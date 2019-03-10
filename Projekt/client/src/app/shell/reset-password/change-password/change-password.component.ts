@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {MatSnackBar} from '@angular/material';
-import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {TranslateService} from '@ngx-translate/core';
-import {ActivatedRoute} from '@angular/router';
-import {HttpClient} from '@angular/common/http';
-import {environment} from '../../../../environments/environment';
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
+import { FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { ActivatedRoute } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 
 @Component({
@@ -56,7 +56,7 @@ export class ChangePasswordComponent implements OnInit {
         if (this.tokenIsValid) {
             let password1;
             let password2;
-            if (this.changePasswordForm.valid && this.changePasswordForm.dirty && this.tokenIsValid) {
+            if (this.changePasswordForm.valid && this.changePasswordForm.dirty) {
                 password1 = this.changePasswordForm.get('newPassword').value;
                 password2 = this.changePasswordForm.get('confirmedPw').value;
             }
@@ -67,7 +67,12 @@ export class ChangePasswordComponent implements OnInit {
                 pass2: password2
             };
 
-            this.http.post(this.baseUrl + '/reset', body).subscribe();
+            this.http.post(this.baseUrl + '/changePassword', body).subscribe();
+            this.changePasswordForm.get('newPassword').disable();
+            this.changePasswordForm.get('newPassword').setValue('-----------------------------');
+            this.changePasswordForm.get('confirmedPw').disable();
+            this.changePasswordForm.get('confirmedPw').setValue('-----------------------------');
+            this.information2 = 'Your password has been successful reset, you can now login with your new password.';
         } else {
             this.invalidTokenSnackbar();
         }
@@ -84,12 +89,12 @@ export class ChangePasswordComponent implements OnInit {
             token: this.token,
         };
         this.http.post(this.baseUrl + '/validate', body).subscribe(data => {
-
             if (data['success'] === true) {
                 this.tokenIsValid = true;
                 this.information1 = 'Hello ' + data['username'] + '!';
                 this.information2 = 'Please enter your new password.';
             } else {
+                this.tokenIsValid = false;
                 this.invalidTokenSnackbar();
                 this.changePasswordForm.get('newPassword').disable();
                 this.changePasswordForm.get('newPassword').setValue('Your link has expired.');
