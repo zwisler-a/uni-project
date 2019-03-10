@@ -23,8 +23,7 @@ export class FieldTypeSelectComponent implements OnInit {
     /** possible field types */
     get fieldTypes() {
         return Object.keys(FieldType)
-            .map(type => FieldType[type])
-            .filter(type => type !== 'file');
+            .map(type => FieldType[type]);
     }
 
     selectType(type) {
