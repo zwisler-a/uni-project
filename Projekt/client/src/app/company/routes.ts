@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import { CompanyListComponent } from './company-list/company-list.component';
 import { DefaultPageComponent } from '../shared/default-page/default-page.component';
 import { AddCompanyComponent } from './add-company/add-company.component';
-import { CompanyResolver } from './company-list/company.resolver';
+import { CompanyResolver } from './_company-store/company.resolver';
 
 export const companyRoutes: Route[] = [
     {

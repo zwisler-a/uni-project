@@ -7,6 +7,7 @@ import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
 import { companiesRoute } from './companies';
 import { passwordResetRoute } from './password_reset';
+import { globalRoute } from './global';
 import { ApiError, ErrorNumber } from '../../types';
 
 /** express.Router for path `/api` */
@@ -20,6 +21,7 @@ apiRouter.use('/items', itemsRoute);
 apiRouter.use('/roles', rolesRoute);
 apiRouter.use('/companies', companiesRoute);
 apiRouter.use('/passwordReset', passwordResetRoute);
+apiRouter.use('/globals', globalRoute);
 
 // If route is unknown throw a new NOT_FOUND error
 apiRouter.use((req: Request, res: Response, next: NextFunction) => {

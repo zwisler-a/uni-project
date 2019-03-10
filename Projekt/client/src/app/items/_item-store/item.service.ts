@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
+import { flatMap, map, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 
 import { ApiItem } from '../../models/api/api-item.interface';
@@ -60,7 +60,8 @@ export class ItemService {
                     this.listState.total = Number.parseInt(res.headers.get('X-Total'), 10);
                     this._items.next(res.body);
                     return this.items;
-                })
+                }),
+                this.itemErrorService.getItemsError()
             );
     }
 
@@ -88,6 +89,10 @@ export class ItemService {
     private rxjsStoreCreateUpdate(entity: ApiItem) {
         return this.storeUpdate(entity.typeId, (store, res) => {
             store.items.push(...res.items);
+            const existingType = store.types.find(sType => sType.id + '' === res.types[0].id + '');
+            if (!existingType) {
+                store.types.push(...res.types);
+            }
             this.listState.total++;
             return store;
         });
@@ -111,6 +116,7 @@ export class ItemService {
     }
     /** Retriev item from backend if not found in the store */
     private getItemFromBackend(typeId, itemId): Observable<Item> {
+        console.log(this._items.getValue());
         return this.http.get<EmbeddedItems>(`${this.baseUrl}/${typeId}/${itemId}`).pipe(
             flatMap(res => {
                 return this.itemPipe.transform(res.items, res.types);

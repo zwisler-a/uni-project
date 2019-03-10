@@ -1,12 +1,10 @@
-import {Component, OnInit, Inject} from '@angular/core';
-import {MatSnackBar, MatSnackBarRef} from '@angular/material';
-import {FormBuilder, FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {MatSnackBar} from '@angular/material';
+import {FormControl, FormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {TranslateService} from '@ngx-translate/core';
-import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../../environments/environment';
-import {ReactiveFormsModule} from '@angular/forms';
 
 
 @Component({
@@ -29,9 +27,7 @@ export class ChangePasswordComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private http: HttpClient,
-        private formBuilder: FormBuilder,
         private translate: TranslateService,
-        private router: Router,
         public snackbar: MatSnackBar,
     ) {
     }
@@ -43,7 +39,6 @@ export class ChangePasswordComponent implements OnInit {
         this.setup();
     }
 
-    // TODO activate the passwordValidator
     private setup() {
         const newPassword = new FormControl('', [Validators.required, this.passwordValidator()]);
         const confirmedPw = new FormControl('', [Validators.required, this.matchValidator(newPassword)]);

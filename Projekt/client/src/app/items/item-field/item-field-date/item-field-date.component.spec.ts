@@ -1,12 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { ItemFieldDateComponent } from './item-field-date.component';
-import { MatInputModule, MatDatepickerModule, MatNativeDateModule } from '@angular/material';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDatepickerModule, MatIconModule, MatInputModule, MatNativeDateModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+
 import { ItemFormControl } from '../../item-form-control';
+import { ItemFieldDateComponent } from './item-field-date.component';
 
 describe('ItemFieldDateComponent', () => {
     let component: ItemFieldDateComponent;
@@ -21,6 +21,7 @@ describe('ItemFieldDateComponent', () => {
                 FlexLayoutModule,
                 MatDatepickerModule,
                 MatNativeDateModule,
+                MatIconModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({})
             ]

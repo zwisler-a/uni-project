@@ -7,5 +7,6 @@ export const passwordResetRoute: Router = Router();
 passwordResetRoute.post('/', receivingResetRequest);
 passwordResetRoute.post('/validate', validate);
 passwordResetRoute.post('/reset', reset);
+// passwordResetRoute.post('/resetpassword', reset);
 
 

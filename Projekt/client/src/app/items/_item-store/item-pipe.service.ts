@@ -1,8 +1,10 @@
 import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map } from 'rxjs/operators';
+import { Field } from 'src/app/models/field.interface';
+import { TypeField } from 'src/app/models/type-field.interface';
 
-import { ApiItem } from '../../models/api/api-item.interface';
+import { ApiItem, ApiItemField } from '../../models/api/api-item.interface';
 import { EmbeddedItems } from '../../models/api/embedded-items.interface';
 import { FieldType } from '../../models/field-type.enum';
 import { Item } from '../../models/item.interface';
@@ -31,7 +33,9 @@ export class ItemPipe implements PipeTransform {
         const transformedItems = items.map(item => {
             const type = types.find(searchType => searchType.id + '' === item.typeId + '');
             if (!type) {
-                throw new Error(`Type ID ${item.typeId} of item ${item.id} not found!`);
+                throw new Error(
+                    `The type with the ID ${item.typeId} is missing. But the Item with the id ${item.id} is of that type!`
+                );
             }
             return this.transformItem(item, type);
         });
@@ -49,11 +53,15 @@ export class ItemPipe implements PipeTransform {
             typeId: item.typeId,
             fields: []
         };
-        // TODO refac
         uiItem.fields = item.fields.map(apiField => {
-            const fieldType = itemType.fields.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            let fieldType;
+            if (apiField.global) {
+                fieldType = itemType.globals.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            } else {
+                fieldType = itemType.fields.find(fieldTypeDef => fieldTypeDef.id === apiField.id);
+            }
             if (!fieldType) {
-                throw new Error(`No field with the id ${apiField.id} found in Type definition for ${item.typeId}`);
+                throw new Error(`The Type with the ID ${itemType.id} does not contain a field with the ID ${apiField.id}.`);
             }
             return {
                 name: fieldType.name,
@@ -62,47 +70,39 @@ export class ItemPipe implements PipeTransform {
                 required: fieldType.required,
                 unique: fieldType.unique,
                 type: fieldType.type,
-                referenceId: fieldType.referenceId,
-                displayValue: this.getFieldDisplayValue(apiField.value, fieldType.type)
-            };
+                referenceValue: apiField.reference,
+                global: apiField.global,
+                referenceFieldId: fieldType.reference ? fieldType.reference.id : null,
+                referenceTypeId: fieldType.reference ? fieldType.reference.typeId : null,
+                displayValue: this.getFieldDisplayValue(apiField, fieldType)
+            } as Field;
         });
         return uiItem;
     }
 
     /** Determines how a value should be displayed */
-    private getFieldDisplayValue(value: any, type: string) {
-        switch (type) {
+    private getFieldDisplayValue(field: ApiItemField, fieldType: TypeField) {
+        switch (fieldType.type) {
             case FieldType.boolean:
-                return value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
+                return field.value ? '<i class="material-icons">check</i>' : '<i class="material-icons">close</i>';
             case FieldType.date:
-                return new Date(value).toLocaleDateString('de-De');
+                return new Date(field.value).toLocaleDateString('de-De');
             case FieldType.number:
-                return value + '';
+                return field.value + '';
             case FieldType.color:
                 // sanatize color beforehand and than bypass the display value
-                const svalue = this.sanatizer.sanitize(SecurityContext.HTML, value);
+                const svalue = this.sanatizer.sanitize(SecurityContext.HTML, field.value);
                 return this.sanatizer.bypassSecurityTrustHtml(
                     `${svalue} <span style="display: inline-block;width: 10px;height: 10px;background:${svalue}"></span>`
                 );
             case FieldType.reference:
-                return '<span class="table-cell-reference"><i class="material-icons">link</i> ' + value + '</span>';
+                return (
+                    '<span class="table-cell-reference"><i class="material-icons">link</i> ' +
+                    this.getFieldDisplayValue({ value: field.reference, id: 0, global: false }, fieldType.reference) +
+                    '</span>'
+                );
             default:
-                return value;
+                return field.value;
         }
-    }
-
-    /** Converts an item to an item usable by the backend */
-    retransformItem(item: Item): ApiItem {
-        const apiItemFields: { id: number; value: any }[] = [];
-        item.fields.forEach(field => {
-            if (field.value !== undefined) {
-                apiItemFields.push({ id: field.id, value: field.value });
-            }
-        });
-        return {
-            fields: apiItemFields,
-            id: item.id,
-            typeId: item.typeId
-        };
     }
 }

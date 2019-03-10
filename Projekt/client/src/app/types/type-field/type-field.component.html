@@ -1,59 +1,39 @@
 <!-- IF REFERENCE MAKE IT A BIT MORE GROUPED BY ADDING SPECIAL STYLE -->
-<div *ngIf="field" [ngClass]="{ reference: field.type === 'reference' }" [ngClass.lt-md]="'small'" @fadeInOut fxLayout="column">
-    <mat-form-field fxFlex>
-        <div matPrefix>
-            <!-- TYPE OF FIELD SELECT -->
-            <span *ngIf="edit" class="field-type" matTooltip="Feld Typ" matPrefix [matMenuTriggerFor]="menu">
-                <span>{{ 'types.edit.field.' + field.type | translate }}</span>
-                <span style="flex:1 1 auto"></span>
-                <mat-icon>arrow_drop_down</mat-icon>
-            </span>
-            <span *ngIf="!edit" class="field-type" matTooltip="Feld Typ" matPrefix>
-                <span>{{ 'types.edit.field.' + field.type | translate }}</span>
-                <span style="flex:1 1 auto"></span>
-            </span>
+<div fxLayout="column" [ngClass]="{ reference: field.type === 'reference' }">
+    <div fxLayout.lt-md="column" fxLayoutAlign.lt-md="start stretch" @fadeInOut fxLayout="row" fxLayoutAlign="start center">
+        <mat-form-field fxFlex="1 1 auto">
+            <app-field-type-select
+                (select)="selectType($event)"
+                [disabled]="!edit"
+                class="field-type"
+                matPrefix
+            ></app-field-type-select>
 
-            <mat-menu #menu="matMenu">
-                <button mat-menu-item *ngFor="let type of fieldTypes" (click)="selectType(type)">
-                    {{ 'types.edit.field.' + type | translate }}
-                </button>
-            </mat-menu>
-            <!-- ---------------- -->
+            <!-- VALUE DISPLAY/INPUT -->
+            <input
+                required
+                matInput
+                [disabled]="!edit"
+                [placeholder]="'types.edit.typeName' | translate"
+                [(ngModel)]="field.name"
+            />
+        </mat-form-field>
+
+        <div class="field-suffix" [ngClass.lt-md]="'small'" fxLayout="row" fxLayoutAlign="start end">
+            <div [ngClass]="{ disabled: !edit }" fxLayout="row" fxLayoutAlign="start end">
+                <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.required">
+                    {{ 'types.edit.required' | translate }}
+                </mat-checkbox>
+                <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.unique">
+                    {{ 'types.edit.unique' | translate }}
+                </mat-checkbox>
+                <button mat-icon-button *ngIf="!isGlobal" [disabled]="!edit" (click)="deleteMe.emit()"><mat-icon>delete</mat-icon></button>
+            </div>
         </div>
-
-        <!-- VALUE DISPLAY/INPUT -->
-        <input
-            required
-            matInput
-            [disabled]="!edit"
-            [placeholder]="'types.edit.typeName' | translate"
-            [(ngModel)]="field.name"
-        />
-
-        <!-- REQUIRED/UNIQUE/REMOVE FIELD - INLINE -->
-        <div matSuffix *ngIf="!isGlobal" fxHide.lt-md><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
-    </mat-form-field>
-
-    <!-- REQUIRED/UNIQUE/REMOVE FIELD - BELOW -->
-    <div *ngIf="!isGlobal" fxHide.gt-sm><ng-container *ngTemplateOutlet="fieldProperies"></ng-container></div>
-
-    <!--REQUIRED/UNIQUE/REMOVE FIELD - TEMPLATE -->
-    <ng-template #fieldProperies>
-        <div class="field-suffix">
-            <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.required">
-                {{ 'types.edit.required' | translate }}
-            </mat-checkbox>
-            <mat-checkbox color="warn" [disabled]="!edit" [(ngModel)]="field.unique">
-                {{ 'types.edit.unique' | translate }}
-            </mat-checkbox>
-            <button mat-icon-button [disabled]="!edit" (click)="deleteMe.emit()"><mat-icon>delete</mat-icon></button>
-        </div>
-    </ng-template>
-
+    </div>
     <!-- FOR REFERENCES: SELECT A TYPE -->
     <app-type-selector
-        [value]="field.referenceId"
-        [fieldId]="0"
+        [value]="reference"
         [disabled]="!edit"
         [withField]="true"
         (selected)="setReference($event)"

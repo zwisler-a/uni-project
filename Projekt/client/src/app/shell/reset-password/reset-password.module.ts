@@ -8,7 +8,7 @@ import {
     MatToolbarModule,
     MatCheckboxModule,
     MatProgressBarModule,
-    MatSnackBarModule, MatDialogModule
+    MatSnackBarModule
 } from '@angular/material';
 import {ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
@@ -34,7 +34,6 @@ import {ChangePasswordComponent} from './change-password/change-password.compone
         MatSnackBarModule,
         MatButtonModule,
         MatCheckboxModule,
-        MatDialogModule,
         RouterModule.forChild([{path: '', component: ResetPasswordComponent}]),
         ReactiveFormsModule
     ],

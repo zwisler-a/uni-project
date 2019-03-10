@@ -1,15 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { Field } from 'src/app/models/field.interface';
 
-import { Item } from '../../models/item.interface';
 import { ConfirmDialogService } from '../../shared/confirm-dialog/confirm-dialog.service';
 import { ItemService } from '../_item-store/item.service';
-import { Field } from 'src/app/models/field.interface';
-import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { FieldType } from 'src/app/models/field-type.enum';
-import { CustomValidators } from 'src/app/shared/custom-validators';
+import { ItemFieldReferenceService } from '../item-field/item-field-reference/item-field-reference.service';
 import { ItemFormControl } from '../item-form-control';
 
 /**
@@ -35,6 +33,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     constructor(
         private acitvatedRoute: ActivatedRoute,
         private confirmService: ConfirmDialogService,
+        private referenceService: ItemFieldReferenceService,
         private itemService: ItemService,
         private location: Location
     ) {}
@@ -43,6 +42,12 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
         // Look out for route parameter change
         this.acitvatedRoute.params.subscribe(params => {
             this.changeItem(params['typeId'], params['id']);
+            // Restore state if its a selection process
+            if (this.referenceService.isSelecting) {
+                this.form = this.referenceService.restoreState();
+                this.controls = this.form.controls as any;
+                this.edit = true;
+            }
         });
     }
 
@@ -88,6 +93,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     /** Send a request to the backend to delete the displayed item. Navigates back on success. */
     delete() {
         this.confirmService.open('items.confirm.delete', true).subscribe(() => {
+            this.itemSub.unsubscribe();
             this.itemService.deleteItem(this.typeId, this.itemId).subscribe(res => {
                 this.location.back();
             });
@@ -113,7 +119,7 @@ export class ItemDetailsComponent implements OnInit, OnDestroy {
     submit() {
         const fields = Object.keys(this.controls).map(key => {
             const ctrl = this.controls[key];
-            return { id: (ctrl as any).id as number, value: ctrl.value };
+            return { id: ctrl.id, value: ctrl.value, global: ctrl.global };
         });
         this.itemService.updateItem(this.typeId, this.itemId, fields).subscribe(res => {
             this.editFields(false);

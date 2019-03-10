@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { CompanyService } from '../_company-store/company.service';
+import { TypesService } from './types.service';
 
-/** Makes sure the company are loaded before resolving */
+/** Makes sure the types are loaded before resolving */
 @Injectable({ providedIn: 'root' })
-export class CompanyResolver implements Resolve<any> {
-    constructor(private companyService: CompanyService) {}
+export class TypesResolver implements Resolve<any> {
+    constructor(private typesService: TypesService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
-        return this.companyService.loadCompanies();
+        return this.typesService.loadTypes();
     }
 }

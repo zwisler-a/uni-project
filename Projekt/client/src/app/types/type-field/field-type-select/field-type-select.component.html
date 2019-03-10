@@ -1,0 +1,15 @@
+<span *ngIf="!disabled" fxFlex fxLayoutAlign="start center" matTooltip="Feld Typ" matPrefix [matMenuTriggerFor]="menu">
+    <span>{{ 'types.edit.field.' + type | translate }}</span>
+    <span fxFlex="1 1 auto"></span>
+    <mat-icon>arrow_drop_down</mat-icon>
+</span>
+
+<span *ngIf="disabled" matTooltip="Feld Typ" matPrefix>
+    <span>{{ 'types.edit.field.' + type | translate }}</span>
+</span>
+
+<mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let type of fieldTypes" (click)="selectType(type)">
+        {{ 'types.edit.field.' + type | translate }}
+    </button>
+</mat-menu>

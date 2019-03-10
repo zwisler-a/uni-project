@@ -1,5 +1,4 @@
 import { Response, Request } from 'express';
-
 import { User, USER_PATCH } from '../models/user';
 import { UserModel } from '../../database/models/user';
 import jsonwebtoken from 'jsonwebtoken';
@@ -25,10 +24,9 @@ export async function receivingResetRequest(req: Request, res: Response) {
         // the token expires after half an hour
         const token = generateToken(secret, '0.5h', payload);
 
-        const resetLink = req.body.baseURL + 'password/' + payload.id + '/' + token;
+        const resetLink = req.body.baseURL + '/' + payload.id + '/' + token;
 
-        // TODO remove the resetLink from the body later, because now it is just for presentation, but shall only be send via email later
-        res.status(200).send({resetLink: '/resetpassword/' + payload.id + '/' + token});
+        res.status(200).send();
 
         sendResetLinkViaEmail(emailAddress, user.name, resetLink);
     }
@@ -43,8 +41,7 @@ export async function validate(req: Request, res: Response) {
 
     jsonwebtoken.verify(token, secret, function (err: Error, data: any) {
         if (err) {
-            // TODO try to get it working with status code 400
-            res.status(200).json({success: false, message: 'Password reset token is invalid or expired'});
+            res.status(400).json({success: false, message: 'Password reset token is invalid or expired'});
         } else {
             res.status(200).json({success: true, username: user.name});
         }
@@ -61,7 +58,6 @@ export async function reset(req: Request, res: Response) {
         return res.status(409).send;
     }
     const id: number = Number.parseInt(req.body['id']);
-    console.log(user);
     try {
         user = await UserModel.update(id, user);
     } catch (e) {
@@ -85,24 +81,25 @@ function sendConfirmationEmail(recipient: string, username: string) {
 }
 
 function sendMail(recipient: string, subject: string, template: string) {
+    const config = require('../../../config.json').mailer;
     const nodemailer = require('nodemailer');
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        secure: false,
-        port: 25,
+        service: config.service,
+        secure: config.secure,
+        port: config.port,
         auth: {
-            user: 'akbsender@gmail.com',
-            pass: '52323000'
+            user: config.user,
+            pass: config.pass
         },
         tls: {
-            rejectUnauthorized: false
+            rejectUnauthorized: config.tlsRejectUnauthorized
         }
     });
 
     const mailData = {
-        from: '"ak18b" <akbsender@gmail.com>',
-        to: 'akbreceiver@gmail.com',
-        subject: subject + ' for ' + recipient,
+        from: '"ak18b" ' + config.user,
+        to: recipient,
+        subject: subject,
         html: template
     };
 

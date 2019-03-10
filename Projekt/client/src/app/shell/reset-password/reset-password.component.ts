@@ -45,6 +45,8 @@ export class ResetPasswordComponent implements OnInit {
         this.http.post(this.baseUrl, body, {}).subscribe(data => {
             this.link = data['resetLink'];
             this.linkName = 'This link is only for testing and is also sent to akbreceiver(at)gmail.com';
+        }, () => {
+            // TODO hier weitermachen
         });
         this.snackbar.open('A reset link has been send to ' + body['email'], '', {
             duration: 20000,
@@ -52,6 +54,6 @@ export class ResetPasswordComponent implements OnInit {
             verticalPosition: 'bottom',
         });
         this.resetForm.disable();
-        this.resetForm.get('email').setValue('A mail has been sent! :)');
+        this.resetForm.get('email').setValue('An email has been sent! :)');
     }
 }

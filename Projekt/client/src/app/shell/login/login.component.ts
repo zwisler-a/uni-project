@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from '../auth/auth.service';
-import { MatSnackBar, MatSnackBarRef } from '@angular/material';
-import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../auth/auth.service';
+import {MatSnackBar, MatSnackBarRef} from '@angular/material';
+import {TranslateService} from '@ngx-translate/core';
+import {environment} from 'src/environments/environment';
+import {Router} from '@angular/router';
 import {$TAB} from 'codelyzer/angular/styles/chars';
 
 /** Contains a login form for user authentication */
@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     ngOnDestroy(): void {
         if (environment.showLoginDemoInfo) {
             this.userDemoInfo.dismissWithAction();
@@ -52,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     /** triggers the login process */
     login() {
-        const { username, password, rememberMe } = this.loginForm.getRawValue();
+        const {username, password, rememberMe} = this.loginForm.getRawValue();
         this.laoding = true;
         this.authService.login(username, password, rememberMe).subscribe(
             () => {
@@ -75,6 +76,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     /** triggers the password recovery*/
     resetPassword() {
-        window.open('/reset');
+        window.open('/resetpassword');
     }
 }

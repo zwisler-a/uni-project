@@ -1,9 +1,8 @@
 <mat-form-field fxFlex [formGroup]="form">
-    <span matPrefix class="field-type">{{'items.field.number'|translate}}</span>
-    <input
-        [placeholder]="control.name"
-        [formControlName]="control.name"
-        matInput
-        type="number"
-    />
+    <span matPrefix class="field-type">
+        <mat-icon *ngIf="control.global">public</mat-icon>
+        {{ 'items.field.number' | translate }}
+    </span>
+
+    <input [placeholder]="control.name" [formControlName]="control.name" matInput [required]="control.required" type="number" />
 </mat-form-field>
