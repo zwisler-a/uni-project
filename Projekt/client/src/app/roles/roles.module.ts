@@ -19,9 +19,11 @@ import { RoleListComponent } from './role-list/role-list.component';
 import { roleRoutes } from './routes';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule } from '@angular/forms';
+import { AddRoleComponent } from './add-role/add-role.component';
+import { TypesPermissionsComponent } from './types-permissions/types-permissions.component';
 
 @NgModule({
-    declarations: [RoleListComponent, RoleDetailComponent],
+    declarations: [RoleListComponent, RoleDetailComponent, AddRoleComponent, TypesPermissionsComponent],
     imports: [
         CommonModule,
         RouterModule.forChild(roleRoutes),

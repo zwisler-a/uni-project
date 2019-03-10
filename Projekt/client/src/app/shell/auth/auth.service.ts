@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
-import { Observable, Subject, throwError } from 'rxjs';
+import { Observable, Subject, throwError, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
@@ -25,8 +25,10 @@ export class AuthService {
     private _jwt: string;
     private _longLivedJwt: string;
 
-    private _authChange = new Subject();
+    private _authChange = new Subject<void>();
     readonly authChange = this._authChange.asObservable();
+
+    readonly rolesUrl = role => [environment.baseUrl, 'roles', role].join('/');
 
     /** Will throw if invalid */
     set jwt(val) {

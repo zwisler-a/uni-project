@@ -6,7 +6,7 @@ import { GlobalFieldModel } from '../../database/models/global';
 export async function globalCreate(req: Request, res: Response, next: NextFunction) {
     try {
         let field: GlobalField = GLOBAL.validate(req.body);
-        field.companyId = req.params.user.companyId;
+        field.companyId = req.params.companyId;
 
         field = await GlobalFieldModel.create(field);
         res.status(200).send(field);
@@ -17,8 +17,7 @@ export async function globalCreate(req: Request, res: Response, next: NextFuncti
 
 export async function globalGet(req: Request, res: Response, next: NextFunction) {
     try {
-        const company = req.params.user.companyId;
-        res.status(200).send(await GlobalFieldModel.get(company));
+        res.status(200).send(await GlobalFieldModel.get(req.params.companyId));
     } catch (error) {
         next(error);
     }
@@ -40,8 +39,7 @@ export async function globalUpdate(req: Request, res: Response, next: NextFuncti
 export async function globalDelete(req: Request, res: Response, next: NextFunction) {
     try {
         const id: number = req.params.id;
-        const company = req.params.user.companyId;
-        await GlobalFieldModel.delete(company, id);
+        await GlobalFieldModel.delete(req.params.companyId, id);
         res.status(204).send();
     } catch (error) {
         next(error);

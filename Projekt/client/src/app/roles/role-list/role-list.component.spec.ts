@@ -4,7 +4,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { RoleListComponent } from './role-list.component';
-import { MatListModule } from '@angular/material';
+import { MatListModule, MatSnackBarModule } from '@angular/material';
 import { RolesStoreModule } from '../_roles-store/roles-store.module';
 
 describe('RoleListComponent', () => {
@@ -19,6 +19,7 @@ describe('RoleListComponent', () => {
                 RouterTestingModule.withRoutes([]),
                 MatListModule,
                 RolesStoreModule,
+                MatSnackBarModule,
                 TranslateTestingModule.withTranslations({})
             ]
         }).compileComponents();

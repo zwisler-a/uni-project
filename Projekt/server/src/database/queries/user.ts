@@ -5,8 +5,8 @@ export class UserQueries extends Queries {
 
     readonly CREATE_TABLE: StaticQuery<ObjectResultsets> = this.sql(
         `CREATE TABLE IF NOT EXISTS ${this.prefix}users (
-            id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
-            companyId SMALLINT UNSIGNED NOT NULL,
+            id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+            companyId MEDIUMINT UNSIGNED NOT NULL,
             name VARCHAR(64) NOT NULL,
             password VARCHAR(60) NOT NULL,
             email VARCHAR(128),
@@ -23,8 +23,9 @@ export class UserQueries extends Queries {
             (id, companyId, name, password, email)
             VALUES (NULL,?,?,?,?)`);
 
-    readonly GET: StaticQuery<ArrayResultsets> = this.sql(
-        `SELECT * FROM ${this.prefix}users`);
+    readonly GET_COMPANY: StaticQuery<ArrayResultsets> = this.sql(
+        `SELECT * FROM ${this.prefix}users
+            WHERE companyId = ?`);
 
     readonly GET_ID: StaticQuery<ArrayResultsets> = this.sql(
         `SELECT * FROM ${this.prefix}users

@@ -25,10 +25,10 @@
         "updateInfoUpdated": "Benutzerdaten wurden geändern!",
         "permissions": "Benutzerrollen",
         "error": {
-            "update": "User konnte nicht bearbeitet werden!",
-            "delete": "User konnte nicht gelöscht werden!",
-            "get": "User konnte nicht geladen werden!",
-            "load": "User konnte nicht gelöscht werden!",
+            "update": "Benutzer konnte nicht bearbeitet werden!",
+            "delete": "Benutzer konnte nicht gelöscht werden!",
+            "get": "Benutzer konnte nicht geladen werden!",
+            "load": "Benutzer konnte nicht geladen werden!",
             "create": "Benutzer konnte nicht angelegt werden"
         },
         "new": {
@@ -38,6 +38,10 @@
             "created": "Benutzer wurde angelegt!",
             "add": "Anlegen",
             "cancel": "Abbrechen"
+        },
+        "edit": {
+            "cancel": "Abbrechen",
+            "save": "Speichern"
         }
     },
 
@@ -49,12 +53,27 @@
         "cancel": "Abbrechen",
         "name": "Firmenname"
     },
-
+    "error": {
+        "insufficient_permission": "Sie haben nicht die benötigte Berechtigung für die angefragte Resource!"
+    },
     "role": {
+        "title": "Benutzerrollen",
+        "new": "Neue Benutzerrolle",
+        "name": "Rollenname",
         "edit": {
             "filter": "Suchen",
             "cancel": "Abbrechen",
             "save": "Speichern"
+        },
+        "globalAdmin": "System Administrator",
+        "localAdmin": "Firmen Administrator",
+        "globalField": "Globale Felder bearbeiten",
+        "error": {
+            "update": "Eine Benutzerrolle konnte nicht bearbeitet werden!",
+            "delete": "Die Benutzerrolle konnte nicht gelöscht werden!",
+            "get": "Die Benutzerrolle konnte nicht geladen werden!",
+            "load": "Die Benutzerrolle konnte nicht geladen werden!",
+            "create": "Die Benutzerrolle konnte nicht erstellt werden!"
         }
     },
 

@@ -9,10 +9,14 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CompanyStoreModule } from './company/_company-store/company-store.module';
+import { navMenu } from './nav.config';
+import { PermissionModule } from './permission/permission.module';
+import { RolesStoreModule } from './roles/_roles-store/roles-store.module';
+import { StoreModule } from './shared/store/store.module';
 import { NavigationService } from './shell/navigation/navigation.service';
 import { ShellModule } from './shell/shell.module';
-import { TypeStoreModule } from './types/_type-store/type-store.module';
 import { GlobalFieldStoreModule } from './types/_global-field-store/global-field-store.module';
+import { TypeStoreModule } from './types/_type-store/type-store.module';
 import { UserStoreModule } from './user/_user-store/user-store.module';
 
 // AoT requires an exported function for factories
@@ -25,10 +29,13 @@ export function HttpLoaderFactory(http: HttpClient) {
     imports: [
         BrowserModule,
         ShellModule,
+        StoreModule,
         GlobalFieldStoreModule,
         TypeStoreModule.forRoot(),
         CompanyStoreModule.forRoot(),
         UserStoreModule.forRoot(),
+        PermissionModule.forRoot(),
+        RolesStoreModule.forRoot(),
         AppRoutingModule,
         BrowserAnimationsModule,
         TranslateModule.forRoot({
@@ -44,51 +51,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 })
 export class AppModule {
     constructor(private navigationService: NavigationService, private translate: TranslateService) {
+        this.navigationService.navigationModel = navMenu;
         this.translate.addLangs(['de', 'en']);
-        this.translate.onLangChange.subscribe(async () => {
-            const translations = await this.translate
-                .get(['nav.inventory', 'nav.types', 'nav.user', 'nav.roles', 'nav.admin', 'nav.companies'])
-                .toPromise();
-
-            this.navigationService.navigationModel = [
-                {
-                    title: translations['nav.inventory'],
-                    items: [
-                        {
-                            label: translations['nav.inventory'],
-                            icon: 'view_list',
-                            route: ['/items']
-                        },
-                        {
-                            label: translations['nav.types'],
-                            icon: 'view_compact',
-                            route: ['/types/view']
-                        }
-                    ]
-                },
-                {
-                    title: translations['nav.admin'],
-                    items: [
-                        /* {
-                            label: translations['nav.roles'],
-                            icon: 'view_compact',
-                            route: ['/roles/view']
-                        },*/
-                        {
-                            label: translations['nav.user'],
-                            icon: 'account_circle',
-                            route: ['/user', 'view']
-                        },
-                        {
-                            label: translations['nav.companies'],
-                            icon: 'work',
-                            route: ['/companies', 'view']
-                        }
-                    ]
-                }
-            ];
-        });
-
         this.translate.use('de');
     }
 }

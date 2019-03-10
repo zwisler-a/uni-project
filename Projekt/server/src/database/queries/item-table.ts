@@ -78,7 +78,7 @@ export class ItemTableQueries extends Queries {
 
     readonly ADD_UNIQUE_INDEX: DynamicQuery<ObjectResultsets, TypeField> = this.dynamic((field: TypeField) => {
         const name = `field_${field.id}`;
-        return `ALTER TABLE ${this.prefix}item_${field.typeId}\` ADD CONSTRAINT ${name} UNIQUE INDEX (${name})`;
+        return `ALTER TABLE ${this.prefix}item_${field.typeId} ADD CONSTRAINT ${name} UNIQUE INDEX (${name})`;
     });
 
     readonly DROP_UNIQUE_INDEX: DynamicQuery<ObjectResultsets, TypeField> = this.dynamic((field: TypeField) => {

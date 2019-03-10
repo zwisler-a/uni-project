@@ -12,7 +12,7 @@
     }
 }
 .field-suffix {
-    min-height: 45px;
+    min-height: 46px;
     & > div {
         border-bottom: solid 1px rgba(0, 0, 0, 0.4);
         padding-bottom: 2px;
@@ -46,6 +46,7 @@ input:disabled {
     color: black;
 }
 .reference {
+    background: rgba(0,0,0,.04);
     padding: 16px 0px;
     margin: 16px 0px;
     flex-direction: column;

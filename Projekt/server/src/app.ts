@@ -77,14 +77,15 @@ export class App {
                 res.status(err.status);
                 delete err.status;
                 res.send(err);
+                console.dir(err);
             } else {
                 res.status('status' in err ? err.status : 500).send({
                     error: err.name,
                     message: err.message,
                     cause: err.cause
                 });
+                console.error(err);
             }
-            console.dir(err);
         });
     }
 

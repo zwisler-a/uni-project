@@ -87,7 +87,9 @@ export class UserDataPageComponent implements OnInit {
         const user: User = {
             id: authUser ? authUser.id : 0,
             name: updateUserInfo ? this.changeUserForm.get('name').value : authUser ? authUser.name : '',
-            email: updateUserInfo ? this.changeUserForm.get('email').value : authUser ? authUser.email : ''
+            email: updateUserInfo ? this.changeUserForm.get('email').value : authUser ? authUser.email : '',
+            roles: authUser ? authUser.roles : [],
+            comapnyId: authUser ? authUser.companyId : 0
         };
         if (this.changePasswordForm.valid && this.changePasswordForm.dirty) {
             user.password = this.changePasswordForm.get('newPassword').value;

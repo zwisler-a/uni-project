@@ -1,11 +1,14 @@
 
 import { Server } from 'http';
 import request from 'supertest';
+import bcrypt from 'bcrypt';
 import { expect } from 'chai';
 import 'mocha';
 
 import { App } from '../src/app';
 import { config } from './config.test';
+import { CompanyModel } from '../src/database/models/company';
+import { UserModel } from '../src/database/models/user';
 
 describe('authentication', () => {
     let app: App;
@@ -13,6 +16,16 @@ describe('authentication', () => {
     before(async () => {
         app = await App.factory(config);
         server = app.express.listen(0);
+
+        const companyId = (await CompanyModel.create({
+            name: 'ak18b'
+        })).id;
+        await UserModel.create({
+            companyId,
+            name: 'username',
+            password: await bcrypt.hash('password', 12),
+            roles: []
+        });
     });
     after(async () => {
         server.close();

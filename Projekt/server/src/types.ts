@@ -53,6 +53,9 @@ export enum ErrorNumber {
     AUTHENTICATION_MISSING_JSONWEBTOKEN,
     AUTHENTICATION_INVALID_JSONWEBTOKEN,
 
+    AUTHENTICATION_INSUFFICIENT_PERMISSION,
+    AUTHENTICATION_INVALID_COMPANY,
+
     COMPANY_NOT_FOUND,
 
     USER_NOT_FOUND,
@@ -68,6 +71,8 @@ export enum ErrorNumber {
     GLOBAL_FIELD_NOT_FOUND,
 
     ITEM_NOT_FOUND,
+
+    ROLE_NOT_FOUND,
 }
 
 export class ApiError extends Error {
@@ -82,6 +87,10 @@ export class ApiError extends Error {
 
     static UNAUTHORIZED(errorNumber: ErrorNumber, cause?: any) {
         return new ApiError('Unauthorized', 'The request has not been applied because it lacks valid authentication credentials for the target resource.', 401, errorNumber, cause);
+    }
+
+    static FORBIDDEN(errorNumber: ErrorNumber, cause?: any) {
+        return new ApiError('Forbidden', 'The request was valid, but the server is refusing action. The user need the necessary permissions for this resource.', 403, errorNumber, cause);
     }
 
     static NOT_FOUND(errorNumber: ErrorNumber, cause?: any) {

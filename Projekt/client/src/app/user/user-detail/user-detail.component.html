@@ -10,42 +10,14 @@
             <input disabled matInput [placeholder]="'user.email' | translate" [value]="user.email" />
         </mat-form-field>
         <mat-form-field>
-            <input
-                disabled
-                matInput
-                [placeholder]="'user.email' | translate"
-                [value]="user.companyId | company | async"
-            />
+            <input disabled matInput [placeholder]="'user.company' | translate" [value]="user.companyId | company | async" />
         </mat-form-field>
+        <app-role-selector [roles]="user.roles"></app-role-selector>
+        <div fxLayoutAlign="end center">
+            <button mat-button appNavigateBack><span translate>user.edit.cancel</span></button>
+            <button mat-raised-button (click)="updateUser()" color="primary">
+                <span translate>user.edit.save</span>
+            </button>
+        </div>
     </form>
-
-    <mat-form-field class="permissions" matTooltip="Not yet implemented!">
-        <mat-chip-list #chipList>
-            <mat-chip
-                *ngFor="let permission of permissions"
-                [selectable]="selectable"
-                [removable]="removable"
-                (removed)="remove(permission)"
-            >
-                {{ permission }}
-                <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-            </mat-chip>
-            <input
-                [placeholder]="'user.permissions' | translate"
-                #permissionInput
-                [formControl]="permissionCtrl"
-                [matAutocomplete]="auto"
-                autocompleteDisabled
-                [matChipInputFor]="chipList"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                [matChipInputAddOnBlur]="addOnBlur"
-                (matChipInputTokenEnd)="add($event)"
-            />
-        </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-            <mat-option *ngFor="let permission of (filteredPermissions | async)" [value]="permission">
-                {{ permission }}
-            </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
 </ng-container>

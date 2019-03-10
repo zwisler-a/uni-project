@@ -1,9 +1,9 @@
 <!-- only show if it actually has a group to display -->
-<ng-container *ngIf="group">
+<ng-container *ngIf="group" >
     <!-- First one isnt visible since it acts like the border of the toolbar above -->
     <mat-divider></mat-divider>
-    <span [hidden]="collapsed" class="navigation-group-title">
-        {{ group.title }}
+    <span [hidden]="collapsed" class="navigation-group-title" [appHasPermission]="group.requiredPermission">
+        {{ group.title | translate }}
     </span>
     <mat-nav-list>
         <a
@@ -12,9 +12,10 @@
             class="navigation-item"
             [routerLink]="navItem.route"
             routerLinkActive="active"
+            [appHasPermission]="navItem.requiredPermission"
         >
             <mat-icon>{{ navItem.icon }}</mat-icon>
-            <span class="label">{{ navItem.label }}</span>
+            <span class="label">{{ navItem.label | translate }}</span>
         </a>
     </mat-nav-list>
 </ng-container>

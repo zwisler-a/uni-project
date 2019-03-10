@@ -1,12 +1,14 @@
 <mat-toolbar fxFlex="0 0 auto" color="form">
     <!-- BACK / TITLE -->
     <button mat-icon-button (click)="back()"><mat-icon>close</mat-icon></button>
-    <span>{{ (typeId ) | typeName | async }}</span>
+    <span>{{ typeId | typeName | async }}</span>
     <span fxFlex></span>
 
     <!-- EDIT / DELETE -->
-    <button [hidden]="edit" (click)="editFields()" mat-icon-button><mat-icon>edit</mat-icon></button>
-    <button (click)="delete()" mat-icon-button><mat-icon>delete</mat-icon></button>
+    <div appHasPermission="ITEM_WRITE" [typeId]="typeId">
+        <button [hidden]="edit" (click)="editFields()" mat-icon-button><mat-icon>edit</mat-icon></button>
+        <button (click)="delete()" mat-icon-button><mat-icon>delete</mat-icon></button>
+    </div>
 </mat-toolbar>
 
 <form fxFlex fxLayout="column" fxLayoutAlign="start stretch" autocomplete="off" [formGroup]="form">
@@ -16,6 +18,8 @@
     <!-- SAVE/CANCEL ACTIONS -->
     <div *ngIf="edit" fxLayoutAlign="end center" class="actions">
         <button mat-button (click)="editFields(false)">{{ 'items.edit.cancel' | translate }}</button>
-        <button color="primary" [disabled]="form.invalid" mat-raised-button (click)="submit()">{{ 'items.edit.save' | translate }}</button>
+        <button color="primary" [disabled]="form.invalid" mat-raised-button (click)="submit()">
+            {{ 'items.edit.save' | translate }}
+        </button>
     </div>
 </form>

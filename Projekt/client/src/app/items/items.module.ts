@@ -8,6 +8,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 
 import { ConfirmDialogModule } from '../shared/confirm-dialog/confirm-dialog.module';
 import { DefaultPageModule } from '../shared/default-page/default-page.module';
+import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
 import { TypeSelectorModule } from '../shared/type-selector/type-selector.module';
 import { TypeStoreModule } from '../types/_type-store/type-store.module';
 import { FieldsStoreModule } from './_fields-store/fields-store.module';
@@ -29,7 +30,7 @@ import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsListResolver } from './items-list/items-list.resolver';
 import { ItemsMaterialModule } from './items.material';
 import { itemsRoutes } from './items.routes';
-import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module';
+import { PermissionModule } from '../permission/permission.module';
 
 @NgModule({
     declarations: [
@@ -60,6 +61,7 @@ import { NavigateBackModule } from '../shared/navigate-back/navigate-back.module
         // Local modules
         ItemStoreModule,
         TypeStoreModule.forChild(),
+        PermissionModule.forChild(),
         FieldsStoreModule,
         ItemsMaterialModule,
 

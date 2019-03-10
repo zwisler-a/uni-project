@@ -29,11 +29,13 @@
         <input matInput [placeholder]="'user.email' | translate" formControlName="email" />
     </mat-form-field>
 
+    <app-role-selector [roles]="newUserRoles"></app-role-selector>
+
     <mat-form-field>
         <input matInput [placeholder]="'user.new.password' | translate" formControlName="password" />
     </mat-form-field>
     <div fxLayoutAlign="end center">
-        <button mat-button><span translate>user.new.cancel</span></button>
+        <button mat-button appNavigateBack><span translate>user.new.cancel</span></button>
         <button mat-raised-button (click)="createUser()" [disabled]="form.invalid" color="primary">
             <span translate>user.new.add</span>
         </button>

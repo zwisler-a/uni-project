@@ -2,7 +2,7 @@
     <a
         mat-list-item
         class="navigation-item"
-        *ngFor="let type of (types | async)"
+        *ngFor="let type of (types | async); trackBy: typeTrackBy"
         [routerLink]="['/types', 'view', { outlets: { detail: [type.id] } }]"
         [routerLinkActive]="'active'"
         @fadeInOut

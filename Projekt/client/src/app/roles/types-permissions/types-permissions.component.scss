@@ -1,0 +1,13 @@
+.role-form {
+    flex-direction: column;
+    box-sizing: border-box;
+    display: flex;
+    overflow: auto;
+}
+:host {
+    display: flex;
+    flex-direction: column;
+}
+.checkbox-cell {
+    width: 80px;
+}

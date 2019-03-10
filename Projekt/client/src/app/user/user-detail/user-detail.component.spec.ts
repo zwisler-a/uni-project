@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ConfirmDialogModule } from 'src/app/shared/confirm-dialog/confirm-dialog.module';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { Location } from '@angular/common';
 
 describe('UserDetailComponent', () => {
     let component: UserDetailComponent;
@@ -20,7 +21,8 @@ describe('UserDetailComponent', () => {
                 ConfirmDialogModule,
                 TranslateTestingModule.withTranslations({})
             ],
-            declarations: []
+            declarations: [],
+            providers: [{ provide: Location, useValue: { path: () => '' } }]
         }).compileComponents();
     }));
 

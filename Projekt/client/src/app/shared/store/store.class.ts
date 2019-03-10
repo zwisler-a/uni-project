@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, Observable, of, OperatorFunction, throwError } from 'rxjs';
-import { catchError, flatMap, tap } from 'rxjs/operators';
+import { catchError, flatMap, tap, shareReplay } from 'rxjs/operators';
 
 import { Storable } from './storable.interface';
 import { StoreConfig } from './store-config.interface';
@@ -17,12 +17,21 @@ export class Store<T extends Storable> {
     private lastUpdate = 0;
     store = this._store.asObservable();
 
+    /** Store alreadys happing fetches for single entities, so they dont get fetched multiple times */
+    private fetchingEntities = {};
+
     constructor(
         private httpClient: HttpClient,
         private translate: TranslateService,
         private snackbar: MatSnackBar,
-        private config: StoreConfig
-    ) {}
+        private config: StoreConfig,
+        private reset: Observable<void>
+    ) {
+        // reload data from backend when a force reload is triggered
+        this.reset.subscribe(() => {
+            this.loadFromBackend().subscribe();
+        });
+    }
 
     /**
      * Returns observable which completes, once there is data in the store.
@@ -50,12 +59,22 @@ export class Store<T extends Storable> {
      * Fetches a single Entity from the store. If its not found in the store it requests it from the backend
      * @param id Id of the Storable
      */
-    byId(id: number) {
+    byId(id: number): Observable<T> {
         return this.store.pipe(
             flatMap(entities => {
                 const foundEntity = entities.find(entity => entity.id + '' === id + '');
                 if (!foundEntity) {
-                    return this.loadSingle(id);
+                    if (!this.fetchingEntities[id]) {
+                        this.fetchingEntities[id] = this.loadSingle(id).pipe(
+                            shareReplay(1),
+                            tap(() => {
+                                delete this.fetchingEntities[id];
+                            })
+                        );
+                        return this.fetchingEntities[id];
+                    } else {
+                        return this.fetchingEntities[id];
+                    }
                 } else {
                     return of(foundEntity);
                 }
@@ -71,7 +90,9 @@ export class Store<T extends Storable> {
         return this.httpClient.get<T>(this.replaceQueryParams(this.config.baseUrl + '/' + this.config.urls.get, { id })).pipe(
             tap((res: T) => {
                 const store = this._store.getValue();
-                store.push(res);
+                if (!store.find(searchEntity => searchEntity.id === res.id)) {
+                    store.push(res);
+                }
                 this._store.next(store);
             }),
             this.catch(this.config.errorKeys.get)
@@ -88,7 +109,9 @@ export class Store<T extends Storable> {
             .pipe(
                 tap((res: T) => {
                     const store = this._store.getValue();
-                    store.push(res);
+                    if (!store.find(searchEntity => searchEntity.id === res.id)) {
+                        store.push(res);
+                    }
                     this._store.next(store);
                 }),
                 this.catch(this.config.errorKeys.create)
@@ -153,6 +176,9 @@ export class Store<T extends Storable> {
      */
     private catch(text: string): OperatorFunction<any, any> {
         return catchError(res => {
+            if (res.status === 403) {
+                text = 'error.insufficient_permission';
+            }
             const translated = this.translate.instant(text);
             this.snackbar.open(translated);
             return throwError(res);

@@ -6,7 +6,8 @@ import {
     MatProgressBarModule,
     MatToolbarModule,
     MatListModule,
-    MatMenuModule
+    MatMenuModule,
+    MatSnackBarModule
 } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -20,6 +21,10 @@ import { AuthService } from '../auth/auth.service';
 import { LanguageSelectorComponent } from '../language-selector/language-selector.component';
 import { TranslateService } from '@ngx-translate/core';
 import { CompanyStoreModule } from 'src/app/company/_company-store/company-store.module';
+import { CompanySelectorComponent } from '../company-selector/company-selector.component';
+import { PermissionModule } from 'src/app/permission/permission.module';
+import { TranslateTestingModule } from 'ngx-translate-testing';
+import { AuthModule } from '../auth/auth.module';
 
 describe('NavigationComponent', () => {
     let component: NavigationComponent;
@@ -32,7 +37,8 @@ describe('NavigationComponent', () => {
                 RouterLoadingIndicatorComponent,
                 SidenavControlButtonComponent,
                 NavigationGroupComponent,
-                LanguageSelectorComponent
+                LanguageSelectorComponent,
+                CompanySelectorComponent
             ],
             imports: [
                 RouterTestingModule,
@@ -41,16 +47,16 @@ describe('NavigationComponent', () => {
                 MatIconModule,
                 CompanyStoreModule,
                 MatButtonModule,
+                MatSnackBarModule,
                 MatMenuModule,
                 HttpClientTestingModule,
                 FlexLayoutModule,
+                TranslateTestingModule.withTranslations({}),
+                AuthModule,
+                PermissionModule.forRoot(),
                 MatListModule
             ],
-            providers: [
-                NavigationService,
-                { provide: AuthService, useValue: {} },
-                { provide: TranslateService, useValue: {} }
-            ]
+            providers: [NavigationService, { provide: AuthService, useValue: {} }, { provide: TranslateService, useValue: {} }]
         }).compileComponents();
     }));
 

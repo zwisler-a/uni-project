@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "nodemon",
+    "test-data": "node -r ts-node/register ./src/test-data.ts config.json",
     "build": "tsc --removeComments",
     "test": "mocha -r ts-node/register test/**/*.ts --reporter mocha-junit-reporter --reporter-options mochaFile=test-report.xml",
     "lint": "tslint -c tslint.json -p tsconfig.json",

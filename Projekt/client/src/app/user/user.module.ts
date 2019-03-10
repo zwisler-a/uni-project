@@ -12,7 +12,7 @@ import {
     MatListModule,
     MatSnackBarModule,
     MatToolbarModule,
-    MatTooltipModule,
+    MatTooltipModule
 } from '@angular/material';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -27,14 +27,18 @@ import { UserDataPageComponent } from './user-data-page/user-data-page.component
 import { UserDetailComponent } from './user-detail/user-detail.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { UserStoreModule } from './_user-store/user-store.module';
+import { RoleSelectorComponent } from './role-selector/role-selector.component';
+import { RolesStoreModule } from '../roles/_roles-store/roles-store.module';
 
 @NgModule({
-    declarations: [UserListComponent, UserDetailComponent, UserDataPageComponent, AddUserComponent],
+    declarations: [UserListComponent, UserDetailComponent, UserDataPageComponent, AddUserComponent, RoleSelectorComponent],
     imports: [
         CommonModule,
         DefaultPageModule,
         RouterModule.forChild(userRoutes),
         UserStoreModule.forChild(),
+        RolesStoreModule.forChild(),
+        RolesStoreModule,
         MatListModule,
         MatIconModule,
         MatInputModule,

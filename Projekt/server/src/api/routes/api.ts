@@ -7,7 +7,7 @@ import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
 import { companiesRoute } from './companies';
 import { passwordResetRoute } from './password_reset';
-import { globalRoute } from './global';
+import { globalRoute } from './globals';
 import { ApiError, ErrorNumber } from '../../types';
 
 /** express.Router for path `/api` */

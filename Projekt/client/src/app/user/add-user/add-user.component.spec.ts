@@ -15,6 +15,8 @@ import { CompanyStoreModule } from 'src/app/company/_company-store/company-store
 import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
 
 import { AddUserComponent } from './add-user.component';
+import { UserModule } from '../user.module';
+import { Location } from '@angular/common';
 
 describe('AddUserComponent', () => {
     let component: AddUserComponent;
@@ -22,9 +24,10 @@ describe('AddUserComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [AddUserComponent],
             imports: [
                 MatToolbarModule,
+                UserModule,
+                NoopAnimationsModule,
                 MatIconModule,
                 MatInputModule,
                 MatButtonModule,
@@ -36,7 +39,8 @@ describe('AddUserComponent', () => {
                 NoopAnimationsModule,
                 TypeStoreModule,
                 HttpClientTestingModule
-            ]
+            ],
+            providers: [{ provide: Location, useValue: { path: () => '' } }]
         }).compileComponents();
     }));
 

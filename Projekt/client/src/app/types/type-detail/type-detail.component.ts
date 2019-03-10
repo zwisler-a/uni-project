@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Type } from 'src/app/models/type.interface';
@@ -12,7 +12,7 @@ import { TypesService } from '../_type-store/types.service';
     templateUrl: './type-detail.component.html',
     styleUrls: ['./type-detail.component.scss']
 })
-export class TypeDetailComponent implements OnInit {
+export class TypeDetailComponent implements OnInit, OnDestroy {
     type: Type;
     edit = false;
     typeSub: Subscription;
@@ -29,6 +29,12 @@ export class TypeDetailComponent implements OnInit {
         });
     }
 
+    ngOnDestroy() {
+        if (this.typeSub) {
+            this.typeSub.unsubscribe();
+        }
+    }
+
     /**
      * Change the type displayed
      * @param id Id of the type
@@ -37,12 +43,10 @@ export class TypeDetailComponent implements OnInit {
         if (this.typeSub) {
             this.typeSub.unsubscribe();
         }
-        this.typeSub = this.typesService.getType(id).subscribe(
-            type => {
-                // Make sure it is not the original object
-                this.type = JSON.parse(JSON.stringify(type));
-            }
-        );
+        this.typeSub = this.typesService.getType(id).subscribe(type => {
+            // Make sure it is not the original object
+            this.type = JSON.parse(JSON.stringify(type));
+        });
     }
 
     /**
@@ -76,11 +80,9 @@ export class TypeDetailComponent implements OnInit {
         // Open confirm first
         this.confirm.open('types.edit.confirmDelete', true).subscribe(() => {
             this.typeSub.unsubscribe();
-            this.typesService.deleteType({ id: this.type.id }).subscribe(
-                () => {
-                    this.router.navigate(['/types', 'view']);
-                }
-            );
+            this.typesService.deleteType({ id: this.type.id }).subscribe(() => {
+                this.router.navigate(['/types', 'view']);
+            });
         });
     }
 
