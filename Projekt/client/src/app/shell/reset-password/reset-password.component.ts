@@ -36,18 +36,12 @@ export class ResetPasswordComponent implements OnInit {
     /**
      * Sends the provided email to the backend to the backend.
      * The user gets no information, if his email is valid for security reasons.
-     * TODO(steve) remove the resetLink which we are only getting for now, as long as no email service is implemented
      */
     requestResetLink() {
         const body = this.resetForm.getRawValue();
         body.baseURL = window.location.href;
 
-        this.http.post(this.baseUrl, body, {}).subscribe(data => {
-            this.link = data['resetLink'];
-            this.linkName = 'This link is only for testing and is also sent to akbreceiver(at)gmail.com';
-        }, () => {
-            // TODO hier weitermachen
-        });
+        this.http.post(this.baseUrl, body, {}).subscribe();
         this.snackbar.open('A reset link has been send to ' + body['email'], '', {
             duration: 20000,
             horizontalPosition: 'center',
