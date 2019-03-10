@@ -6,6 +6,14 @@ import {NavigationComponent} from './shell/navigation/navigation.component';
 
 const routes: Routes = [
     {
+        path: 'resetpassword/:id/:token',
+        loadChildren: './shell/reset-password/change-password/change-password.module#ChangePasswordModule'
+    },
+    {
+        path: 'resetpassword',
+        loadChildren: './shell/reset-password/reset-password.module#ResetPasswordModule'
+    },
+    {
         path: '',
         component: NavigationComponent,
         canActivate: [AuthGuard],
@@ -37,17 +45,6 @@ const routes: Routes = [
             },
 
         ]
-    },
-    {
-        path: 'reset',
-        // loadChildren: './shell/reset-password/reset-password.component',
-        loadChildren: './shell/reset-password/reset-password.module#ResetPasswordModule'
-    },
-
-    {
-        path: 'resetpassword/:id/:token',
-        // loadChildren: './shell/reset-password/reset-password.component',
-        loadChildren: './shell/reset-password/change-password/change-password.module#ChangePasswordModule'
     }
 
     // Redirect all unidentifiable routes to login
