@@ -1,11 +1,11 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../auth/auth.service';
-import {MatSnackBar, MatSnackBarRef} from '@angular/material';
-import {TranslateService} from '@ngx-translate/core';
-import {environment} from 'src/environments/environment';
-import {Router} from '@angular/router';
-import {$TAB} from 'codelyzer/angular/styles/chars';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from '../auth/auth.service';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material';
+import { TranslateService } from '@ngx-translate/core';
+import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
+import { $TAB } from 'codelyzer/angular/styles/chars';
 
 /** Contains a login form for user authentication */
 @Component({
@@ -35,9 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ngOnInit() {
         setTimeout(() => {
             if (environment.showLoginDemoInfo) {
-                this.userDemoInfo = this.snackbar.open(
-                    'Demo Username: "superuser", password: "password"'
-                );
+                this.userDemoInfo = this.snackbar.open('Demo Username: "superuser", password: "password"');
             }
             if (this.authService.jwt) {
                 this.router.navigate(['/']);
@@ -53,7 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     /** triggers the login process */
     login() {
-        const {username, password, rememberMe} = this.loginForm.getRawValue();
+        const { username, password, rememberMe } = this.loginForm.getRawValue();
         this.laoding = true;
         this.authService.login(username, password, rememberMe).subscribe(
             () => {
@@ -62,20 +60,18 @@ export class LoginComponent implements OnInit, OnDestroy {
             () => {
                 // Give feedback to the user via snackbar
                 this.laoding = false;
-                this.translate
-                    .get('login.invalid-login')
-                    .subscribe(translation => {
-                        this.snackbar.open(translation, null, {
-                            duration: 2000,
-                            horizontalPosition: 'end'
-                        });
+                this.translate.get('login.invalid-login').subscribe(translation => {
+                    this.snackbar.open(translation, null, {
+                        duration: 2000,
+                        horizontalPosition: 'end'
                     });
+                });
             }
         );
     }
 
     /** triggers the password recovery*/
     resetPassword() {
-        window.open('/resetpassword');
+        this.router.navigate(['/resetpassword']);
     }
 }

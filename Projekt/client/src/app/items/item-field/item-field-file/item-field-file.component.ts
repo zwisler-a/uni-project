@@ -37,7 +37,6 @@ export class ItemFieldFileComponent implements OnInit {
 
     ngOnInit() {
         const files = this.control.value;
-        console.log(this.form.itemId);
         if (this.form.itemId === -1) {
             this.isNew = true;
         }
