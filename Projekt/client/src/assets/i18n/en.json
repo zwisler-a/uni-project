@@ -165,6 +165,12 @@
         "remember": "Remember me",
         "submit": "Login",
         "title": "Login",
-        "username": "Username"
+        "username": "Username",
+        "resetPassword": "Forgot Password?"
+    },
+    "resetPassword": {
+        "title": "Password Recovery",
+        "resetPassword": "Forgot Password?",
+        "submit": "Submit"
     }
 }

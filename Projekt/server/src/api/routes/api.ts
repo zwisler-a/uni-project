@@ -6,6 +6,7 @@ import { typesRoute } from './types';
 import { itemsRoute } from './items';
 import { rolesRoute } from './roles';
 import { companiesRoute } from './companies';
+import { passwordResetRoute } from './password_reset';
 import { globalRoute } from './globals';
 import { ApiError, ErrorNumber } from '../../types';
 import { filesRoute } from './files';
@@ -20,6 +21,7 @@ apiRouter.use('/types', typesRoute);
 apiRouter.use('/items', itemsRoute);
 apiRouter.use('/roles', rolesRoute);
 apiRouter.use('/companies', companiesRoute);
+apiRouter.use('/passwordReset', passwordResetRoute);
 apiRouter.use('/globals', globalRoute);
 apiRouter.use('/files', filesRoute);
 

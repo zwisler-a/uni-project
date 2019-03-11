@@ -1,10 +1,18 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { AuthGuard } from './shell/auth/auth.guard';
-import { NavigationComponent } from './shell/navigation/navigation.component';
+import {AuthGuard} from './shell/auth/auth.guard';
+import {NavigationComponent} from './shell/navigation/navigation.component';
 
 const routes: Routes = [
+    {
+        path: 'resetpassword/:id/:token',
+        loadChildren: './shell/reset-password/change-password/change-password.module#ChangePasswordModule'
+    },
+    {
+        path: 'resetpassword',
+        loadChildren: './shell/reset-password/reset-password.module#ResetPasswordModule'
+    },
     {
         path: '',
         component: NavigationComponent,
@@ -35,7 +43,7 @@ const routes: Routes = [
                 loadChildren: './company/company.module#CompanyModule',
                 canLoad: [AuthGuard]
             },
-            { path: '**', redirectTo: '/items', pathMatch: 'full' }
+
         ]
     }
 
@@ -52,4 +60,5 @@ const routes: Routes = [
     ],
     exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}

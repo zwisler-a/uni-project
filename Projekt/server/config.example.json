@@ -13,5 +13,13 @@
 		"password": "password",
 		"database": "ak18b",
 		"prefix": "ak18b_"
+	},
+	"mailer": {
+		"service": "gmail",
+		"secure": false,
+		"port": 25,
+		"user": "betterNotYourPrivateGmailAccount@gmail.com",
+		"pass": "passForThisAccount",
+		"tlsRejectUnauthorized": false
 	}
 }

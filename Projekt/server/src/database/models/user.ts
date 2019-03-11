@@ -71,6 +71,19 @@ export class UserModel {
     }
 
     /**
+     * Get an user object by email
+     * @param email email address of the user object to get
+     * @returns retrieved user object on success
+     */
+    static async getByEmail(email: string): Promise<User> {
+        const users = await UserModel.database.USER.GET_EMAIL.execute(email);
+        if (users.length === 0) {
+            throw ApiError.NOT_FOUND(ErrorNumber.USER_NOT_FOUND, email);
+        }
+        return users.pop();
+    }
+
+    /**
      * Get an array of all Users
      * @param id id/name of the user object to get
      * @returns retrived user object on success

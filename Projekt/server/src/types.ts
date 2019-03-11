@@ -19,6 +19,16 @@ export interface Config {
     socket?: string;
     ssl: SslConfig;
     database: DatabaseConfig;
+    mailer: MailerConfig;
+}
+
+export interface MailerConfig {
+    service: string;
+    secure: boolean;
+    port: number;
+    user: string;
+    pass: string;
+    tlsRejectUnauthorized: boolean;
 }
 
 export enum ErrorNumber {

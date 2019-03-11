@@ -35,6 +35,10 @@ export class UserQueries extends Queries {
         `SELECT * FROM ${this.prefix}users
             WHERE name = ?`);
 
+    readonly GET_EMAIL: StaticQuery<ArrayResultsets> = this.sql(
+        `SELECT * FROM ${this.prefix}users
+            WHERE email = ?`);
+
     readonly UPDATE: StaticQuery<ObjectResultsets> = this.sql(
         `UPDATE ${this.prefix}users
             SET name = ?, password = ?, email = ?
