@@ -17,6 +17,7 @@
     height: 50px;
     margin: 0 16px;
     justify-content: flex-start;
+    border-radius: 3px;
 
     .focused {
         font-size: 10px;
@@ -43,6 +44,7 @@
         transition: width 0.2s;
         height: 100%;
         background: #40c4ff;
+        border-radius: none;
         left: 0;
         position: absolute;
         content: '';
