@@ -48,6 +48,7 @@ sent with every request.
 | 28.01.19   |                        Review 2: Präsentation des Entwurfs durch das Team für Betreuer und Tutor                        |        **Ja** |
 | 28.01.19   |                                                Abgabe Releasebündel 2                                                   |        **Ja** |
 | 04.02.19   |                                                Abgabe Releasebündel 3                                                   |        **Ja** |
-| 04.03.19   |                                                Abgabe Releasebündel 4                                                   |      **Nein** |
-| 11.03.19   |                                                Abgabe Releasebündel 5                                                   |      **Nein** |
+| 04.03.19   |                                                Abgabe Releasebündel 4                                                   |        **Ja** |
+| 11.03.19   |                                                Abgabe Releasebündel 5                                                   |        **ja** |
 | Termin\*\* |       Endabnahme: Präsentation des Projektergebnisses durch das Team für Betreuer und Tutor (spätestens 03/2019)        |      **Nein** |
+| 26.04.19   |                                                Abschlussveranstaltung                                                   |      **Nein** |
