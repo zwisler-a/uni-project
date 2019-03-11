@@ -1,0 +1,20 @@
+\select@language {german}
+\contentsline {section}{\numberline {1}Allgemeine Informationen}{1}{section.0.1}
+\contentsline {subsection}{\numberline {1.1}Einf\IeC {\"u}hrung}{1}{subsection.0.1.1}
+\contentsline {subsection}{\numberline {1.2}Ihre Vorteile}{1}{subsection.0.1.2}
+\contentsline {section}{\numberline {2}Erste Schritte}{1}{section.0.2}
+\contentsline {section}{\numberline {3}Verwenden der Inventarisierungsapp}{1}{section.0.3}
+\contentsline {subsection}{\numberline {3.1}Einen Objekttypen hinzuf\IeC {\"u}gen}{1}{subsection.0.3.1}
+\contentsline {subsection}{\numberline {3.2}Einen Objekttypen bearbeiten oder l\IeC {\"o}schen}{2}{subsection.0.3.2}
+\contentsline {subsection}{\numberline {3.3}Ein Objekt zu einem Objekttypen hinzuf\IeC {\"u}gen}{3}{subsection.0.3.3}
+\contentsline {subsection}{\numberline {3.4}Ein Objekt bearbeiten oder l\IeC {\"o}schen}{3}{subsection.0.3.4}
+\contentsline {subsection}{\numberline {3.5}Die Sprache \IeC {\"a}ndern}{3}{subsection.0.3.5}
+\contentsline {section}{\numberline {4}Eigene Daten bearbeiten}{4}{section.0.4}
+\contentsline {subsection}{\numberline {4.1}Email-Adresse \IeC {\"a}ndern}{4}{subsection.0.4.1}
+\contentsline {subsection}{\numberline {4.2}Passwort \IeC {\"a}ndern}{4}{subsection.0.4.2}
+\contentsline {section}{\numberline {5}Funktionen f\IeC {\"u}r den Admin}{4}{section.0.5}
+\contentsline {subsection}{\numberline {5.1}eine Benutzerrolle hinzuf\IeC {\"u}gen}{4}{subsection.0.5.1}
+\contentsline {subsection}{\numberline {5.2}eine Benutzerrolle bearbeiten}{4}{subsection.0.5.2}
+\contentsline {subsection}{\numberline {5.3}Einen Benutzer einer Benutzerrolle hinzuf\IeC {\"u}gen}{5}{subsection.0.5.3}
+\contentsline {subsection}{\numberline {5.4}Einen Benutzer bearbeiten}{5}{subsection.0.5.4}
+\contentsline {subsection}{\numberline {5.5}Eine Firma hinzuf\IeC {\"u}gen}{6}{subsection.0.5.5}
