@@ -1,4 +1,13 @@
-<div class="file-input">
+<div *ngIf="isNew">
+    <mat-form-field fxFlex>
+        <span matPrefix class="field-type">
+            <mat-icon *ngIf="control.global">public</mat-icon>
+            {{ 'items.field.file' | translate }}
+        </span>
+        <input disabled [value]="'items.file.createFirst' | translate" [placeholder]="control.name" matInput />
+    </mat-form-field>
+</div>
+<div class="file-input" *ngIf="!isNew">
     <span class="field-type">{{ control.name }}</span>
     <div [ngClass]="{ fullScreen: fullScreen }">
         <mat-sidenav-container>
@@ -6,7 +15,7 @@
                 <div fxLayoutAlign="end center" style="margin-right:8px;">
                     <button mat-icon-button (click)="sidenav.close()"><mat-icon>close</mat-icon></button>
                 </div>
-                <mat-list dense *ngIf="control?.value.length">
+                <mat-list dense>
                     <mat-list-item
                         class="version"
                         (click)="loadPreview(version.time, version.name)"
@@ -27,7 +36,7 @@
                     {{ 'items.file.history' | translate }}
                 </button>
                 <button mat-button class="file-download" (click)="download()">
-                        {{ 'items.file.download' | translate }}
+                    {{ 'items.file.download' | translate }}
                 </button>
             </mat-sidenav-content>
         </mat-sidenav-container>

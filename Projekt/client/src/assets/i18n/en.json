@@ -83,7 +83,8 @@
             "history": "Version history",
             "download": "Download",
             "upload": "Upload",
-            "selectFile": "Select file"
+            "selectFile": "Select file",
+            "createFirst": "Please create the item before adding a file."
         },
         "noData": "No Items available",
         "new": "New item",
@@ -121,6 +122,7 @@
             "color": "Color",
             "number": "Number",
             "reference": "Ref.",
+            "file": "File",
             "date": "Date",
             "string": "Text"
         }

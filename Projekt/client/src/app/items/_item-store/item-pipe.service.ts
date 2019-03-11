@@ -90,7 +90,7 @@ export class ItemPipe implements PipeTransform {
             case FieldType.number:
                 return field.value + '';
             case FieldType.file:
-                return field.value.length ? field.value[field.value.length - 1].name : '';
+                return field.value && field.value.length ? field.value[field.value.length - 1].name : '';
             case FieldType.color:
                 // sanatize color beforehand and than bypass the display value
                 const svalue = this.sanatizer.sanitize(SecurityContext.HTML, field.value);

@@ -111,7 +111,7 @@ export class AddItemComponent implements OnInit, OnDestroy {
         fields.forEach(field => {
             controls[field.name] = ItemFormControl.fromField(field);
         });
-        this.form = new ItemFormGroup(typeId, 0, controls);
+        this.form = new ItemFormGroup(typeId, -1, controls);
     }
 
     private createGlobalFormControls(fields: TypeField[]) {
