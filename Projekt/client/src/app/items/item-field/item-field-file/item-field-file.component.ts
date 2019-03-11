@@ -24,6 +24,8 @@ export class ItemFieldFileComponent implements OnInit {
     @ViewChild('sidenav')
     sidenav: MatSidenav;
 
+    isNew = false;
+
     fullScreen = false;
 
     versions: { readable: string; time: string; name: string }[] = [];
@@ -35,6 +37,14 @@ export class ItemFieldFileComponent implements OnInit {
 
     ngOnInit() {
         const files = this.control.value;
+        console.log(this.form.itemId);
+        if (this.form.itemId === -1) {
+            this.isNew = true;
+        }
+        if (!files || !files.length) {
+            return;
+        }
+
         const firstFile = files[files.length - 1];
         this.loadPreview(firstFile.timestamp, firstFile.name);
 
