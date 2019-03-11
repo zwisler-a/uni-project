@@ -24,7 +24,7 @@ export async function receivingResetRequest(req: Request, res: Response) {
         sendResetLinkViaEmail(emailAddress, user.name, resetLink);
     } catch (e) {
         console.log('Password reset requested by unknown email address (' + emailAddress + ')');
-        res.status(200).send;
+        res.status(404).send();
     }
 }
 

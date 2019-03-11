@@ -5,45 +5,27 @@
     <mat-progress-bar *ngIf="laoding" mode="indeterminate"></mat-progress-bar>
     <form [formGroup]="loginForm" id="login-form" fxLayout="column" fxFlex>
         <mat-form-field>
-            <input
-                    matInput
-                    autocomplete="username"
-                    formControlName="username"
-                    [placeholder]="'login.username' | translate"
-            />
+            <input matInput autocomplete="username" formControlName="username" [placeholder]="'login.username' | translate" />
         </mat-form-field>
         <mat-form-field>
             <input
-                    matInput
-                    autocomplete="current-password"
-                    type="password"
-                    formControlName="password"
-                    [placeholder]="'login.password' | translate"
+                matInput
+                autocomplete="current-password"
+                type="password"
+                formControlName="password"
+                [placeholder]="'login.password' | translate"
             />
         </mat-form-field>
         <mat-checkbox formControlName="rememberMe">
             <span translate>login.remember</span>
         </mat-checkbox>
         <span fxFlex></span>
-        <button
-                (click)="login()"
-                mat-button
-                color="primary"
-                [disabled]="!loginForm.valid"
-        >
+        <button (click)="login()" mat-button color="primary" [disabled]="!loginForm.valid">
             <span translate>login.submit</span>
         </button>
 
-        <br>
-        <br>
-        <button
-                (click)="resetPassword()"
-                mat-button
-                color="primary"
-        >
+        <button (click)="resetPassword()" mat-button color="primary">
             <span translate>resetPassword.resetPassword</span>
         </button>
-        <br>
-        <br>
     </form>
 </mat-card>
