@@ -1,0 +1,118 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+	\section*{Demo}
+	Link auf Präsentation\\
+	\subsection*{Itemtypen}
+		\begin{itemize}
+			\item Erstellen und Feldtypen erklären:\\
+			Text: normaler Text, selbsterklärend (Bsp: Name)\\
+			Nummer: normale Nummer (Integer), selbsterklärend (Bsp: Raumnummer)\\
+			Wahr/Falsch: Wahr/Falsch-Feld, selbsterklärend (Bsp: defekt ja/nein)\\
+			Verlinkung: Verlinkt Feldtyp mit einem anderen vorhandenen Feldtypen (Bsp: Laptop-Verlinkung auf bestimmten Raum)\\
+			Farbe: RGB-Farbbereich, manuell wählbar von \texttt{\#000000} und \texttt{\#FFFFFF} (Bsp: schwarzer Laptop)\\
+			Datei: Upload-Feld (Bsp: Rechnung zum Laptop hochladen)\\
+			Datum: Datum kann aus Kalender ausgewählt werden (Bsp: Datum, wie lange der Laptop bereits im Raum ist)
+			\item Benötigt (Markierung Feld ist Pflichtfeld)
+			\item Einzigartig (Nur ein Objekt darf diesen Wert annehmen)
+			\item zu jedem Feldtyp ein Feld erstellen:\\
+			ein Typ mit Benötigt (Bsp: Name)\\
+			ein Typ mit Einzigartig (Bsp: Nummer)\\
+			\item auch kurz zeigen, die Feldtypen bearbeitet werden können
+		\end{itemize}
+	
+	\subsection*{Item}
+		\begin{itemize}
+			\item Items zum Feldtypen erstellen
+			\item auch Fehlermeldungen zeigen (Bsp: wenn zwei Laptops mit derselben Nummer erstellt wurden)
+			\item Aufzeigen globales Feld
+			\item Sortierfunktion zeigen
+			\item Filterfunktion zeigen
+			\item Suchfeld demonstrieren 
+			\item auch kurz zeigen, wie Items geändert werden können
+		\end{itemize}
+	
+	\subsection*{Firmen}
+		\begin{itemize}
+			\item neue Firma erstellen
+			\item dort sollen auch Benutzer und Rollen erstellt werden
+			\item Firmenauswahl oben rechts zeigen
+		\end{itemize}
+
+	\subsection*{Rollen}
+		\begin{itemize}
+			\item Rolle erstellen
+			\item vorher Firma oben rechts auswählen
+			\item Berechtigungen einstellen 
+		\end{itemize}
+	
+	\subsection*{Benutzer}
+		\begin{itemize}
+			\item Benutzer anlegen
+			\item Benutzer eine Rolle zuteilen
+			\item Passwort zurücksetzen/ändern zeigen
+			\item sich als neuer Benutzer einloggen und zeigen, dass dieser wirklich nur begrenzt Rechte durch Rollenzuweisung hat
+			\item Daten bearbeiten (Stift unten links)
+		\end{itemize}
+	\clearpage
+	\section*{Technische Umsetzung UI}
+		UI mit Angular geschriebene Aufteilung in Module:
+		\begin{itemize}
+			\item Types (besitzt Store-Modul):\\
+			Beinhaltet UI für Typenliste, Typendetails und globale Felder
+			\item Items (besitzt Store-Modul):\\
+			Beinhaltet UI für Itemliste, Itemdetails, Spaltenauswahl
+			\item Roles (besitzt Store-Modul):\\
+			Beinhaltet UI für Rollenliste, Details, Anlegen
+			\item Company (besitzt Store-Modul):\\
+			Beinhaltet UI für Unternehmen anlegen, Details
+			\item User (besitzt Store-Modul):\\
+			Beinhaltet UI für Benutzer anlegen, Details
+			\item Permission:\\
+			Das Permisson-Modul beinhaltet Helfer rund um die UI, damit Benutzer wirklich nur das sieht, was er darf\\
+			\item Shell:\\
+			Beinhaltet UI für die Navigation (links), Login-Fenster und Authorisierung
+			\item Shared:\\
+			Beinhaltet Inhalte, die von mehreren Modulen genutzt werden:\\
+			Confirm Dialog: PopUp-Warnung bei DB-schädlicher Aktion (Bsp: löschen)\\
+			Type Selector: Auswahl-Interface für ein Typ und Feld\\
+			Default Page: Core-UI, auf der alles aufbaut (inkl. Elemente, die jede Seite besitzt, wie die Suchleiste)
+			Store Factory: Alex, was heißt 'gleich' bei dir? xD
+	\end{itemize}
+\clearpage
+	\section*{Datenhandling in der UI}
+		\subsection*{Erklärung Store}
+		Jede kontext-getrennte Ressource (Items/Types/Company/Roles/User) hat einen eigenen sog. Store.\\
+		Dieser übernimmt die Backend Kommunikation für das Laden, Editieren und Löschen der Daten sowie das Anzeigen eines Fehlers bei fehlerhaften backend Kommunikation. \\
+		(In einem Store gespeicherte Entitäten brauchen mindestens eine ID)\\~\\
+		
+		\subsection*{unsere Stores}
+		Ein Store bietet dem "Benutzer" 6 Methoden:
+		\texttt{
+		\begin{itemize}
+			\item load()
+			\item byId(id)
+			\item create(enitity)
+			\item update(enitity)
+			\item delete(id)
+			\item store
+		\end{itemize}}
+	Enitäten in einem Store werden so lange nicht neu geladen bis entweder ein forced reload stattfindet (wechseln der Firma) oder die TTL (time to live) abläuft.\\
+	Stores funktionieren über rxjs, was bedeutet ein Benutzer des Stores "abboniert" (subscribed) sich auf die gewünschten Daten und bekommt somit Änderungen im Store mit.\\
+	Stores werden über das StoreFactory Modul erzeugt. Dies übernimmt das Einstellen von Standart Konfigurationen und das bereitstellen von anderen Services an den Store (bsp. TranslateService für Übersetzungen)
+	\clearpage
+	\section*{Lessons learned}
+	\begin{itemize}
+		\item Einstieg in Angular ziemlich schwer
+		\item TypeScript nicht so fehlertollerant wie JavaScript
+		\item Besser recherchieren vor und während des Projekts
+		\item Reviewgespräche besser vorbereiten
+		\item Zeit besser einteilen
+		\item 
+		\item 
+		\item 
+		\item 
+		\item
+	\end{itemize}
+\end{document}
