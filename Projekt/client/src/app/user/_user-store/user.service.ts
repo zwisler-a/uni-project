@@ -20,7 +20,7 @@ export class UserService {
         // Create a fitting store
         this._store = this.storeFactory.create<User>({
             baseUrl: environment.baseUrl + '/users',
-            errorKeyBase: 'users.'
+            errorKeyBase: 'user.'
         });
     }
 

@@ -7,6 +7,7 @@ import { Storable } from './storable.interface';
 import { StoreConfig } from './store-config.interface';
 import { Store } from './store.class';
 import { Subject } from 'rxjs';
+import { AuthService } from 'src/app/shell/auth/auth.service';
 
 /** Service to help creating a store. Avoids the need to provide services ect ... */
 @Injectable({ providedIn: 'root' })
@@ -34,7 +35,14 @@ export class StoreFactoryService {
     /** Triggered when all stores reload */
     resetAllStores = this._resetAllStores.asObservable();
 
-    constructor(private httpClient: HttpClient, private snackbar: MatSnackBar, private translate: TranslateService) {}
+    constructor(private httpClient: HttpClient,
+                private snackbar: MatSnackBar,
+                private translate: TranslateService,
+                private authService: AuthService) {
+        this.authService.authChange.subscribe(() => {
+            this._resetAllStores.next();
+        });
+    }
 
     /**
      * Creates a new Store and adds missing config values with the default values
