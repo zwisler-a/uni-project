@@ -4,11 +4,12 @@ import { RoleService } from './role.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { StoreModule } from 'src/app/shared/store/store.module';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RoleService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, StoreModule, TranslateTestingModule.withTranslations({})]
+            imports: [HttpClientTestingModule, StoreModule,AuthModule, TranslateTestingModule.withTranslations({}), RouterTestingModule.withRoutes([])]
         })
     );
 

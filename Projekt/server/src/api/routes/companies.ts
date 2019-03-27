@@ -12,7 +12,10 @@ export const companiesRoute: Router = Router();
 companiesRoute.param('id', param);
 
 companiesRoute.post('/',        verifyJsonWebToken, verifyPermission(Permission.GLOBAL_ADMIN), companyCreate);
-companiesRoute.get('/',         verifyJsonWebToken, verifyPermission(Permission.GLOBAL_ADMIN), companyGetAll);
+
+// TODO set permission back. Just a bit to hard to do it in the fronend at the moment ... sorry
+companiesRoute.get('/',         verifyJsonWebToken, companyGetAll);
+// companiesRoute.get('/',         verifyJsonWebToken, verifyPermission(Permission.GLOBAL_ADMIN), companyGetAll);
 companiesRoute.get('/:id',      verifyJsonWebToken, companyGet);
 companiesRoute.patch('/:id',    verifyJsonWebToken, verifyPermission(Permission.GLOBAL_ADMIN), companyUpdate);
 companiesRoute.delete('/:id',   verifyJsonWebToken, verifyPermission(Permission.GLOBAL_ADMIN), companyDelete);
