@@ -29,7 +29,9 @@ export class Store<T extends Storable> {
     ) {
         // reload data from backend when a force reload is triggered
         this.reset.subscribe(() => {
-            this.loadFromBackend().subscribe();
+            if (this._store.getValue().length) {
+                this.loadFromBackend().subscribe();
+            }
         });
     }
 
