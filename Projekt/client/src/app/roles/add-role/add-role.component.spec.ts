@@ -7,6 +7,7 @@ import { StoreModule } from 'src/app/shared/store/store.module';
 
 import { RolesModule } from '../roles.module';
 import { AddRoleComponent } from './add-role.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AddRoleComponent', () => {
     let component: AddRoleComponent;
@@ -18,10 +19,11 @@ describe('AddRoleComponent', () => {
                 RolesModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({}),
+                RouterTestingModule.withRoutes([]),
                 StoreModule,
                 NoopAnimationsModule
             ],
-            providers: [{ provide: Location, useValue: {} }]
+            providers: [{ provide: Location, useValue: { path: () => {} } }]
         }).compileComponents();
     }));
 

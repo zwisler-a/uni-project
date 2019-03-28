@@ -17,6 +17,7 @@ import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
 import { AddUserComponent } from './add-user.component';
 import { UserModule } from '../user.module';
 import { Location } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AddUserComponent', () => {
     let component: AddUserComponent;
@@ -30,6 +31,7 @@ describe('AddUserComponent', () => {
                 NoopAnimationsModule,
                 MatIconModule,
                 MatInputModule,
+                RouterTestingModule.withRoutes([]),
                 MatButtonModule,
                 TranslateTestingModule.withTranslations({}),
                 CompanyStoreModule,

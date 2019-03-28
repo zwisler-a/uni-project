@@ -5,11 +5,17 @@ import { environment } from 'src/environments/environment';
 
 import { CompanyService } from './company.service';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('CompanyService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, StoreModule, TranslateTestingModule.withTranslations({})]
+            imports: [
+                HttpClientTestingModule,
+                StoreModule,
+                RouterTestingModule.withRoutes([]),
+                TranslateTestingModule.withTranslations({})
+            ]
         })
     );
 

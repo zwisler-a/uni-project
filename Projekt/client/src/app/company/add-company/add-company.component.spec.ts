@@ -9,6 +9,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { CompanyStoreModule } from '../_company-store/company-store.module';
 import { Location } from '@angular/common';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('AddCompanyComponent', () => {
     let component: AddCompanyComponent;
@@ -25,11 +26,12 @@ describe('AddCompanyComponent', () => {
                 MatButtonModule,
                 FlexLayoutModule,
                 MatSnackBarModule,
+                RouterTestingModule.withRoutes([]),
                 CompanyStoreModule,
                 HttpClientTestingModule,
                 TranslateTestingModule.withTranslations({})
             ],
-            providers: [{ provide: Location, useValue: {} }]
+            providers: [{ provide: Location, useValue: { path: () => {} } }]
         }).compileComponents();
     }));
 

@@ -7,6 +7,7 @@ import { DefaultPageComponent } from 'src/app/shared/default-page/default-page.c
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { StoreModule } from 'src/app/shared/store/store.module';
 
 describe('UserListComponent', () => {
     let component: UserListComponent;
@@ -18,6 +19,7 @@ describe('UserListComponent', () => {
                 UserModule,
                 NoopAnimationsModule,
                 HttpClientTestingModule,
+                StoreModule,
                 TranslateTestingModule.withTranslations({}),
                 RouterTestingModule.withRoutes([]),
                 NoopAnimationsModule

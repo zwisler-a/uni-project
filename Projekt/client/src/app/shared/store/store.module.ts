@@ -4,6 +4,7 @@ import { MatSnackBarModule } from '@angular/material';
 import { TranslateModule } from '@ngx-translate/core';
 
 import { StoreFactoryService } from './store-factory.service';
+import { AuthModule } from 'src/app/shell/auth/auth.module';
 
 @NgModule({
     imports: [CommonModule, MatSnackBarModule, TranslateModule],

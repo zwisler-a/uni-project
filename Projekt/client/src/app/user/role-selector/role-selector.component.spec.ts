@@ -5,6 +5,7 @@ import { UserModule } from '../user.module';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('RoleSelectorComponent', () => {
     let component: RoleSelectorComponent;
@@ -12,7 +13,13 @@ describe('RoleSelectorComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [UserModule, HttpClientTestingModule, TranslateTestingModule.withTranslations({}), NoopAnimationsModule]
+            imports: [
+                UserModule,
+                HttpClientTestingModule,
+                RouterTestingModule.withRoutes([]),
+                TranslateTestingModule.withTranslations({}),
+                NoopAnimationsModule
+            ]
         }).compileComponents();
     }));
 
