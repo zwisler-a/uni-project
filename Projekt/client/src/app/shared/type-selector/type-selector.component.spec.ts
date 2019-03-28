@@ -7,6 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { TypeSelectorComponent } from './type-selector.component';
 import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('TypeSelectorComponent', () => {
     let component: TypeSelectorComponent;
@@ -20,6 +21,7 @@ describe('TypeSelectorComponent', () => {
                 MatInputModule,
                 NoopAnimationsModule,
                 TypeStoreModule.forRoot(),
+                RouterTestingModule.withRoutes([]),
                 FlexLayoutModule,
                 MatSnackBarModule,
                 MatIconModule,

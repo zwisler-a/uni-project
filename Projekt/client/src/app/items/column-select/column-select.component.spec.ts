@@ -15,6 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ItemStoreModule } from '../_item-store/item-store.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ColumnSelectComponent', () => {
   let component: ColumnSelectComponent;
@@ -27,6 +28,7 @@ describe('ColumnSelectComponent', () => {
         MatAutocompleteModule,
         MatChipsModule,
         TranslateTestingModule.withTranslations({}),
+        RouterTestingModule.withRoutes([]),
         FieldsStoreModule,
         MatIconModule,
         NoopAnimationsModule,

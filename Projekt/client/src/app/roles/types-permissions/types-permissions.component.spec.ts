@@ -6,6 +6,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { MatSnackBarModule } from '@angular/material';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('TypesPermissionsComponent', () => {
     let component: TypesPermissionsComponent;
@@ -17,6 +18,7 @@ describe('TypesPermissionsComponent', () => {
                 RolesModule,
                 HttpClientTestingModule,
                 MatSnackBarModule,
+                RouterTestingModule.withRoutes([]),
                 TranslateTestingModule.withTranslations({}),
                 NoopAnimationsModule
             ]

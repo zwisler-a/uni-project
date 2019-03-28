@@ -7,6 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing';
 
 import { TypesModule } from '../types.module';
 import { GlobalFieldsComponent } from './global-fields.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GlobalFieldsComponent', () => {
     let component: GlobalFieldsComponent;
@@ -19,11 +20,12 @@ describe('GlobalFieldsComponent', () => {
                 HttpClientTestingModule,
                 NoopAnimationsModule,
                 TranslateTestingModule.withTranslations({}),
+                RouterTestingModule.withRoutes([]),
                 MatButtonModule,
                 MatSnackBarModule,
                 TypesModule
             ],
-            providers: [{ provide: Location, useValue: {} }]
+            providers: [{ provide: Location, useValue: { path: () => {} } }]
         }).compileComponents();
     }));
 

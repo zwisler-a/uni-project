@@ -4,11 +4,17 @@ import { UserService } from './user.service';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('UserService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, MatSnackBarModule, TranslateTestingModule.withTranslations({})]
+            imports: [
+                HttpClientTestingModule,
+                MatSnackBarModule,
+                RouterTestingModule.withRoutes([]),
+                TranslateTestingModule.withTranslations({})
+            ]
         })
     );
 

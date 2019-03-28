@@ -5,11 +5,18 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TranslateTestingModule } from 'ngx-translate-testing';
 import { TypeStoreModule } from 'src/app/types/_type-store/type-store.module';
 import { ItemStoreModule } from '../_item-store/item-store.module';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('FieldsService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, TypeStoreModule, ItemStoreModule, TranslateTestingModule.withTranslations({})]
+            imports: [
+                HttpClientTestingModule,
+                TypeStoreModule,
+                ItemStoreModule,
+                RouterTestingModule.withRoutes([]),
+                TranslateTestingModule.withTranslations({})
+            ]
         })
     );
 

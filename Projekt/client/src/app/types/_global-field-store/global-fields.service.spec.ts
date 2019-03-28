@@ -5,11 +5,17 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MatSnackBarModule } from '@angular/material';
 import { StoreModule } from 'src/app/shared/store/store.module';
 import { TranslateTestingModule } from 'ngx-translate-testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('GlobalFieldsService', () => {
     beforeEach(() =>
         TestBed.configureTestingModule({
-            imports: [HttpClientTestingModule, StoreModule, TranslateTestingModule.withTranslations({})]
+            imports: [
+                HttpClientTestingModule,
+                StoreModule,
+                RouterTestingModule.withRoutes([]),
+                TranslateTestingModule.withTranslations({})
+            ]
         })
     );
 
