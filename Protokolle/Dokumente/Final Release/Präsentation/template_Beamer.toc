@@ -1,4 +1,0 @@
-\beamer@sectionintoc {1}{Demonstration}{2}{0}{1}
-\beamer@sectionintoc {2}{Technische Umsetzung des UserInterfaces}{3}{0}{2}
-\beamer@sectionintoc {3}{Datenhandling in der UI}{4}{0}{3}
-\beamer@sectionintoc {4}{Lessons learned}{5}{0}{4}
