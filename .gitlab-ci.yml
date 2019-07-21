@@ -51,19 +51,7 @@ test_server:
       junit:
         - Projekt/server/test-report.xml
 
-staging:
-  stage: production
-  dependencies:
-    - test_client
-  script:
-    - cd Projekt/
-    - npm install
-    - npm run build:staging
-    - npm run deploy:staging
-  only: 
-    - master
-
-deploy:
+build:
   stage: production
   dependencies:
     - test_client
@@ -71,7 +59,6 @@ deploy:
     - cd Projekt/
     - npm install
     - npm run build
-    - npm run deploy
   only:
     - master
   when: manual
@@ -80,13 +67,18 @@ deploy:
     paths:
       - Projekt/dist/
 
-      
-test_data:
-  stage: production
+deploy:
+  image: alpine
+  stage: deploy
+  dependencies:
+    - build
   script:
-    - cd Projekt/
-    - npm install
-    - node test-data
-  only:
-    - master
-  when: manual
+    - apk add --no-cache rsync openssh
+    - mkdir -p ~/.ssh
+    - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
+    - chmod 600 ~/.ssh/id_dsa
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+    - rsync -O -rav Projekt/dist/ $SSH_USER@$DEPLOY_SERVER:$DEPLOY_PATH
+    - ssh $SSH_USER@$DEPLOY_SERVER "cd $DEPLOY_PATH && npm i && $START_SCRIPT"
+
+
