@@ -69,7 +69,7 @@ build:
 
 deploy:
   image: alpine
-  stage: deploy
+  stage: production
   dependencies:
     - build
   script:
