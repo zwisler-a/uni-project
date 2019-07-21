@@ -51,28 +51,15 @@ test_server:
       junit:
         - Projekt/server/test-report.xml
 
-build:
-  stage: production
-  dependencies:
-    - test_client
-  script:
-    - cd Projekt/
-    - npm install
-    - npm run build
-  only:
-    - master
-  when: manual
-  artifacts:
-    name: "$CI_JOB_STAGE-$CI_COMMIT_REF_NAME"
-    paths:
-      - Projekt/dist/
 
 deploy:
   image: alpine
   stage: production
-  dependencies:
-    - build
   script:
+    - cd Projekt/
+    - npm install
+    - npm run build
+    - cd ..
     - apk add --no-cache rsync openssh
     - mkdir -p ~/.ssh
     - echo "$SSH_PRIVATE_KEY" >> ~/.ssh/id_dsa
